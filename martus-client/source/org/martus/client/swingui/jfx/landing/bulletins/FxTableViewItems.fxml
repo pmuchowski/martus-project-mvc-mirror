@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <center>
+      <TableView fx:id="itemsTable" onMouseClicked="#onMouseClick" prefHeight="400.0" prefWidth="940.0">
+        <columns>
+          <TableColumn fx:id="onServerColumn" editable="false" text="%OnServer" />
+            <TableColumn fx:id="authorColumn" editable="false" prefWidth="120.0" text="%Author" />
+            <TableColumn fx:id="authorVerifiedColumn" prefWidth="100.0" text="%ContactVerified" />
+          <TableColumn fx:id="titleColumn" editable="false" prefWidth="360.0" text="%InputCustomFieldsTitle" />
+            <TableColumn fx:id="dateSavedColumn" editable="false" prefWidth="140.0" text="%BulletinDetailsVersionDate" />
+            <TableColumn visible="%isFullDesktopFlavor" fx:id="viewBulletinColumn" text="%ViewAttachmentAction" />
+            <TableColumn fx:id="editBulletinColumn" text="%Edit" />
+        </columns>
+      </TableView>
+  </center>
+   <bottom>
+      <BorderPane BorderPane.alignment="CENTER">
+         <left>
+          <HBox BorderPane.alignment="CENTER">
+             <children>
+                 <Button visible="%isFullDesktopFlavor" fx:id="importBulletin" mnemonicParsing="false" onAction="#onImportBulletin">
+	            	<font>
+	            		<Font name="Helvetica" size="12.0" />
+	            	</font>
+	                <graphic>
+	                	<ImageView pickOnBounds="true" preserveRatio="true">
+							<image>
+	               		      <Image url="@../../images/import.png" />
+	                        </image>
+	                    </ImageView>
+	                 </graphic>
+	                 <tooltip>
+	                      <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.ImportBulletin" />
+	                 </tooltip>
+	                     <styleClass>
+	                        <String fx:value="button-minpadding" />
+	                        <String fx:value="button-transparentWithHover" />
+	                     </styleClass>
+	            </Button>
+                
+             
+                <Button fx:id="trashButton" mnemonicParsing="false" onAction="#onTrashSelectedItems" styleClass="button-transparentWithHover">
+                   <graphic>
+                      <ImageView pickOnBounds="true" preserveRatio="true">
+                         <image>
+                            <Image url="@../../images/delete.png" />
+                         </image>
+                      </ImageView>
+                   </graphic>
+                     <tooltip>
+                        <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.DeleteItem" />
+                     </tooltip>
+                </Button>
+                <Button fx:id="exportButton" mnemonicParsing="false" onAction="#onExportSelectedItems" styleClass="button-transparentWithHover">
+                   <graphic>
+                      <ImageView pickOnBounds="true" preserveRatio="true">
+                         <image>
+                            <Image url="@../../images/export.png" />
+                         </image>
+                      </ImageView>
+                   </graphic>
+                     <tooltip>
+                        <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.ExportItem" />
+                     </tooltip>
+                </Button>
+                
+                <Button fx:id="importServerResponseFileButton" mnemonicParsing="false" onAction="#onImportServerResponseFile" styleClass="button-transparentWithHover">
+                   <graphic>
+                      <ImageView pickOnBounds="true" preserveRatio="true">
+                         <image>
+                            <Image url="@../../images/import-server-response-file-button.png" />
+                         </image>
+                      </ImageView>
+                   </graphic>
+                     <tooltip>
+                        <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.ImportServerResponseFile" />
+                     </tooltip>
+                </Button>
+                
+                <Button fx:id="moveButton" mnemonicParsing="false" onAction="#onMoveSelectedItems" styleClass="button-transparentWithHover">
+                   <graphic>
+                      <ImageView pickOnBounds="true" preserveRatio="true">
+                         <image>
+                            <Image url="@../../images/move.png" />
+                         </image>
+                      </ImageView>
+                   </graphic>
+                     <tooltip>
+                        <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.MoveItem" />
+                     </tooltip>
+                </Button>
+                <Button fx:id="copyButton" mnemonicParsing="false" onAction="#onCopySelectedItem" styleClass="button-transparentWithHover">
+                   <graphic>
+                      <ImageView pickOnBounds="true" preserveRatio="true">
+                         <image>
+                            <Image url="@../../images/copy.png" />
+                         </image>
+                      </ImageView>
+                   </graphic>
+                     <tooltip>
+                        <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.CopyItem" />
+                     </tooltip>
+                </Button>
+                <Button fx:id="emptyTrashButton" mnemonicParsing="false" onAction="#onEmptyTrash" styleClass="button-transparentWithHover">
+                   <graphic>
+                      <ImageView pickOnBounds="true" preserveRatio="true">
+                         <image>
+                            <Image url="@../../images/trash.png" />
+                         </image>
+                      </ImageView>
+                   </graphic>
+                     <tooltip>
+                        <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.EmptyTrash" />
+                     </tooltip>
+                </Button>
+             </children>
+          </HBox>
+         </left>
+         
+         
+         <right>
+ 								<HBox alignment="CENTER" styleClass="toolbarHBox" >
+                           			<children>
+                           				<HBox fx:id="statusBar" alignment="CENTER" BorderPane.alignment="CENTER" >
+                           					<padding><Insets top="0" right="10" bottom="0" left="5"/></padding>	
+                           				</HBox>
+										<Label contentDisplay="CENTER" styleClass="toolbarLabel" text="%serverWithColon" />
+										<Button fx:id="toolbarButtonOnline" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onOnline">
+	                                		 <graphic>
+	                                    		<ImageView fx:id="toolbarImageViewOnline" pickOnBounds="true" preserveRatio="true">
+	                                       			<image>
+	                                          			<Image url="@../images/toggle_off.png" />
+	                                       			</image>
+	                                    		</ImageView>
+	                                 		</graphic>
+	                                 		<tooltip>
+	                                    		<Tooltip anchorLocation="WINDOW_TOP_LEFT" />
+	                                 		</tooltip>
+	                                 		<styleClass>
+	                                    		<String fx:value="toolbarButton" />
+	                                    		<String fx:value="button-minpadding" />
+	                                    		<String fx:value="button-transparentNoHover" />
+	                                 		</styleClass>
+	                                 	</Button>
+									</children>
+	 								<opaqueInsets>
+                              			<Insets />
+                           			</opaqueInsets>								
+									<children>
+										<Label styleClass="toolbarLabel" text="%Tor" />
+ 										<Button fx:id="toolbarButtonTor" mnemonicParsing="false" onAction="#onTor">
+                                			<graphic>
+                                    			<ImageView fx:id="toolbarImageViewTor" pickOnBounds="true" preserveRatio="true">
+                                       				<image>
+                                          				<Image url="@../images/toggle_off.png" />
+                                       				</image>
+                                    			</ImageView>
+                                 			</graphic>
+                                 			<tooltip>
+                                    			<Tooltip anchorLocation="WINDOW_TOP_LEFT" />
+                                 			</tooltip>
+			                                 <styleClass>
+			                                    <String fx:value="toolbarButton" />
+			                                    <String fx:value="button-minpadding" />
+			                                    <String fx:value="button-transparentNoHover" />
+			                                 </styleClass>
+			                          	</Button>
+                           			</children>
+                        		</HBox>
+		</right>                        
+      </BorderPane>
+   </bottom>
+</BorderPane>

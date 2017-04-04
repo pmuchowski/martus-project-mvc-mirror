@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.web.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+    <BorderPane>
+		<center>
+		  <VBox>
+		    <children>			    
+		    <VBox styleClass="mainTextBox" BorderPane.alignment="CENTER">
+			    <GridPane vgap="5.0" xmlns:fx="http://javafx.com/fxml" styleClass="usernameBorder" >
+			    
+			    <columnConstraints>
+    				<ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="550.0" />
+  				</columnConstraints>
+			    
+			    <rowConstraints>
+				  	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+				   	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+				   	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+				   	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+			  	</rowConstraints>
+			     
+			      <children>
+			        <TextField fx:id="userNameField" id="accountName" styleClass="mainTextBoxText" promptText="%AccountUserNameInstructions" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+					<Label styleClass="headingLevel3" text="%UsernameIsCaseSensitiveHint" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+			        <PasswordField fx:id="passwordField" id="password" promptText="%PasswordInstructions" styleClass="mainTextBoxText" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+			        <Label GridPane.columnIndex="0" GridPane.rowIndex="4"/>
+			        <PasswordField fx:id="confirmPasswordField" promptText="%PasswordConfirmInstructions" styleClass="mainTextBoxText" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+			        <Label fx:id="errorLabel" styleClass="errorText" wrapText="true" GridPane.columnIndex="0" GridPane.rowIndex="6"/>
+			      </children>
+			    </GridPane>
+			    
+			    <Label styleClass="headingLevel3" text="%UserWarning"  />
+			  </VBox>
+		      
+	   		 <VBox styleClass="mainTextBox">
+		    	 <GridPane  vgap="15.0" xmlns:fx="http://javafx.com/fxml" styleClass="invisibleBorder" >
+		    	 
+		    	  <columnConstraints>
+    				<ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="550.0" />
+  				 </columnConstraints>
+		    	 
+		    	 <rowConstraints>
+				  	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+				   	<RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+				 </rowConstraints>
+				 			 
+		      		<children>
+		        		<TextField id="" fx:id="authorField" promptText="%Author" styleClass="mainTextBoxText" GridPane.columnIndex="0" GridPane.rowIndex="0" />		        		
+		        		<TextField id="" fx:id="organizationField" promptText="%Organization" styleClass="mainTextBoxText" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+		      		</children>
+		    	</GridPane>
+		    </VBox>
+			</children>
+		  </VBox>
+		</center>
+    </BorderPane>
+  </children>
+</AnchorPane>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="284.0" prefWidth="575.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <VBox prefHeight="65.0" prefWidth="431.0" BorderPane.alignment="CENTER">
+         <children>
+            <TextArea fx:id="textMessageArea" editable="false" prefHeight="267.0" prefWidth="614.0" wrapText="true" />
+            
+            <HBox alignment="CENTER_LEFT" spacing="10">
+	            <VBox alignment="CENTER_LEFT" spacing="10">
+	            	<children>
+	            		<CheckBox fx:id="encryptExportFile" mnemonicParsing="false" text="%Button.Encrypted" />
+	            		<CheckBox fx:id="includeAttachments" mnemonicParsing="false" text="%Button.IncludeAttachments" />
+	            		<CheckBox fx:id="zipForUploading" mnemonicParsing="false" text="%Button.ZipRadioButton" />
+	            	</children>
+	            </VBox>
+	            
+	            <HBox alignment="CENTER_LEFT" fx:id="unencryptedExportFormatBox" spacing="15">
+	            	<children>
+	            		<Label text="%UnencryptedFile" styleClass="titelTextAlert" />
+	            		<RadioButton fx:id="xmlRadioButton" mnemonicParsing="false" text="%Button.XmlRadioButton">
+	            			<toggleGroup>
+	        					<ToggleGroup fx:id="exportFormatToggleGroup" onSelectedToggleChange="#handleExportFormatToggleChange"/>
+			        		</toggleGroup>
+	            		</RadioButton>
+	            		<RadioButton fx:id="csvRadioButton" mnemonicParsing="false" text="%Button.CsvRadioButton" toggleGroup="$exportFormatToggleGroup" />
+	            		<RadioButton fx:id="jsonRadioButton" mnemonicParsing="false" text="%Button.JsonRadioButton" toggleGroup="$exportFormatToggleGroup" />
+	            	</children>
+	            </HBox>
+	     	</HBox>
+            
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="%Location" />
+                  <TextField fx:id="fileLocation" editable="false" prefHeight="26.0" prefWidth="360.0" />
+                  <Button mnemonicParsing="false" onAction="#onChangeFileLocation" text="%Button.ExportTo" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

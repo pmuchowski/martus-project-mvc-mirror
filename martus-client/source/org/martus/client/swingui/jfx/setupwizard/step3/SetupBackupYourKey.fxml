@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import org.martus.client.swingui.jfx.setupwizard.step1.*?>
+
+<AnchorPane id="MainAnchorPane" maxHeight="-Infinity" maxWidth="660" minHeight="-Infinity" minWidth="-Infinity" prefWidth="660" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <children>
+
+		<TitledBorder title="%BackupYourKey" >
+			<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
+			  <top>
+			    <VBox>
+			      <children>
+			      	<Label />
+			        <Button mnemonicParsing="false" onAction="#createSingelEncryptedFile" text="%Button.CreateSingleEncryptedFile" styleClass="use-default-server-button" />
+			        <Label id="backupMessageLabel" minHeight="54.0" prefHeight="54.0" prefWidth="600.0" styleClass="mainText" text="%CreateSingleEncryptedFileInformation" wrapText="true" />
+			        <Label fx:id="backupMessageLabel" minHeight="75.0" prefHeight="75.0" prefWidth="600.0" styleClass="hintText" text="" wrapText="true" />
+			      </children>
+			    </VBox>
+			  </top>
+			 
+			  <center>
+			    <VBox>
+			      <children>
+			        <Label />
+			        <Label />
+			        <Label />
+			      </children>
+			    </VBox>
+			  </center>
+			</BorderPane>
+		</TitledBorder>
+	
+  </children>
+</AnchorPane>
