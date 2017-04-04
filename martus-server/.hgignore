@@ -1,0 +1,5 @@
+
+syntax: regexp
+^/var/MartusServer/deleteOnStartup/keypair\.dat$
+syntax: regexp
+^varMartusServerdeleteOnStartupkeypair\.dat$
