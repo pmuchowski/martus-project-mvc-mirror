@@ -7,67 +7,72 @@
 <?import javafx.scene.layout.*?>
 
 <BorderPane id="MainAnchorPane" maxHeight="-Infinity" maxWidth="160" minHeight="-Infinity" prefWidth="60"  VBox.vgrow="ALWAYS" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
- 	<top>
-        <HBox fx:id="topBar" >
-          <children>
-          	<Label styleClass="TopBarArrow" text="Welcome to Martus" />
-          	
-          	<HBox HBox.hgrow="ALWAYS"/>
-          
-          	<HBox fx:id="step1" styleClass="step">
-              <children>
-                <Label styleClass="TopBarStepName" text="Account" />
-              </children>
-            </HBox>
+    <top>
+        <VBox>
+            <children>
+                <HBox fx:id="topBar">
+                    <children>
+                        <Label styleClass="TopBarArrow" text="Welcome to Martus" />
+                        <HBox HBox.hgrow="ALWAYS"/>
+                        <HBox fx:id="step4" styleClass="step">
+                            <ImageView fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../../dialogs/Martus-logo-black-text-160x72.png" />
+                                </image>
+                                <BorderPane.margin>
+                                    <Insets left="30.0" />
+                                </BorderPane.margin>
+                            </ImageView>
+                        </HBox>
+                    </children>
+                </HBox>
+                <HBox>
+                    <padding>
+                        <Insets top="20.0" />
+                    </padding>
+                    <children>
+                        <HBox HBox.hgrow="ALWAYS"/>
+                        <HBox fx:id="step1" styleClass="step">
+                            <children>
+                                <Label styleClass="TopBarStepName" text="1. Account" />
+                            </children>
+                        </HBox>
+                        <HBox fx:id="step2" styleClass="step">
+                            <children>
+                                <Label styleClass="TopBarStepName" text="2. Settings" />
+                            </children>
+                        </HBox>
+                        <HBox fx:id="step3" styleClass="step">
+                            <children>
+                                <Label styleClass="TopBarStepName" text="3. Finish" />
+                            </children>
+                        </HBox>
+                        <HBox HBox.hgrow="ALWAYS"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </top>
 
-            <HBox fx:id="step2" styleClass="step">
-              <children>
-                <Label styleClass="TopBarStepName" text="Settings" />
-              </children>
-            </HBox>
-            
-            <HBox fx:id="step3" styleClass="step">
-              <children>
-                <Label styleClass="TopBarStepName" text="Finish" />
-              </children>
-            </HBox>
-            
-            <HBox HBox.hgrow="ALWAYS"/>
-        
-            <HBox fx:id="step4" styleClass="step">
-            <ImageView fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
-                  <image>
-                    <Image url="@../../dialogs/Martus-logo-black-text-160x72.png" />
-                  </image>
-					<BorderPane.margin>
-						<Insets left="30.0" />
-					</BorderPane.margin>
-                </ImageView>
-             </HBox>
-                
-          </children>
-        </HBox>
-	</top>
-
-	<center>      
+    <center>
         <BorderPane maxWidth="Infinity" maxHeight="Infinity">
-          <center>
-             <Pane fx:id="contentPane" maxWidth="-Infinity" maxHeight="-Infinity"/>
-          </center>
-          <bottom >
-              	<HBox spacing="40">
-              		<padding>
-              			<Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
-					</padding> 
-            		<children>
-            		 	<Pane HBox.hgrow="ALWAYS" />
-                  		<Button fx:id="backButton" 	mnemonicParsing="false" onAction="#onBack" text="%Button.GoBack" styleClass="back-button" />
-                       	<Button fx:id="nextButton"  mnemonicParsing="false" onAction="#onNext" text="%Button.Next" styleClass="next-button"/>
-                       	<Button fx:id="optionalNextButton" mnemonicParsing="false" styleClass="basic-button"/>
-                	</children>                       
-				</HBox>	
-			</bottom>
-         </BorderPane>
-	</center>        
-  
+            <center>
+                <Pane fx:id="contentPane" maxWidth="-Infinity" maxHeight="-Infinity"/>
+            </center>
+            <bottom >
+                <HBox spacing="40">
+                    <padding>
+                        <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
+                    </padding>
+                    <children>
+                        <Pane HBox.hgrow="ALWAYS" />
+                        <Button fx:id="backButton" 	mnemonicParsing="false" onAction="#onBack" text="%Button.GoBack" styleClass="back-button" />
+                        <Button fx:id="nextButton"  mnemonicParsing="false" onAction="#onNext" text="%Button.Next" styleClass="next-button"/>
+                        <Button fx:id="optionalNextButton" mnemonicParsing="false" styleClass="basic-button"/>
+                    </children>
+                </HBox>
+            </bottom>
+        </BorderPane>
+    </center>
+
 </BorderPane>

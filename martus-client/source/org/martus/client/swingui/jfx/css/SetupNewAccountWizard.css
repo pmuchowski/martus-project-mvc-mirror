@@ -316,37 +316,22 @@
 .current-step {
 }
 
-.current-step .TopBarStepNumber {
-	-fx-text-fill: #BABCBF;
-	-fx-font-size: 27px;
-}
-
 .current-step .TopBarStepName {
-	-fx-text-fill: #bababa;
-	-fx-font-size: 30px;
-	-fx-border-color: #bababa;
-	-fx-border-style: solid;
-	-fx-border-width: 3;
-	-fx-padding: 3 3 3 3;
-}
-
-.TopBarStepNumber {
-	-fx-text-fill: White;
-	-fx-font-size: 27px;
-	-fx-padding: 0 5 0 3;
+	-fx-text-fill: #595959;
 }
 
 .TopBarStepName {
-	-fx-text-fill: White;
+	-fx-text-fill: #A5A5A5;
+	-fx-padding: 0 16 0 16;
 	-fx-alignment: center-left;
-	-fx-font-size: 25px;
+	-fx-font-size: 32px;
+	-fx-font-weight: bold;
 }
 
 .TopBarArrow {
 	-fx-text-fill: White;
   	-fx-padding: 4 4 4 4;
-	-fx-font-size: 26px;
-  	-fx-font-weight: bold;
+	-fx-font-size: 32px;
 }
 
 .content-description-font {
