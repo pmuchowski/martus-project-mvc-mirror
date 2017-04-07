@@ -15,7 +15,7 @@
                         <Label styleClass="TopBarArrow" text="Welcome to Martus" />
                         <HBox HBox.hgrow="ALWAYS"/>
                         <HBox fx:id="step4" styleClass="step">
-                            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <ImageView fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
                                 <image>
                                     <Image url="@../../dialogs/Martus-logo-black-text-160x72.png" />
                                 </image>
