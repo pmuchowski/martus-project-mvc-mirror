@@ -66,9 +66,10 @@
                     </padding>
                     <children>
                         <Pane HBox.hgrow="ALWAYS" />
-                        <Button fx:id="backButton" 	mnemonicParsing="false" onAction="#onBack" text="%Button.GoBack" styleClass="back-button" />
-                        <Button fx:id="nextButton"  mnemonicParsing="false" onAction="#onNext" text="%Button.Next" styleClass="next-button"/>
-                        <Button fx:id="optionalNextButton" mnemonicParsing="false" styleClass="basic-button"/>
+                        <Button fx:id="backButton" mnemonicParsing="false" managed="${backButton.visible}" onAction="#onBack" text="%Button.GoBack" styleClass="back-button" />
+                        <Button fx:id="nextButton" mnemonicParsing="false" managed="${nextButton.visible}" onAction="#onNext" text="%Button.Next" styleClass="next-button"/>
+                        <Button fx:id="optionalNextButton" mnemonicParsing="false" managed="${optionalNextButton.visible}" styleClass="basic-button"/>
+                        <Pane HBox.hgrow="ALWAYS" />
                     </children>
                 </HBox>
             </bottom>
