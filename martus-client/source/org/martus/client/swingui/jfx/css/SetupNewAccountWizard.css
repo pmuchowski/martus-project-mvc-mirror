@@ -11,7 +11,7 @@
 }
 
 #topBar {
-	-fx-background-color: #1868B8;
+	-fx-background-color: #3B92E4;
   	-fx-padding: 6 25 6 25;
 	-fx-spacing: 10;
 	-fx-alignment: center-left;
@@ -42,7 +42,7 @@
 .mainTextBoxText {
 	-fx-text-fill: #4c5e70;
 	-fx-alignment: center-left;
-	-fx-font-size: 20px;
+	-fx-font-size: 24px;
 	-fx-padding: 5 10 5 7;
 }
 
@@ -372,11 +372,22 @@
 	-fx-text-fill: Black;
 }
 
+.accountNameHint {
+    -fx-text-fill: Black;
+    -fx-font-size: 14px;
+    -fx-padding: 0 3 5 3;
+}
+
+.userWarning {
+    -fx-text-fill: Black;
+    -fx-font-size: 20px;
+    -fx-padding: 0 3 5 3;
+}
+
 .usernameBorder {
 	-fx-border-color: red; 
 	-fx-border-width: 2; 
 	-fx-border-style: solid;
-	-fx-border-radius: 20 20 20 20;
 	-fx-padding: 10 30 10 30;
 }
 
