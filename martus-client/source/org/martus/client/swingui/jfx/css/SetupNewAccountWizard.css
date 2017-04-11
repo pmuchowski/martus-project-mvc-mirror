@@ -163,59 +163,23 @@
 		-fx-background-color:#a3a3a3;
 }
 
+.use-default-server-button,
 .use-default-server-button:hover {
 		-fx-border-radius: 20 20 20 20;
         -fx-text-fill: White;
         -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 5 3 5;
-		-fx-background-color:#bababa;
+        -fx-font-size: 24px;
+        -fx-padding: 5 20 5 20;
+        -fx-background-color:#45A4FC;
 }
 
-.use-default-server-button {
-		-fx-border-radius: 20 20 20 20;
-        -fx-text-fill: White;
-        -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 5 3 5;
-        -fx-background-color:#35d3ff;        
-}
-
-.use-default-server-button:selected {
-		-fx-border-radius: 2 2 2 2;
-		-fx-border-color: white;
-        -fx-text-fill: White;
-        -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 5 3 5;
-        -fx-background-color:#35d3ff;                
-}
-
+.use-private-server-button,
 .use-private-server-button:hover {
         -fx-border-radius: 20 20 20 20;
         -fx-text-fill: White;
         -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 5 3 5;
-        -fx-background-color:#bababa;
-}
-
-.use-private-server-button {
-        -fx-border-radius: 20 20 20 20;
-        -fx-text-fill: White;
-        -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 5 3 5;
-        -fx-background-color:#a3a3a3;
-}
-
-.use-private-server-button:selected {
-        -fx-border-radius: 3 3 3 3;
-        -fx-border-color: white;
-        -fx-text-fill: White;
-        -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 5 3 5;
+        -fx-font-size: 24px;
+        -fx-padding: 5 20 5 20;
         -fx-background-color:#a3a3a3;
 }
 

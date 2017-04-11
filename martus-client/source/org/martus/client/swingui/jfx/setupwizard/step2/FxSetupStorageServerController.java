@@ -41,8 +41,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 
@@ -152,6 +152,7 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 	public void useDefaultServer()
 	{
 		hideAdvancedServerConnectionFields();
+		defaultServerButton.setSelected(true);
 	}
 	
 	private String getDefaultServerIp()
@@ -168,6 +169,7 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 	public void advancedServerSettings()
 	{
 		showAdvancedServerConnectionFields();
+		advancedServerSettingsButton.setSelected(true);
 	}
 
 	private void showAdvancedServerConnectionFields()
@@ -182,7 +184,7 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 	
 	private void connect()
 	{
-		ToggleButton selectedToggle = (ToggleButton) serverConnectionChoiceToggleGroup.getSelectedToggle();
+		RadioButton selectedToggle = (RadioButton) serverConnectionChoiceToggleGroup.getSelectedToggle();
 		if (selectedToggle == null || selectedToggle.getId().equals(defaultServerButton.getId()))
 			attempToConnectToDefaultSettings();
 		else	
@@ -297,10 +299,10 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 //			+ "Hn0FNdbz81l1FrELGyh1hRAgMBAAE=";
 
 	@FXML
-	private ToggleButton advancedServerSettingsButton;
+	private RadioButton advancedServerSettingsButton;
 
 	@FXML
-	private ToggleButton defaultServerButton;
+	private RadioButton defaultServerButton;
 
 	@FXML
 	private Hyperlink advancedHyperlink;
