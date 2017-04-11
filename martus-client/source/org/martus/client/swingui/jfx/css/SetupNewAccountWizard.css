@@ -134,53 +134,33 @@
 	-fx-text-fill: #4c5e70;
 }
 
-.basic-button {
+.basic-button,
+.basic-button:hover {
         -fx-border-radius: 20 20 20 20;
         -fx-text-fill: White;
         -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 5 3 5;
+        -fx-font-size: 24px;
+        -fx-padding: 3 30 3 30;
 }
 
-.next-button {
-	 	-fx-border-radius: 20 20 20 20;
-        -fx-text-fill: White;
-        -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 50 3 50;
-		-fx-background-color:#6cb737;
-}
-
+.next-button,
 .next-button:hover {
 	 	-fx-border-radius: 20 20 20 20;
         -fx-text-fill: White;
         -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 50 3 50;
-		-fx-background-color:#bababa;
+        -fx-font-size: 24px;
+        -fx-padding: 3 30 3 30;
+		-fx-background-color:#6cb737;
 }
 
-.back-button {
-	 	-fx-border-radius: 20 20 20 20;
-        -fx-text-fill: White;
-        -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 50 3 50;
-		-fx-background-color:#a3a3a3;
-}
-
+.back-button,
 .back-button:hover {
 	 	-fx-border-radius: 20 20 20 20;
         -fx-text-fill: White;
         -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 50 3 50;
-		-fx-background-color:#bababa;
-}
-
-.basic-button:hover {
-        .basic-button;
-        -fx-background-color:#bababa;
+        -fx-font-size: 24px;
+        -fx-padding: 3 30 3 30;
+		-fx-background-color:#a3a3a3;
 }
 
 .use-default-server-button:hover {
@@ -239,37 +219,24 @@
         -fx-background-color:#a3a3a3;
 }
 
-.server-settings-next-connect-later-button {
-        .basic-button;
-        -fx-padding: 3 30 3 30;
-        -fx-background-color:#a3e575;
-}
-
+.server-settings-next-connect-later-button,
 .server-settings-next-connect-later-button:hover {
 		-fx-border-radius: 20 20 20 20;
         -fx-text-fill: White;
         -fx-alignment: center;
-        -fx-font-size: 25px;
+        -fx-font-size: 24px;
         -fx-padding: 3 30 3 30;
-        -fx-background-color:#bababa;
+        -fx-background-color:#92D050;
 }
 
-.server-settings-next-connect-now-button {
-        -fx-border-radius: 20 20 20 20;
-        -fx-text-fill: White;
-        -fx-alignment: center;
-        -fx-font-size: 25px;
-        -fx-padding: 3 30 3 30;
-        -fx-background-color:#6cb737;
-}
-
+.server-settings-next-connect-now-button,
 .server-settings-next-connect-now-button:hover {
 		-fx-border-radius: 20 20 20 20;
         -fx-text-fill: White;
         -fx-alignment: center;
-        -fx-font-size: 25px;
+        -fx-font-size: 24px;
         -fx-padding: 3 30 3 30;
-        -fx-background-color:#bababa;
+        -fx-background-color:#00B050;
 }
 
 .server-settings-back-button {
@@ -286,7 +253,7 @@
         -fx-border-radius: 20 20 20 20;
         -fx-text-fill: White;
         -fx-alignment: center;
-        -fx-font-size: 25px;
+        -fx-font-size: 24px;
         -fx-padding: 3 5 3 5;
         -fx-background-color:#638a4b;
 }
