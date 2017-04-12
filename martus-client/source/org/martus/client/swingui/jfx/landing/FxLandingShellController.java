@@ -56,6 +56,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -307,7 +308,7 @@ public class FxLandingShellController extends FxNonWizardShellController
 	private Pane sideContentPane;
 	
 	@FXML
-	private Pane mainContentPane;
+	private ScrollPane mainContentPane;
 	
 	private BulletinsListController bulletinsListController;
 	private BulletinListProvider bulletinListProvider;

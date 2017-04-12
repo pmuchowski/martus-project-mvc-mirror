@@ -131,6 +131,7 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		updateOnlineStatus();
 		updateTorStatus();
 		initializeTorListener();
+		itemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	}
 
 	public void prepareToSort()

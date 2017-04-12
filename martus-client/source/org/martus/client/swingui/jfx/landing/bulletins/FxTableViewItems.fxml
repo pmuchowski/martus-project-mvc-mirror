@@ -9,13 +9,13 @@
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <center>
-      <TableView fx:id="itemsTable" onMouseClicked="#onMouseClick" prefHeight="400.0" prefWidth="940.0">
+      <TableView fx:id="itemsTable" onMouseClicked="#onMouseClick" prefHeight="400.0" minWidth="140.0">
         <columns>
           <TableColumn fx:id="onServerColumn" editable="false" text="%OnServer" />
-            <TableColumn fx:id="authorColumn" editable="false" prefWidth="120.0" text="%Author" />
-            <TableColumn fx:id="authorVerifiedColumn" prefWidth="100.0" text="%ContactVerified" />
-          <TableColumn fx:id="titleColumn" editable="false" prefWidth="360.0" text="%InputCustomFieldsTitle" />
-            <TableColumn fx:id="dateSavedColumn" editable="false" prefWidth="140.0" text="%BulletinDetailsVersionDate" />
+            <TableColumn fx:id="authorColumn" editable="false" text="%Author" />
+            <TableColumn fx:id="authorVerifiedColumn" text="%ContactVerified" />
+          	<TableColumn fx:id="titleColumn" editable="false" text="%InputCustomFieldsTitle" />
+            <TableColumn fx:id="dateSavedColumn" editable="false" text="%BulletinDetailsVersionDate" />
             <TableColumn visible="%isFullDesktopFlavor" fx:id="viewBulletinColumn" text="%ViewAttachmentAction" />
             <TableColumn fx:id="editBulletinColumn" text="%Edit" />
         </columns>

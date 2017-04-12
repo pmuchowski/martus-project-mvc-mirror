@@ -42,6 +42,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -367,6 +368,16 @@ abstract public class FxController implements Initializable
 		embeddedContentController.setParentController(this);
 		Parent createContents = embeddedContentController.createContents();
 		destinationPane.getChildren().addAll(createContents);
+	}
+	
+	public void loadControllerAndEmbedInPane(FxController embeddedContentController, ScrollPane destinationPane) throws Exception
+	{
+		destinationPane.setFitToWidth(true);
+		destinationPane.setFitToHeight(true);
+		embeddedContentController.setShellController(getShellController());
+		embeddedContentController.setParentController(this);
+		Parent createContents = embeddedContentController.createContents();
+		destinationPane.setContent(createContents);
 	}
 
 	private void setParentController(FxController parentControllerToUse)

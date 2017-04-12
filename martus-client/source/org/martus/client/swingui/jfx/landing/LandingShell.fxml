@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane prefHeight="105.0" prefWidth="1050.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane prefHeight="105.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<top>
 		<HBox alignment="CENTER_RIGHT" styleClass="menu-bar" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 			<children>
@@ -43,21 +43,21 @@
 		</HBox>
 	</top>
 	<center>
-		<BorderPane prefHeight="64.0" prefWidth="997.0">
+		<BorderPane prefHeight="64.0">
 			<top>
-				<VBox prefHeight="38.0" prefWidth="1012.0" style="-fx-background-color: #e6e6e6;">
+				<VBox prefHeight="38.0" style="-fx-background-color: #e6e6e6;">
 					<VBox.margin>
 						<Insets bottom="1.0" top="1.0" />
 					</VBox.margin>
 					<children>
-						<GridPane hgap="5.0" prefHeight="38.0" prefWidth="1085.0">
+						<GridPane hgap="5.0" prefHeight="38.0" >
 							<columnConstraints>
-								<ColumnConstraints hgrow="NEVER" maxWidth="300.0" minWidth="300.0" prefWidth="300.0" />
-								<ColumnConstraints hgrow="NEVER" maxWidth="170.0" minWidth="170.0" prefWidth="170.0" />
+								<ColumnConstraints hgrow="NEVER" maxWidth="300.0" minWidth="300.0" />
+								<ColumnConstraints hgrow="NEVER" maxWidth="170.0" minWidth="170.0" />
 							    <ColumnConstraints hgrow="ALWAYS" />
 							</columnConstraints>
 							<children>
-                        <HBox alignment="CENTER" prefHeight="38.0" prefWidth="332.0">
+                        <HBox alignment="CENTER" prefHeight="38.0" >
                            <children>
       								<ImageView fitHeight="28.0" onMouseClicked="#onLogoClicked" pickOnBounds="true" preserveRatio="true">
       									<image>
@@ -149,7 +149,7 @@
                         </HBox>
                         <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="2" GridPane.rowSpan="2147483647">
                            <children>
-      								<TextField fx:id="searchText" visible="%isFullDesktopFlavor" maxWidth="500.0" minWidth="150.0" prefWidth="500.0" style="-fx-background-radius: 0px;" />
+      								<TextField fx:id="searchText" visible="%isFullDesktopFlavor" maxWidth="500.0" minWidth="150.0" style="-fx-background-radius: 0px;" />
       								<Button visible="%isFullDesktopFlavor" alignment="CENTER_RIGHT" defaultButton="true" mnemonicParsing="false" onAction="#onQuickSearch" textAlignment="CENTER">
       									<font>
       										<Font name="Helvetica" size="14.0" />
@@ -210,11 +210,7 @@
 						<StackPane fx:id="sideContentPane" />
 					</left>
 					<center>
-						<BorderPane>
-							<center>
-								<StackPane fx:id="mainContentPane" />
-							</center>
-						</BorderPane>
+						<ScrollPane fx:id="mainContentPane" />
 					</center>
 				</BorderPane>
 			</center>
