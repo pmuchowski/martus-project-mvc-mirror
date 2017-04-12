@@ -34,6 +34,7 @@ import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.actions.ActionDoer;
 import org.martus.client.swingui.filefilters.MartusBulletinArchiveFileFilter;
+import org.martus.client.swingui.filefilters.ServerResponseFileFilter;
 import org.martus.client.swingui.filefilters.XmlFileFilter;
 import org.martus.client.swingui.jfx.generic.FxController.UserCancelledException;
 import org.martus.client.swingui.jfx.landing.cases.FxCaseManagementController;
@@ -44,9 +45,9 @@ import org.martus.common.MartusLogger;
 
 import javafx.application.Platform;
 
-public class ImportBulletinAction implements ActionDoer
+public class ImportVariousTypesAction implements ActionDoer
 {
-	public ImportBulletinAction(FxCaseManagementController fxCaseManagementControllerToUse)
+	public ImportVariousTypesAction(FxCaseManagementController fxCaseManagementControllerToUse)
 	{
 		fxCaseManagementController = fxCaseManagementControllerToUse;
 		uiMainWindow = fxCaseManagementController.getMainWindow();
@@ -54,20 +55,21 @@ public class ImportBulletinAction implements ActionDoer
 
 	public void doAction()
 	{
-		String fileDialogCategory = "ImportBulletin";
-
-		MartusBulletinArchiveFileFilter mbaFilter = new MartusBulletinArchiveFileFilter(getLocalization());
-		XmlFileFilter xmlFilter = new XmlFileFilter(getLocalization());
-		
 		Vector<FormatFilter> filters = new Vector();
-		filters.add(mbaFilter);
-		filters.add(xmlFilter);
+		filters.add(new MartusBulletinArchiveFileFilter(getLocalization()));
+		filters.add(new XmlFileFilter(getLocalization()));
+		filters.add(new ServerResponseFileFilter(getLocalization()));
 
-		File[] selectedFiles = getMainWindow().showMultiFileOpenDialog(fileDialogCategory, filters);
+		File[] selectedFiles = getMainWindow().showMultiFileOpenDialog("ImportBulletin", filters);
 		if (selectedFiles.length == 0)
 			return;
 		
 		Platform.runLater(new ImportRunner(selectedFiles));
+	}
+	
+	protected void importUploaderResponseFile(File selectedFile)
+	{
+		new ImportServerResponseFileAction(getFxCaseManagementController()).importServerResponseFile(selectedFile);
 	}
 	
 	protected void importBulletinFromXmlFile(File fileToImport)
@@ -141,15 +143,15 @@ public class ImportBulletinAction implements ActionDoer
 	
 	public class ImportRunner implements Runnable
 	{
-		public ImportRunner(File[] selectedFilesToUse)
+		public ImportRunner(File[] selectedFilesToImportToUse)
 		{
-			selectedFiles = selectedFilesToUse;
+			selectedFilesToImport = selectedFilesToImportToUse;
 		}
 
 		@Override
 		public void run()
 		{
-			ImportTask importTask =  new ImportTask(getApp(), selectedFiles);
+			ImportTask importTask =  new ImportTask(getApp(), selectedFilesToImport);
 			try
 			{
 				String message = getLocalization().getFieldLabel("ImportingRecords");
@@ -165,31 +167,32 @@ public class ImportBulletinAction implements ActionDoer
 			}
 		}
 		
-		private File[] selectedFiles;
+		private File[] selectedFilesToImport;
 	}
 	
 	private class ImportTask extends AbstractAppTask 
 	{
-		public ImportTask(MartusApp appToUse, File[] selectedFilesToUse)
+		public ImportTask(MartusApp appToUse, File[] selectedFilesToImportToUse)
 		{
 			super(appToUse);
 			
-			selectedFiles = selectedFilesToUse;
+			selectedFilesToImport = selectedFilesToImportToUse;
 		}
 
 		@Override
 		protected Void call() throws Exception
 		{
-			MartusBulletinArchiveFileFilter mbaFilter = new MartusBulletinArchiveFileFilter(getLocalization());
-			for (int index = 0; index < selectedFiles.length; ++index)
+			for (int index = 0; index < selectedFilesToImport.length; ++index)
 			{
 				if (getProgressMeter().shouldExit())
 					break;
 				
-				getProgressMeter().updateProgressMeter(index + 1, selectedFiles.length);
-				File selectedFile = selectedFiles[index];
+				getProgressMeter().updateProgressMeter(index + 1, selectedFilesToImport.length);
+				File selectedFile = selectedFilesToImport[index];
 				String lowerCaseFileName = selectedFile.getName().toLowerCase();
-				if(lowerCaseFileName.endsWith(mbaFilter.getExtension().toLowerCase()))
+				if (new ServerResponseFileFilter(getLocalization()).accept(selectedFile))
+					importUploaderResponseFile(selectedFile);
+				else if(lowerCaseFileName.endsWith(new MartusBulletinArchiveFileFilter(getLocalization()).getExtension().toLowerCase()))
 					importBulletinFromMbaFile(selectedFile);
 				else
 					importBulletinFromXmlFile(selectedFile);		
@@ -197,8 +200,8 @@ public class ImportBulletinAction implements ActionDoer
 			
 			return null;
 		}
-		
-		private File[] selectedFiles;
+
+		private File[] selectedFilesToImport;
 	}
 		
 	private UiMainWindow uiMainWindow;

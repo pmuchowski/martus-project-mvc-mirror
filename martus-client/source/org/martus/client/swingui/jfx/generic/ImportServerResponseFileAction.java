@@ -35,7 +35,6 @@ import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.actions.ActionDoer;
 import org.martus.client.swingui.filefilters.ServerResponseFileFilter;
-import org.martus.client.swingui.jfx.landing.bulletins.BulletinsListController;
 import org.martus.client.swingui.jfx.landing.general.ServerResponseController;
 import org.martus.clientside.FormatFilter;
 import org.martus.common.MartusLogger;
@@ -45,7 +44,7 @@ import org.martus.util.UnicodeReader;
 
 public class ImportServerResponseFileAction implements ActionDoer
 {
-	public ImportServerResponseFileAction(BulletinsListController fxCaseManagementControllerToUse)
+	public ImportServerResponseFileAction(FxContentController fxCaseManagementControllerToUse)
 	{
 		fxCaseManagementController = fxCaseManagementControllerToUse;
 		uiMainWindow = fxCaseManagementController.getMainWindow();
@@ -63,7 +62,7 @@ public class ImportServerResponseFileAction implements ActionDoer
 		}
 	}
 	
-	private void importServerResponseFile(File serverResponseFileToImport)
+	public void importServerResponseFile(File serverResponseFileToImport)
 	{
 		try
 		{
@@ -142,5 +141,5 @@ public class ImportServerResponseFileAction implements ActionDoer
 	}
 
 	private UiMainWindow uiMainWindow;
-	private BulletinsListController fxCaseManagementController;
+	private FxContentController fxCaseManagementController;
 }

@@ -45,8 +45,7 @@ import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.actions.ActionMenuFxBulletin;
 import org.martus.client.swingui.actions.ActionMenuModifyFxBulletin;
 import org.martus.client.swingui.actions.ActionMenuViewFxBulletin;
-import org.martus.client.swingui.jfx.generic.ImportBulletinAction;
-import org.martus.client.swingui.jfx.generic.ImportServerResponseFileAction;
+import org.martus.client.swingui.jfx.generic.ImportVariousTypesAction;
 import org.martus.client.swingui.jfx.generic.TableRowData;
 import org.martus.client.swingui.jfx.generic.controls.FxButtonTableCellFactory;
 import org.martus.client.swingui.jfx.generic.controls.FxTimestampTableCellFactory;
@@ -498,12 +497,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		}		
 	}
 	
-	@FXML
-	private void onImportServerResponseFile(javafx.event.ActionEvent event)
-	{
-		doAction(new ImportServerResponseFileAction(this));
-	}
-
 	private void exportBulletins(UniversalId[] bulletinsIdsToExport)throws Exception
 	{
 		String defaultFileName = getDefaultExportFileName(bulletinsIdsToExport);
@@ -699,7 +692,7 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 	@FXML
 	public void onImportBulletin(ActionEvent event)
 	{
-		doAction(new ImportBulletinAction(caseManagementController));
+		doAction(new ImportVariousTypesAction(caseManagementController));
 	}
 	
 	private void updateOnlineStatus()
