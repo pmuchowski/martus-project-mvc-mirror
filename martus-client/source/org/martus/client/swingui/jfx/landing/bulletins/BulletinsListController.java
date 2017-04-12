@@ -176,10 +176,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		dateSavedColumn.setCellValueFactory(new PropertyValueFactory<BulletinTableRowData, Long>(BulletinTableRowData.DATE_SAVED_PROPERTY_NAME));
 		dateSavedColumn.setCellFactory(new FxTimestampTableCellFactory(getLocalization()));
 		
-        Image viewRecordImage = new Image(VIEW_BULLETIN_IMAGE_PATH);
-        viewBulletinColumn.setCellFactory(FxButtonTableCellFactory.createNarrowButtonTableCell(viewRecordImage, () -> viewSelectedBulletin()));
-		viewBulletinColumn.setCellValueFactory(new PropertyValueFactory<TableRowData, Boolean>(BulletinTableRowData.CAN_VIEW_PROPERTY_NAME));
-		
         Image editRecordImage = new Image(EDIT_BULLETIN_IMAGE_PATH);
         editBulletinColumn.setCellFactory(FxButtonTableCellFactory.createNarrowButtonTableCell(editRecordImage, () -> editSelectedBulletin()));
 		editBulletinColumn.setCellValueFactory(new PropertyValueFactory<TableRowData, Boolean>(BulletinTableRowData.CAN_EDIT_PROPERTY_NAME));
@@ -789,7 +785,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 
 	final private String TOGGLE_ON_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_on.png";
 	final private String TOGGLE_OFF_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_off.png";
-	final private String VIEW_BULLETIN_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/view.png";
 	final private String EDIT_BULLETIN_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/edit.png";
 	private Property<Boolean> useZawgyiFontProperty;
 	@FXML 
@@ -809,9 +804,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 
 	@FXML
 	protected TableColumn<BulletinTableRowData, Long> dateSavedColumn;	
-
-	@FXML
-	protected TableColumn<TableRowData, Boolean> viewBulletinColumn;
 
 	@FXML
 	protected TableColumn<TableRowData, Boolean> editBulletinColumn;

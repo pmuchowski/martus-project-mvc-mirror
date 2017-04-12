@@ -24,7 +24,7 @@
 							<items>
 							<MenuItem mnemonicParsing="false" onAction="#onAccountInformation" styleClass="menu-item" text="%Menu.AccountInformation" />
 							<MenuItem mnemonicParsing="false" onAction="#onContactInformation" styleClass="menu-item" text="%Menu.AuthorInformation" />
-                        <MenuItem mnemonicParsing="false" onAction="#onManageContacts" text="%Menu.ManageContacts" />
+                        	<MenuItem mnemonicParsing="false" onAction="#onManageContacts" text="%Menu.ManageContacts" />
 							<MenuItem mnemonicParsing="false" onAction="#onBackupKeypair" styleClass="menu-item" text="%Menu.KeyBackup" />
 							<MenuItem mnemonicParsing="false" onAction="#onDeleteMyData" styleClass="menu-item" text="%Menu.DeleteAccount" />
 							</items>
@@ -66,7 +66,7 @@
       								</ImageView>
                            </children>
                         </HBox>
-                         <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="8.0" GridPane.columnIndex="1">
+                         <HBox alignment="CENTER_LEFT" prefHeight="38.0" prefWidth="8.0" GridPane.columnIndex="1" spacing="30">
                            <children>
       							<Button mnemonicParsing="false" onAction="#onCreateNewBulletin">
       									<font>

@@ -21,24 +21,21 @@
                <left>
               		<HBox alignment="CENTER_LEFT" BorderPane.alignment="CENTER">
               			<children>
-							<SplitMenuButton fx:id="saveSplitMenuButton" text="%Button.versionBulletin" onAction="#onSaveBulletin" styleClass="split-menu-button">
-				    			<items>
-				        			<MenuItem onAction="#onVersionBulletin" text="%Button.createBulletinCopy" styleClass="split-menu-button" />
-				    			</items>
-							</SplitMenuButton>
+							<Button fx:id="saveSplitMenuButton" text="%Button.versionBulletin" onAction="#onSaveBulletin" styleClass="split-menu-button" />
+				        	<Button onAction="#onVersionBulletin" text="%Button.createBulletinCopy" styleClass="split-menu-button" />
 						</children>
 					</HBox>
                </left>
                <right>
          			<HBox alignment="CENTER_LEFT" BorderPane.alignment="CENTER">
             			<children>
+            				<CheckBox fx:id="immutableOnServer" mnemonicParsing="false" text="%NeverDeleteVersionOnServer" />
             				<Button fx:id="shareButton" onAction="#onShareBulletin" text="%Button.shareBulletin" styleClass="defaultButton" >
 								<tooltip>
                       				<Tooltip anchorLocation="WINDOW_TOP_LEFT" text="%Tooltip.Share" />
 					  			</tooltip>
             				</Button>
             				<Button onAction="#onCancel" text="%Button.Cancel" BorderPane.alignment="CENTER" styleClass="cancelButton" />
-            				<CheckBox fx:id="immutableOnServer" mnemonicParsing="false" text="%NeverDeleteVersionOnServer" />
             			</children>
          			</HBox>
                </right>

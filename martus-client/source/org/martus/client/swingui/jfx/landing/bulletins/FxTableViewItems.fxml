@@ -16,7 +16,6 @@
             <TableColumn fx:id="authorVerifiedColumn" text="%ContactVerified" />
           	<TableColumn fx:id="titleColumn" editable="false" text="%InputCustomFieldsTitle" />
             <TableColumn fx:id="dateSavedColumn" editable="false" text="%BulletinDetailsVersionDate" />
-            <TableColumn visible="%isFullDesktopFlavor" fx:id="viewBulletinColumn" text="%ViewAttachmentAction" />
             <TableColumn fx:id="editBulletinColumn" text="%Edit" />
         </columns>
       </TableView>
@@ -31,7 +30,7 @@
 	            		<Font name="Helvetica" size="12.0" />
 	            	</font>
 	                <graphic>
-	                	<ImageView pickOnBounds="true" preserveRatio="true">
+	                	<ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
 							<image>
 	               		      <Image url="@../../images/import.png" />
 	                        </image>
@@ -49,7 +48,7 @@
              
                 <Button fx:id="trashButton" mnemonicParsing="false" onAction="#onTrashSelectedItems" styleClass="button-transparentWithHover">
                    <graphic>
-                      <ImageView pickOnBounds="true" preserveRatio="true">
+                      <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                          <image>
                             <Image url="@../../images/delete.png" />
                          </image>
@@ -61,7 +60,7 @@
                 </Button>
                 <Button fx:id="exportButton" mnemonicParsing="false" onAction="#onExportSelectedItems" styleClass="button-transparentWithHover">
                    <graphic>
-                      <ImageView pickOnBounds="true" preserveRatio="true">
+                      <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                          <image>
                             <Image url="@../../images/export.png" />
                          </image>
@@ -74,7 +73,7 @@
                 
                 <Button fx:id="importServerResponseFileButton" mnemonicParsing="false" onAction="#onImportServerResponseFile" styleClass="button-transparentWithHover">
                    <graphic>
-                      <ImageView pickOnBounds="true" preserveRatio="true">
+                      <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                          <image>
                             <Image url="@../../images/import-server-response-file-button.png" />
                          </image>
@@ -87,7 +86,7 @@
                 
                 <Button fx:id="moveButton" mnemonicParsing="false" onAction="#onMoveSelectedItems" styleClass="button-transparentWithHover">
                    <graphic>
-                      <ImageView pickOnBounds="true" preserveRatio="true">
+                      <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                          <image>
                             <Image url="@../../images/move.png" />
                          </image>
@@ -99,7 +98,7 @@
                 </Button>
                 <Button fx:id="copyButton" mnemonicParsing="false" onAction="#onCopySelectedItem" styleClass="button-transparentWithHover">
                    <graphic>
-                      <ImageView pickOnBounds="true" preserveRatio="true">
+                      <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                          <image>
                             <Image url="@../../images/copy.png" />
                          </image>
@@ -111,7 +110,7 @@
                 </Button>
                 <Button fx:id="emptyTrashButton" mnemonicParsing="false" onAction="#onEmptyTrash" styleClass="button-transparentWithHover">
                    <graphic>
-                      <ImageView pickOnBounds="true" preserveRatio="true">
+                      <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                          <image>
                             <Image url="@../../images/trash.png" />
                          </image>
