@@ -27,7 +27,6 @@ package org.martus.client.swingui.jfx.setupwizard.step3;
 
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.jfx.setupwizard.AbstractFxSetupWizardContentController;
-import org.martus.client.swingui.jfx.setupwizard.step3.BackupKeyAction;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -47,7 +46,7 @@ public class FxSetupBackupYourKeyController	extends	FxStep3Controller
 		
 		getWizardNavigationHandler().getOptionalNextButton().setVisible(false);
 		getWizardNavigationHandler().getNextButton().getStyleClass().add("server-settings-next-connect-now-button");
-		getWizardNavigationHandler().getNextButton().setText("Finish");
+		getWizardNavigationHandler().getNextButton().setText(getLocalization().getButtonLabel("Finish"));
 	}
 	
 	@FXML
