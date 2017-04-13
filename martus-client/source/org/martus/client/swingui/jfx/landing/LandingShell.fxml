@@ -18,6 +18,7 @@
                                 <MenuItem mnemonicParsing="false" onAction="#onConfigureServer" text="%Menu.ServerSettings" />
                                 <MenuItem mnemonicParsing="false" onAction="#onSystemPreferences" text="%Menu.SystemPreferences" />
                                 <MenuItem mnemonicParsing="false" onAction="#onTorPreferences" text="%Menu.TorPreferences" />
+                                <MenuItem mnemonicParsing="false" onAction="#onHelpMenu" text="%Menu.HelpMenu" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" styleClass="menu-item" text="%Menu.Account">
@@ -170,49 +171,11 @@
                                     </children>
                                 </HBox>
                                 <HBox alignment="CENTER_RIGHT" GridPane.columnIndex="3">
+                                    <padding>
+                                        <Insets right="10.0" />
+                                    </padding>
                                     <children>
                                         <TextField fx:id="searchText" visible="%isFullDesktopFlavor" maxWidth="500.0" minWidth="150.0" style="-fx-background-radius: 0px;" />
-                                        <Button visible="%isFullDesktopFlavor" alignment="CENTER_RIGHT" defaultButton="true" mnemonicParsing="false" onAction="#onQuickSearch" textAlignment="CENTER">
-                                            <font>
-                                                <Font name="Helvetica" size="14.0" />
-                                            </font>
-                                            <opaqueInsets>
-                                                <Insets />
-                                            </opaqueInsets>
-                                            <graphic>
-                                                <ImageView visible="%isFullDesktopFlavor" pickOnBounds="true" preserveRatio="true" styleClass="labelLeftRightPadding">
-                                                    <image>
-                                                        <Image url="@../images/search.png" />
-                                                    </image>
-                                                </ImageView>
-                                            </graphic>
-                                            <tooltip>
-                                                <Tooltip anchorLocation="WINDOW_TOP_LEFT" text="%Tooltip.QuickSearch" />
-                                            </tooltip>
-                                            <styleClass>
-                                                <String fx:value="toolbarButton" />
-                                                <String fx:value="button-minpadding" />
-                                                <String fx:value="button-transparentWithHover" />
-                                            </styleClass>
-                                        </Button>
-
-                                        <Button mnemonicParsing="false" onAction="#onHelpMenu">
-                                            <graphic>
-                                                <ImageView pickOnBounds="true" preserveRatio="true">
-                                                    <image>
-                                                        <Image url="@../images/help.png" />
-                                                    </image>
-                                                </ImageView>
-                                            </graphic>
-                                            <tooltip>
-                                                <Tooltip anchorLocation="WINDOW_TOP_LEFT" text="%Tooltip.Help" />
-                                            </tooltip>
-                                            <styleClass>
-                                                <String fx:value="toolbarButton" />
-                                                <String fx:value="button-minpadding" />
-                                                <String fx:value="button-transparentWithHover" />
-                                            </styleClass>
-                                        </Button>
                                     </children>
                                 </HBox>
                             </children>

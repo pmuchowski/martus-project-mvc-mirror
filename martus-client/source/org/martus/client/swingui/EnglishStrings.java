@@ -1893,6 +1893,7 @@ public class EnglishStrings
 "field:NewAccountWizardNextButton=Next",
 "menu:SystemPreferences=System Preferences",
 "menu:TorPreferences=Tor Preferences",
+"menu:HelpMenu=Help",
 
 "menu:AccountInformation=Account Information",
 "field:AccountInformation=Account Information",
