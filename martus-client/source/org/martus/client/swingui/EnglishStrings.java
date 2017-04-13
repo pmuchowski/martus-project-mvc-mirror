@@ -341,6 +341,7 @@ public class EnglishStrings
 "field:ServerResponseTableResponseColumnName=Uploaded Status",
 "field:ServerResponseTableRecordTitleColumnName=Record Title",
 "field:ServerUploaderResponsesLabel=Server Uploader Response",
+"field:AllKnownFields=All known fields",
 
 "wintitle:LoadSavedSearch=Load Saved Search",
 "wintitle:FileDialogSaveSearch=Save Search",

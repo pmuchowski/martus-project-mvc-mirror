@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.Set;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -136,16 +137,27 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 			for (String templateName : availableTemplates)
 			{
 				FormTemplate formTemplate = getMainWindow().getStore().getFormTemplate(templateName);
-				formTemplateDropdown.addItem(new FormTemplateWithSaneDefaultLabel(formTemplate));
+				formTemplateDropdown.addItem(new ChoiceBoxItem(formTemplate));
 			}
+
+			formTemplateDropdown.addItem(new AllKnownFieldSpecsPseudoFormTemplate());
 		}
 		catch (Exception e)
 		{
 			MartusLogger.logException(e);
 		}
 	}
+
+	protected FieldSpecCollection getAllKnownFields()
+	{
+		FieldSpecCollection allKnownFields = new FieldSpecCollection();
+		Set allKnownFieldsAsSet = getMainWindow().getStore().getAllKnownFieldSpecs();
+		allKnownFields.addAllSpecs(allKnownFieldsAsSet);
+		
+		return allKnownFields;
+	}
 	
-	protected void fillSelectorPanel(FormTemplate selectedFormTemplate)
+	protected void fillSelectorPanel(ChoiceBoxItem selectedFormTemplate)
 	{
 		FieldSpecCollection allFieldsForTemplate = new FieldSpecCollection();
 		allFieldsForTemplate.addAll(selectedFormTemplate.getTopFields());
@@ -178,7 +190,7 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 		@Override
 		public void itemStateChanged(ItemEvent e)
 		{
-			FormTemplate selectedFormTemplate = (FormTemplate) formTemplateDropdown.getSelectedItem();
+			ChoiceBoxItem selectedFormTemplate = (ChoiceBoxItem) formTemplateDropdown.getSelectedItem();
 			fillSelectorPanel(selectedFormTemplate);
 		}
 
@@ -210,7 +222,7 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 		return selectedSpecs;
 	}
 	
-	private UiMainWindow getMainWindow()
+	protected UiMainWindow getMainWindow()
 	{
 		return mainWindow;
 	}
@@ -220,17 +232,61 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 		return getMainWindow().getLocalization();
 	}
 	
-	private class FormTemplateWithSaneDefaultLabel extends FormTemplate
+	private class ChoiceBoxItem
 	{
-		public FormTemplateWithSaneDefaultLabel(FormTemplate formTemplate) throws Exception
+		public ChoiceBoxItem(FormTemplate formTemplateToUse) throws Exception
 		{
-			super(formTemplate.getTitle(), formTemplate.getDescription(), formTemplate.getTopFields(), formTemplate.getBottomFields());
+			formTemplate = formTemplateToUse;
+		}
+		
+		public FieldSpecCollection getTopFields()
+		{
+			return formTemplate.getTopFields();
+		}
+		
+		public FieldSpecCollection getBottomFields()
+		{
+			return formTemplate.getBottomFields();
+		}
+		
+		public String getTitle()
+		{
+			return formTemplate.getTitle();
+		}
+
+		@Override
+		public String toString()
+		{
+			return FormTemplate.getDisplayableTemplateName(getTitle(), getLocatization());
+		}
+		
+		
+		private FormTemplate formTemplate;
+	}
+	
+	private class AllKnownFieldSpecsPseudoFormTemplate extends ChoiceBoxItem
+	{
+		public AllKnownFieldSpecsPseudoFormTemplate() throws Exception
+		{
+			super(null);
 		}
 		
 		@Override
 		public String toString()
 		{
-			return getDisplayableTemplateName(getTitle(), getLocatization());
+			return getLocatization().getFieldLabel("AllKnownFields");
+		}
+		
+		@Override
+		public FieldSpecCollection getBottomFields()
+		{
+			return getAllKnownFields();
+		}
+		
+		@Override
+		public FieldSpecCollection getTopFields()
+		{
+			return new FieldSpecCollection();
 		}
 	}
 	
