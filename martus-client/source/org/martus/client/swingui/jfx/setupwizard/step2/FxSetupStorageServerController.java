@@ -60,10 +60,10 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 		
 		getWizardNavigationHandler().getBackButton().setVisible(false);
 		getWizardNavigationHandler().getNextButton().getStyleClass().add("server-settings-next-connect-later-button");
-		getWizardNavigationHandler().getNextButton().setText("Connect Later");
+		getWizardNavigationHandler().getNextButton().setText(getLocalization().getButtonLabel("ConnectLater"));
 
 		getWizardNavigationHandler().getOptionalNextButton().getStyleClass().add("server-settings-next-connect-now-button");
-		getWizardNavigationHandler().getOptionalNextButton().setText("Connect Now");
+		getWizardNavigationHandler().getOptionalNextButton().setText(getLocalization().getButtonLabel("ConnectNow"));
 		getWizardNavigationHandler().getOptionalNextButton().setOnAction(new OptionalNextHandler());
 
 		serverConnectionChoiceToggleGroup.selectToggle(defaultServerButton);

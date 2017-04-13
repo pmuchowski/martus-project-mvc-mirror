@@ -12,7 +12,7 @@
             <children>
                 <HBox fx:id="topBar">
                     <children>
-                        <Label styleClass="TopBarArrow" text="Welcome to Martus" />
+                        <Label styleClass="TopBarArrow" text="%WelcomeToMartus" />
                         <HBox HBox.hgrow="ALWAYS"/>
                         <HBox fx:id="step4" styleClass="step">
                             <ImageView fitHeight="75.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
@@ -34,17 +34,17 @@
                         <HBox HBox.hgrow="ALWAYS"/>
                         <HBox fx:id="step1" styleClass="step">
                             <children>
-                                <Label styleClass="TopBarStepName" text="1. Account" />
+                                <Label styleClass="TopBarStepName" text="%WizardStep1Name" />
                             </children>
                         </HBox>
                         <HBox fx:id="step2" styleClass="step">
                             <children>
-                                <Label styleClass="TopBarStepName" text="2. Settings" />
+                                <Label styleClass="TopBarStepName" text="%WizardStep2Name" />
                             </children>
                         </HBox>
                         <HBox fx:id="step3" styleClass="step">
                             <children>
-                                <Label styleClass="TopBarStepName" text="3. Finish" />
+                                <Label styleClass="TopBarStepName" text="%WizardStep3Name" />
                             </children>
                         </HBox>
                         <HBox HBox.hgrow="ALWAYS"/>
