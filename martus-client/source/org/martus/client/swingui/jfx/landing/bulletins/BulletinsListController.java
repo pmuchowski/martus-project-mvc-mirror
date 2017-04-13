@@ -36,8 +36,6 @@ import java.util.Vector;
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.core.AttachmentProxyFile;
-import org.martus.client.core.ConfigInfo;
-import org.martus.client.core.MartusApp.SaveConfigInfoException;
 import org.martus.client.core.SortableBulletinList;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.StatusBar;
@@ -65,7 +63,6 @@ import org.martus.common.EnglishCommonStrings;
 import org.martus.common.MartusLogger;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.network.OrchidTransportWrapper;
 import org.martus.common.packet.UniversalId;
 import org.martus.util.TokenReplacement;
 
@@ -74,8 +71,6 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -86,11 +81,9 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.SortType;
 import javafx.scene.control.TableView;
-import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -127,8 +120,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		initalizeItemsTable();
 		initalizeButtons();
 		initializeStatusBar();
-		updateTorStatus();
-		initializeTorListener();
 		itemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	}
 
@@ -646,105 +637,12 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 			}
 		}
 	}
-	
-	private void initializeTorListener()
-	{
-		TorChangeListener torChangeListener = new TorChangeListener();
-		Property<Boolean> configInfoUseInternalTorProperty = getApp().getConfigInfo().useInternalTorProperty();
-		configInfoUseInternalTorProperty.addListener(torChangeListener);
-		Property<Boolean> orchidTransportWrapperTorProperty = getApp().getTransport().getIsTorActiveProperty();
-		orchidTransportWrapperTorProperty.addListener(torChangeListener);
-	}
-	
-	@FXML
-	private void onTor(ActionEvent event)
-	{
-		boolean oldState = getApp().getTransport().isTorEnabled();
-		try
-		{
-			ConfigInfo configInfo = getApp().getConfigInfo();
-			boolean newState = !oldState;
-			
-			configInfo.setUseInternalTor(newState);
-			getApp().saveConfigInfo();
-		} 
-		catch (SaveConfigInfoException e)
-		{
-			MartusLogger.logException(e);
-			showNotifyDialog("ErrorSavingConfig");
-		}
-		catch (Exception e)
-		{
-			logAndNotifyUnexpectedError(e);
-		}
-	}
-	
+
 	@FXML
 	public void onImportBulletin(ActionEvent event)
 	{
 		doAction(new ImportVariousTypesAction(caseManagementController));
 	}
-	
-	protected void updateTorStatus()
-	{
-		OrchidTransportWrapper transport = getApp().getTransport();
-		boolean isTorEnabled = transport.isTorEnabled();
-		toolbarImageViewTor.setImage(getUpdatedOnOffStatusImage(isTorEnabled));
-		toolbarButtonTor.setTooltip(getUpdatedToolTip(isTorEnabled, "TorCurrentlyOn", "TorCurrentlyOff"));
-	}
-	
-	private Tooltip getUpdatedToolTip(boolean enabled, String onMessage, String offMessage)
-	{
-		Tooltip tooltip = new Tooltip();
-		String tooltipMessage = getLocalization().getTooltipLabel(offMessage);
-		if(enabled)
-			tooltipMessage = getLocalization().getTooltipLabel(onMessage);
-		tooltip.setText(tooltipMessage);
-		return tooltip;
-	}
-
-	private Image getUpdatedOnOffStatusImage(boolean isOn)
-	{
-		Image onOffImage = new Image(getOnOffImagePath(isOn));
-		return onOffImage;
-	}
-
-	private String getOnOffImagePath(boolean isOn)
-	{
-		String onOffImagePath = TOGGLE_OFF_IMAGE_PATH;
-		if(isOn)
-			onOffImagePath = TOGGLE_ON_IMAGE_PATH;
-		return onOffImagePath;
-	}
-	
-	class UpdateTorStatusLater implements Runnable
-	{
-		public void run()
-		{
-			updateTorStatus();
-		}
-	}
-	
-	
-	private final class TorChangeListener implements ChangeListener<Boolean>
-	{
-		public TorChangeListener()
-		{
-		}
-
-		@Override
-		public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) 
-		{
-			runUpdateOnFxThread();
-		}
-
-		private void runUpdateOnFxThread()
-		{
-			Platform.runLater(new UpdateTorStatusLater());
-		}
-	}
-
-
 
 	@Override
 	public void folderWasSelected(BulletinFolder folder)
@@ -758,8 +656,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		bulletinTableProvider.updateAllItemsInCurrentFolder();
 	}
 
-	final private String TOGGLE_ON_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_on.png";
-	final private String TOGGLE_OFF_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_off.png";
 	final private String EDIT_BULLETIN_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/edit.png";
 	private Property<Boolean> useZawgyiFontProperty;
 	@FXML 
@@ -800,12 +696,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 	
 	@FXML
 	private HBox statusBar;
-	
-	@FXML
-	private Button toolbarButtonTor;
-	
-	@FXML
-	private ImageView toolbarImageViewTor;
 
 	protected BulletinListProvider bulletinTableProvider;
 	private FxCaseManagementController caseManagementController;
