@@ -1894,6 +1894,7 @@ public class EnglishStrings
 "menu:SystemPreferences=System Preferences",
 "menu:TorPreferences=Tor Preferences",
 "menu:HelpMenu=Help",
+"field:Advanced=Advanced",
 
 "menu:AccountInformation=Account Information",
 "field:AccountInformation=Account Information",

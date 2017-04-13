@@ -95,3 +95,14 @@
 .caseLabel{
 	-fx-text-fill: #36536C;
 }
+
+.searchLink,
+.searchLink:visited,
+.searchLink:hover,
+.searchLink:focused {
+    -fx-text-fill: black;
+    -fx-underline: true;
+    -fx-border-color: transparent;
+    -fx-font-size: 11px;
+    -fx-padding: 0 0 2 0;
+}
