@@ -127,7 +127,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		initalizeItemsTable();
 		initalizeButtons();
 		initializeStatusBar();
-		updateOnlineStatus();
 		updateTorStatus();
 		initializeTorListener();
 		itemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -658,15 +657,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 	}
 	
 	@FXML
-	private void onOnline(ActionEvent event)
-	{
-		boolean oldState = getApp().getTransport().isOnline();
-		boolean newState = !oldState;
-		getApp().turnNetworkOnOrOff(newState);
-		updateOnlineStatus();
-	}
-	
-	@FXML
 	private void onTor(ActionEvent event)
 	{
 		boolean oldState = getApp().getTransport().isTorEnabled();
@@ -695,14 +685,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		doAction(new ImportVariousTypesAction(caseManagementController));
 	}
 	
-	private void updateOnlineStatus()
-	{
-		boolean isOnline = getApp().getTransport().isOnline();
-		toolbarImageViewOnline.setImage(getUpdatedOnOffStatusImage(isOnline));
-		toolbarButtonOnline.setTooltip(getUpdatedToolTip(isOnline, "ServerCurrentlyOn", "ServerCurrentlyOff"));
-		getMainWindow().updateServerStatusInStatusBar();
-	}
-	
 	protected void updateTorStatus()
 	{
 		OrchidTransportWrapper transport = getApp().getTransport();
@@ -714,7 +696,7 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 	private Tooltip getUpdatedToolTip(boolean enabled, String onMessage, String offMessage)
 	{
 		Tooltip tooltip = new Tooltip();
-		String tooltipMessage = new String(getLocalization().getTooltipLabel(offMessage));
+		String tooltipMessage = getLocalization().getTooltipLabel(offMessage);
 		if(enabled)
 			tooltipMessage = getLocalization().getTooltipLabel(onMessage);
 		tooltip.setText(tooltipMessage);
@@ -818,12 +800,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 	
 	@FXML
 	private HBox statusBar;
-	
-	@FXML
-	private Button toolbarButtonOnline;
-	
-	@FXML
-	private ImageView toolbarImageViewOnline;
 	
 	@FXML
 	private Button toolbarButtonTor;

@@ -58,12 +58,17 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 
 public class FxLandingShellController extends FxNonWizardShellController
 {
+	private final String TOGGLE_ON_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_on.png";
+	private final String TOGGLE_OFF_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_off.png";
+
 	public FxLandingShellController(UiMainWindow mainWindowToUse)
 	{
 		super(mainWindowToUse);
@@ -103,6 +108,7 @@ public class FxLandingShellController extends FxNonWizardShellController
 	public void initialize(URL location, ResourceBundle bundle)
 	{
 		super.initialize(location, bundle);
+		updateOnlineStatus();
 		caseManagementController.addFolderSelectionListener(bulletinListProvider);
 		caseManagementController.addFolderSelectionListener(bulletinsListController);
 	}
@@ -288,7 +294,48 @@ public class FxLandingShellController extends FxNonWizardShellController
 			logAndNotifyUnexpectedError(e);
 		}
 	}
-	
+
+	@FXML
+	private void onOnline(ActionEvent event)
+	{
+		boolean oldState = getApp().getTransport().isOnline();
+		boolean newState = !oldState;
+		getApp().turnNetworkOnOrOff(newState);
+		updateOnlineStatus();
+	}
+
+	private void updateOnlineStatus()
+	{
+		boolean isOnline = getApp().getTransport().isOnline();
+		toolbarImageViewOnline.setImage(getUpdatedOnOffStatusImage(isOnline));
+		toolbarButtonOnline.setTooltip(getUpdatedToolTip(isOnline, "ServerCurrentlyOn", "ServerCurrentlyOff"));
+		getMainWindow().updateServerStatusInStatusBar();
+	}
+
+	private Tooltip getUpdatedToolTip(boolean enabled, String onMessage, String offMessage)
+	{
+		Tooltip tooltip = new Tooltip();
+		String tooltipMessage = getLocalization().getTooltipLabel(offMessage);
+		if(enabled)
+			tooltipMessage = getLocalization().getTooltipLabel(onMessage);
+		tooltip.setText(tooltipMessage);
+		return tooltip;
+	}
+
+	private Image getUpdatedOnOffStatusImage(boolean isOn)
+	{
+		Image onOffImage = new Image(getOnOffImagePath(isOn));
+		return onOffImage;
+	}
+
+	private String getOnOffImagePath(boolean isOn)
+	{
+		String onOffImagePath = TOGGLE_OFF_IMAGE_PATH;
+		if(isOn)
+			onOffImagePath = TOGGLE_ON_IMAGE_PATH;
+		return onOffImagePath;
+	}
+
 	@FXML
 	private TextField searchText;
 	
