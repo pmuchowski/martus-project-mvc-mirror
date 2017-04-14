@@ -25,7 +25,7 @@
             <left>
                 <HBox BorderPane.alignment="CENTER">
                     <children>
-                        <Button visible="%isFullDesktopFlavor" fx:id="importBulletin" mnemonicParsing="false" onAction="#onImportBulletin">
+                        <Button visible="%isFullDesktopFlavor" fx:id="importBulletin" mnemonicParsing="false" managed="${importBulletin.visible}" onAction="#onImportBulletin">
                             <font>
                                 <Font name="Helvetica" size="12.0" />
                             </font>
@@ -44,8 +44,7 @@
                                 <String fx:value="button-transparentWithHover" />
                             </styleClass>
                         </Button>
-
-                        <Button fx:id="trashButton" mnemonicParsing="false" onAction="#onTrashSelectedItems" styleClass="button-transparentWithHover">
+                        <Button fx:id="trashButton" mnemonicParsing="false" managed="${trashButton.visible}" onAction="#onTrashSelectedItems" styleClass="button-transparentWithHover">
                             <graphic>
                                 <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                                     <image>
@@ -57,7 +56,7 @@
                                 <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.DeleteItem" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="exportButton" mnemonicParsing="false" onAction="#onExportSelectedItems" styleClass="button-transparentWithHover">
+                        <Button fx:id="exportButton" mnemonicParsing="false" managed="${exportButton.visible}" onAction="#onExportSelectedItems" styleClass="button-transparentWithHover">
                             <graphic>
                                 <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                                     <image>
@@ -69,8 +68,7 @@
                                 <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.ExportItem" />
                             </tooltip>
                         </Button>
-
-                        <Button fx:id="moveButton" mnemonicParsing="false" onAction="#onMoveSelectedItems" styleClass="button-transparentWithHover">
+                        <Button fx:id="moveButton" mnemonicParsing="false" managed="${moveButton.visible}" onAction="#onMoveSelectedItems" styleClass="button-transparentWithHover">
                             <graphic>
                                 <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                                     <image>
@@ -82,7 +80,7 @@
                                 <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.MoveItem" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="copyButton" mnemonicParsing="false" onAction="#onCopySelectedItem" styleClass="button-transparentWithHover">
+                        <Button fx:id="copyButton" mnemonicParsing="false" managed="${copyButton.visible}" onAction="#onCopySelectedItem" styleClass="button-transparentWithHover">
                             <graphic>
                                 <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                                     <image>
@@ -94,7 +92,7 @@
                                 <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.CopyItem" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="emptyTrashButton" mnemonicParsing="false" onAction="#onEmptyTrash" styleClass="button-transparentWithHover">
+                        <Button fx:id="emptyTrashButton" mnemonicParsing="false" managed="${emptyTrashButton.visible}" onAction="#onEmptyTrash" styleClass="button-transparentWithHover">
                             <graphic>
                                 <ImageView pickOnBounds="true" preserveRatio="true" fitHeight="30.0" fitWidth="30.0">
                                     <image>
@@ -109,7 +107,6 @@
                     </children>
                 </HBox>
             </left>
-
 
             <right>
                 <HBox alignment="CENTER" styleClass="toolbarHBox" >
