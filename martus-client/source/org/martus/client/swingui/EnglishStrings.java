@@ -1895,6 +1895,7 @@ public class EnglishStrings
 "menu:TorPreferences=Tor Preferences",
 "menu:HelpMenu=Help",
 "field:Advanced=Advanced",
+"field:SearchPrompt=Search",
 
 "menu:AccountInformation=Account Information",
 "field:AccountInformation=Account Information",
