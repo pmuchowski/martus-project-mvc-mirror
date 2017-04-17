@@ -224,4 +224,9 @@
 	-fx-background-color: #77bad0;
 }
 
-
+.casesMenu {
+    -fx-text-fill: Black;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-color: #e6e6e6;
+}

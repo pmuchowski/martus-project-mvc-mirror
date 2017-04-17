@@ -59,7 +59,7 @@
                                 <ColumnConstraints hgrow="ALWAYS" />
                             </columnConstraints>
                             <children>
-                                <HBox alignment="CENTER" prefHeight="38.0" GridPane.columnIndex="0" >
+                                <HBox alignment="CENTER" prefHeight="38.0" GridPane.columnIndex="0" style="-fx-background-color: #C8C8C8;">
                                     <children>
                                         <ImageView fitHeight="28.0" onMouseClicked="#onLogoClicked" pickOnBounds="true" preserveRatio="true">
                                             <image>
