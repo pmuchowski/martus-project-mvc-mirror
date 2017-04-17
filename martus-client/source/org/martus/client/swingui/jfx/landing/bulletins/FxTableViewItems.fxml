@@ -118,29 +118,6 @@
                             <padding><Insets top="0" right="10" bottom="0" left="5"/></padding>
                         </HBox>
                     </children>
-                    <opaqueInsets>
-                        <Insets />
-                    </opaqueInsets>
-                    <children>
-                        <Label styleClass="toolbarLabel" text="%Tor" />
-                        <Button fx:id="toolbarButtonTor" mnemonicParsing="false" onAction="#onTor">
-                            <graphic>
-                                <ImageView fx:id="toolbarImageViewTor" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../images/toggle_off.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                            <tooltip>
-                                <Tooltip anchorLocation="WINDOW_TOP_LEFT" />
-                            </tooltip>
-                            <styleClass>
-                                <String fx:value="toolbarButton" />
-                                <String fx:value="button-minpadding" />
-                                <String fx:value="button-transparentNoHover" />
-                            </styleClass>
-                        </Button>
-                    </children>
                 </HBox>
             </right>
         </BorderPane>
