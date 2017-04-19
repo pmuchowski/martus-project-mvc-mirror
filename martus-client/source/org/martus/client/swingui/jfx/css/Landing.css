@@ -15,6 +15,10 @@
 	-fx-font-face: Helvetica;
 }
 
+.menu:showing, .menu:focused, .menu:hover {
+     -fx-background-color: darkgray;
+}
+
 .menu-item {
     -fx-text-fill: #f7f7f7;
     -fx-background-color: #3B92E4;
@@ -25,7 +29,7 @@
 }
 
 .menu-item:focused .label {
-    -fx-text-fill: blue;
+    -fx-text-fill: #f7f7f7;
 }
 
 .context-menu {
