@@ -49,6 +49,7 @@ import org.martus.common.fieldspec.FieldTypeLanguage;
 import org.martus.common.fieldspec.FieldTypeMultiline;
 import org.martus.common.fieldspec.FieldTypeNormal;
 import org.martus.common.fieldspec.FieldTypePopUpTree;
+import org.martus.common.fieldspec.FieldTypeUnknown;
 
 public class SearchGridTable extends GridTable
 {
@@ -87,6 +88,7 @@ public class SearchGridTable extends GridTable
 		map.put(new FieldTypeAnyField(), new GridNormalCellEditor(localization));
 		map.put(new FieldTypeGrid(), new GridNormalCellEditor(localization));
 		map.put(new FieldTypePopUpTree(), new SearchGridPopUpTreeCellEditor(dlgLauncher.getMainWindow(), getFancySearchTableModel()));
+		map.put(new FieldTypeUnknown(), new GridButtonCellViewer(localization));
 	}
 	
 	public Collection getAllEditors()
@@ -128,6 +130,12 @@ public class SearchGridTable extends GridTable
 	protected GridCellEditorAndRenderer getDateRangeEditor()
 	{
 		return (GridCellEditorAndRenderer) editors.get(new FieldTypeDateRange());
+	}
+
+	@Override
+	public void setColumnWidthForUnknownType (int column) {
+		int width = ((GridCellEditorAndRenderer) editors.get(new FieldTypeUnknown())).getMinimumCellWidth();
+		setColumnMaxWidth(column, width);
 	}
 
 	private HashMap renderers;

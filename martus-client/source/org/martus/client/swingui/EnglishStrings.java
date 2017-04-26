@@ -477,7 +477,7 @@ public class EnglishStrings
 "button:SearchFinalBulletinsOnly=Only search most recent version of records",
 "button:SearchSameRowsOnly=Match multi-item list details in the search screen to a single item. See the search Help screen for additional guidance on this advanced option.",
 "button:DeleteSelectedGridRow=Delete Selected Row",
-"button:InsertEmptyGridRow=Insert Row",
+"button:InsertEmptyGridRow=+ Add Criteria",
 "button:AppendEmptyGridRow=Append Row",
 "button:PopUpTreeChoose=Choose Field",
 "button:RunReport=Use Existing Report Format",
@@ -490,7 +490,7 @@ public class EnglishStrings
 "button:SaveSearch=Save This Search",
 "button:LoadSearch=Load Previous Search",
 "button:LoadSearchOkButton=Load",
-"button:LoadFieldValuesFromAllBulletins=Load all possible values for selected field",
+"button:LoadFieldValuesFromAllBulletins=Load all possible field values",
 
 "button:AddTemplate=Add",
 

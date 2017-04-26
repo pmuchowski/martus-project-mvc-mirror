@@ -41,9 +41,11 @@ import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.dialogs.UiDialogLauncher;
 import org.martus.client.swingui.fields.SearchFieldTreeDialog;
+import org.martus.client.swingui.fields.UIButtonViewer;
 import org.martus.client.swingui.fields.UiEditableGrid;
 import org.martus.client.swingui.fields.UiFieldContext;
 import org.martus.client.swingui.fields.UiPopUpFieldChooserEditor;
+import org.martus.client.swingui.grids.GridButtonCellViewer;
 import org.martus.client.swingui.grids.GridPopUpTreeCellEditor;
 import org.martus.client.swingui.grids.GridTable;
 import org.martus.client.swingui.grids.SearchGridTable;
@@ -77,6 +79,7 @@ public class FancySearchGridEditor extends UiEditableGrid
 		setSearchForColumnWideEnoughForDates();
 		setGridTableSize();
 		addListenerSoFieldChangeCanTriggerRepaintOfValueColumn();
+		addDeleteRowCellButtonListener();
 		getTable().addRowSelectionListener(new ListSelectionHandler());
 	}
 	
@@ -112,8 +115,10 @@ public class FancySearchGridEditor extends UiEditableGrid
 	
 	protected Vector createButtons()
 	{
-		Vector buttons = super.createButtons();
+		super.createButtons();
+		Vector buttons = new Vector();
 		loadValuesButton = createLoadValuesButton();
+		buttons.add(getInsertButton());
 		buttons.add(loadValuesButton);
 		return buttons;
 	}
@@ -179,7 +184,13 @@ public class FancySearchGridEditor extends UiEditableGrid
 		int column = FancySearchTableModel.fieldColumn;
 		return (GridPopUpTreeCellEditor)getTable().getCellEditor(0, column);
 	}
-	
+
+	private GridButtonCellViewer getFieldDeleteButtonViewer()
+	{
+		int column = FancySearchTableModel.deleteButtonColumn;
+		return (GridButtonCellViewer)getTable().getCellEditor(0, column);
+	}
+
 	public void setFromJson(JSONObject json)
 	{
 		helper.setSearchFromJson(getGridData(), json);
@@ -202,12 +213,32 @@ public class FancySearchGridEditor extends UiEditableGrid
 		fieldChoiceEditor.addActionListener(new PopUpActionHandler());
 	}
 
+	private void addDeleteRowCellButtonListener() {
+		UIButtonViewer buttonCellViewer = (UIButtonViewer)getFieldDeleteButtonViewer().getUiField();
+		buttonCellViewer.setActionListener(new DeleteRowListener());
+	}
+
 	class PopUpActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			stopCellEditing();
 			updateLoadValuesButtonStatus();
+		}
+	}
+
+	private class DeleteRowListener implements ActionListener
+	{
+		public void actionPerformed(ActionEvent e)
+		{
+			try
+			{
+				deleteSelectedRow();
+			}
+			catch (ArrayIndexOutOfBoundsException e1)
+			{
+				e1.printStackTrace();
+			}
 		}
 	}
 

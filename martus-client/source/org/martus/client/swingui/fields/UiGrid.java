@@ -41,7 +41,6 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 
@@ -94,7 +93,7 @@ abstract public class UiGrid extends UiField
 		widget.setLayout(new BorderLayout());
 
 		buttonBox = Box.createHorizontalBox();
-		buttonBox.setBorder(new EmptyBorder(10,0,0,0));
+		buttonBox.setBorder(new EmptyBorder(10,0,10,0));
 		setButtons(createButtons());
 		rebuildWidget();
 	}
@@ -271,12 +270,14 @@ abstract public class UiGrid extends UiField
 	void showCollapsed()
 	{
 		widget.removeAll();
+		widget.setBackground(Color.WHITE);
+		widget.setBorder(new EmptyBorder(0, 10, 0, 10));
 		copyExpandedFieldsToTableModel();
 		updateVisibleRowCount();
 		expandedFieldRows = null;
 		widget.add(buttonBox, BorderLayout.SOUTH);
 		UiScrollPane tableScroller = new UiScrollPane(table);
-		tableScroller.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		tableScroller.setViewportBorder(BorderFactory.createEmptyBorder());
 		widget.add(tableScroller, BorderLayout.CENTER);
 		
 		updateSpellChecker(getContext().getCurrentBulletinLanguage());

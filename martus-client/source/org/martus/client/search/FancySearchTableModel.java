@@ -40,6 +40,7 @@ import org.martus.common.fieldspec.ChoiceItem;
 import org.martus.common.fieldspec.DropDownFieldSpec;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.FieldType;
+import org.martus.common.fieldspec.FieldTypeUnknown;
 import org.martus.common.fieldspec.GridFieldSpec;
 import org.martus.common.fieldspec.MiniFieldSpec;
 import org.martus.common.fieldspec.PopUpTreeFieldSpec;
@@ -82,6 +83,58 @@ public class FancySearchTableModel extends GridTableModel implements TableModelL
 		setAvailableFieldValues(fieldSpec, choices);
 	}
 
+	@Override
+	public int getColumnCount()
+	{
+		return super.getColumnCount() + EXTRA_COLUMN_COUNT;
+	}
+
+	@Override
+	public String getColumnName(int column)
+	{
+		if(column == deleteButtonColumn)
+			return " ";
+
+		return super.getColumnName(column);
+	}
+
+	@Override
+	public FieldType getColumnType(int column)
+	{
+		if(column == deleteButtonColumn)
+			return new FieldTypeUnknown();
+
+		return super.getColumnType(column);
+	}
+
+	@Override
+	public FieldSpec getFieldSpecForColumn(int column)
+	{
+		if(column == deleteButtonColumn)
+			return FieldSpec.createFieldSpec(new FieldTypeUnknown());
+
+		return super.getFieldSpecForColumn(column);
+	}
+
+	@Override
+	public Object getValueAt(int row, int column)
+	{
+		if(column == deleteButtonColumn)
+			return "";
+
+		return super.getValueAt(row, column);
+	}
+
+	@Override
+	public void setValueAt(Object aValue, int row, int column)
+	{
+		if(column == deleteButtonColumn)
+			return;
+
+		super.setValueAt(aValue, row, column);
+	}
+
+	@Override
 	public FieldSpec getFieldSpecForCell(int row, int column)
 	{
 		if(column == valueColumn)
@@ -231,7 +284,10 @@ public class FancySearchTableModel extends GridTableModel implements TableModelL
 	public static int fieldColumn = 1;
 	public static int opColumn = 2;
 	public static int valueColumn = 3;
-	
+	public static int deleteButtonColumn = 5;
+
+	private static final int EXTRA_COLUMN_COUNT = 1;
+
 	private MiniLocalization localization;
 	private HashMap memorizedFieldValues;
 }
