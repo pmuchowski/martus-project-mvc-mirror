@@ -27,6 +27,9 @@ package org.martus.client.swingui.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -39,6 +42,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import org.martus.client.search.FieldChoicesByLabel;
 import org.martus.client.search.FieldChooserSpecBuilder;
@@ -51,8 +55,8 @@ import org.martus.common.MartusLogger;
 import org.martus.common.MiniLocalization;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.FormTemplate;
+import org.martus.swing.FontHandler;
 import org.martus.swing.UiButton;
-import org.martus.swing.UiWrappedTextPanel;
 import org.martus.swing.Utilities;
 
 import javafx.collections.ObservableSet;
@@ -81,21 +85,70 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 		selectedFieldsPanel.add(new JLabel(localization.getFieldLabel("SelectedFields")), BorderLayout.PAGE_START);
 		selectedFieldsPanel.add(selectedFieldsSelector, BorderLayout.CENTER);
 
-		JPanel mainSelectionsPanel = new JPanel(new BorderLayout());
+		JPanel dropDownPanel = new JPanel(new BorderLayout());
 		createFormTemplateCombo();
-		mainSelectionsPanel.add(formTemplateDropdown, BorderLayout.NORTH);
-		mainSelectionsPanel.add(fieldSelectorPanel, BorderLayout.WEST);
-		mainSelectionsPanel.add(createAddRemoveSelectedFieldsButtonsPanel(), BorderLayout.CENTER);
-		mainSelectionsPanel.add(selectedFieldsPanel, BorderLayout.EAST);
-		
+
+		Box selectLabelBox = createStepLabel("ReportStep1", "SelectReportTemplate");
+		Box fieldsLabelBox = createStepLabel("ReportStep2", dialogTag);
+
+		dropDownPanel.add(selectLabelBox, BorderLayout.NORTH);
+		dropDownPanel.add(formTemplateDropdown, BorderLayout.CENTER);
+		dropDownPanel.add(fieldsLabelBox, BorderLayout.SOUTH);
+
+		JPanel mainSelectionsPanel = new JPanel(new GridBagLayout());
+
+		GridBagConstraints gridBagConstraints = createGridBagConstraints(0, 0, GridBagConstraints.HORIZONTAL, 1, 0);
+		gridBagConstraints.gridwidth = 3;
+		mainSelectionsPanel.add(dropDownPanel, gridBagConstraints);
+
+		gridBagConstraints = createGridBagConstraints(0, 1, GridBagConstraints.BOTH, 1, 1);
+		mainSelectionsPanel.add(fieldSelectorPanel, gridBagConstraints);
+
+		gridBagConstraints = createGridBagConstraints(1, 1, GridBagConstraints.NONE);
+		gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
+		mainSelectionsPanel.add(createAddRemoveSelectedFieldsButtonsPanel(), gridBagConstraints);
+
+		gridBagConstraints = createGridBagConstraints(2, 1, GridBagConstraints.BOTH, 1, 1);
+		mainSelectionsPanel.add(selectedFieldsPanel, gridBagConstraints);
+
 		JPanel mainPanelWithButtonBar = new JPanel(new BorderLayout());
-		mainPanelWithButtonBar.add(new UiWrappedTextPanel(localization.getFieldLabel(dialogTag)), BorderLayout.BEFORE_FIRST_LINE);
 		mainPanelWithButtonBar.add(mainSelectionsPanel, BorderLayout.CENTER);
 		mainPanelWithButtonBar.add(createButtonBar(localization), BorderLayout.AFTER_LAST_LINE);
 
 		getContentPane().add(mainPanelWithButtonBar);
 		pack();
 		Utilities.packAndCenterWindow(this);
+	}
+
+	private Box createStepLabel(String stepCode, String labelCode) {
+		Box labelBox = Box.createHorizontalBox();
+		labelBox.setBorder(new EmptyBorder(15, 0, 5, 0));
+
+		JLabel stepLabel = new JLabel(mainWindow.getLocalization().getFieldLabel(stepCode));
+		stepLabel.setFont(FontHandler.getDefaultFont().deriveFont(Font.BOLD, 16.0f));
+
+		JLabel label = new JLabel(mainWindow.getLocalization().getFieldLabel(labelCode));
+		label.setFont(FontHandler.getDefaultFont().deriveFont(Font.PLAIN, 16.0f));
+
+		Component[] labels = new Component[] { stepLabel, label, Box.createHorizontalGlue() };
+		Utilities.addComponentsRespectingOrientation(labelBox, labels);
+
+		return labelBox;
+	}
+
+	private GridBagConstraints createGridBagConstraints(int gridx, int gridy, int fill) {
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.gridx = gridx;
+		gridBagConstraints.gridy = gridy;
+		gridBagConstraints.fill = fill;
+		return gridBagConstraints;
+	}
+
+	private GridBagConstraints createGridBagConstraints(int gridx, int gridy, int fill, int weightx, int weighty) {
+		GridBagConstraints gridBagConstraints = createGridBagConstraints(gridx, gridy, fill);
+		gridBagConstraints.weightx = weightx;
+		gridBagConstraints.weighty = weighty;
+		return gridBagConstraints;
 	}
 
 	private Box createButtonBar(MartusLocalization localization)
