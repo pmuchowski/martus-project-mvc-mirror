@@ -27,8 +27,12 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -52,14 +56,15 @@ import org.martus.clientside.UiLocalization;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.MiniLocalization;
 import org.martus.common.crypto.MartusCrypto;
+import org.martus.swing.FontHandler;
 import org.martus.swing.UiButton;
 import org.martus.swing.UiCheckBox;
+import org.martus.swing.UiLinkButton;
+import org.martus.swing.UiTextArea;
 import org.martus.swing.UiWrappedTextPanel;
 import org.martus.swing.Utilities;
 import org.martus.util.TokenReplacement;
 import org.martus.util.TokenReplacement.TokenInvalidException;
-
-import com.jhlabs.awt.GridLayoutPlus;
 
 public class UiFancySearchDialogContents extends SwingDialogContentPane
 {
@@ -72,88 +77,157 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 	void createBody()
 	{
 		setTitle(getLocalization().getWindowTitle("search"));
-		
-		String helpButtonText = getLocalization().getButtonLabel("Help"); 
-		UiButton help = new UiButton(helpButtonText);
-		help.addActionListener(new HelpListener(getMainWindow()));
-		
+
 		String saveButtonText = getLocalization().getButtonLabel("SaveSearch");
-		UiButton save = new UiButton(saveButtonText);
+		UiLinkButton save = new UiLinkButton(saveButtonText);
 		save.addActionListener(new SaveButtonHandler(this));
-		
+
 		String loadButtonText = getLocalization().getButtonLabel("LoadSearch");
-		UiButton load = new UiButton(loadButtonText);
+		UiLinkButton load = new UiLinkButton(loadButtonText);
 		load.addActionListener(new LoadButtonHandler(this));
-		
-		UiButton search = new UiButton(getLocalization().getButtonLabel("search"));
+
+		UiButton help = createButton("Help");
+		help.addActionListener(new HelpListener(getMainWindow()));
+
+		UiButton search = createButton("search");
 		search.addActionListener(new SearchButtonHandler());
 
-		UiButton cancel = new UiButton(getLocalization().getButtonLabel(EnglishCommonStrings.CANCEL));
+		UiButton cancel = createButton(EnglishCommonStrings.CANCEL);
 		cancel.addActionListener(new CancelButtonHandler());
+
 		UiDialogLauncher dlgLauncher = new UiDialogLauncher(getMainWindow(), getMainWindow().getCurrentActiveFrame().getSwingFrame());
 		grid = FancySearchGridEditor.create(getMainWindow(), dlgLauncher);
 		clearGridIfAnyProblems();
 
-		JPanel instructionPanel = new JPanel();
-		instructionPanel.setLayout(new BorderLayout());
-		instructionPanel.add(new UiWrappedTextPanel(getLocalization().getFieldLabel("SearchBulletinRules")), BorderLayout.NORTH);
-		UiWrappedTextPanel uiWrappedTextPanel = new UiWrappedTextPanel(getLocalization().getFieldLabel("SearchBulletinAddingRules"));
-		uiWrappedTextPanel.setBorder(new EmptyBorder(10, 0, 10,0));
-		instructionPanel.add(uiWrappedTextPanel, BorderLayout.CENTER);
-		try
-		{
-			String helpInfo = TokenReplacement.replaceToken(getLocalization().getFieldLabel("SearchBulletinHelp"), "#SearchHelpButton#", helpButtonText);
-			UiWrappedTextPanel uiWrappedTextPanel2 = new UiWrappedTextPanel(helpInfo);
-			uiWrappedTextPanel2.setBorder(new EmptyBorder(0,0,10,0));
-			instructionPanel.add(uiWrappedTextPanel2, BorderLayout.SOUTH);
-		}
-		catch(TokenInvalidException e)
-		{
-			e.printStackTrace();
-		}
+		JPanel headerPanel = new JPanel();
+		headerPanel.setLayout(new BorderLayout());
+		headerPanel.setBackground(Color.decode("#E6E6E6"));
+		headerPanel.setBorder(new EmptyBorder(0, 0, 5, 0));
+		UiTextArea searchHeader = new UiTextArea(getLocalization().getFieldLabel("SearchHeader"));
+		searchHeader.setEditable(false);
+		searchHeader.setForeground(Color.decode("#595959"));
+		searchHeader.setBackground(Color.decode("#C8C8C8"));
+		searchHeader.setFont(FontHandler.getDefaultFont().deriveFont(Font.BOLD, 20.0f));
+		searchHeader.setBorder(new EmptyBorder(5, 15, 5, 5));
+		headerPanel.add(searchHeader, BorderLayout.CENTER);
 
-		Box buttonBox = Box.createHorizontalBox();
-		buttonBox.setBorder(new EmptyBorder(10,0,0,0));
-		Component[] buttons = new Component[] {help, Box.createHorizontalGlue(), load, save, Box.createHorizontalGlue(), search, cancel };
-		Utilities.addComponentsRespectingOrientation(buttonBox, buttons);
-		
-		searchFinalBulletins = new UiCheckBox(getLocalization().getButtonLabel("SearchFinalBulletinsOnly"));
+		Box topButtonsBox = Box.createHorizontalBox();
+		topButtonsBox.setBackground(Color.decode("#E6E6E6"));
+		topButtonsBox.setBorder(new EmptyBorder(0,0,10,0));
+		Component[] buttons = new Component[] { Box.createHorizontalGlue(), save, load };
+		Utilities.addComponentsRespectingOrientation(topButtonsBox, buttons);
+
+		Box bottomButtonsBox = Box.createHorizontalBox();
+		bottomButtonsBox.setBackground(Color.decode("#E6E6E6"));
+		bottomButtonsBox.setBorder(new EmptyBorder(10,0,0,0));
+		buttons = new Component[] { search, Box.createHorizontalStrut(20), cancel, Box.createHorizontalGlue(), help };
+		Utilities.addComponentsRespectingOrientation(bottomButtonsBox, buttons);
+
+		dontSearchTrash = createCheckBox("DontSearchTrash");
+		dontSearchTrash.setSelected(true);
+		dontSearchTrash.setEnabled(false);
+		searchFinalBulletins = createCheckBox("SearchFinalBulletinsOnly");
 		searchFinalBulletins.setSelected(false);
-		searchSameRowsOnly = new UiCheckBox(getLocalization().getButtonLabel("SearchSameRowsOnly"));
+		searchSameRowsOnly = createCheckBox("SearchSameRowsOnly");
 		searchSameRowsOnly.setSelected(false);
-		
+
 		JPanel bottomPanel = new JPanel();
-		bottomPanel.setLayout(new GridLayoutPlus(2, 1));
-		bottomPanel.add(searchFinalBulletins);
-		bottomPanel.add(searchSameRowsOnly);
-		bottomPanel.add(buttonBox);
-		
+		bottomPanel.setBackground(Color.decode("#E6E6E6"));
+		bottomPanel.setLayout(new GridBagLayout());
+
+		GridBagConstraints gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.weightx = 1;
+		bottomPanel.add(topButtonsBox, gridBagConstraints);
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		bottomPanel.add(dontSearchTrash, gridBagConstraints);
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 2;
+		bottomPanel.add(searchFinalBulletins, gridBagConstraints);
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.anchor = GridBagConstraints.LINE_START;
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 3;
+		bottomPanel.add(searchSameRowsOnly, gridBagConstraints);
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 4;
+		gridBagConstraints.weightx = 1;
+		bottomPanel.add(bottomButtonsBox, gridBagConstraints);
 
 		JPanel mainPanel = new JPanel();
-		int borderWidth = 5;
-		mainPanel.setBorder(new EmptyBorder(borderWidth,borderWidth,borderWidth,borderWidth));
-		mainPanel.setLayout(new BorderLayout());
-		mainPanel.add(instructionPanel,BorderLayout.NORTH);
-		setGridSize(grid, borderWidth);
-		mainPanel.add(grid.getComponent(),BorderLayout.CENTER);
-		mainPanel.add(bottomPanel,BorderLayout.SOUTH);
+		mainPanel.setBorder(new EmptyBorder(15,20,15,20));
+		mainPanel.setLayout(new GridBagLayout());
+		mainPanel.setBackground(Color.decode("#E6E6E6"));
 
-		add(mainPanel);
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 0;
+		gridBagConstraints.weightx = 1;
+
+		mainPanel.add(headerPanel, gridBagConstraints);
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 1;
+		gridBagConstraints.weightx = 1;
+		gridBagConstraints.weighty = 1;
+
+		mainPanel.add(grid.getComponent(), gridBagConstraints);
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
+		gridBagConstraints.gridx = 0;
+		gridBagConstraints.gridy = 2;
+		gridBagConstraints.weightx = 1;
+
+		mainPanel.add(bottomPanel, gridBagConstraints);
+
+		gridBagConstraints = new GridBagConstraints();
+		gridBagConstraints.fill = GridBagConstraints.BOTH;
+		gridBagConstraints.weightx = 1;
+		gridBagConstraints.weighty = 1;
+
+		setLayout(new GridBagLayout());
+		add(mainPanel, gridBagConstraints);
 		setInsertButtonAsDefault();
+	}
+
+	private UiButton createButton(String messageCode) {
+		UiButton button = new UiButton(getLocalization().getButtonLabel(messageCode));
+		button.setFocusPainted(false);
+		button.setFont(FontHandler.getDefaultFont().deriveFont(18.0f));
+
+		return button;
+	}
+
+	private UiCheckBox createCheckBox(String messageCode) {
+		UiCheckBox checkBox = new UiCheckBox(getLocalization().getButtonLabel(messageCode));
+		checkBox.setFocusPainted(false);
+		checkBox.setFont(FontHandler.getDefaultFont().deriveFont(18.0f));
+
+		return checkBox;
 	}
 
 	private void setInsertButtonAsDefault()
 	{
 		setDefaultButton(grid.getInsertButton());
 	}
-	
-	
-	private static void setGridSize(FancySearchGridEditor gridEditor, int borderWidth)
-	{
-		int gridWidth = Utilities.getViewableScreenSize().width - 4*borderWidth;
-		gridEditor.getComponent().setPreferredSize(new Dimension(gridWidth, 300));
-	}
-	
+
 	private void clearGridIfAnyProblems()
 	{
 		try
@@ -260,7 +334,17 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 	{
 		return grid.getSearchTree();
 	}
-	
+
+	public boolean dontSearchTrashFolder()
+	{
+		return dontSearchTrash.isSelected();
+	}
+
+	public void setDontSearchTrashFolder(boolean searchFinalOnly)
+	{
+		dontSearchTrash.setSelected(searchFinalOnly);
+	}
+
 	public boolean searchFinalBulletinsOnly()
 	{
 		return searchFinalBulletins.isSelected();
@@ -455,6 +539,7 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 
 	boolean result;
 	FancySearchGridEditor grid;
+	UiCheckBox dontSearchTrash;
 	UiCheckBox searchFinalBulletins;
 	UiCheckBox searchSameRowsOnly;
 }
