@@ -95,6 +95,8 @@ public abstract class GridTable extends UiTableWithCellEditingProtection
 				setColumnWidthToHeaderWidth(i);
 			else if(columnType.isBoolean())
 				setColumnWidthToHeaderWidth(i);
+			else if (columnType.isUnknown())
+				setColumnWidthForUnknownType(i);
 			else
 				setColumnWidthToMinimumRequred(i);
 		}
@@ -168,6 +170,10 @@ public abstract class GridTable extends UiTableWithCellEditingProtection
 			widestWidth += DROPDOWN_LANGUAGE_PADDING;
 		
 		return widestWidth;
+	}
+
+	public void setColumnWidthForUnknownType (int column) {
+		setColumnWidthToMinimumRequred(column);
 	}
 
 	public JComponent[] getFocusableComponents()

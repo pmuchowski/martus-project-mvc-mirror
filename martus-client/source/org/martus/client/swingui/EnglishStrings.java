@@ -478,7 +478,7 @@ public class EnglishStrings
 "button:SearchSameRowsOnly=Match multi-list item list details in search screen to a single item (Click \"Help\" to learn more)",
 "button:DontSearchTrash=Don't search Trash folder",
 "button:DeleteSelectedGridRow=Delete Selected Row",
-"button:InsertEmptyGridRow=Insert Row",
+"button:InsertEmptyGridRow=+ Add Criteria",
 "button:AppendEmptyGridRow=Append Row",
 "button:PopUpTreeChoose=Choose Field",
 "button:RunReport=Use Existing Report Format",
@@ -491,7 +491,7 @@ public class EnglishStrings
 "button:SaveSearch=Save search criteria",
 "button:LoadSearch=Load search criteria",
 "button:LoadSearchOkButton=Load",
-"button:LoadFieldValuesFromAllBulletins=Load all possible values for selected field",
+"button:LoadFieldValuesFromAllBulletins=Load all possible field values",
 "field:SearchHeader=Set Search Criteria",
 
 "button:AddTemplate=Add",
