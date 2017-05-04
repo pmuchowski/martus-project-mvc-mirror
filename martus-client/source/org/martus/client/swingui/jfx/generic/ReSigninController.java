@@ -28,10 +28,10 @@ package org.martus.client.swingui.jfx.generic;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import javafx.scene.Node;
-
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.jfx.landing.bulletins.FxViewFieldCreator;
+
+import javafx.scene.Node;
 
 public class ReSigninController extends SigninController
 {
@@ -45,7 +45,6 @@ public class ReSigninController extends SigninController
 	public void initialize(URL location, ResourceBundle bundle)
 	{
 		super.initialize(location, bundle);
-		hideLanguageDropdown();
 		updateMessagePane();
 	}
 

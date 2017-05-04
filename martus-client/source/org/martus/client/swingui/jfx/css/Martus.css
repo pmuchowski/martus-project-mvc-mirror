@@ -129,6 +129,28 @@
 .button-transparentDarkText {
 }
 
+.button-green,
+.button-green:hover,
+.button-green:pressed {
+    -fx-border-radius: 20 20 20 20;
+    -fx-text-fill: White;
+    -fx-alignment: center;
+    -fx-font-size: 18px;
+    -fx-padding: 5 35 5 35;
+    -fx-background-color:#00B050;
+}
+
+.button-gray,
+.button-gray:hover,
+.button-gray:pressed {
+    -fx-border-radius: 20 20 20 20;
+    -fx-text-fill: White;
+    -fx-alignment: center;
+    -fx-font-size: 18px;
+    -fx-padding: 5 35 5 35;
+    -fx-background-color:#A6A6A6;
+}
+
 /************/
 /* Headings */
 /************/
@@ -152,6 +174,12 @@
 	-fx-text-fill: #4c5e70;
 	-fx-font-size: 13px;
 	-fx-padding: 5 3 5 3;
+}
+
+.headingLevel4 {
+    -fx-text-fill: #3f3f3f;
+    -fx-font-size: 20px;
+    -fx-padding: 5 3 5 3;
 }
 
 /********/
@@ -181,6 +209,32 @@
 
 .tab-cases {
 	-fx-background-color:  #C8C8C8;
+}
+
+.singIn-tab .tab-header-area .tab-header-background {
+    -fx-opacity: 0;
+}
+
+.singIn-tab .tab-label {
+    -fx-font-size: 18px;
+    -fx-text-fill: White;
+}
+
+.singIn-tab .tab {
+    -fx-background-color: #A6A6A6;
+    -fx-background-insets: 0 1 0 1, 0, 0;
+    -fx-background-radius: 0;
+}
+
+.singIn-tab .tab:selected {
+    -fx-background-color: #6a6a6a;
+    -fx-background-insets: 0 1 0 1, 0, 0;
+}
+
+.singIn-content {
+    -fx-background-color: #e6e6e6;
+    -fx-border-width: 1;
+    -fx-border-color: #6a6a6a;
 }
 
 /************/
@@ -229,4 +283,23 @@
     -fx-font-size: 15px;
     -fx-font-weight: bold;
     -fx-background-color: #e6e6e6;
+}
+
+.singIn-topBar {
+    -fx-background-color: #3B92E4;
+}
+
+.singIn-welcome-label {
+    -fx-text-fill: White;
+    -fx-font-size: 18px;
+}
+
+.singIn-choice-box {
+    -fx-background-color: White;
+}
+
+.singIn-separator *.line {
+    -fx-border-color: #6a6a6a;
+    -fx-border-style: solid;
+    -fx-border-width: 1px;
 }

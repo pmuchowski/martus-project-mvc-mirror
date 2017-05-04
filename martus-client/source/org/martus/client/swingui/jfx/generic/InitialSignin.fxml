@@ -1,80 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.web.*?>
-
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-   	<TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
-      <tabs>
-      		<Tab text="%Button.SignIn">
-         <content>
-         		    <BorderPane>
-         				<center>
-         				  <VBox>
-            <children>
-            				    <GridPane fx:id="signInPane" vgap="5.0" xmlns:fx="http://javafx.com/fxml">
-               <children>
-               				        <Label styleClass="headingLevel2" text="%CreateAccountUserName" />
-               				        <TextField id="accountName" fx:id="userNameField" GridPane.columnIndex="1" />
-               		
-               				        <Label styleClass="headingLevel2" text="%Password" GridPane.rowIndex="1" />
-               				        <PasswordField id="password" fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-               </children>
-                                 <columnConstraints>
-                                    <ColumnConstraints />
-                                    <ColumnConstraints />
-                                 </columnConstraints>
-                                 <rowConstraints>
-                                    <RowConstraints />
-                                    <RowConstraints />
-                                 </rowConstraints>
-            		
-            				    </GridPane>
-            				    <VBox fx:id="createPane">
-               <children>
-               					    <Hyperlink fx:id="newAccountHyperLink" onAction="#onNewAccount" text="%CreateNewAccount" />
-               </children>
-            					</VBox>
-            </children>
-         				  </VBox>
-         				</center>
-         				<bottom>
-         					<HBox>
-            <children>
-            		        		<ChoiceBox fx:id="languagesDropdown">
-                                 <HBox.margin>
-                                    <Insets right="10.0" />
-                                 </HBox.margin></ChoiceBox>
-            					
-            						<Button fx:id="okButton" defaultButton="true" onAction="#onOk" text="%Button.SignIn">
-                                 <HBox.margin>
-                                    <Insets right="10.0" />
-                                 </HBox.margin></Button>
-            						<Button onAction="#onCancel" text="%Button.cancel" />
-            </children>
-         					</HBox>
-         				</bottom>
-         		    </BorderPane>
-         </content>
-      		</Tab>
-      		<Tab fx:id="restoreTab" text="%Button.RecoverAccountTab">
-         <content>
-         			<VBox>
-            <children>
-            			    <Button onAction="#onRestoreFile" text="%Button.RecoverAccountByBackup" />
-            			    <Button onAction="#onRestoreShare" text="%Button.RecoverAccountByShare" />
-            </children>
-         			</VBox>
-         </content>
-      		</Tab>
-      </tabs>
-         <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-         </padding>
-   	</TabPane>
-   </children>
+    <children>
+        <VBox>
+            <HBox styleClass="singIn-topBar" alignment="CENTER">
+                <padding>
+                    <Insets top="5" bottom="5" />
+                </padding>
+                <children>
+                    <Label text="%WelcomeToMartus" styleClass="singIn-welcome-label" />
+                </children>
+            </HBox>
+            <StackPane VBox.vgrow="ALWAYS">
+                <padding>
+                    <Insets left="20" right="20" bottom="10" />
+                </padding>
+                <children>
+                    <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE" styleClass="singIn-tab">
+                        <tabs>
+                            <Tab text="%Button.SignInTab">
+                                <content>
+                                    <HBox styleClass="singIn-content">
+                                        <HBox HBox.hgrow="ALWAYS" />
+                                        <VBox>
+                                            <padding>
+                                                <Insets top="20" />
+                                            </padding>
+                                            <children>
+                                                <GridPane fx:id="signInPane" vgap="5.0" hgap="5" xmlns:fx="http://javafx.com/fxml">
+                                                    <children>
+                                                        <Label styleClass="headingLevel4" text="%CreateAccountUserName" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                        <TextField id="accountName" fx:id="userNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                                                        <Label styleClass="headingLevel4" text="%Password" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                        <PasswordField id="password" fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                                        <Label styleClass="headingLevel4" text="%LanguageLabel" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                                        <ChoiceBox fx:id="languagesDropdown" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="singIn-choice-box" />
+                                                    </children>
+                                                    <columnConstraints>
+                                                        <ColumnConstraints halignment="RIGHT" />
+                                                        <ColumnConstraints />
+                                                    </columnConstraints>
+                                                    <rowConstraints>
+                                                        <RowConstraints />
+                                                        <RowConstraints />
+                                                        <RowConstraints />
+                                                    </rowConstraints>
+                                                </GridPane>
+                                                <HBox>
+                                                    <padding>
+                                                        <Insets top="20" />
+                                                    </padding>
+                                                    <children>
+                                                        <Button fx:id="okButton" defaultButton="true" onAction="#onOk" text="%Button.SignIn" styleClass="button-green" />
+                                                        <HBox HBox.hgrow="ALWAYS" />
+                                                        <Button onAction="#onCancel" text="%Button.cancel" styleClass="button-gray" />
+                                                    </children>
+                                                </HBox>
+                                                <HBox VBox.vgrow="ALWAYS" />
+                                                <VBox fx:id="createPane" spacing="10" alignment="CENTER">
+                                                    <padding>
+                                                        <Insets bottom="20" />
+                                                    </padding>
+                                                    <children>
+                                                        <HBox alignment="CENTER">
+                                                            <Separator HBox.hgrow="ALWAYS" styleClass="singIn-separator" />
+                                                            <Label text="%NewToMartus" styleClass="headingLevel4" />
+                                                            <Separator HBox.hgrow="ALWAYS" styleClass="singIn-separator" />
+                                                        </HBox>
+                                                        <Button fx:id="newAccountButton" onAction="#onNewAccount" text="%Button.CreateNewAccount" styleClass="button-gray" />
+                                                    </children>
+                                                </VBox>
+                                            </children>
+                                        </VBox>
+                                        <HBox HBox.hgrow="ALWAYS" />
+                                    </HBox>
+                                </content>
+                            </Tab>
+                            <Tab fx:id="restoreTab" text="%Button.RecoverAccountTab">
+                                <content>
+                                    <HBox styleClass="singIn-content">
+                                        <HBox HBox.hgrow="ALWAYS" />
+                                        <VBox alignment="CENTER_LEFT" spacing="10">
+                                            <children>
+                                                <Label styleClass="headingLevel4" text="%RecoverAccountOptions" />
+                                                <Button onAction="#onRestoreFile" text="%Button.RecoverAccountByBackup" styleClass="button-green" />
+                                                <Button onAction="#onRestoreShare" text="%Button.RecoverAccountByShare" styleClass="button-green" />
+                                            </children>
+                                        </VBox>
+                                        <HBox HBox.hgrow="ALWAYS" />
+                                    </HBox>
+                                </content>
+                            </Tab>
+                        </tabs>
+                        <padding>
+                            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        </padding>
+                    </TabPane>
+                </children>
+            </StackPane>
+        </VBox>
+    </children>
 </StackPane>
