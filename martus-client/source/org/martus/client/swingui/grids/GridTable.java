@@ -172,7 +172,8 @@ public abstract class GridTable extends UiTableWithCellEditingProtection
 		return widestWidth;
 	}
 
-	public void setColumnWidthForUnknownType (int column) {
+	public void setColumnWidthForUnknownType (int column)
+	{
 		setColumnWidthToMinimumRequred(column);
 	}
 

@@ -133,7 +133,8 @@ public class SearchGridTable extends GridTable
 	}
 
 	@Override
-	public void setColumnWidthForUnknownType (int column) {
+	public void setColumnWidthForUnknownType (int column)
+	{
 		int width = ((GridCellEditorAndRenderer) editors.get(new FieldTypeUnknown())).getMinimumCellWidth();
 		setColumnMaxWidth(column, width);
 	}
