@@ -50,6 +50,7 @@ import org.martus.client.swingui.grids.GridPopUpTreeCellEditor;
 import org.martus.client.swingui.grids.GridTable;
 import org.martus.client.swingui.grids.SearchGridTable;
 import org.martus.common.FieldSpecCollection;
+import org.martus.common.MartusLogger;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.swing.UiButton;
 import org.martus.swing.Utilities;
@@ -187,7 +188,7 @@ public class FancySearchGridEditor extends UiEditableGrid
 
 	private GridButtonCellViewer getFieldDeleteButtonViewer()
 	{
-		int column = FancySearchTableModel.deleteButtonColumn;
+		int column = FancySearchTableModel.DELETE_BUTTON_COLUMN;
 		return (GridButtonCellViewer)getTable().getCellEditor(0, column);
 	}
 
@@ -213,7 +214,8 @@ public class FancySearchGridEditor extends UiEditableGrid
 		fieldChoiceEditor.addActionListener(new PopUpActionHandler());
 	}
 
-	private void addDeleteRowCellButtonListener() {
+	private void addDeleteRowCellButtonListener()
+	{
 		UIButtonViewer buttonCellViewer = (UIButtonViewer)getFieldDeleteButtonViewer().getUiField();
 		buttonCellViewer.setActionListener(new DeleteRowListener());
 	}
@@ -227,7 +229,7 @@ public class FancySearchGridEditor extends UiEditableGrid
 		}
 	}
 
-	private class DeleteRowListener implements ActionListener
+	protected class DeleteRowListener implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
@@ -235,9 +237,9 @@ public class FancySearchGridEditor extends UiEditableGrid
 			{
 				deleteSelectedRow();
 			}
-			catch (ArrayIndexOutOfBoundsException e1)
+			catch (ArrayIndexOutOfBoundsException ex)
 			{
-				e1.printStackTrace();
+				MartusLogger.logException(ex);
 			}
 		}
 	}

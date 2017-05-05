@@ -92,7 +92,7 @@ public class FancySearchTableModel extends GridTableModel implements TableModelL
 	@Override
 	public String getColumnName(int column)
 	{
-		if(column == deleteButtonColumn)
+		if(isDeleteButtonColumn(column))
 			return " ";
 
 		return super.getColumnName(column);
@@ -101,7 +101,7 @@ public class FancySearchTableModel extends GridTableModel implements TableModelL
 	@Override
 	public FieldType getColumnType(int column)
 	{
-		if(column == deleteButtonColumn)
+		if(isDeleteButtonColumn(column))
 			return new FieldTypeUnknown();
 
 		return super.getColumnType(column);
@@ -110,7 +110,7 @@ public class FancySearchTableModel extends GridTableModel implements TableModelL
 	@Override
 	public FieldSpec getFieldSpecForColumn(int column)
 	{
-		if(column == deleteButtonColumn)
+		if(isDeleteButtonColumn(column))
 			return FieldSpec.createFieldSpec(new FieldTypeUnknown());
 
 		return super.getFieldSpecForColumn(column);
@@ -119,7 +119,7 @@ public class FancySearchTableModel extends GridTableModel implements TableModelL
 	@Override
 	public Object getValueAt(int row, int column)
 	{
-		if(column == deleteButtonColumn)
+		if(isDeleteButtonColumn(column))
 			return "";
 
 		return super.getValueAt(row, column);
@@ -128,10 +128,14 @@ public class FancySearchTableModel extends GridTableModel implements TableModelL
 	@Override
 	public void setValueAt(Object aValue, int row, int column)
 	{
-		if(column == deleteButtonColumn)
+		if(isDeleteButtonColumn(column))
 			return;
 
 		super.setValueAt(aValue, row, column);
+	}
+
+	private boolean isDeleteButtonColumn(int column) {
+		return column == DELETE_BUTTON_COLUMN;
 	}
 
 	@Override
@@ -284,8 +288,8 @@ public class FancySearchTableModel extends GridTableModel implements TableModelL
 	public static int fieldColumn = 1;
 	public static int opColumn = 2;
 	public static int valueColumn = 3;
-	public static int deleteButtonColumn = 5;
 
+	public static final int DELETE_BUTTON_COLUMN = 5;
 	private static final int EXTRA_COLUMN_COUNT = 1;
 
 	private MiniLocalization localization;

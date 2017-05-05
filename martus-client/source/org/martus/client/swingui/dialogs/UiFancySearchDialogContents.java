@@ -68,6 +68,10 @@ import org.martus.util.TokenReplacement.TokenInvalidException;
 
 public class UiFancySearchDialogContents extends SwingDialogContentPane
 {
+	private static final String DIALOG_BACKGROUND_COLOR = "#E6E6E6";
+	private static final String HEADER_BACKGROUND_COLOR = "#C8C8C8";
+	private static final String HEADER_FONT_COLOR = "#595959";
+
 	public UiFancySearchDialogContents(UiMainWindow owner)
 	{
 		super(owner);
@@ -101,24 +105,24 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 
 		JPanel headerPanel = new JPanel();
 		headerPanel.setLayout(new BorderLayout());
-		headerPanel.setBackground(Color.decode("#E6E6E6"));
+		headerPanel.setBackground(Color.decode(DIALOG_BACKGROUND_COLOR));
 		headerPanel.setBorder(new EmptyBorder(0, 0, 5, 0));
 		UiTextArea searchHeader = new UiTextArea(getLocalization().getFieldLabel("SearchHeader"));
 		searchHeader.setEditable(false);
-		searchHeader.setForeground(Color.decode("#595959"));
-		searchHeader.setBackground(Color.decode("#C8C8C8"));
+		searchHeader.setForeground(Color.decode(HEADER_FONT_COLOR));
+		searchHeader.setBackground(Color.decode(HEADER_BACKGROUND_COLOR));
 		searchHeader.setFont(FontHandler.getDefaultFont().deriveFont(Font.BOLD, 20.0f));
 		searchHeader.setBorder(new EmptyBorder(5, 15, 5, 5));
 		headerPanel.add(searchHeader, BorderLayout.CENTER);
 
 		Box topButtonsBox = Box.createHorizontalBox();
-		topButtonsBox.setBackground(Color.decode("#E6E6E6"));
+		topButtonsBox.setBackground(Color.decode(DIALOG_BACKGROUND_COLOR));
 		topButtonsBox.setBorder(new EmptyBorder(0,0,10,0));
 		Component[] buttons = new Component[] { Box.createHorizontalGlue(), save, load };
 		Utilities.addComponentsRespectingOrientation(topButtonsBox, buttons);
 
 		Box bottomButtonsBox = Box.createHorizontalBox();
-		bottomButtonsBox.setBackground(Color.decode("#E6E6E6"));
+		bottomButtonsBox.setBackground(Color.decode(DIALOG_BACKGROUND_COLOR));
 		bottomButtonsBox.setBorder(new EmptyBorder(10,0,0,0));
 		buttons = new Component[] { search, Box.createHorizontalStrut(20), cancel, Box.createHorizontalGlue(), help };
 		Utilities.addComponentsRespectingOrientation(bottomButtonsBox, buttons);
@@ -132,7 +136,7 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		searchSameRowsOnly.setSelected(false);
 
 		JPanel bottomPanel = new JPanel();
-		bottomPanel.setBackground(Color.decode("#E6E6E6"));
+		bottomPanel.setBackground(Color.decode(DIALOG_BACKGROUND_COLOR));
 		bottomPanel.setLayout(new GridBagLayout());
 
 		GridBagConstraints gridBagConstraints = new GridBagConstraints();
@@ -170,7 +174,7 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		JPanel mainPanel = new JPanel();
 		mainPanel.setBorder(new EmptyBorder(15,20,15,20));
 		mainPanel.setLayout(new GridBagLayout());
-		mainPanel.setBackground(Color.decode("#E6E6E6"));
+		mainPanel.setBackground(Color.decode(DIALOG_BACKGROUND_COLOR));
 
 		gridBagConstraints = new GridBagConstraints();
 		gridBagConstraints.fill = GridBagConstraints.HORIZONTAL;
