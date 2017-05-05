@@ -48,8 +48,6 @@ import java.util.Stack;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import javafx.application.Platform;
-
 import javax.crypto.Cipher;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
@@ -155,6 +153,8 @@ import org.martus.util.TokenReplacement.TokenInvalidException;
 import org.martus.util.UnicodeReader;
 import org.martus.util.language.LanguageOptions;
 import org.martus.util.xml.XmlUtilities;
+
+import javafx.application.Platform;
 
 public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInterface
 {
@@ -634,7 +634,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		{
 			try
 			{
-				SigninController signinController = new InitialSigninController(this);
+				InitialSigninController signinController = new InitialSigninController(this);
 				createAndShowModalDialog(signinController, signinController.getPreferredDimension(), "MartusSignIn");
 				SigninResult result = signinController.getResult();
 				if(result == null)

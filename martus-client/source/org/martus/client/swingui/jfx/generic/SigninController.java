@@ -29,27 +29,21 @@ import java.awt.Dimension;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.martus.client.swingui.UiMainWindow;
+import org.martus.common.MartusLogger;
+import org.martus.common.crypto.MartusCrypto.AuthorizationFailedException;
+
 import javafx.application.Platform;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-
-import org.martus.client.swingui.UiMainWindow;
-import org.martus.client.swingui.jfx.setupwizard.step6.FxSelectLanguageController;
-import org.martus.common.MartusLogger;
-import org.martus.common.crypto.MartusCrypto.AuthorizationFailedException;
-import org.martus.common.fieldspec.ChoiceItem;
 
 abstract public class SigninController extends FxNonWizardShellController
 {
@@ -69,15 +63,7 @@ abstract public class SigninController extends FxNonWizardShellController
 	public void initialize(URL location, ResourceBundle bundle)
 	{
 		super.initialize(location, bundle);
-		ObservableList<ChoiceItem> availableLanguages = FxSelectLanguageController.getAvailableLanguages(getLocalization());
-		languagesDropdown.setItems(availableLanguages);
-		ChoiceItem currentLanguageChoiceItem = FxSelectLanguageController.findCurrentLanguageChoiceItem(getLocalization());
-		languagesDropdown.getSelectionModel().select(currentLanguageChoiceItem);
 
-		SingleSelectionModel<ChoiceItem> selectionModel = languagesDropdown.selectionModelProperty().getValue();
-		ReadOnlyObjectProperty<ChoiceItem> selectedLanguageProperty = selectionModel.selectedItemProperty();
-		selectedLanguageProperty.addListener((property, oldValue, newValue) -> languageChangedTo(newValue));
-		
 		BooleanBinding isUserNameEmpty = userNameField.textProperty().isEmpty();
 		BooleanBinding isPasswordEmpty = passwordField.textProperty().isEmpty();
 		okButton.disableProperty().bind(isUserNameEmpty.or(isPasswordEmpty));
@@ -85,12 +71,7 @@ abstract public class SigninController extends FxNonWizardShellController
 		Platform.runLater(()->userNameField.requestFocus());
 	}
 
-	private void languageChangedTo(ChoiceItem newValue)
-	{
-		closeDialog(SigninResult.CHANGE_LANGUAGE);
-	}
-	
-	private void closeDialog(SigninResult resultToUse)
+	protected void closeDialog(SigninResult resultToUse)
 	{
 		result = resultToUse;
 		getStage().close();
@@ -99,11 +80,6 @@ abstract public class SigninController extends FxNonWizardShellController
 	public SigninResult getResult()
 	{
 		return result;
-	}
-	
-	public String getSelectedLanguageCode()
-	{
-		return languagesDropdown.getSelectionModel().getSelectedItem().getCode();
 	}
 
 	public String getUserName()
@@ -117,11 +93,6 @@ abstract public class SigninController extends FxNonWizardShellController
 		// The caller will wipe the char[] we return, but the string could exist 
 		// in memory even after Martus exits. 
 		return passwordField.getText().toCharArray();
-	}
-	
-	protected void hideLanguageDropdown()
-	{
-		languagesDropdown.setVisible(false);
 	}
 	
 	@FXML
@@ -201,13 +172,16 @@ abstract public class SigninController extends FxNonWizardShellController
 		closeDialog(SigninResult.RESTORE_FILE);
 	}
 
-	public void setSignInPaneVisible(boolean visible)
+	public void setSignInRowsVisible(boolean visible)
 	{
-		signInPane.setVisible(visible);
+		signInPane.getChildren().get(0).setVisible(visible);
+		signInPane.getChildren().get(1).setVisible(visible);
+		signInPane.getChildren().get(2).setVisible(visible);
+		signInPane.getChildren().get(3).setVisible(visible);
 	}
 	
 	public static enum SigninResult { CANCEL, SIGNIN, CREATE_ACCOUNT, CHANGE_LANGUAGE, RESTORE_SHARE, RESTORE_FILE };
-	public static final Dimension SIGNIN_PREFERRED_DIALOG_SIZE = new Dimension(700, 250);
+	public static final Dimension SIGNIN_PREFERRED_DIALOG_SIZE = new Dimension(550, 400);
 	
 	@FXML
 	private GridPane signInPane;
@@ -223,10 +197,7 @@ abstract public class SigninController extends FxNonWizardShellController
 	
 	@FXML
 	private PasswordField passwordField;
-	
-	@FXML 
-	private ChoiceBox<ChoiceItem> languagesDropdown; 
-	
+
 	@FXML 
 	Pane signInMessagePane;
 
