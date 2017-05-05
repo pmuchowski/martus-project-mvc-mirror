@@ -116,7 +116,8 @@ public class TabularReportBuilder extends ReportBuilder
 		for(int i = start; i !=  end; i += increment)
 		{
 			MiniFieldSpec fieldSpec = specs[i];
-			if (fieldSpec.getType().isMessage())
+			//FIXME MEDIUM - this is a temporary fix to get a unsigned jar to a client.
+			if (fieldSpec.getType().isMessage() && !fieldSpec.getTopLevelType().isGrid())
 			{
 				detailBuffer.append(getColumnStart());
 				detailBuffer.append("</td>");

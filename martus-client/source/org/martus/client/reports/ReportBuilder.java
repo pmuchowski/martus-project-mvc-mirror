@@ -127,7 +127,7 @@ public class ReportBuilder
 		//The real fix is based on properly unit testing the replacement of new lines, or configuring Velocity to handle new lines. 
 		//Another option might be to replace \n with <br/> tags
 		String topLevelLabel = spec.getTopLevelLabel();
-		String topLevelLabelWithoutNewLines = topLevelLabel.replaceAll("\n", " ");
+		String topLevelLabelWithoutNewLines = replaceNewLinesWithSingleSpace(topLevelLabel);
 		result.append(quotedEscape(topLevelLabelWithoutNewLines));
 		System.out.println("TOP LEVEL label = " + topLevelLabelWithoutNewLines);
 	
@@ -141,7 +141,7 @@ public class ReportBuilder
 			result.append(".getSubField(\"");
 			String tag = tags[i];
 			System.out.println("tag = " + tag);
-			String tagWithoutNewLines = tag.replaceAll("\n", " ");
+			String tagWithoutNewLines = replaceNewLinesWithSingleSpace(tag);
 			System.out.println("tag = " + tagWithoutNewLines);
 			String quotedEscape = quotedEscape(tagWithoutNewLines);
 			result.append(quotedEscape);
@@ -149,6 +149,12 @@ public class ReportBuilder
 		}
 			
 		return result.toString();
+	}
+
+	public static String replaceNewLinesWithSingleSpace(String topLevelLabel)
+	{
+		final String SINGLE_SPACE = " ";
+		return topLevelLabel.replaceAll("\n", SINGLE_SPACE);
 	}
 	
 	protected static final String INDENT = "&nbsp;&nbsp;&nbsp;&nbsp;";

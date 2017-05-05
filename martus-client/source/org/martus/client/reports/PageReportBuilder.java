@@ -104,7 +104,8 @@ public class PageReportBuilder extends ReportBuilder
 			detailBuffer.append(fieldSpec.getLabel());
 			detailBuffer.append(getHtmlColumnEndTag());
 			
-			if (fieldSpec.getType().isMessage())
+			//FIXME MEDIUM - this is a temporary fix to get a unsigned jar to a client.
+			if (fieldSpec.getType().isMessage() && !fieldSpec.getTopLevelType().isGrid())
 			{
 				detailBuffer.append(getHtmlColumnStartTag());
 				detailBuffer.append(getHtmlColumnEndTag());

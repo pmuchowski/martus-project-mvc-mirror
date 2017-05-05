@@ -115,9 +115,10 @@ public class SafeReadableBulletin
 		
 		//FIXME MEDIUM : this is a second bug from MARTUSDEV-1800.  This is a temp fix to patch and 
 		//send a user a unsigned jar.  Also added trimming white space for the labels.
-		String candidateLabel = candidate.getLabel();
+		String candidateLabel = candidate.getLocalizedLabel(localization);
 		String candidateLabelWithEscapedQuotes = ReportBuilder.quotedEscape(candidateLabel);
 		candidateLabelWithEscapedQuotes = candidateLabelWithEscapedQuotes.trim();
+		candidateLabelWithEscapedQuotes = ReportBuilder.replaceNewLinesWithSingleSpace(candidateLabelWithEscapedQuotes);
 		label = label.trim();
 		
 		return candidateLabelWithEscapedQuotes.equals(label);
