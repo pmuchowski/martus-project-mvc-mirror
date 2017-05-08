@@ -118,6 +118,8 @@ public class BulletinEditorFooterController extends FxController
 		@Override
 		public void onClick()
 		{
+			FxBulletinEditorShellController shellController = (FxBulletinEditorShellController) getController().getShellController();
+			shellController.saveDraftBulletin();
 		}
 	}
 

@@ -61,7 +61,6 @@
                                 <HBox alignment="CENTER_LEFT" BorderPane.alignment="CENTER">
                                     <children>
                                         <Button fx:id="saveSplitMenuButton" text="%Button.versionBulletin" onAction="#onSaveBulletin" styleClass="button-green" />
-                                        <Button onAction="#onVersionBulletin" text="%Button.createBulletinCopy" styleClass="split-menu-button" />
                                     </children>
                                 </HBox>
                             </left>

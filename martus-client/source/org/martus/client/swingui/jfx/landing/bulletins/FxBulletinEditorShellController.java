@@ -289,12 +289,6 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 	}
 
 	@FXML
-	private void onVersionBulletin(ActionEvent event)
-	{
-		saveBulletinWithState(BulletinState.STATE_SNAPSHOT);
-	}
-	
-	@FXML
 	private void onShareBulletin(ActionEvent event)
 	{
 		saveBulletinWithState(BulletinState.STATE_SHARED);
@@ -304,6 +298,10 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 	private void onCancel(ActionEvent event)
 	{
 		closeDialog();
+	}
+
+	public void saveDraftBulletin() {
+		saveBulletinWithState(BulletinState.STATE_SNAPSHOT);
 	}
 
 	private void saveBulletinWithState(final BulletinState state)
