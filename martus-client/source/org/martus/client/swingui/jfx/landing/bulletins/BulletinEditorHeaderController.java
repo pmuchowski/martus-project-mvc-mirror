@@ -25,33 +25,38 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.jfx.landing.bulletins;
 
+import java.net.URL;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.ResourceBundle;
 import java.util.Vector;
 
-import javafx.beans.property.Property;
-import javafx.beans.property.StringProperty;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-
+import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.core.FxBulletin;
 import org.martus.client.core.MartusApp;
+import org.martus.client.search.SaneCollator;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.client.swingui.actions.ActionDoer;
-import org.martus.client.swingui.jfx.generic.DialogWithNoButtonsShellController;
 import org.martus.client.swingui.jfx.generic.FxController;
-import org.martus.client.swingui.jfx.generic.data.FxBindingHelpers;
-import org.martus.client.swingui.jfx.landing.general.SelectTemplateController;
+import org.martus.client.swingui.jfx.generic.data.ObservableChoiceItemList;
 import org.martus.common.ContactKeys;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.HeadquartersKey;
-import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.fieldspec.ChoiceItem;
+import org.martus.common.fieldspec.FormTemplate;
 import org.martus.util.TokenReplacement;
+
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableSet;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 
 public class BulletinEditorHeaderController extends FxController
 {
@@ -72,9 +77,55 @@ public class BulletinEditorHeaderController extends FxController
 		return "css/MainDialog.css";
 	}
 
+	@Override
+	public void initialize(URL location, ResourceBundle bundle)
+	{
+		super.initialize(location, bundle);
+
+		ClientBulletinStore store = getBulletinStore();
+		ObservableSet<String> templateNames = store.getAvailableTemplates();
+		ObservableChoiceItemList templateChoiceItems = new ObservableChoiceItemList();
+		templateNames.forEach(name -> templateChoiceItems.add(createTemplateChoiceItem(name)));
+		Comparator<ChoiceItem> sorter = new SaneCollator(getLocalization().getCurrentLanguageCode());
+		templateChoiceItems.sort(sorter);
+		availableTemplates.setItems(templateChoiceItems);
+		updateSelectionFromReality();
+		availableTemplates.valueProperty().addListener(new TemplateChangeHandler());
+	}
+
+	private void updateSelectionFromReality()
+	{
+		ClientBulletinStore store = getBulletinStore();
+		ObservableChoiceItemList templateChoiceItems = (ObservableChoiceItemList) availableTemplates.getItems();
+		try
+		{
+			blockSelection();
+			ChoiceItem current = templateChoiceItems.findByCode(store.getCurrentFormTemplateName());
+			availableTemplates.getSelectionModel().select(current);
+			unblockSelection();
+		}
+		catch(Exception e)
+		{
+			logAndNotifyUnexpectedError(e);
+		}
+	}
+
+	private ClientBulletinStore getBulletinStore()
+	{
+		return getApp().getStore();
+	}
+
+	private ChoiceItem createTemplateChoiceItem(String name)
+	{
+		String displayableName = name;
+		if(displayableName.equals(FormTemplate.MARTUS_DEFAULT_FORM_TEMPLATE_NAME))
+			displayableName = getLocalization().getFieldLabel("DisplayableDefaultFormTemplateName");
+		ChoiceItem choiceItem = new ChoiceItem(name, displayableName);
+		return choiceItem;
+	}
+
 	public void showBulletin(FxBulletin bulletinToShow)
 	{
-		updateTitle(bulletinToShow);
 		updateFrom(bulletinToShow);
 		updateTo(bulletinToShow);
 		updateAddRemoveContacts();
@@ -170,28 +221,53 @@ public class BulletinEditorHeaderController extends FxController
 		}
 	}
 
-	private void updateTitle(FxBulletin bulletinToShow)
+	private void blockSelection()
 	{
-		StringProperty newTitleProperty = bulletinToShow.fieldProperty(Bulletin.TAGTITLE);
-		titleProperty = FxBindingHelpers.bindToOurPropertyField(newTitleProperty, titleField.textProperty(), titleProperty);
-		headerTitleLabel.textProperty().bind(titleProperty);
+		selectionBlocked = true;
 	}
 
-	@FXML
-	private void onSelectTemplate(ActionEvent event) 
+	private void unblockSelection()
 	{
-		try
+		selectionBlocked = false;
+	}
+
+	private boolean isSelectionBlocked()
+	{
+		return selectionBlocked;
+	}
+
+	protected class TemplateChangeHandler implements ChangeListener<ChoiceItem>
+	{
+		@Override
+		public void changed(ObservableValue<? extends ChoiceItem> observable, ChoiceItem oldValue, ChoiceItem newValue)
 		{
-			FxController controller = new SelectTemplateController(getMainWindow());
-			ActionDoer shellController = new DialogWithNoButtonsShellController(getMainWindow(), controller);
-			doAction(shellController);
-		}
-		catch (Exception e)
-		{
-			logAndNotifyUnexpectedError(e);
+			try
+			{
+				if (isSelectionBlocked())
+				{
+					return;
+				}
+				else
+				{
+					String message = getLocalization().getFieldLabel("confirmOkToSwitchTemplate");
+					if (!showConfirmationDialog("SelectTemplate", message))
+					{
+						blockSelection();
+						availableTemplates.getSelectionModel().select(oldValue);
+						unblockSelection();
+						return;
+					}
+				}
+
+				getBulletinStore().setFormTemplate(newValue.getCode());
+			}
+			catch(Exception e)
+			{
+				logAndNotifyUnexpectedError(e);
+			}
 		}
 	}
-	
+
 	@FXML
 	private void onAddRemoveContact(ActionEvent event) 
 	{
@@ -206,19 +282,16 @@ public class BulletinEditorHeaderController extends FxController
 			updateAuthorizedToContactsList();
 		}
 	}
-	
-	@FXML
-	Label headerTitleLabel;
 
 	@FXML
-	TextField titleField;
-	
-	@FXML
-	Label toField;
+	private Label toField;
 
 	@FXML
-	Button addRemoveContact;
-	
-	private Property titleProperty;
+	private Button addRemoveContact;
+
+	@FXML
+	private ChoiceBox<ChoiceItem> availableTemplates;
+
+	private boolean selectionBlocked;
 	private ObservableList<HeadquartersKey> authorizedToContacts;
 }

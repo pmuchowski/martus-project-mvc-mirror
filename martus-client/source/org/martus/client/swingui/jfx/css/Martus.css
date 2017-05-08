@@ -347,3 +347,11 @@
 .background-blue {
     -fx-background-color: #3B92E4;
 }
+
+.background-grey {
+    -fx-background-color:#e6e6e6;
+}
+
+.background-white {
+    -fx-background-color: #FFFFFF;
+}
