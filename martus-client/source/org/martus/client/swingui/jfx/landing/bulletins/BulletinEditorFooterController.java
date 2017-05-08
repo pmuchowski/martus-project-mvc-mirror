@@ -55,13 +55,25 @@ public class BulletinEditorFooterController extends FxController
 
 	private abstract class ComboBoxChoiceItem
 	{
+		public ComboBoxChoiceItem(String label)
+		{
+			this.label = label;
+		}
+
+		@Override
+		public String toString()
+		{
+			return label;
+		}
+
+		private String label;
 	}
 
 	private class HistoryItem extends ComboBoxChoiceItem
 	{
 		public HistoryItem(String data, UniversalId revisionUidToUse)
 		{
-			label = data;
+			super(data);
 			revisionUid = revisionUidToUse;
 		}
 		
@@ -69,15 +81,8 @@ public class BulletinEditorFooterController extends FxController
 		{
 			return revisionUid;
 		}
-		
-		@Override
-		public String toString()
-		{
-			return label;
-		}
 
 		private UniversalId revisionUid;
-		private String label;
 	}
 
 	public void showBulletin(FxBulletin bulletinToShow)
