@@ -108,6 +108,19 @@ public class BulletinEditorFooterController extends FxController
 		private UniversalId revisionUid;
 	}
 
+	private class SaveDraftItem extends ComboBoxChoiceItem
+	{
+		public SaveDraftItem(FxController controller, String label)
+		{
+			super(controller, label);
+		}
+
+		@Override
+		public void onClick()
+		{
+		}
+	}
+
 	public void showBulletin(FxBulletin bulletinToShow)
 	{
 		bulletin = bulletinToShow;
@@ -132,6 +145,7 @@ public class BulletinEditorFooterController extends FxController
 			String currentVersionLastSaved = UiBulletinDetailsDialog.getSavedDateToDisplay(bulletinUid,bulletinUid, mainWindow);
 			String versionsData =  getHistoryItemData(versionNumber, currentVersionLastSaved, currentVersionTitle);
 			historyItemLabels.add(new HistoryItem(this, versionsData, bulletinUid));
+			historyItemLabels.add(new SaveDraftItem(this, getLocalization().getButtonLabel("saveAsNewVersion")));
 			historyItems.setItems(historyItemLabels);
 		} 
 		catch (TokenInvalidException e)
@@ -178,8 +192,8 @@ public class BulletinEditorFooterController extends FxController
 	}
 	
 	@FXML
-	private ComboBox<HistoryItem> historyItems;
+	private ComboBox<ComboBoxChoiceItem> historyItems;
 
-	private ObservableList<HistoryItem> historyItemLabels;
+	private ObservableList<ComboBoxChoiceItem> historyItemLabels;
 	private FxBulletin bulletin;
 }

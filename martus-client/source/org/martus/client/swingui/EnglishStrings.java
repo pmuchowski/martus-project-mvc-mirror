@@ -424,7 +424,7 @@ public class EnglishStrings
 "button:saveBulletin=Save",
 "button:versionBulletin=Save Draft",
 "button:shareBulletin=Send",
-"button:createBulletinCopy=Create a copy",
+"button:saveAsNewVersion=+ Save as new version",
 
 "button:InputServerNameOk=OK",
 "button:inputsearchok=Search",
