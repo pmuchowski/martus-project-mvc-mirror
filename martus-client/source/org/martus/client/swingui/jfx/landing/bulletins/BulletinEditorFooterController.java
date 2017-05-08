@@ -27,12 +27,6 @@ package org.martus.client.swingui.jfx.landing.bulletins;
 
 import java.util.HashMap;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.core.FxBulletin;
 import org.martus.client.swingui.UiMainWindow;
@@ -45,6 +39,12 @@ import org.martus.common.packet.UniversalId;
 import org.martus.util.TokenReplacement;
 import org.martus.util.TokenReplacement.TokenInvalidException;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+
 public class BulletinEditorFooterController extends FxController
 {
 
@@ -52,8 +52,12 @@ public class BulletinEditorFooterController extends FxController
 	{
 		super(mainWindowToUse);
 	}
-	
-	private class HistoryItem
+
+	private abstract class ComboBoxChoiceItem
+	{
+	}
+
+	private class HistoryItem extends ComboBoxChoiceItem
 	{
 		public HistoryItem(String data, UniversalId revisionUidToUse)
 		{
