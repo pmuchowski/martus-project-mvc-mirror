@@ -55,10 +55,13 @@ public class BulletinEditorFooterController extends FxController
 
 	private abstract class ComboBoxChoiceItem
 	{
-		public ComboBoxChoiceItem(String label)
+		public ComboBoxChoiceItem(FxController controller, String label)
 		{
+			this.controller = controller;
 			this.label = label;
 		}
+
+		public abstract void onClick();
 
 		@Override
 		public String toString()
@@ -66,17 +69,37 @@ public class BulletinEditorFooterController extends FxController
 			return label;
 		}
 
+		public FxController getController()
+		{
+			return controller;
+		}
+
+		private FxController controller;
 		private String label;
 	}
 
 	private class HistoryItem extends ComboBoxChoiceItem
 	{
-		public HistoryItem(String data, UniversalId revisionUidToUse)
+		public HistoryItem(FxController controller, String data, UniversalId revisionUidToUse)
 		{
-			super(data);
+			super(controller, data);
 			revisionUid = revisionUidToUse;
 		}
-		
+
+		@Override
+		public void onClick()
+		{
+			ClientBulletinStore store = getController().getApp().getStore();
+			Bulletin bulletinHistoryItem = store.getBulletinRevision(this.getUid());
+
+			if(bulletinHistoryItem == null)
+				return;
+
+			ActionMenuViewFxBulletin actionDoer = new ActionMenuViewFxBulletin(getMainWindow(), getController());
+			actionDoer.setBulletin(bulletinHistoryItem);
+			getController().doAction(actionDoer);
+		}
+
 		public UniversalId getUid()
 		{
 			return revisionUid;
@@ -103,12 +126,12 @@ public class BulletinEditorFooterController extends FxController
 				String dateSaved = UiBulletinDetailsDialog.getSavedDateToDisplay(revisionUid,bulletinUid, mainWindow);
 				String title = UiBulletinDetailsDialog.getTitleToDisplay(revisionUid, bulletinUid, mainWindow);
 				String versionsData =  getHistoryItemData(versionNumber, dateSaved, title);
-				historyItemLabels.add(new HistoryItem(versionsData, revisionUid));
+				historyItemLabels.add(new HistoryItem(this, versionsData, revisionUid));
 			}
 			String currentVersionTitle = bulletinToShow.fieldProperty(Bulletin.TAGTITLE).getValue();
 			String currentVersionLastSaved = UiBulletinDetailsDialog.getSavedDateToDisplay(bulletinUid,bulletinUid, mainWindow);
 			String versionsData =  getHistoryItemData(versionNumber, currentVersionLastSaved, currentVersionTitle);
-			historyItemLabels.add(new HistoryItem(versionsData, bulletinUid));
+			historyItemLabels.add(new HistoryItem(this, versionsData, bulletinUid));
 			historyItems.setItems(historyItemLabels);
 		} 
 		catch (TokenInvalidException e)
@@ -145,17 +168,9 @@ public class BulletinEditorFooterController extends FxController
 	{
 		try
 		{
-			final HistoryItem selectedVersion = historyItems.getSelectionModel().getSelectedItem();
-			ClientBulletinStore store = getApp().getStore();
-			Bulletin bulletinHistoryItem = store.getBulletinRevision(selectedVersion.getUid());
-			if(bulletinHistoryItem == null)
-				return; 
-			
-			
-			ActionMenuViewFxBulletin actionDoer = new ActionMenuViewFxBulletin(getMainWindow(), this);
-			actionDoer.setBulletin(bulletinHistoryItem);
-			doAction(actionDoer);
-		} 
+			final ComboBoxChoiceItem selectedItem = historyItems.getSelectionModel().getSelectedItem();
+			selectedItem.onClick();
+		}
 		catch (Exception e)
 		{
 			logAndNotifyUnexpectedError(e);
