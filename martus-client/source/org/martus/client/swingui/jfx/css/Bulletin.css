@@ -90,6 +90,11 @@ Scene {
 -fx-background-color: white;
 }
 
+.list-item-green {
+    -fx-text-fill: #00B050;
+    -fx-font-weight: bold;
+}
+
 .choice-box {
 -fx-padding: 2 6 3 6;
 -fx-font-size: 13px;

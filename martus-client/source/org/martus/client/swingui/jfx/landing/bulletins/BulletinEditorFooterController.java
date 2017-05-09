@@ -44,6 +44,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.util.Callback;
 
 public class BulletinEditorFooterController extends FxController
 {
@@ -149,7 +152,36 @@ public class BulletinEditorFooterController extends FxController
 			historyItemLabels.add(new HistoryItem(this, versionsData, bulletinUid));
 			historyItemLabels.add(new SaveDraftItem(this, getLocalization().getButtonLabel("saveAsNewVersion")));
 			historyItems.setItems(historyItemLabels);
-		} 
+
+			historyItems.setCellFactory(new Callback<ListView<ComboBoxChoiceItem>, ListCell<ComboBoxChoiceItem>>()
+			{
+				@Override
+				public ListCell<ComboBoxChoiceItem> call(ListView<ComboBoxChoiceItem> param)
+				{
+					return new ListCell<ComboBoxChoiceItem>()
+					{
+						@Override
+						public void updateItem(ComboBoxChoiceItem item, boolean empty)
+						{
+							super.updateItem(item, empty);
+
+							if (item != null)
+							{
+								setText(item.toString());
+								if (getIndex() == getListView().getItems().size() - 1)
+								{
+									this.getStyleClass().add("list-item-green");
+								}
+							}
+							else
+							{
+								setText(null);
+							}
+						}
+					};
+				}
+			});
+		}
 		catch (TokenInvalidException e)
 		{
 			logAndNotifyUnexpectedError(e);
