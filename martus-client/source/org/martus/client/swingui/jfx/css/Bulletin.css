@@ -90,6 +90,15 @@ Scene {
 -fx-background-color: white;
 }
 
+.dropdown-list {
+    -fx-padding: 2 6 3 6;
+    -fx-font-size: 13px;
+    -fx-background-color: white;
+    -fx-border-color: #bdbdbd;
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+}
+
 .list-item-green {
     -fx-text-fill: #00B050;
     -fx-font-weight: bold;

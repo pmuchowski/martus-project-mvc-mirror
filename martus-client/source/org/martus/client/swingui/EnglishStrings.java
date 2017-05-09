@@ -425,6 +425,7 @@ public class EnglishStrings
 "button:versionBulletin=Save Draft",
 "button:shareBulletin=Send",
 "button:saveAsNewVersion=+ Save as new version",
+"field:RecordHistory=Record History",
 
 "button:InputServerNameOk=OK",
 "button:inputsearchok=Search",

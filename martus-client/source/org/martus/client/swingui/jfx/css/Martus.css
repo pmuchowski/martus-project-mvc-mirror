@@ -355,3 +355,13 @@
 .background-white {
     -fx-background-color: #FFFFFF;
 }
+
+.link-noHover,
+.link-noHover:visited,
+.link-noHover:hover,
+.link-noHover:focused {
+    -fx-text-fill: black;
+    -fx-underline: true;
+    -fx-border-color: transparent;
+    -fx-font-size: 14px;
+}

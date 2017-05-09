@@ -283,6 +283,13 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 	}
 
 	@FXML
+	private void onShowBulletinDetails(ActionEvent event)
+	{
+		BulletinDetailsController details = new BulletinDetailsController(getMainWindow(), fxBulletin);
+		showDialogWithClose("BulletinDetails", details);
+	}
+
+	@FXML
 	private void onSaveBulletin(ActionEvent event)
 	{
 		saveBulletinWithState(BulletinState.STATE_SAVE);
