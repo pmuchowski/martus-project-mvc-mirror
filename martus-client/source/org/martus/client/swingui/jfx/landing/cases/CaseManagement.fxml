@@ -62,7 +62,7 @@
                 </HBox>
             </right>
         </BorderPane>
-        <ListView fx:id="casesListViewAll" onMouseClicked="#onCaseListMouseClicked" prefWidth="300.0" />
+        <ListView fx:id="casesListViewAll" onMouseClicked="#onCaseListMouseClicked" prefWidth="300.0" VBox.vgrow="ALWAYS" />
         <BorderPane>
             <left>
                 <HBox BorderPane.alignment="CENTER">
