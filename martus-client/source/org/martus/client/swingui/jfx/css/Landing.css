@@ -74,9 +74,11 @@
 }
 
 .button-transparentWithHover:hover {
+    -fx-background-color: #85C1FD;
 }
 
 .button-transparentWithHover:pressed {
+    -fx-background-color: #85C1FD;
 }
 
 .button-transparentNoHover{
