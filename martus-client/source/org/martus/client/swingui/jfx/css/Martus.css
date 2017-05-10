@@ -45,10 +45,12 @@
 }
 
 .button-transparentMinPadding:hover {
+	-fx-background-color: #85C1FD;
 	-fx-padding: 5 5 5 5;
 }
 
 .button-transparentMinPadding:pressed {
+	-fx-background-color: #85C1FD;
 	-fx-padding: 5 5 5 5;
 }
 
@@ -112,10 +114,12 @@
 
 .button-transparentWithHover:hover {
 		-fx-padding: 5 5 5 5;
+		-fx-background-color: #85C1FD;
 }
 
 .button-transparentWithHover:pressed {
 		-fx-padding: 5 5 5 5;
+		-fx-background-color: #85C1FD;
 }
 
 .button-transparentDarkText{
