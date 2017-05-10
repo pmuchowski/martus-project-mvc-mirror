@@ -1,5 +1,5 @@
 .root {
-  -fx-font-family: "Helvetica";
+  -fx-font-family: "Helvetica Light", Helvetica, sans-serif;
   -fx-line-height: inherit 28px;
  }
 
@@ -206,7 +206,7 @@
 
 .headingLevel4 {
     -fx-text-fill: #3f3f3f;
-    -fx-font-size: 20px;
+    -fx-font-size: 18px;
     -fx-padding: 5 3 5 3;
 }
 
@@ -256,7 +256,7 @@
 }
 
 .singIn-tab .tab-label {
-    -fx-font-size: 18px;
+    -fx-font-size: 16px;
     -fx-text-fill: White;
 }
 
@@ -274,7 +274,7 @@
 .singIn-content {
     -fx-background-color: #e6e6e6;
     -fx-border-width: 1;
-    -fx-border-color: #6a6a6a;
+    -fx-border-color: #737373;
 }
 
 /************/
@@ -373,4 +373,8 @@
     -fx-underline: true;
     -fx-border-color: transparent;
     -fx-font-size: 14px;
+}
+
+.singIn-text {
+    -fx-text-alignment: center;
 }

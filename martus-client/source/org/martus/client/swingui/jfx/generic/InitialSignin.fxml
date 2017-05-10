@@ -54,7 +54,7 @@
                                                         <ChoiceBox fx:id="languagesDropdown" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="singIn-choice-box" />
                                                     </children>
                                                     <columnConstraints>
-                                                        <ColumnConstraints halignment="RIGHT" />
+                                                        <ColumnConstraints />
                                                         <ColumnConstraints />
                                                     </columnConstraints>
                                                     <rowConstraints>
