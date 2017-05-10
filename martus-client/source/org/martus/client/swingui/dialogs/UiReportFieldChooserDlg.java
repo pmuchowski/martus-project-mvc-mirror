@@ -34,6 +34,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Set;
 
 import javax.swing.Box;
@@ -107,6 +109,7 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 		gridBagConstraints = createGridBagConstraints(1, 1, GridBagConstraints.NONE);
 		gridBagConstraints.anchor = GridBagConstraints.PAGE_START;
 		mainSelectionsPanel.add(createAddRemoveSelectedFieldsButtonsPanel(), gridBagConstraints);
+		addTableRowDoubleClickListeners();
 
 		gridBagConstraints = createGridBagConstraints(2, 1, GridBagConstraints.BOTH, 1, 1);
 		mainSelectionsPanel.add(selectedFieldsPanel, gridBagConstraints);
@@ -120,6 +123,12 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 		Utilities.packAndCenterWindow(this);
 	}
 
+	private void addTableRowDoubleClickListeners()
+	{
+		fieldSelector.getTable().addMouseListener(new AddFieldByDoubleClickSelectedField());
+		selectedFieldsSelector.getTable().addMouseListener(new RemoveFieldByDoubleClickSelectedField());
+	}
+	
 	private Box createStepLabel(String stepCode, String labelCode) {
 		Box labelBox = Box.createHorizontalBox();
 		labelBox.setBorder(new EmptyBorder(15, 0, 5, 0));
@@ -166,10 +175,10 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 
 	private JPanel createAddRemoveSelectedFieldsButtonsPanel()
 	{
-		JButton removeFieldButton = new JButton("<-");
+		removeFieldButton = new JButton("<-");
 		removeFieldButton.addActionListener(new RemoveFieldFromSelectedTableHandler());
 		
-		JButton addFieldButton = new JButton("->");
+		addFieldButton = new JButton("->");
 		addFieldButton.addActionListener(new AddFieldToSelectedTableHandler());
 		
 		JPanel selectionButtonsPanel = new JPanel();
@@ -343,6 +352,45 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 		}
 	}
 	
+	protected abstract class AbstractDoubleClickHandler extends MouseAdapter
+	{
+		@Override
+		 public void mousePressed(MouseEvent me) 
+		 {
+		        if (isDoubleClick(me)) 
+		        {
+		        	handleDoubleClick();
+		        }
+		    }
+
+		private boolean isDoubleClick(MouseEvent me)
+		{
+			return me.getClickCount() == 2;
+		}
+
+		abstract protected void handleDoubleClick();
+	}
+	
+	protected class RemoveFieldByDoubleClickSelectedField extends AbstractDoubleClickHandler
+	{
+		@Override
+		 public void handleDoubleClick() 
+		 {
+		       removeFieldButton.doClick();
+		 }
+	}
+	
+	protected class AddFieldByDoubleClickSelectedField extends AbstractDoubleClickHandler
+	{
+		@Override
+		public void handleDoubleClick() 
+		{
+			addFieldButton.doClick();
+		}
+	}
+	
+	protected JButton removeFieldButton;
+	protected JButton addFieldButton;
 	private UiMainWindow mainWindow;
 	protected JComboBox formTemplateDropdown;
 	protected UiReportFieldSelectorPanel fieldSelector;

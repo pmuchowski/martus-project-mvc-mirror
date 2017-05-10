@@ -39,13 +39,16 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 
+import org.martus.client.search.FieldChooserSpecBuilder;
+import org.martus.client.search.SearchFieldChooserSpecBuilder;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.dialogs.SingleSelectionFieldChooserDialog;
+import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.MiniFieldSpec;
 import org.martus.common.fieldspec.PopUpTreeFieldSpec;
 import org.martus.common.fieldspec.SearchFieldTreeModel;
@@ -147,22 +150,31 @@ public class UiPopUpFieldChooserEditor extends UiField implements ActionListener
 		Container topLevel = panel.getTopLevelAncestor();
 		Point locationOnScreen = panel.getLocationOnScreen();
 		String initialCode = getText();
-		DefaultMutableTreeNode selectedNode = askUserForField(topLevel, locationOnScreen, spec, initialCode, mainWindow.getLocalization());
+		SearchableFieldChoiceItem selectedNode = askUserForField(topLevel, locationOnScreen, spec, initialCode, mainWindow.getLocalization());
 		if(selectedNode == null)
 			return;
 		
-		selectedItem = (SearchableFieldChoiceItem)selectedNode.getUserObject();
+		selectedItem = selectedNode;
 		label.setText(selectedNode.toString());
 		notifyListeners();
 	}
 
-	private DefaultMutableTreeNode askUserForField(Container topLevel, Point location, PopUpTreeFieldSpec treeSpec, String initialCode, MartusLocalization localization)
+	private SearchableFieldChoiceItem askUserForField(Container topLevel, Point location, PopUpTreeFieldSpec treeSpec, String initialCode, MartusLocalization localization)
 	{
-		FieldTreeDialog dlg = createFieldChooserDialog(topLevel, location, treeSpec, localization);
-		dlg.selectCode(initialCode);
-		dlg.setVisible(true);
-		DefaultMutableTreeNode selectedNode = dlg.getSelectedNode();
-		return selectedNode;
+		FieldChooserSpecBuilder fieldChooserSpecBuilder = new SearchFieldChooserSpecBuilder(mainWindow.getLocalization());
+		FieldSpec[] availableFieldSpecs = fieldChooserSpecBuilder.createFieldSpecArray(mainWindow.getStore());
+		SingleSelectionFieldChooserDialog uiReportDialog = new SingleSelectionFieldChooserDialog(mainWindow, availableFieldSpecs);
+
+		uiReportDialog.setVisible(true);
+		FieldSpec[] selectedSpecs = uiReportDialog.getSelectedSpecs();
+		if (selectedSpecs == null)
+			return null;
+
+		if (selectedSpecs.length == 0)
+			return null;
+		
+		FieldSpec fieldSpec = selectedSpecs[0];
+		return new SearchableFieldChoiceItem(fieldSpec);
 	}
 
 	protected FieldTreeDialog createFieldChooserDialog(Container topLevel, Point locationOnScreen, PopUpTreeFieldSpec treeSpec, MartusLocalization localization)

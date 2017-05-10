@@ -30,6 +30,7 @@ import java.awt.Component;
 
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import org.martus.client.reports.SpecTableModel;
@@ -54,6 +55,11 @@ public class UiReportFieldSelectorPanel extends JPanel
 		table.createDefaultColumnsFromModel();
 		table.setColumnSelectionAllowed(false);
 		add(new UiScrollPane(table), BorderLayout.CENTER);
+	}
+	
+	public void enableSingleSelection()
+	{
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 
 	public void rebuildTableWithNewFieldSpecs(FieldSpec[] rawFieldSpecs)
