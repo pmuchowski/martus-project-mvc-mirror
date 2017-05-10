@@ -11,7 +11,9 @@
                 <Insets top="20" left="5" right="5" />
             </padding>
             <children>
-                <Pane fx:id="signInMessagePane" />
+                <HBox alignment="CENTER">
+                    <Pane fx:id="signInMessagePane" />
+                </HBox>
                 <HBox VBox.vgrow="ALWAYS" />
                 <HBox>
                     <HBox HBox.hgrow="ALWAYS" />
