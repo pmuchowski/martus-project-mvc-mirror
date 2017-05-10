@@ -206,7 +206,7 @@
 
 .headingLevel4 {
     -fx-text-fill: #3f3f3f;
-    -fx-font-size: 20px;
+    -fx-font-size: 18px;
     -fx-padding: 5 3 5 3;
 }
 
@@ -256,7 +256,7 @@
 }
 
 .singIn-tab .tab-label {
-    -fx-font-size: 18px;
+    -fx-font-size: 16px;
     -fx-text-fill: White;
 }
 
