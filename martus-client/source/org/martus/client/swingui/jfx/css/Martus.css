@@ -248,6 +248,7 @@
     -fx-border-color: #2c2c2c;
     -fx-border-radius: 5;
     -fx-background-insets: 0;
+    -fx-font-size: 14px;
  }
 
 .list-cell:filled:selected:focused:selected {
@@ -264,7 +265,7 @@
 /* TableView */
 /*************/
 .table-view{
- -fx-font-size: 15px;
+    -fx-font-size: 14px;
 }
 
 /* Selected row */
