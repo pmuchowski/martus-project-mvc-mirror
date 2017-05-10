@@ -278,6 +278,10 @@
     -fx-background-color: #85C1FD;
 }
 
+.table-column {
+    -fx-alignment: center;
+}
+
 .casesMenu {
     -fx-text-fill: Black;
     -fx-font-size: 15px;
