@@ -27,12 +27,6 @@ package org.martus.client.swingui.jfx.landing.bulletins;
 
 import java.util.HashMap;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.ComboBox;
-
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.core.FxBulletin;
 import org.martus.client.swingui.UiMainWindow;
@@ -45,6 +39,15 @@ import org.martus.common.packet.UniversalId;
 import org.martus.util.TokenReplacement;
 import org.martus.util.TokenReplacement.TokenInvalidException;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.util.Callback;
+
 public class BulletinEditorFooterController extends FxController
 {
 
@@ -52,28 +55,75 @@ public class BulletinEditorFooterController extends FxController
 	{
 		super(mainWindowToUse);
 	}
-	
-	private class HistoryItem
+
+	private abstract class ComboBoxChoiceItem
 	{
-		public HistoryItem(String data, UniversalId revisionUidToUse)
+		public ComboBoxChoiceItem(FxController controller, String label)
 		{
-			label = data;
-			revisionUid = revisionUidToUse;
+			this.controller = controller;
+			this.label = label;
 		}
-		
-		public UniversalId getUid()
-		{
-			return revisionUid;
-		}
-		
+
+		public abstract void onClick();
+
 		@Override
 		public String toString()
 		{
 			return label;
 		}
 
-		private UniversalId revisionUid;
+		public FxController getController()
+		{
+			return controller;
+		}
+
+		private FxController controller;
 		private String label;
+	}
+
+	private class HistoryItem extends ComboBoxChoiceItem
+	{
+		public HistoryItem(FxController controller, String data, UniversalId revisionUidToUse)
+		{
+			super(controller, data);
+			revisionUid = revisionUidToUse;
+		}
+
+		@Override
+		public void onClick()
+		{
+			ClientBulletinStore store = getController().getApp().getStore();
+			Bulletin bulletinHistoryItem = store.getBulletinRevision(this.getUid());
+
+			if(bulletinHistoryItem == null)
+				return;
+
+			ActionMenuViewFxBulletin actionDoer = new ActionMenuViewFxBulletin(getMainWindow(), getController());
+			actionDoer.setBulletin(bulletinHistoryItem);
+			getController().doAction(actionDoer);
+		}
+
+		public UniversalId getUid()
+		{
+			return revisionUid;
+		}
+
+		private UniversalId revisionUid;
+	}
+
+	private class SaveDraftItem extends ComboBoxChoiceItem
+	{
+		public SaveDraftItem(FxController controller, String label)
+		{
+			super(controller, label);
+		}
+
+		@Override
+		public void onClick()
+		{
+			FxBulletinEditorShellController shellController = (FxBulletinEditorShellController) getController().getShellController();
+			shellController.saveDraftBulletin();
+		}
 	}
 
 	public void showBulletin(FxBulletin bulletinToShow)
@@ -94,17 +144,57 @@ public class BulletinEditorFooterController extends FxController
 				String dateSaved = UiBulletinDetailsDialog.getSavedDateToDisplay(revisionUid,bulletinUid, mainWindow);
 				String title = UiBulletinDetailsDialog.getTitleToDisplay(revisionUid, bulletinUid, mainWindow);
 				String versionsData =  getHistoryItemData(versionNumber, dateSaved, title);
-				historyItemLabels.add(new HistoryItem(versionsData, revisionUid));
+				historyItemLabels.add(new HistoryItem(this, versionsData, revisionUid));
 			}
 			String currentVersionTitle = bulletinToShow.fieldProperty(Bulletin.TAGTITLE).getValue();
 			String currentVersionLastSaved = UiBulletinDetailsDialog.getSavedDateToDisplay(bulletinUid,bulletinUid, mainWindow);
 			String versionsData =  getHistoryItemData(versionNumber, currentVersionLastSaved, currentVersionTitle);
-			historyItemLabels.add(new HistoryItem(versionsData, bulletinUid));
+			historyItemLabels.add(new HistoryItem(this, versionsData, bulletinUid));
+			historyItemLabels.add(new SaveDraftItem(this, getLocalization().getButtonLabel("saveAsNewVersion")));
 			historyItems.setItems(historyItemLabels);
-		} 
+
+			historyItems.setCellFactory(new HistoryItemCellFactory());
+		}
 		catch (TokenInvalidException e)
 		{
 			logAndNotifyUnexpectedError(e);
+		}
+	}
+
+	protected class HistoryItemCellFactory implements Callback<ListView<ComboBoxChoiceItem>, ListCell<ComboBoxChoiceItem>>
+	{
+		protected class ComboBoxChoiceItemUpdateHandler extends ListCell<ComboBoxChoiceItem>
+		{
+			@Override
+			public void updateItem(ComboBoxChoiceItem item, boolean empty)
+			{
+				super.updateItem(item, empty);
+				setText(getText(item));
+
+				if (item != null && isLastItemInList())
+				{
+					this.getStyleClass().add("list-item-green");
+				}
+			}
+
+			private String getText(ComboBoxChoiceItem item)
+			{
+				if (item == null)
+					return null;
+
+				return item.toString();
+			}
+
+			private boolean isLastItemInList()
+			{
+				return getIndex() == getListView().getItems().size() - 1;
+			}
+		}
+
+		@Override
+		public ListCell<ComboBoxChoiceItem> call(ListView<ComboBoxChoiceItem> param)
+		{
+			return new ComboBoxChoiceItemUpdateHandler();
 		}
 	}
 
@@ -125,28 +215,13 @@ public class BulletinEditorFooterController extends FxController
 	}
 
 	@FXML
-	private void onShowBulletinDetails(ActionEvent event) 
-	{
-		BulletinDetailsController details = new BulletinDetailsController(getMainWindow(), bulletin);
-		showDialogWithClose("BulletinDetails", details);
-	}
-	
-	@FXML
 	private void onShowVersion(ActionEvent event) 
 	{
 		try
 		{
-			final HistoryItem selectedVersion = historyItems.getSelectionModel().getSelectedItem();
-			ClientBulletinStore store = getApp().getStore();
-			Bulletin bulletinHistoryItem = store.getBulletinRevision(selectedVersion.getUid());
-			if(bulletinHistoryItem == null)
-				return; 
-			
-			
-			ActionMenuViewFxBulletin actionDoer = new ActionMenuViewFxBulletin(getMainWindow(), this);
-			actionDoer.setBulletin(bulletinHistoryItem);
-			doAction(actionDoer);
-		} 
+			final ComboBoxChoiceItem selectedItem = historyItems.getSelectionModel().getSelectedItem();
+			selectedItem.onClick();
+		}
 		catch (Exception e)
 		{
 			logAndNotifyUnexpectedError(e);
@@ -154,8 +229,8 @@ public class BulletinEditorFooterController extends FxController
 	}
 	
 	@FXML
-	private ComboBox<HistoryItem> historyItems;
+	private ComboBox<ComboBoxChoiceItem> historyItems;
 
-	private ObservableList<HistoryItem> historyItemLabels;
+	private ObservableList<ComboBoxChoiceItem> historyItemLabels;
 	private FxBulletin bulletin;
 }

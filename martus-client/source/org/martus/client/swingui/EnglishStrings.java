@@ -420,10 +420,12 @@ public class EnglishStrings
 "button:ShowMap=Show on Map",
 "button:ShowImage=Return to image",
 
+"field:CreateRecord=Create a new record",
 "button:saveBulletin=Save",
 "button:versionBulletin=Save Draft",
 "button:shareBulletin=Send",
-"button:createBulletinCopy=Create a copy",
+"button:saveAsNewVersion=+ Save as new version",
+"field:RecordHistory=Record History",
 
 "button:InputServerNameOk=OK",
 "button:inputsearchok=Search",
@@ -1710,6 +1712,7 @@ public class EnglishStrings
 "field:To=To ",
 "field:From=From ",
 "field:VersionNumber=Version # ",
+"field:SelectTemplate=Select a Template",
 
 "wintitle:FileDialogImportContactPublicKey=Import Contact Key",
 "button:FileDialogOkImportContactPublicKey=Import",

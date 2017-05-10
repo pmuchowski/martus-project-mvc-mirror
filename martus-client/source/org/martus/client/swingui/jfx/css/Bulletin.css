@@ -72,8 +72,8 @@ Scene {
 }
 
 .systemFieldTitle {	
-	-fx-font-size: 15px;
-	-fx-text-fill: #405980;
+	-fx-font-size: 20px;
+	-fx-text-fill: #3f3f3f;
 	-fx-font-weight: bold;
 	-fx-text-alignment:left;
 	-fx-padding:5 0 5 0;
@@ -88,6 +88,20 @@ Scene {
 
 .context-menu {
 -fx-background-color: white;
+}
+
+.dropdown-list {
+    -fx-padding: 2 6 3 6;
+    -fx-font-size: 13px;
+    -fx-background-color: white;
+    -fx-border-color: #bdbdbd;
+    -fx-border-width: 2;
+    -fx-background-radius: 0;
+}
+
+.list-item-green {
+    -fx-text-fill: #00B050;
+    -fx-font-weight: bold;
 }
 
 .choice-box {
@@ -105,10 +119,9 @@ Scene {
      -fx-text-fill: black;
  }
 
-
-.headerFieldBox {
-	-fx-padding:0 10 0 10;
-	-fx-background-color:#FFFFFF;
+.border-gray {
+    -fx-border-color: #bdbdbd;
+    -fx-border-width: 1;
 }
 
 .headerButtonHBox {
