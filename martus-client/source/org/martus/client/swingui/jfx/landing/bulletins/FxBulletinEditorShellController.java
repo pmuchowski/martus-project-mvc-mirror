@@ -188,10 +188,10 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 
 	private String getOnOffImagePath(boolean isOn)
 	{
-		String onOffImagePath = TOGGLE_OFF_IMAGE_PATH;
 		if(isOn)
-			onOffImagePath = TOGGLE_ON_IMAGE_PATH;
-		return onOffImagePath;
+			return TOGGLE_ON_IMAGE_PATH;
+
+		return TOGGLE_OFF_IMAGE_PATH;
 	}
 
 	@Override

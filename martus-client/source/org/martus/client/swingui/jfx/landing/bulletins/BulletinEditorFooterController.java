@@ -153,38 +153,48 @@ public class BulletinEditorFooterController extends FxController
 			historyItemLabels.add(new SaveDraftItem(this, getLocalization().getButtonLabel("saveAsNewVersion")));
 			historyItems.setItems(historyItemLabels);
 
-			historyItems.setCellFactory(new Callback<ListView<ComboBoxChoiceItem>, ListCell<ComboBoxChoiceItem>>()
-			{
-				@Override
-				public ListCell<ComboBoxChoiceItem> call(ListView<ComboBoxChoiceItem> param)
-				{
-					return new ListCell<ComboBoxChoiceItem>()
-					{
-						@Override
-						public void updateItem(ComboBoxChoiceItem item, boolean empty)
-						{
-							super.updateItem(item, empty);
-
-							if (item != null)
-							{
-								setText(item.toString());
-								if (getIndex() == getListView().getItems().size() - 1)
-								{
-									this.getStyleClass().add("list-item-green");
-								}
-							}
-							else
-							{
-								setText(null);
-							}
-						}
-					};
-				}
-			});
+			historyItems.setCellFactory(new HistoryItemCellFactory());
 		}
 		catch (TokenInvalidException e)
 		{
 			logAndNotifyUnexpectedError(e);
+		}
+	}
+
+	protected class HistoryItemCellFactory implements Callback<ListView<ComboBoxChoiceItem>, ListCell<ComboBoxChoiceItem>>
+	{
+		protected class ComboBoxChoiceItemUpdateHandler extends ListCell<ComboBoxChoiceItem>
+		{
+			@Override
+			public void updateItem(ComboBoxChoiceItem item, boolean empty)
+			{
+				super.updateItem(item, empty);
+				setText(getText(item));
+
+				if (item != null && isLastItemInList())
+				{
+					this.getStyleClass().add("list-item-green");
+				}
+			}
+
+			private String getText(ComboBoxChoiceItem item)
+			{
+				if (item == null)
+					return null;
+
+				return item.toString();
+			}
+
+			private boolean isLastItemInList()
+			{
+				return getIndex() == getListView().getItems().size() - 1;
+			}
+		}
+
+		@Override
+		public ListCell<ComboBoxChoiceItem> call(ListView<ComboBoxChoiceItem> param)
+		{
+			return new ComboBoxChoiceItemUpdateHandler();
 		}
 	}
 
