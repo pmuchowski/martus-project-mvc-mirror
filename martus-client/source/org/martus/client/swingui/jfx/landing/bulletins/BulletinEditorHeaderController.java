@@ -38,15 +38,18 @@ import org.martus.client.search.SaneCollator;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.jfx.generic.FxController;
+import org.martus.client.swingui.jfx.generic.data.FxBindingHelpers;
 import org.martus.client.swingui.jfx.generic.data.ObservableChoiceItemList;
 import org.martus.common.ContactKeys;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.HeadquartersKey;
+import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.fieldspec.ChoiceItem;
 import org.martus.common.fieldspec.FormTemplate;
 import org.martus.util.TokenReplacement;
 
+import javafx.beans.property.Property;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -57,6 +60,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 public class BulletinEditorHeaderController extends FxController
 {
@@ -126,6 +130,7 @@ public class BulletinEditorHeaderController extends FxController
 
 	public void showBulletin(FxBulletin bulletinToShow)
 	{
+		updateTitle(bulletinToShow);
 		updateFrom(bulletinToShow);
 		updateTo(bulletinToShow);
 		updateAddRemoveContacts();
@@ -244,19 +249,16 @@ public class BulletinEditorHeaderController extends FxController
 			try
 			{
 				if (isSelectionBlocked())
-				{
 					return;
-				}
-				else
+
+				String message = getLocalization().getFieldLabel("confirmOkToSwitchTemplate");
+				if (!showConfirmationDialog("SelectTemplate", message))
 				{
-					String message = getLocalization().getFieldLabel("confirmOkToSwitchTemplate");
-					if (!showConfirmationDialog("SelectTemplate", message))
-					{
-						blockSelection();
-						availableTemplates.getSelectionModel().select(oldValue);
-						unblockSelection();
-						return;
-					}
+					blockSelection();
+					availableTemplates.getSelectionModel().select(oldValue);
+					unblockSelection();
+					
+					return;
 				}
 
 				getBulletinStore().setFormTemplate(newValue.getCode());
@@ -282,6 +284,15 @@ public class BulletinEditorHeaderController extends FxController
 			updateAuthorizedToContactsList();
 		}
 	}
+	
+	private void updateTitle(FxBulletin bulletinToShow)
+	{
+		StringProperty newTitleProperty = bulletinToShow.fieldProperty(Bulletin.TAGTITLE);
+		titleProperty = FxBindingHelpers.bindToOurPropertyField(newTitleProperty, titleField.textProperty(), titleProperty);
+	}
+	
+	@FXML
+	private TextField titleField;
 
 	@FXML
 	private Label toField;
@@ -292,6 +303,7 @@ public class BulletinEditorHeaderController extends FxController
 	@FXML
 	private ChoiceBox<ChoiceItem> availableTemplates;
 
+	private Property titleProperty;
 	private boolean selectionBlocked;
 	private ObservableList<HeadquartersKey> authorizedToContacts;
 }
