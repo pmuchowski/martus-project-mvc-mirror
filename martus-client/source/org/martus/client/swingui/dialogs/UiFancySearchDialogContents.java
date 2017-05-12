@@ -68,8 +68,7 @@ import org.martus.util.TokenReplacement.TokenInvalidException;
 
 public class UiFancySearchDialogContents extends SwingDialogContentPane
 {
-	private static final String DIALOG_BACKGROUND_COLOR = "#E6E6E6";
-	private static final String HEADER_BACKGROUND_COLOR = "#C8C8C8";
+	private static final String DIALOG_BACKGROUND_COLOR = "#F4F4F4";
 	private static final String HEADER_FONT_COLOR = "#595959";
 
 	public UiFancySearchDialogContents(UiMainWindow owner)
@@ -110,7 +109,7 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		UiTextArea searchHeader = new UiTextArea(getLocalization().getFieldLabel("SearchHeader"));
 		searchHeader.setEditable(false);
 		searchHeader.setForeground(Color.decode(HEADER_FONT_COLOR));
-		searchHeader.setBackground(Color.decode(HEADER_BACKGROUND_COLOR));
+		searchHeader.setBackground(Color.decode(DIALOG_BACKGROUND_COLOR));
 		searchHeader.setFont(FontHandler.getDefaultFont().deriveFont(Font.BOLD, 20.0f));
 		searchHeader.setBorder(new EmptyBorder(5, 15, 5, 5));
 		headerPanel.add(searchHeader, BorderLayout.CENTER);
