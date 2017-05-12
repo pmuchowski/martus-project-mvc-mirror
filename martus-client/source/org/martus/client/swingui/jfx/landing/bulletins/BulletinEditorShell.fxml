@@ -18,7 +18,7 @@
             <HBox alignment="CENTER" styleClass="background-blue" prefHeight="15" />
             <HBox>
                 <padding>
-                    <Insets left="20" top="10" right="20" bottom="10" />
+                    <Insets left="20" right="20" />
                 </padding>
                 <children>
                     <HBox>
@@ -48,7 +48,7 @@
     <center>
         <BorderPane>
             <padding>
-                <Insets left="20" right="20" bottom="10" />
+                <Insets left="20" right="20" bottom="5" />
             </padding>
             <top>
                 <StackPane fx:id="headerPane" />
