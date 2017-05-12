@@ -12,7 +12,7 @@
         <VBox BorderPane.alignment="CENTER">
             <children>
                 <HBox>
-                    <HBox styleClass="background-dark-grey">
+                    <HBox styleClass="background-dark-grey" alignment="CENTER">
                         <padding>
                             <Insets left="15" right="15" />
                         </padding>
