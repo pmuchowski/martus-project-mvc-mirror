@@ -217,8 +217,8 @@
 }
 
 .headingLevel6 {
-    -fx-text-fill: #3f3f3f;
-    -fx-font-size: 16px;
+    -fx-text-fill: #2c2c2c;
+    -fx-font-size: 13px;
     -fx-padding: 5 3 5 3;
 }
 
@@ -372,7 +372,7 @@
     -fx-text-fill: black;
     -fx-underline: true;
     -fx-border-color: transparent;
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
 }
 
 .singIn-text {

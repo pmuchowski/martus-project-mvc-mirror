@@ -25,10 +25,10 @@
                         <Hyperlink onAction="#onShowBulletinDetails" text="%BulletinDetails" styleClass="link-noHover" />
                     </HBox>
                     <HBox HBox.hgrow="ALWAYS" />
-                    <HBox>
+                    <HBox alignment="CENTER">
                         <Button fx:id="immutableOnServerButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onImmutable">
                             <graphic>
-                                <ImageView fx:id="immutableOnServerImageView" pickOnBounds="true" preserveRatio="true">
+                                <ImageView fx:id="immutableOnServerImageView" fitHeight="13" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../images/toggle_off.png" />
                                     </image>
