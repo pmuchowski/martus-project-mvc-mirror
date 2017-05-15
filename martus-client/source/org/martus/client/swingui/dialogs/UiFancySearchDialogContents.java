@@ -58,6 +58,7 @@ import org.martus.common.MiniLocalization;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.swing.FontHandler;
 import org.martus.swing.UiButton;
+import org.martus.swing.UiFxStyleButton;
 import org.martus.swing.UiCheckBox;
 import org.martus.swing.UiLinkButton;
 import org.martus.swing.UiTextArea;
@@ -68,9 +69,13 @@ import org.martus.util.TokenReplacement.TokenInvalidException;
 
 public class UiFancySearchDialogContents extends SwingDialogContentPane
 {
-	private static final String DIALOG_BACKGROUND_COLOR = "#E6E6E6";
-	private static final String HEADER_BACKGROUND_COLOR = "#C8C8C8";
+	private static final String DIALOG_BACKGROUND_COLOR = "#F4F4F4";
 	private static final String HEADER_FONT_COLOR = "#595959";
+	private static final String SEARCH_BUTTON_BACKGROUND_COLOR = "#00B050";
+	private static final String CANCEL_BUTTON_BACKGROUND_COLOR = "#A6A6A6";
+	private static final String HELP_BUTTON_BACKGROUND_COLOR = "#FFFFFF";
+	private static final String BUTTON_TEXT_WHITE = "#FFFFFF";
+	private static final String BUTTON_TEXT_BLACK = "#000000";
 
 	public UiFancySearchDialogContents(UiMainWindow owner)
 	{
@@ -90,13 +95,13 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		UiLinkButton load = new UiLinkButton(loadButtonText);
 		load.addActionListener(new LoadButtonHandler(this));
 
-		UiButton help = createButton("Help");
+		UiButton help = createButton("Help", HELP_BUTTON_BACKGROUND_COLOR, BUTTON_TEXT_BLACK, true);
 		help.addActionListener(new HelpListener(getMainWindow()));
 
-		UiButton search = createButton("search");
+		UiButton search = createButton("search", SEARCH_BUTTON_BACKGROUND_COLOR, BUTTON_TEXT_WHITE, false);
 		search.addActionListener(new SearchButtonHandler());
 
-		UiButton cancel = createButton(EnglishCommonStrings.CANCEL);
+		UiButton cancel = createButton(EnglishCommonStrings.CANCEL, CANCEL_BUTTON_BACKGROUND_COLOR, BUTTON_TEXT_WHITE, false);
 		cancel.addActionListener(new CancelButtonHandler());
 
 		UiDialogLauncher dlgLauncher = new UiDialogLauncher(getMainWindow(), getMainWindow().getCurrentActiveFrame().getSwingFrame());
@@ -110,7 +115,7 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		UiTextArea searchHeader = new UiTextArea(getLocalization().getFieldLabel("SearchHeader"));
 		searchHeader.setEditable(false);
 		searchHeader.setForeground(Color.decode(HEADER_FONT_COLOR));
-		searchHeader.setBackground(Color.decode(HEADER_BACKGROUND_COLOR));
+		searchHeader.setBackground(Color.decode(DIALOG_BACKGROUND_COLOR));
 		searchHeader.setFont(FontHandler.getDefaultFont().deriveFont(Font.BOLD, 20.0f));
 		searchHeader.setBorder(new EmptyBorder(5, 15, 5, 5));
 		headerPanel.add(searchHeader, BorderLayout.CENTER);
@@ -211,10 +216,11 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		setInsertButtonAsDefault();
 	}
 
-	private UiButton createButton(String messageCode) {
-		UiButton button = new UiButton(getLocalization().getButtonLabel(messageCode));
-		button.setFocusPainted(false);
-		button.setFont(FontHandler.getDefaultFont().deriveFont(18.0f));
+	private UiButton createButton(String messageCode, String backgroundColorCode, String textColorCode, boolean drawBorder) {
+		UiFxStyleButton button = new UiFxStyleButton(getLocalization().getButtonLabel(messageCode));
+		button.setForeground(Color.decode(textColorCode));
+		button.setBackground(Color.decode(backgroundColorCode));
+		button.setDrawBorder(drawBorder);
 
 		return button;
 	}

@@ -26,12 +26,14 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.search;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
+import javax.swing.Box;
 import javax.swing.JTable;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -53,6 +55,7 @@ import org.martus.common.FieldSpecCollection;
 import org.martus.common.MartusLogger;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.swing.UiButton;
+import org.martus.swing.UiFxStyleButton;
 import org.martus.swing.Utilities;
 
 public class FancySearchGridEditor extends UiEditableGrid
@@ -113,22 +116,52 @@ public class FancySearchGridEditor extends UiEditableGrid
 	{
 		return new SearchGridTable(getMainWindow(), getFancySearchTableModel(), dlgLauncher, context);
 	}
-	
+
+	@Override
 	protected Vector createButtons()
 	{
-		super.createButtons();
 		Vector buttons = new Vector();
 		loadValuesButton = createLoadValuesButton();
-		buttons.add(getInsertButton());
+		insertButton = createInsertButton();
+
+		buttons.add(insertButton);
+		buttons.add(Box.createHorizontalStrut(30));
 		buttons.add(loadValuesButton);
 		return buttons;
 	}
-	
+
+	private UiButton createInsertButton()
+	{
+		UiFxStyleButton button = new UiFxStyleButton(getLocalization().getButtonLabel("InsertEmptyGridRow"));
+		button.addActionListener(new InsertRowListener(table.getDialogLauncher()));
+
+		formatGridButton(button);
+		return button;
+	}
+
 	private UiButton createLoadValuesButton()
 	{
-		return new UiButton(new LoadValuesAction());
+		UiFxStyleButton button = new UiFxStyleButton(new LoadValuesAction());
+
+		formatGridButton(button);
+		return button;
 	}
-	
+
+	private void formatGridButton(UiFxStyleButton button)
+	{
+		button.setForeground(Color.decode("#000000"));
+		button.setBackground(Color.decode("#ffffff"));
+		button.setFontSize(12.0f);
+		button.setRoundedCorners(false);
+		button.setDrawBorder(true);
+	}
+
+	@Override
+	public UiButton getInsertButton()
+	{
+		return insertButton;
+	}
+
 	class LoadValuesAction extends AbstractAction
 	{
 		LoadValuesAction()
@@ -249,4 +282,5 @@ public class FancySearchGridEditor extends UiEditableGrid
 	UiMainWindow mainWindow;
 	FancySearchHelper helper;
 	private UiButton loadValuesButton;
+	private UiButton insertButton;
 }
