@@ -151,11 +151,11 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		itemsTable.setOnSort((sortEvent) -> prepareToSort());
 		
 		onServerColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.1));
-		authorColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.25));
+		authorColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.20));
 		titleColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.3));
 		authorVerifiedColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.1));
 		dateSavedColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.2));
-		editBulletinColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.05));
+		editBulletinColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.1));
 	}
 
 	private void initalizeColumns()

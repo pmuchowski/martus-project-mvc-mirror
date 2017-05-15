@@ -56,10 +56,15 @@ public class ImportServerResponseFileAction implements ActionDoer
 		Vector<FormatFilter> filters = new Vector();
 		filters.add(new ServerResponseFileFilter(getLocalization()));
 		File[] selectedFiles = getMainWindow().showMultiFileOpenDialog("ImportServerResponseFile", filters);
+		if (selectedFiles.length == 0)
+			MartusLogger.logVerbose("No files were selected");
+		
 		for (int index = 0; index < selectedFiles.length; ++index)
 		{
 			importServerResponseFile(selectedFiles[index]);
 		}
+		
+		fxCaseManagementController.showConfirmationDialog("Import Complete!");
 	}
 	
 	public void importServerResponseFile(File serverResponseFileToImport)
@@ -87,6 +92,9 @@ public class ImportServerResponseFileAction implements ActionDoer
 			String allContentAsString = reader.readAll();
 			JSONObject json = loadResponseJson(allContentAsString);
 			Set jsonKeys = json.keySet();
+			if (jsonKeys.isEmpty())
+				MartusLogger.logVerbose("No json keys found in file: " + serverResponseFileToImport.getName());
+			
 			HashMap<String, String> recordNameToServerResponseMap = new HashMap<>();
 			for (Object jsonKey : jsonKeys)
 			{
@@ -94,7 +102,11 @@ public class ImportServerResponseFileAction implements ActionDoer
 				String bulletinId = jsonKey.toString();
 				UniversalId universalId = UniversalId.createFromString(bulletinId);
 				Vector<Bulletin> expectedSingleItemBulletins = getMainWindow().getBulletins(new UniversalId[]{universalId});
-				
+				if (expectedSingleItemBulletins.isEmpty())
+				{
+					MartusLogger.logWarning("Could not find any bulletins matching ID = " + universalId);
+					recordNameToServerResponseMap.put(getLocalization().getFieldLabel("UnknownRecord"), getLocalization().getFieldLabel("RecordDoesNotExist"));
+				}
 				Bulletin foundBulletin = expectedSingleItemBulletins.get(0);
 				if (foundBulletin == null)
 				{
