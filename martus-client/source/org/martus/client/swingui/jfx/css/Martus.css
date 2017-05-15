@@ -152,7 +152,7 @@
     -fx-alignment: center;
     -fx-font-size: 18px;
     -fx-padding: 5 35 5 35;
-    -fx-background-color:#A6A6A6;
+    -fx-background-color:#808080;
 }
 
 .button-transparentNoHover{
@@ -212,13 +212,13 @@
 
 .headingLevel5 {
 	-fx-text-fill: White;
-	-fx-font-size: 18px;
+	-fx-font-size: 13px;
 	-fx-padding: 5 3 5 3;
 }
 
 .headingLevel6 {
-    -fx-text-fill: #3f3f3f;
-    -fx-font-size: 16px;
+    -fx-text-fill: #2c2c2c;
+    -fx-font-size: 13px;
     -fx-padding: 5 3 5 3;
 }
 
@@ -372,7 +372,7 @@
     -fx-text-fill: black;
     -fx-underline: true;
     -fx-border-color: transparent;
-    -fx-font-size: 14px;
+    -fx-font-size: 13px;
 }
 
 .singIn-text {
