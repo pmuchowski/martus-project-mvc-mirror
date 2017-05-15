@@ -120,7 +120,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		initalizeItemsTable();
 		initalizeButtons();
 		initializeStatusBar();
-		itemsTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 	}
 
 	public void prepareToSort()
@@ -150,6 +149,13 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		// a row is selected gives an AOOB exception. To work around that, 
 		// we will always clear the selection before sorting
 		itemsTable.setOnSort((sortEvent) -> prepareToSort());
+		
+		onServerColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.1));
+		authorColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.25));
+		titleColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.3));
+		authorVerifiedColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.1));
+		dateSavedColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.2));
+		editBulletinColumn.prefWidthProperty().bind(itemsTable.widthProperty().multiply(0.05));
 	}
 
 	private void initalizeColumns()
