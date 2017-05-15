@@ -393,10 +393,10 @@ public abstract class UiEditableGrid extends UiGrid implements FocusListener
 		}		
 		UiDialogLauncher dlgLauncher;
 	}
-	
-	private class InsertRowListener implements ActionListener
+
+	protected class InsertRowListener implements ActionListener
 	{
-		InsertRowListener(UiDialogLauncher dlgLauncherToUse)
+		public InsertRowListener(UiDialogLauncher dlgLauncherToUse)
 		{
 			dlgLauncher = dlgLauncherToUse;
 		}
