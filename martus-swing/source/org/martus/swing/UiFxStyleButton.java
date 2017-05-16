@@ -25,6 +25,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.swing;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
@@ -44,6 +45,7 @@ public class UiFxStyleButton extends UiButton
 	private Boolean roundedCorners;
 	private Boolean drawBorder;
 	private Color borderColor;
+	private Integer padding;
 
 	public UiFxStyleButton()
 	{
@@ -92,9 +94,8 @@ public class UiFxStyleButton extends UiButton
 		}
 
 		drawBorders(g2);
+		drawString(g2);
 		g2.dispose();
-
-		super.paintComponent(g);
 	}
 
 	private void drawBorders(Graphics2D g2)
@@ -113,12 +114,21 @@ public class UiFxStyleButton extends UiButton
 		}
 	}
 
+	private void drawString(Graphics2D g2)
+	{
+		FontMetrics metrics = g2.getFontMetrics(getFont());
+		int y = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();
+		g2.setPaint(getForeground());
+		g2.drawString(getText(), padding, y);
+	}
+
 	public void setFontSize(float fontSize) {
 		setFont(FontHandler.getDefaultFont().deriveFont(fontSize));
 	}
 
 	public void setTextPadding(int padding)
 	{
+		this.padding = padding;
 		setMargin(new Insets(0, padding, 0, padding));
 	}
 

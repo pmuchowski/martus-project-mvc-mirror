@@ -228,7 +228,7 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 	private UiCheckBox createCheckBox(String messageCode) {
 		UiCheckBox checkBox = new UiCheckBox(getLocalization().getButtonLabel(messageCode));
 		checkBox.setFocusPainted(false);
-		checkBox.setFont(FontHandler.getDefaultFont().deriveFont(18.0f));
+		checkBox.setFont(FontHandler.getDefaultFont().deriveFont(12.0f));
 
 		return checkBox;
 	}
