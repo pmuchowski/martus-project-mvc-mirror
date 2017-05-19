@@ -26,7 +26,6 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui.jfx.landing.bulletins;
 
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
@@ -43,39 +42,38 @@ public class BulletinOnServerColumnHandler implements Callback<TableColumn<Bulle
 	
 	final class TableCellUpdateHandler extends TableCell
 	{
-		
+		private final ImageView onServerImageView;
+		private final ImageView notOnServerImageView;
+
 		TableCellUpdateHandler(TableColumn tableColumn)
 		{
 			this.tableColumn = tableColumn;
+
+			onServerImageView = new ImageView(ON_SERVER_IMAGE);
+			notOnServerImageView = new ImageView(NOT_ON_SERVER_IMAGE);
 		}
 		
 		@Override
 		public void updateItem(Object item, boolean empty) 
 		{
-		    super.updateItem(item, empty);
-		    if (empty) 
-		    {
-		        setText(null);
-		        setGraphic(null);
-		    } 
-		    else 
-		    {
-		    		Boolean onServer = (Boolean)item;
-		    		if(onServer)
-		    		{
-		    			Image image = new Image(ON_SERVER_IMAGE_PATH);
-			    		final Node statusCell = new ImageView(image);
-		    			setGraphic(statusCell);
-				}
-		    		else
-		    		{
-		    			Image image = new Image(NOT_ON_SERVER_IMAGE_PATH);
-			    		final Node statusCell = new ImageView(image);
-		    			setGraphic(statusCell);
-		    		}
-	    			setAlignment(Pos.CENTER);
-		    	}
+			super.updateItem(item, empty);
+			if (empty)
+			{
+				setText(null);
+				setGraphic(null);
+			}
+			else
+			{
+				Boolean onServer = (Boolean) item;
+				if (onServer)
+					setGraphic(onServerImageView);
+				else
+					setGraphic(notOnServerImageView);
+
+				setAlignment(Pos.CENTER);
+			}
 		}
+
 		protected final TableColumn tableColumn;
 	}
 
@@ -83,10 +81,13 @@ public class BulletinOnServerColumnHandler implements Callback<TableColumn<Bulle
 	public TableCell call(final TableColumn param) 
 	{
 		return new TableCellUpdateHandler(param);
-	}	
+	}
 	
-	private final String ON_SERVER_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/on_server.png";
-	private final String NOT_ON_SERVER_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/not_on_server.png";
-}	
+	private static final String ON_SERVER_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/on_server.png";
+	private static final String NOT_ON_SERVER_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/not_on_server.png";
+
+	private static final Image ON_SERVER_IMAGE = new Image(ON_SERVER_IMAGE_PATH);
+	private static final Image NOT_ON_SERVER_IMAGE = new Image(NOT_ON_SERVER_IMAGE_PATH);
+}
 
 
