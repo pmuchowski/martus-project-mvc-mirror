@@ -28,7 +28,6 @@ package org.martus.client.swingui.jfx.landing.bulletins;
 import org.martus.common.ContactKey;
 
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.image.Image;
@@ -42,33 +41,52 @@ public class AuthorVerifiedColumnHandler implements Callback<TableColumn<Bulleti
 	{
 		super();
 	}
-	
+
 	final class TableCellUpdateHandler extends TableCell
 	{
-		
+		private final ImageView contactVerified;
+		private final ImageView contactNotVerified;
+		private final ImageView contactUnknown;
+
 		TableCellUpdateHandler(TableColumn tableColumn)
 		{
 			this.tableColumn = tableColumn;
+
+			contactVerified = new ImageView(IMAGE_CONTACT_VERIFIED);
+			contactNotVerified = new ImageView(IMAGE_CONTACT_NOT_VERIFIED);
+			contactUnknown = new ImageView(IMAGE_CONTACT_UNKNOWN);
 		}
 		
 		@Override
 		public void updateItem(Object item, boolean empty) 
 		{
-		    super.updateItem(item, empty);
-		    if (empty) 
-		    {
-		        setText(null);
-		        setGraphic(null);
-		    } 
-		    else 
-		    {
-		    		Integer verified = (Integer)item;
-		    		Image image = getVerificationImage(verified);
-		    		final Node statusCell = new ImageView(image);
-	    			setGraphic(statusCell);
-	    			setAlignment(Pos.CENTER);
-		    	}
+			super.updateItem(item, empty);
+			if (empty)
+			{
+				setText(null);
+				setGraphic(null);
+			}
+			else
+			{
+				Integer verified = (Integer)item;
+				setGraphic(getVerificationImageNode(verified));
+				setAlignment(Pos.CENTER);
+			}
 		}
+
+		private ImageView getVerificationImageNode(Integer verified)
+		{
+			if (ContactKey.VERIFIED_ACCOUNT_OWNER.equals(verified) ||
+					ContactKey.VERIFIED_VISUALLY.equals(verified) ||
+					ContactKey.VERIFIED_ENTERED_20_DIGITS.equals(verified))
+				return contactVerified;
+
+			if (ContactKey.NOT_VERIFIED.equals(verified))
+				return contactNotVerified;
+
+			return contactUnknown;
+		}
+
 		protected final TableColumn tableColumn;
 	}
 
@@ -76,26 +94,28 @@ public class AuthorVerifiedColumnHandler implements Callback<TableColumn<Bulleti
 	public TableCell call(final TableColumn param) 
 	{
 		return new TableCellUpdateHandler(param);
-	}	
-	
-	static public Image getVerificationImage(Integer verified)
-	{
-		Image image = null;
-		if(verified == ContactKey.VERIFIED_ACCOUNT_OWNER ||
-		   verified == ContactKey.VERIFIED_VISUALLY ||
-		   verified == ContactKey.VERIFIED_ENTERED_20_DIGITS)
-			image = new Image(IMAGE_CONTACT_VERIFIED_PATH);
-		else if(verified == ContactKey.NOT_VERIFIED)
-		image = new Image(IMAGE_CONTACT_NOT_VERIFIED_PATH);
-		else
-		image = new Image(IMAGE_CONTACT_UNKNOWN_PATH);
-		return image;
 	}
 
-	static public final String IMAGE_CONTACT_VERIFIED_PATH = "/org/martus/client/swingui/jfx/images/contact_verified.png";
-	static public final String IMAGE_CONTACT_NOT_VERIFIED_PATH = "/org/martus/client/swingui/jfx/images/contact_not_verified.png";
-	static public final String IMAGE_CONTACT_UNKNOWN_PATH = "/org/martus/client/swingui/jfx/images/contact_unknown.png";
-	
-}	
+	static Image getVerificationImage(Integer verified)
+	{
+		if (ContactKey.VERIFIED_ACCOUNT_OWNER.equals(verified) ||
+				ContactKey.VERIFIED_VISUALLY.equals(verified) ||
+				ContactKey.VERIFIED_ENTERED_20_DIGITS.equals(verified))
+			return IMAGE_CONTACT_VERIFIED;
+
+		if (ContactKey.NOT_VERIFIED.equals(verified))
+			return IMAGE_CONTACT_NOT_VERIFIED;
+
+		return IMAGE_CONTACT_UNKNOWN;
+	}
+
+	private static final String IMAGE_CONTACT_VERIFIED_PATH = "/org/martus/client/swingui/jfx/images/contact_verified.png";
+	private static final String IMAGE_CONTACT_NOT_VERIFIED_PATH = "/org/martus/client/swingui/jfx/images/contact_not_verified.png";
+	private static final String IMAGE_CONTACT_UNKNOWN_PATH = "/org/martus/client/swingui/jfx/images/contact_unknown.png";
+
+	private static final Image IMAGE_CONTACT_VERIFIED = new Image(IMAGE_CONTACT_VERIFIED_PATH);
+	private static final Image IMAGE_CONTACT_NOT_VERIFIED = new Image(IMAGE_CONTACT_NOT_VERIFIED_PATH);
+	private static final Image IMAGE_CONTACT_UNKNOWN = new Image(IMAGE_CONTACT_UNKNOWN_PATH);
+}
 
 
