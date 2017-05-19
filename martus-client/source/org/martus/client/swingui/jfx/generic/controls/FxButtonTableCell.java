@@ -25,6 +25,8 @@ Boston, MA 02111-1307, USA.
  */
 package org.martus.client.swingui.jfx.generic.controls;
 
+import org.martus.client.swingui.actions.ActionDoer;
+
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Pos;
@@ -32,8 +34,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
-import org.martus.client.swingui.actions.ActionDoer;
 
 public class FxButtonTableCell extends TableCell
 {
@@ -57,13 +57,14 @@ public class FxButtonTableCell extends TableCell
 
 	private void setButtonStyle(String styleToUse)
 	{
-		buttonStyling = styleToUse;
+		button.getStyleClass().add(styleToUse);
 	}
 
 	private FxButtonTableCell(ReadOnlyProperty<Image> buttonImageToUse, ActionDoer doerToUse)
 	{
-		buttonImageProperty = buttonImageToUse;
-		doer = doerToUse;
+		button = new Button(null, new ImageView(buttonImageToUse.getValue()));
+		handler = new FxTableCellButtonActionHandler(getTableView(), doerToUse);
+		button.setOnAction(handler);
 	}
 	
 	@Override
@@ -77,11 +78,9 @@ public class FxButtonTableCell extends TableCell
 		boolean doesRowSupportButtonAction = isValidRow && ((Boolean)cellObject).booleanValue();
 		if (doesRowSupportButtonAction) 
 		{
-			button = new Button(null, new ImageView(buttonImageProperty.getValue()));
-			button.getStyleClass().add(buttonStyling);
-			FxTableCellButtonActionHandler handler = new FxTableCellButtonActionHandler(getTableView(), doer);
+			button = this.button;
+			handler.setTable(getTableView());
 			handler.setTableRowIndex(getIndex());
-			button.setOnAction(handler);
 		}
 		setAlignment(Pos.CENTER);
 		setText(null);
@@ -89,7 +88,6 @@ public class FxButtonTableCell extends TableCell
 	}
 	
 	static final private String TRANSPARENT_NARROW_BUTTON_STYLE = "button-transparentMinPadding";
-	private ReadOnlyProperty<Image> buttonImageProperty;
-	private ActionDoer doer;
-	private String buttonStyling = "";
+	private Button button;
+	private FxTableCellButtonActionHandler handler;
 }
