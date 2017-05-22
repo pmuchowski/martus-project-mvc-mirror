@@ -72,19 +72,19 @@ public class FxButtonTableCell extends TableCell
 	{
 		super.updateItem(cellObject, empty);
 		
-		Button button = null;
+		setAlignment(Pos.CENTER);
+		setText(null);
 		
 		boolean isValidRow = !empty;
 		boolean doesRowSupportButtonAction = isValidRow && ((Boolean)cellObject).booleanValue();
 		if (doesRowSupportButtonAction) 
 		{
-			button = this.button;
+			setGraphic(button);
 			handler.setTable(getTableView());
 			handler.setTableRowIndex(getIndex());
 		}
-		setAlignment(Pos.CENTER);
-		setText(null);
-		setGraphic(button);
+		else
+			setGraphic(null);
 	}
 	
 	static final private String TRANSPARENT_NARROW_BUTTON_STYLE = "button-transparentMinPadding";
