@@ -25,11 +25,11 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.jfx.generic.controls;
 
+import org.martus.client.swingui.actions.ActionDoer;
+
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TableView;
-
-import org.martus.client.swingui.actions.ActionDoer;
 
 public class FxTableCellButtonActionHandler implements EventHandler<ActionEvent>
 {
@@ -43,7 +43,12 @@ public class FxTableCellButtonActionHandler implements EventHandler<ActionEvent>
 	{
 		this.tableRowIndex = tableRowIndex;
 	}
-	
+
+	public void setTable(TableView table)
+	{
+		this.table = table;
+	}
+
 	@Override
 	public void handle(ActionEvent ae)
 	{
