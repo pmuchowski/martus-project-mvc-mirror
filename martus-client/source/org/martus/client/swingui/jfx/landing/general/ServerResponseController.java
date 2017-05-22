@@ -76,7 +76,6 @@ public class ServerResponseController extends FxController
 	
 	private void populateServerResponsesTable() throws Exception
 	{
-		
 		ObservableList<UploaderServerResponseTableRowData> templateRows = FXCollections.observableArrayList();
 		Set<String> jsonKeys = getRecordNameToServerResponseMap().keySet();
 		for (String recordName : jsonKeys)

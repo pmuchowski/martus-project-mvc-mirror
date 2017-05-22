@@ -26,6 +26,8 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui.jfx.generic;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.util.Arrays;
 import java.util.Vector;
 
 import org.martus.client.bulletinstore.BulletinFolder;
@@ -64,9 +66,35 @@ public class ImportVariousTypesAction implements ActionDoer
 		if (selectedFiles.length == 0)
 			return;
 		
-		Platform.runLater(new ImportRunner(selectedFiles));
+		Vector<File> serverResponseFilesOnly = groupFilesByExtension(selectedFiles, new ServerResponseFileFilter(getLocalization()));
+		Vector<File> nonServerResponseFiles = new Vector<>(Arrays.asList(selectedFiles));
+		nonServerResponseFiles.removeAll(serverResponseFilesOnly);
+		importServerResponseFiles(serverResponseFilesOnly);
+		
+		if (!nonServerResponseFiles.isEmpty())
+			Platform.runLater(new ImportRunner(nonServerResponseFiles.toArray(new File[0])));
 	}
 	
+	private void importServerResponseFiles(Vector<File> serverResponseFilesOnly)
+	{
+		for (File serverResponseFile : serverResponseFilesOnly)
+		{
+			importUploaderResponseFile(serverResponseFile);
+		}
+	}
+
+	private Vector<File> groupFilesByExtension(File[] selectedFiles, FileFilter fileFilterToGroupBy)
+	{
+		Vector<File> groupedByExtension = new Vector();
+		for (File fileToGroup : selectedFiles)
+		{
+			if (fileFilterToGroupBy.accept(fileToGroup))
+				groupedByExtension.add(fileToGroup);
+		}
+		
+		return groupedByExtension;
+	}
+
 	protected void importUploaderResponseFile(File selectedFile)
 	{
 		new ImportServerResponseFileAction(getFxCaseManagementController()).importServerResponseFile(selectedFile);
@@ -116,7 +144,7 @@ public class ImportVariousTypesAction implements ActionDoer
 		return getApp().getStore().getFolderImport();
 	}
 	
-	private UiMainWindow getMainWindow()
+	public UiMainWindow getMainWindow()
 	{
 		return uiMainWindow;
 	}
@@ -186,16 +214,23 @@ public class ImportVariousTypesAction implements ActionDoer
 			{
 				if (getProgressMeter().shouldExit())
 					break;
-				
-				getProgressMeter().updateProgressMeter(index + 1, selectedFilesToImport.length);
+
 				File selectedFile = selectedFilesToImport[index];
 				String lowerCaseFileName = selectedFile.getName().toLowerCase();
-				if (new ServerResponseFileFilter(getLocalization()).accept(selectedFile))
-					importUploaderResponseFile(selectedFile);
-				else if(lowerCaseFileName.endsWith(new MartusBulletinArchiveFileFilter(getLocalization()).getExtension().toLowerCase()))
+				if(lowerCaseFileName.endsWith(new MartusBulletinArchiveFileFilter(getLocalization()).getExtension().toLowerCase()))
+				{
 					importBulletinFromMbaFile(selectedFile);
+				}
+				else if (new XmlFileFilter(getLocalization()).accept(selectedFile))
+				{
+					importBulletinFromXmlFile(selectedFile);
+				}
 				else
-					importBulletinFromXmlFile(selectedFile);		
+				{
+					getMainWindow().notifyDlg("UknownFileTypeToImport");
+				}
+				
+				getProgressMeter().updateProgressMeter(index + 1, selectedFilesToImport.length);
 			}
 			
 			return null;

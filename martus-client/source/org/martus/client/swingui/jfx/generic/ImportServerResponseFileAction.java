@@ -57,7 +57,7 @@ public class ImportServerResponseFileAction implements ActionDoer
 		filters.add(new ServerResponseFileFilter(getLocalization()));
 		File[] selectedFiles = getMainWindow().showMultiFileOpenDialog("ImportServerResponseFile", filters);
 		if (selectedFiles.length == 0)
-			MartusLogger.logVerbose("No files were selected");
+			System.out.println("No files were selected");
 		
 		for (int index = 0; index < selectedFiles.length; ++index)
 		{
@@ -93,7 +93,7 @@ public class ImportServerResponseFileAction implements ActionDoer
 			JSONObject json = loadResponseJson(allContentAsString);
 			Set jsonKeys = json.keySet();
 			if (jsonKeys.isEmpty())
-				MartusLogger.logVerbose("No json keys found in file: " + serverResponseFileToImport.getName());
+				System.out.println("No json keys found in file: " + serverResponseFileToImport.getName());
 			
 			HashMap<String, String> recordNameToServerResponseMap = new HashMap<>();
 			for (Object jsonKey : jsonKeys)

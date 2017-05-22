@@ -1068,7 +1068,7 @@ public class EnglishStrings
 "field:notifyViewAttachmentNotAvailablecause=This computer can only view JPEG, GIF, and PNG image attachments",
 "field:notifyAddPermissionsZeroBulletinsOurscause=You must select at least one record that was created by this account",
 "field:notifySealSelectedZeroBulletinsOurscause=You must select at least one record that was created by this account",
-
+"field:notifyUknownFileTypeToImportcause=Unknown file type to import",
 
 "field:notifyErrorImportingBulletinsTooOldcause=This XML file was created by an older version of Martus and cannot be read by this version.",
 "field:notifyErrorImportingBulletinsTooNewcause=This XML file was created by a newer version of Martus and cannot be read by this version.  You must upgrade to the newer version of Martus to import this file.",
