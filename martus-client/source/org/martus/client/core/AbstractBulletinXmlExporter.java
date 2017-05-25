@@ -217,9 +217,9 @@ abstract public class AbstractBulletinXmlExporter
 	private void writeBulletinFieldSpecs(Writer dest, Bulletin b, boolean includePrivateData) throws Exception
 	{
 		if(shouldIncludeTopSection(b, includePrivateData))
-			writeFieldSpecs(dest, b.getTopSectionFieldSpecs(), BulletinXmlExportImportConstants.MAIN_FIELD_SPECS);
+			writeFieldSpecs(dest, new FieldSpecCollection(getTopFieldsToExport(b)), BulletinXmlExportImportConstants.MAIN_FIELD_SPECS);
 		if(includePrivateData)
-			writeFieldSpecs(dest, b.getBottomSectionFieldSpecs(), BulletinXmlExportImportConstants.PRIVATE_FIELD_SPECS);
+			writeFieldSpecs(dest, new FieldSpecCollection(getBottomFieldsToExport(b)), BulletinXmlExportImportConstants.PRIVATE_FIELD_SPECS);
 	}
 
 	private boolean shouldIncludeTopSection(Bulletin b, boolean includePrivateData)
@@ -265,14 +265,14 @@ abstract public class AbstractBulletinXmlExporter
 	
 		if(shouldIncludeTopSection(b, includePrivateData))
 		{
-			writeFields(dest, b, b.getTopSectionFieldSpecs().asArray());
+			writeFields(dest, b, getTopFieldsToExport(b));
 			if(includeAttachments)
 				writeAttachments(dest, attachmentsDirectory, b.getPublicAttachments(), BulletinXmlExportImportConstants.TOP_SECTION_ATTACHMENT_LIST);
 		}
 	
 		if(includePrivateData)
 		{
-			writeFields(dest, b, b.getBottomSectionFieldSpecs().asArray());
+			writeFields(dest, b, getBottomFieldsToExport(b));
 			if(includeAttachments)
 				writeAttachments(dest, attachmentsDirectory, b.getPrivateAttachments(), BulletinXmlExportImportConstants.BOTTOM_SECTION_ATTACHMENT_LIST);
 		}
@@ -280,6 +280,16 @@ abstract public class AbstractBulletinXmlExporter
 	
 		dest.write(MartusXml.getTagEnd(BulletinXmlExportImportConstants.BULLETIN));
 		dest.write(BulletinXmlExportImportConstants.NEW_LINE);
+	}
+
+	protected FieldSpec[] getTopFieldsToExport(Bulletin bulletin) throws Exception
+	{
+		return bulletin.getTopSectionFieldSpecs().asArray();
+	}
+
+	protected FieldSpec[] getBottomFieldsToExport(Bulletin bulletin) throws Exception
+	{
+		return bulletin.getBottomSectionFieldSpecs().asArray();
 	}
 
 	private String getAttachmentSubDirName(Bulletin bulletin)
