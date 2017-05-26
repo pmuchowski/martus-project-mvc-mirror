@@ -66,8 +66,10 @@ import javafx.scene.layout.Pane;
 
 public class FxLandingShellController extends FxNonWizardShellController
 {
-	private final String TOGGLE_ON_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_on.png";
-	private final String TOGGLE_OFF_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_off.png";
+	private static final String TOGGLE_ON_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_on.png";
+	private static final String TOGGLE_OFF_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_off.png";
+	private static final Image TOGGLE_ON_IMAGE = new Image(TOGGLE_ON_IMAGE_PATH);
+	private static final Image TOGGLE_OFF_IMAGE = new Image(TOGGLE_OFF_IMAGE_PATH);
 
 	public FxLandingShellController(UiMainWindow mainWindowToUse)
 	{
@@ -324,16 +326,10 @@ public class FxLandingShellController extends FxNonWizardShellController
 
 	private Image getUpdatedOnOffStatusImage(boolean isOn)
 	{
-		Image onOffImage = new Image(getOnOffImagePath(isOn));
-		return onOffImage;
-	}
+		if (isOn)
+			return TOGGLE_ON_IMAGE;
 
-	private String getOnOffImagePath(boolean isOn)
-	{
-		String onOffImagePath = TOGGLE_OFF_IMAGE_PATH;
-		if(isOn)
-			onOffImagePath = TOGGLE_ON_IMAGE_PATH;
-		return onOffImagePath;
+		return TOGGLE_OFF_IMAGE;
 	}
 
 	@FXML
