@@ -115,10 +115,10 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 	public void updateContents()
 	{
-		loadBulletinData(getUniversalIds());
+		loadBulletinsInBackground(new LoadBulletinsTask(loadBulletinsThread));
 	}
 
-	private Set getUniversalIds()
+	private synchronized Set getUniversalIds()
 	{
 		if(folder == FxCaseManagementController.ALL_FOLDER)
 			return getAllBulletinUidsIncludingDiscardedItems();
@@ -166,12 +166,17 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 	public void loadBulletinData(Set bulletinUids)
 	{
+		loadBulletinsInBackground(new LoadBulletinsWithIdsTask(loadBulletinsThread, bulletinUids));
+	}
+
+	private synchronized void loadBulletinsInBackground(LoadBulletinsTask task)
+	{
 		if (loadBulletinsTask != null && loadBulletinsTask.isRunning())
 		{
 			loadBulletinsTask.cancel();
 		}
 
-		loadBulletinsTask = new LoadBulletinsTask(loadBulletinsThread, bulletinUids);
+		loadBulletinsTask = task;
 		loadBulletinsThread = new Thread(loadBulletinsTask);
 		loadBulletinsThread.setDaemon(false);
 		loadBulletinsThread.start();
@@ -179,26 +184,29 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 	class LoadBulletinsTask extends Task<Void>
 	{
-		private Set bulletinUids;
 		private Thread previousSearch;
 
-		public LoadBulletinsTask(Thread previousSearch, Set bulletinUids)
+		public LoadBulletinsTask(Thread previousSearch)
 		{
-			this.bulletinUids = bulletinUids;
 			this.previousSearch = previousSearch;
 		}
 
 		@Override
 		protected Void call() throws Exception
 		{
-			if (previousSearch != null && previousSearch.isAlive())
-				previousSearch.join();
+			waitForPreviousSearch();
 
-			loadBulletinData(bulletinUids);
+			loadBulletinData(getUniversalIds());
 			return null;
 		}
 
-		private void loadBulletinData(Set bulletinUids)
+		protected void waitForPreviousSearch() throws Exception
+		{
+			if (previousSearch != null && previousSearch.isAlive())
+				previousSearch.join();
+		}
+
+		protected void loadBulletinData(Set bulletinUids)
 		{
 			// FIXME: To avoid the bulletin list flickering,
 			// we should just add or remove as needed, instead of
@@ -222,6 +230,26 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 			}
 
 			updateNumberOfRecordsBeingDisplayed();
+		}
+	}
+
+	class LoadBulletinsWithIdsTask extends LoadBulletinsTask
+	{
+		private Set bulletinUids;
+
+		public LoadBulletinsWithIdsTask(Thread previousSearch, Set bulletinUids)
+		{
+			super(previousSearch);
+			this.bulletinUids = bulletinUids;
+		}
+
+		@Override
+		protected Void call() throws Exception
+		{
+			waitForPreviousSearch();
+
+			loadBulletinData(bulletinUids);
+			return null;
 		}
 	}
 
