@@ -230,6 +230,13 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 			}
 
 			updateNumberOfRecordsBeingDisplayed();
+			refreshView();
+		}
+
+		private void refreshView()
+		{
+			if (refreshViewHandler != null)
+				refreshViewHandler.refresh();
 		}
 	}
 
@@ -326,11 +333,17 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		return mainWindow;
 	}
 
+	public void setRefreshViewHandler(RefreshViewHandler refreshViewHandler)
+	{
+		this.refreshViewHandler = refreshViewHandler;
+	}
+
 	private static final int BULLETIN_NOT_IN_TABLE = -1;
 	private static final int INITIAL_CAPACITY = 1000;
 
 	private LoadBulletinsTask loadBulletinsTask;
 	private Thread loadBulletinsThread;
+	private RefreshViewHandler refreshViewHandler;
 
 	private UiMainWindow mainWindow;
 	private BulletinFolder folder;
