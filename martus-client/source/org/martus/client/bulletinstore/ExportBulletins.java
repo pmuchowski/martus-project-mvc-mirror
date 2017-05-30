@@ -147,7 +147,8 @@ public class ExportBulletins extends AbstractExport
 				int numberOfMissingAttachment = getNumberOfFailingAttachments();
 				int bulletinsExported = getNumberOfBulletinsExported();
 				updateExportMessage(this, bulletinsExported, numberOfMissingAttachment);
-				progressMeter.finished();
+				if (progressMeter != null)
+					progressMeter.finished();
 			}
 		}
 
@@ -179,14 +180,14 @@ public class ExportBulletins extends AbstractExport
 			return exportBulletins(bulletinsToExport, destinationFile.getParentFile());
 		}
 		
-		private String exportBulletinsWithGroupedAttachments(Vector<Bulletin> bulletinsToExportForTemplate, File destinationDir) throws Exception
+		protected String exportBulletinsWithGroupedAttachments(Vector<Bulletin> bulletinsToExportForTemplate, File destinationDir) throws Exception
 		{
 			exporter = new BulletinXmlExporterWithGroupedAttachments(getMainWindow().getApp(), getMainWindow().getLocalization(), progressMeter);
 			
 			return exportBulletins(bulletinsToExportForTemplate, destinationDir);
 		}
 
-		private String exportBulletins(Vector bulletinsToExportToUse, File parentDir) throws Exception
+		protected String exportBulletins(Vector bulletinsToExportToUse, File parentDir) throws Exception
 		{
 			StringWriter writer = new StringWriter();
 			exporter.exportBulletins(writer, bulletinsToExportToUse, isExportPrivate(), isExportAttachments(), isExportAllVersions(), parentDir);
@@ -195,7 +196,7 @@ public class ExportBulletins extends AbstractExport
 			return writer.toString();
 		}
 
-		private void exportAsCsvs() throws Exception
+		protected void exportAsCsvs() throws Exception
 		{
 			HashMap<String, Vector<Bulletin>> formTemplateTitleToBulletinMap = createFormTemplateTitleToBulletinMap();			
 			exportBulletinsInTemplateDirs(formTemplateTitleToBulletinMap);
@@ -238,7 +239,7 @@ public class ExportBulletins extends AbstractExport
 			}
 		}
 
-		private void exportBulletins(String formTemplateTitle, Vector<Bulletin> bulletinsToExportForTemplate) throws Exception
+		protected void exportBulletins(String formTemplateTitle, Vector<Bulletin> bulletinsToExportForTemplate) throws Exception
 		{
 			File destinationDir = findOrCreateDir(formTemplateTitle);
 			File csvDestinationFile = new File(destinationDir, destinationFile.getName());
@@ -386,7 +387,7 @@ public class ExportBulletins extends AbstractExport
 		
 		ProgressMeterInterface progressMeter;
 		ClientBulletinStore clientStore;
-		private AbstractBulletinXmlExporter exporter;
+		protected AbstractBulletinXmlExporter exporter;
 		private boolean errorOccured;
 	}	
 
