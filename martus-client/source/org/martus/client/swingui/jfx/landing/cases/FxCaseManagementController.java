@@ -74,12 +74,12 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		allCaseListItem = new AllCaseListItem(getMainWindow());
 		updateCasesSelectDefaultCase();
 		CaseListChangeListener caseListChangeListener = new CaseListChangeListener();
-		casesListViewAll.getSelectionModel().selectedItemProperty().addListener(caseListChangeListener);
 		casesListViewAll.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 		currentSelectedCase = currentCasesListView.getSelectionModel().selectedItemProperty();
 		showTrashFolder.visibleProperty().bind(getFxLandingShellController().getShowTrashBinding());
 		addFolderContentsListener();
 		showAllCases();
+		casesListViewAll.getSelectionModel().selectedItemProperty().addListener(caseListChangeListener);
 	}
 
 	private void addFolderContentsListener()

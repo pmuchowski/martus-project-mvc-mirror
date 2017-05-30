@@ -116,6 +116,7 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 	@Override
 	public void initializeMainContentPane()
 	{
+		bulletinTableProvider.setRefreshViewHandler(new TableViewRefreshHandler(itemsTable));
 		initalizeColumns();
 		initalizeItemsTable();
 		initalizeButtons();
@@ -391,6 +392,22 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		// whenever user switches folders
 		if(itemsTable != null)
 			itemsTable.getSortOrder().clear();
+	}
+
+	private class TableViewRefreshHandler implements RefreshViewHandler
+	{
+		private TableView table;
+
+		public TableViewRefreshHandler(TableView table)
+		{
+			this.table = table;
+		}
+
+		@Override
+		public void refresh()
+		{
+			Platform.runLater(() -> table.refresh());
+		}
 	}
 
 	@FXML

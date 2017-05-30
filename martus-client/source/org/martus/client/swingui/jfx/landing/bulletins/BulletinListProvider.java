@@ -25,14 +25,7 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.jfx.landing.bulletins;
 
-import java.util.Iterator;
 import java.util.Set;
-
-import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
@@ -45,6 +38,12 @@ import org.martus.common.MartusLogger;
 import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.packet.UniversalId;
+
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.concurrent.Task;
 
 public class BulletinListProvider extends ArrayObservableList<BulletinTableRowData> implements FolderSelectionListener, FolderContentsListener
 {
@@ -116,10 +115,10 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 	public void updateContents()
 	{
-		Platform.runLater(() -> loadBulletinData(getUniversalIds()));
+		loadBulletinsInBackground(new LoadBulletinsTask(loadBulletinsThread));
 	}
 
-	private Set getUniversalIds()
+	private synchronized Set getUniversalIds()
 	{
 		if(folder == FxCaseManagementController.ALL_FOLDER)
 			return getAllBulletinUidsIncludingDiscardedItems();
@@ -167,24 +166,98 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 	public void loadBulletinData(Set bulletinUids)
 	{
-		// FIXME: To avoid the bulletin list flickering, 
-		// we should just add or remove as needed, instead of 
-		// clearing and re-populating from scratch
-		clear();
-		try
+		loadBulletinsInBackground(new LoadBulletinsWithIdsTask(loadBulletinsThread, bulletinUids));
+	}
+
+	private synchronized void loadBulletinsInBackground(LoadBulletinsTask task)
+	{
+		if (loadBulletinsTask != null && loadBulletinsTask.isRunning())
 		{
-			for(Iterator iter = bulletinUids.iterator(); iter.hasNext();)
-			{
-				UniversalId leafBulletinUid = (UniversalId) iter.next();
-				BulletinTableRowData bulletinData = getCurrentBulletinData(leafBulletinUid);
-				add(bulletinData);		
-			}
-		} 
-		catch (Exception e)
-		{
-			MartusLogger.logException(e);
+			loadBulletinsTask.cancel();
 		}
-		updateNumberOfRecordsBeingDisplayed();
+
+		loadBulletinsTask = task;
+		loadBulletinsThread = new Thread(loadBulletinsTask);
+		loadBulletinsThread.setDaemon(false);
+		loadBulletinsThread.start();
+	}
+
+	class LoadBulletinsTask extends Task<Void>
+	{
+		private Thread previousSearch;
+
+		public LoadBulletinsTask(Thread previousSearch)
+		{
+			this.previousSearch = previousSearch;
+		}
+
+		@Override
+		protected Void call() throws Exception
+		{
+			waitForPreviousSearch();
+
+			loadBulletinData(getUniversalIds());
+			return null;
+		}
+
+		protected void waitForPreviousSearch() throws Exception
+		{
+			if (previousSearch != null && previousSearch.isAlive())
+				previousSearch.join();
+		}
+
+		protected void loadBulletinData(Set bulletinUids)
+		{
+			// FIXME: To avoid the bulletin list flickering,
+			// we should just add or remove as needed, instead of
+			// clearing and re-populating from scratch
+			clear();
+			try
+			{
+				for (Object bulletinUid : bulletinUids)
+				{
+					if (isCancelled())
+						return;
+
+					UniversalId leafBulletinUid = (UniversalId) bulletinUid;
+					BulletinTableRowData bulletinData = getCurrentBulletinData(leafBulletinUid);
+					add(bulletinData);
+				}
+			}
+			catch (Exception e)
+			{
+				MartusLogger.logException(e);
+			}
+
+			updateNumberOfRecordsBeingDisplayed();
+			refreshView();
+		}
+
+		private void refreshView()
+		{
+			if (refreshViewHandler != null)
+				refreshViewHandler.refresh();
+		}
+	}
+
+	class LoadBulletinsWithIdsTask extends LoadBulletinsTask
+	{
+		private Set bulletinUids;
+
+		public LoadBulletinsWithIdsTask(Thread previousSearch, Set bulletinUids)
+		{
+			super(previousSearch);
+			this.bulletinUids = bulletinUids;
+		}
+
+		@Override
+		protected Void call() throws Exception
+		{
+			waitForPreviousSearch();
+
+			loadBulletinData(bulletinUids);
+			return null;
+		}
 	}
 
 	private void updateNumberOfRecordsBeingDisplayed()
@@ -260,9 +333,18 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		return mainWindow;
 	}
 
+	public void setRefreshViewHandler(RefreshViewHandler refreshViewHandler)
+	{
+		this.refreshViewHandler = refreshViewHandler;
+	}
+
 	private static final int BULLETIN_NOT_IN_TABLE = -1;
 	private static final int INITIAL_CAPACITY = 1000;
-	
+
+	private LoadBulletinsTask loadBulletinsTask;
+	private Thread loadBulletinsThread;
+	private RefreshViewHandler refreshViewHandler;
+
 	private UiMainWindow mainWindow;
 	private BulletinFolder folder;
 	private BooleanProperty trashFolderBeingDisplayedProperty;
