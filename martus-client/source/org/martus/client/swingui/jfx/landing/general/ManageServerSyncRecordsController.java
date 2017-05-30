@@ -30,21 +30,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.Label;
-import javafx.scene.control.SelectionMode;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
-
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.bulletinstore.ClientBulletinStore.BulletinAlreadyExistsException;
@@ -55,8 +40,29 @@ import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveTableModel;
+import org.martus.common.MartusLogger;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.packet.UniversalId;
+
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 
 public class ManageServerSyncRecordsController extends AbstractFxLandingContentController
@@ -64,7 +70,6 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 	public ManageServerSyncRecordsController(UiMainWindow mainWindowToUse) throws Exception
 	{
 		super(mainWindowToUse);
-		getServerRecords();
 	}
 
 	@Override
@@ -80,94 +85,176 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 	
 	private void initalizeItemsTable()
 	{
-		Label noRecords = new Label(getLocalization().getFieldLabel("NoServerSyncDataInTable"));
-		allRecordsTable.setPlaceholder(noRecords);
+		allRecordsTable.setPlaceholder(createProgressPlaceholder());
 		allRecordsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-		
 		syncRecordsTableProvider = new SyncRecordsTableProvider(getMainWindow());
-		allRecordsTable.setItems(syncRecordsTableProvider);
+		final SyncRecordsTableProvdiderTask task = new SyncRecordsTableProvdiderTask(syncRecordsTableProvider);
+		Thread thread = new Thread(task);
+		thread.setDaemon(false);
+		thread.start();		
+	}
+
+	private BorderPane createProgressPlaceholder()
+	{
+		VBox progressBox = new VBox();
+		progressBox.setAlignment(Pos.CENTER);
+		BorderPane progressPane = new BorderPane();
+		progressPane.setCenter(progressBox);		
+		progressPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		recordsProgressBar = new ProgressBar();
+		progressLabel = new Label();
+		progressBox.getChildren().addAll(recordsProgressBar, progressLabel);
+		
+		return progressPane;
+	}
+	
+	protected class SyncRecordsTableProvdiderTask extends Task<SyncRecordsTableProvider>
+	{
+		private SyncRecordsTableProvider syncRecordsTableProvider;
+		public SyncRecordsTableProvdiderTask(SyncRecordsTableProvider syncRecordsTableProvider)
+		{
+			this.syncRecordsTableProvider = syncRecordsTableProvider;
+		}
+		
+		@Override
+		protected void failed() 
+		{ 
+			updateStatusLabel((long) recordsProgressBar.getProgress(), "Failed to load data!");
+		}
+
+		@Override
+		protected SyncRecordsTableProvider call() throws Exception
+		{
+			try
+			{
+				updateStatusLabel(0, "Loading server drafts...");
+				serverMyDrafts = getServerMyDrafts();
+
+				updateStatusLabel(1, "Loading sealed records...");
+				serverMySealeds = getServerMySealeds();
+
+				updateStatusLabel(2, "Loading HG drafts...");
+				serverHQDrafts = getServerHQDrafts();
+
+				updateStatusLabel(3, "Loading HQ sealed records..");
+				serverHQSealeds = getServerHQSealeds();
+
+				updateStatusLabel(4, "Loading data...");
+				allRecordsTable.setItems(syncRecordsTableProvider);
+				
+				updateLocationLinks();
+				updateSubFilterLinks();
+				loadData();
+				updateStatusLabel(5, "Finished");
+			} 
+			catch (Exception e)
+			{
+				MartusLogger.logException(e);
+			}
+			
+			return syncRecordsTableProvider;
+		}
+		
+		@Override
+		protected void succeeded()
+		{
+			super.succeeded();
+			
+			syncRecordsTableProvider = getValue();
+			onShowAll(null);
+		}
+	}
+	
+	protected void updateStatusLabel(long progressCount, String label)
+	{
+		Platform.runLater(new UpdateStatusProgressRunner(progressCount, label));
+	}
+	
+	protected class UpdateStatusProgressRunner implements Runnable
+	{
+		private double progressCount;
+		private String updateLabel;
+		private static final double MAX_PROGRESS_VALUE = 5;
+		
+		public UpdateStatusProgressRunner(double progressCountToUse, String updateLabelToUse)
+		{
+			progressCount = progressCountToUse;
+			updateLabel = updateLabelToUse;
+		}
+		
+		@Override
+		public void run()
+		{
+			progressLabel.setText(updateLabel);
+			recordsProgressBar.setProgress(calculatePercentComplete());
+		}
+
+		private double calculatePercentComplete()
+		{
+			return progressCount/MAX_PROGRESS_VALUE;
+		}
+	}
+
+	protected void loadData()
+	{
 		try
 		{
 			Set localRecords = getLocalRecords();
 			syncRecordsTableProvider.addBulletinsAndSummaries(localRecords, serverMyDrafts, serverMySealeds, serverHQDrafts, serverHQSealeds);
-			onShowAll(null);
 		} 
 		catch (Exception e)
 		{
 			logAndNotifyUnexpectedError(e);
 		}
 	}
-
+	
 	private Set getLocalRecords()
 	{
 		return getApp().getStore().getAllBulletinLeafUids();
 	}
 
-	public void getServerRecords() throws Exception
+	protected Vector getServerMyDrafts() throws Exception
 	{
-		showBusyDialogWithCancel(getLocalization().getFieldLabel("RetrievingRecordSummariesFromServer"), new UpdateAllRecordsTask());
-	}
-	
-	class UpdateAllRecordsTask extends Task
-	{
-		@Override
-		protected Object call() throws Exception
-		{
-			//TODO: should all be on separate background threads to improve performance 
-			if(!isCancelled())
-				serverMyDrafts = getServerMyDrafts();
-			if(!isCancelled())
-				serverMySealeds = getServerMySealeds();
-			if(!isCancelled())
-				serverHQDrafts = getServerHQDrafts();
-			if(!isCancelled())
-				serverHQSealeds = getServerHQSealeds();
-			return null;
-		}
-			
-		private Vector getServerMyDrafts() throws Exception
-		{
-			RetrieveTableModel model = new RetrieveMyDraftsTableModel(getApp(), getLocalization());
-			model.initialize(null);
-			return model.getAllSummaries();
-		}
-
-		private Vector getServerMySealeds() throws Exception
-		{
-			RetrieveTableModel model = new RetrieveMyTableModel(getApp(), getLocalization());
-			model.initialize(null);
-			return model.getAllSummaries();
-		}
-
-		private Vector getServerHQDrafts() throws Exception
-		{
-			RetrieveTableModel model = new RetrieveHQDraftsTableModel(getApp(), getLocalization());
-			model.initialize(null);
-			return model.getAllSummaries();
-		}
-
-		private Vector getServerHQSealeds() throws Exception
-		{
-			RetrieveTableModel model = new RetrieveHQTableModel(getApp(), getLocalization());
-			model.initialize(null);
-			return model.getAllSummaries();
-		}
-		
-		
-		
+		RetrieveTableModel model = new RetrieveMyDraftsTableModel(getApp(), getLocalization());
+		model.initialize(null);
+		return model.getAllSummaries();
 	}
 
+	protected Vector getServerMySealeds() throws Exception
+	{
+		RetrieveTableModel model = new RetrieveMyTableModel(getApp(), getLocalization());
+		model.initialize(null);
+		return model.getAllSummaries();
+	}
+
+	protected Vector getServerHQDrafts() throws Exception
+	{
+		RetrieveTableModel model = new RetrieveHQDraftsTableModel(getApp(), getLocalization());
+		model.initialize(null);
+		return model.getAllSummaries();
+	}
+
+	protected Vector getServerHQSealeds() throws Exception
+	{
+		RetrieveTableModel model = new RetrieveHQTableModel(getApp(), getLocalization());
+		model.initialize(null);
+		return model.getAllSummaries();
+	}
 
 	private void initalizeColumns()
 	{
 		recordLocationColumn.setCellValueFactory(new PropertyValueFactory<ServerSyncTableRowData, String>(ServerSyncTableRowData.LOCATION_PROPERTY_NAME));
 		recordLocationColumn.setCellFactory(TextFieldTableCell.<ServerSyncTableRowData>forTableColumn());
+		
 		recordTitleColumn.setCellValueFactory(new PropertyValueFactory<ServerSyncTableRowData, String>(ServerSyncTableRowData.TITLE_PROPERTY_NAME));
 		recordTitleColumn.setCellFactory(TextFieldTableCell.<ServerSyncTableRowData>forTableColumn());
+		
 		recordAuthorColumn.setCellValueFactory(new PropertyValueFactory<ServerSyncTableRowData, String>(ServerSyncTableRowData.AUTHOR_PROPERTY_NAME));
 		recordAuthorColumn.setCellFactory(TextFieldTableCell.<ServerSyncTableRowData>forTableColumn());
+		
 		recordLastSavedColumn.setCellValueFactory(new PropertyValueFactory<ServerSyncTableRowData, String>(ServerSyncTableRowData.DATE_SAVDED_PROPERTY_NAME));
 		recordLastSavedColumn.setCellFactory(TextFieldTableCell.<ServerSyncTableRowData>forTableColumn());
+		
 		recordSizeColumn.setCellValueFactory(new PropertyValueFactory<ServerSyncTableRowData, Integer>(ServerSyncTableRowData.SIZE_PROPERTY_NAME));
 		recordSizeColumn.setCellFactory(new RecordSizeColumnHandler());
 	}
@@ -212,7 +299,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		updateSubFilterLinks();
 	}
 
-	private void updateLocationLinks()
+	protected void updateLocationLinks()
 	{
 		int location = syncRecordsTableProvider.getLocation();
 		fxLocationAll.setVisited(location == ServerSyncTableRowData.LOCATION_ANY);
@@ -221,7 +308,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		fxLocationBoth.setVisited(location == ServerSyncTableRowData.LOCATION_BOTH);
 	}
 
-	private void updateSubFilterLinks()
+	protected void updateSubFilterLinks()
 	{
 		int subFilter = syncRecordsTableProvider.getSubFilter();
 		fxSubFilterAll.setVisited(subFilter == SyncRecordsTableProvider.SUB_FILTER_ALL);
@@ -370,7 +457,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 	}
 
 	@FXML 	
-	private void onShowAll(ActionEvent event)
+	protected void onShowAll(ActionEvent event)
 	{
 		updateTable(ServerSyncTableRowData.LOCATION_ANY);
 	}
@@ -435,7 +522,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 	private Hyperlink fxSubFilterSharedWithMe;
 	
 	@FXML
-	private TableView<ServerSyncTableRowData> allRecordsTable;
+	protected TableView<ServerSyncTableRowData> allRecordsTable;
 	
 	@FXML
 	private TableColumn<ServerSyncTableRowData, String> recordLocationColumn;
@@ -461,6 +548,8 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 	@FXML 
 	private Button deleteButton;
 	
+	protected ProgressBar recordsProgressBar;
+	protected Label progressLabel;
 	protected Vector serverMyDrafts;
 	protected Vector serverMySealeds;
 	protected Vector serverHQDrafts;
