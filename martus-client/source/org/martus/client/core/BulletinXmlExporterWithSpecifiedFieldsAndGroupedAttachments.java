@@ -90,8 +90,8 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 
 			if (fieldSpecToExport.getType().isGrid())
 			{
-				GridFieldSpec gridSpec = (GridFieldSpec) fieldSpecToExport;
-				removeNonExportableGridColumns(colsSpecMap, gridSpec, tagParts);
+				GridFieldSpec gridFieldSpecToExport = (GridFieldSpec) fieldSpecToExport;
+				removeNonExportableGridColumns(colsSpecMap, gridFieldSpecToExport, tagParts);
 			}
 
 			fieldSpecToExportList.add(fieldSpecToExport);
@@ -100,7 +100,7 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 		return fieldSpecToExportList.toArray(new FieldSpec[fieldSpecToExportList.size()]);
 	}
 
-	private void removeNonExportableGridColumns(Map<String, Vector<FieldSpec>> colsSpecMap, GridFieldSpec gridSpec, String[] tagParts) throws Exception
+	private void removeNonExportableGridColumns(Map<String, Vector<FieldSpec>> colsSpecMap, GridFieldSpec gridFieldSpecToExport, String[] tagParts) throws Exception
 	{
 		String tag = tagParts[0];
 
@@ -112,14 +112,14 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 
 		if (colsSpecs == null)
 		{
-			colsSpecs = gridSpec.getColumns();
+			colsSpecs = gridFieldSpecToExport.getColumns();
 			colsSpecMap.put(tag, colsSpecs);
-			gridSpec.setColumns(new Vector());
+			gridFieldSpecToExport.setColumns(new Vector());
 		}
 
 		FieldSpec colSpec = findColumnSpecByLabel(colsSpecs, colLabel);
 
-		gridSpec.addColumn(colSpec);
+		gridFieldSpecToExport.addColumn(colSpec);
 	}
 
 	private FieldSpec findColumnSpecByLabel(Vector<FieldSpec> columns, String gridColumnLabel)
