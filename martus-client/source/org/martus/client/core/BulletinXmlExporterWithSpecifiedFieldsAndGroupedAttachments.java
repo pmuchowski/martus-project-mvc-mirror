@@ -43,10 +43,15 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 	private MiniFieldSpec[] fieldsToExport;
 
 	public BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments(MartusApp appToUse, MiniLocalization localizationToUse,
-																																		 ProgressMeterInterface progressMeterToUse, MiniFieldSpec[] fieldsToExport)
+																																		 ProgressMeterInterface progressMeterToUse, MiniFieldSpec[] fieldsToExportToUse)
 	{
 		super(appToUse, localizationToUse, progressMeterToUse);
-		this.fieldsToExport = fieldsToExport;
+		fieldsToExport = fieldsToExportToUse;
+	}
+
+	private MiniFieldSpec[] getFieldsToExport()
+	{
+		return fieldsToExport;
 	}
 
 	@Override
@@ -58,51 +63,63 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 	@Override
 	protected FieldSpec[] getTopFieldsToExport(Bulletin bulletin) throws Exception
 	{
-		return findFieldSpecsInFieldSpecCollection(bulletin.getTopSectionFieldSpecs());
+		return findExportableFieldSpecsInFieldSpecCollection(bulletin.getTopSectionFieldSpecs());
 	}
 
 	@Override
 	protected FieldSpec[] getBottomFieldsToExport(Bulletin bulletin) throws Exception
 	{
-		return findFieldSpecsInFieldSpecCollection(bulletin.getBottomSectionFieldSpecs());
+		return findExportableFieldSpecsInFieldSpecCollection(bulletin.getBottomSectionFieldSpecs());
 	}
 
-	private FieldSpec[] findFieldSpecsInFieldSpecCollection(FieldSpecCollection fieldSpecs) throws Exception
+	private FieldSpec[] findExportableFieldSpecsInFieldSpecCollection(FieldSpecCollection fieldSpecs) throws Exception
 	{
 		List<FieldSpec> specList = new ArrayList<>();
 		Map<String, Vector<FieldSpec>> colsSpecMap = new HashMap<>();
 
-		for (MiniFieldSpec spec : fieldsToExport)
+		for (MiniFieldSpec spec : getFieldsToExport())
 		{
 			String[] tagParts = spec.getTag().split("\\.");
 			String tag = tagParts[0];
 			FieldSpec fieldSpec = fieldSpecs.findBytag(tag);
 
-			if (fieldSpec != null)
+			if (fieldSpec == null)
 			{
-				if (fieldSpec.getType().isGrid() && tagParts.length > 1)
-				{
-					GridFieldSpec gridSpec = (GridFieldSpec) fieldSpec;
-					Vector<FieldSpec> colsSpecs = colsSpecMap.get(tag);
-
-					if (colsSpecs == null)
-					{
-						colsSpecs = gridSpec.getColumns();
-						colsSpecMap.put(tag, colsSpecs);
-						gridSpec.setColumns(new Vector());
-					}
-
-					FieldSpec colSpec = findColumnSpecByLabel(colsSpecs, tagParts[1]);
-
-					gridSpec.addColumn(colSpec);
-					fieldSpec = gridSpec;
-				}
-
-				specList.add(fieldSpec);
+				continue;
 			}
+
+			if (fieldSpec.getType().isGrid())
+			{
+				GridFieldSpec gridSpec = (GridFieldSpec) fieldSpec;
+				removeNonExportableGridColumns(colsSpecMap, gridSpec, tagParts);
+			}
+
+			specList.add(fieldSpec);
 		}
 
 		return specList.toArray(new FieldSpec[specList.size()]);
+	}
+
+	private void removeNonExportableGridColumns(Map<String, Vector<FieldSpec>> colsSpecMap, GridFieldSpec gridSpec, String[] tagParts) throws Exception
+	{
+		String tag = tagParts[0];
+
+		if (tagParts.length == 1)
+			throw new Exception("Grid field spec tag does not contain column label: " + tag);
+
+		String colLabel = tagParts[1];
+		Vector<FieldSpec> colsSpecs = colsSpecMap.get(tag);
+
+		if (colsSpecs == null)
+		{
+			colsSpecs = gridSpec.getColumns();
+			colsSpecMap.put(tag, colsSpecs);
+			gridSpec.setColumns(new Vector());
+		}
+
+		FieldSpec colSpec = findColumnSpecByLabel(colsSpecs, colLabel);
+
+		gridSpec.addColumn(colSpec);
 	}
 
 	private FieldSpec findColumnSpecByLabel(Vector<FieldSpec> columns, String gridColumnLabel)
