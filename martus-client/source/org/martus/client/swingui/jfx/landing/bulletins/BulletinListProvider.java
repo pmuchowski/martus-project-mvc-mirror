@@ -63,7 +63,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		setFolder(newFolder);
 	}
 
-	public void setFolder(BulletinFolder newFolder)
+	public synchronized void setFolder(BulletinFolder newFolder)
 	{
 		if(folder != null)
 			folder.removeFolderContentsListener(this);
