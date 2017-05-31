@@ -77,9 +77,9 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 		List<FieldSpec> fieldSpecToExportList = new ArrayList<>();
 		Map<String, Vector<FieldSpec>> colsSpecMap = new HashMap<>();
 
-		for (MiniFieldSpec spec : getFieldsToExport())
+		for (MiniFieldSpec miniFieldSpecToExport : getFieldsToExport())
 		{
-			String[] tagParts = spec.getTag().split("\\.");
+			String[] tagParts = miniFieldSpecToExport.getTag().split("\\.");
 			String tag = tagParts[0];
 			FieldSpec fieldSpecToExport = fieldSpecs.findBytag(tag);
 
