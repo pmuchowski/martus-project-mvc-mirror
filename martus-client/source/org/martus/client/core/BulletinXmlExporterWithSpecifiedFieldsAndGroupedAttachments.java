@@ -81,20 +81,20 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 		{
 			String[] tagParts = spec.getTag().split("\\.");
 			String tag = tagParts[0];
-			FieldSpec fieldSpec = fieldSpecs.findBytag(tag);
+			FieldSpec fieldSpecToExport = fieldSpecs.findBytag(tag);
 
-			if (fieldSpec == null)
+			if (fieldSpecToExport == null)
 			{
 				continue;
 			}
 
-			if (fieldSpec.getType().isGrid())
+			if (fieldSpecToExport.getType().isGrid())
 			{
-				GridFieldSpec gridSpec = (GridFieldSpec) fieldSpec;
+				GridFieldSpec gridSpec = (GridFieldSpec) fieldSpecToExport;
 				removeNonExportableGridColumns(colsSpecMap, gridSpec, tagParts);
 			}
 
-			fieldSpecToExportList.add(fieldSpec);
+			fieldSpecToExportList.add(fieldSpecToExport);
 		}
 
 		return fieldSpecToExportList.toArray(new FieldSpec[fieldSpecToExportList.size()]);
