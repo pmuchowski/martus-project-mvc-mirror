@@ -117,9 +117,9 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 			gridFieldSpecToExport.setColumns(new Vector());
 		}
 
-		FieldSpec colSpec = findColumnSpecByLabel(colsSpecs, colLabel);
+		FieldSpec colSpecToExport = findColumnSpecByLabel(colsSpecs, colLabel);
 
-		gridFieldSpecToExport.addColumn(colSpec);
+		gridFieldSpecToExport.addColumn(colSpecToExport);
 	}
 
 	private FieldSpec findColumnSpecByLabel(Vector<FieldSpec> columns, String gridColumnLabel)
