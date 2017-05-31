@@ -74,7 +74,7 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 
 	private FieldSpec[] findExportableFieldSpecsInFieldSpecCollection(FieldSpecCollection fieldSpecs) throws Exception
 	{
-		List<FieldSpec> specList = new ArrayList<>();
+		List<FieldSpec> fieldSpecToExportList = new ArrayList<>();
 		Map<String, Vector<FieldSpec>> colsSpecMap = new HashMap<>();
 
 		for (MiniFieldSpec spec : getFieldsToExport())
@@ -94,10 +94,10 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 				removeNonExportableGridColumns(colsSpecMap, gridSpec, tagParts);
 			}
 
-			specList.add(fieldSpec);
+			fieldSpecToExportList.add(fieldSpec);
 		}
 
-		return specList.toArray(new FieldSpec[specList.size()]);
+		return fieldSpecToExportList.toArray(new FieldSpec[fieldSpecToExportList.size()]);
 	}
 
 	private void removeNonExportableGridColumns(Map<String, Vector<FieldSpec>> colsSpecMap, GridFieldSpec gridSpec, String[] tagParts) throws Exception
