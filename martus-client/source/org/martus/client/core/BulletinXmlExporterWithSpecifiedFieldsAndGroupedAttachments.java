@@ -79,7 +79,7 @@ public class BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments extends
 
 		for (MiniFieldSpec miniFieldSpecToExport : getFieldsToExport())
 		{
-			String[] tagParts = miniFieldSpecToExport.getTag().split("\\.");
+			String[] tagParts = SafeReadableBulletin.parseNestedTags(miniFieldSpecToExport.getTag());
 			String tag = tagParts[0];
 			FieldSpec fieldSpecToExport = fieldSpecs.findBytag(tag);
 
