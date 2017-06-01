@@ -264,6 +264,7 @@ public class ExportBulletins extends AbstractExport
 
 		private String findMatchingFormTemplate(Bulletin bulletinToExport) throws Exception
 		{
+			//TODO MEDIUM: This code duplicates BulletinsToTemplateMatcher functionality and should be refactored
 			Set bulletinTopSectionFieldSpecs = bulletinToExport.getTopSectionFieldSpecs().asSet();
 			ObservableSet<String> existingTemplateTitles = getMainWindow().getStore().getAvailableTemplates();
 			for (String templateTitle : existingTemplateTitles)
