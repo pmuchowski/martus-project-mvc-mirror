@@ -93,18 +93,16 @@ public class BulletinEditorHeaderController extends FxController
 		Comparator<ChoiceItem> sorter = new SaneCollator(getLocalization().getCurrentLanguageCode());
 		templateChoiceItems.sort(sorter);
 		availableTemplates.setItems(templateChoiceItems);
-		updateSelectionFromReality();
 		availableTemplates.valueProperty().addListener(new TemplateChangeHandler());
 	}
 
-	private void updateSelectionFromReality()
+	private void updateSelectionFromReality(String bulletinFormTemplateTitle)
 	{
-		ClientBulletinStore store = getBulletinStore();
 		ObservableChoiceItemList templateChoiceItems = (ObservableChoiceItemList) availableTemplates.getItems();
 		try
 		{
 			blockSelection();
-			ChoiceItem current = templateChoiceItems.findByCode(store.getCurrentFormTemplateName());
+			ChoiceItem current = templateChoiceItems.findByCode(bulletinFormTemplateTitle);
 			availableTemplates.getSelectionModel().select(current);
 			unblockSelection();
 		}
@@ -128,12 +126,13 @@ public class BulletinEditorHeaderController extends FxController
 		return choiceItem;
 	}
 
-	public void showBulletin(FxBulletin bulletinToShow)
+	public void showBulletin(FxBulletin bulletinToShow, String bulletinFormTemplateTitle)
 	{
 		updateTitle(bulletinToShow);
 		updateFrom(bulletinToShow);
 		updateTo(bulletinToShow);
 		updateAddRemoveContacts();
+		updateSelectionFromReality(bulletinFormTemplateTitle);
 	}
 	
 	private void updateAddRemoveContacts()
