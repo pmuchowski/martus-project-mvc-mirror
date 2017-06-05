@@ -33,6 +33,7 @@ import java.util.ResourceBundle;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import org.martus.client.bulletinstore.BulletinsToTemplateMatcher;
 import org.martus.client.core.BulletinLanguageChangeListener;
 import org.martus.client.core.FxBulletin;
 import org.martus.client.swingui.UiMainWindow;
@@ -128,16 +129,18 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 		// NOTE: We have to create a new fxb each time, because the old one 
 		// was probably bound to a bunch of controls, and we have no way to unbind 
 		fxBulletin = new FxBulletin(getLocalization());
+		String bulletinFormTemplateTitle;
 
 		try
 		{
 			fxBulletin.copyDataFromBulletin(bulletinToShow, getApp().getStore());
-		} 
+			bulletinFormTemplateTitle = BulletinsToTemplateMatcher.findMatchingFormTemplateTitle(getApp().getStore(), bulletinToShow);
+		}
 		catch (Exception e)
 		{
 			throw new RuntimeException(e);
 		}
-		Platform.runLater(() -> headerController.showBulletin(fxBulletin));
+		Platform.runLater(() -> headerController.showBulletin(fxBulletin, bulletinFormTemplateTitle));
 		Platform.runLater(() -> bodyController.showBulletin(fxBulletin));
 		Platform.runLater(() -> footerController.showBulletin(fxBulletin));
 
