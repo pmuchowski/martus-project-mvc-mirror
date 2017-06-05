@@ -419,7 +419,8 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 	public void showAllCases()
 	{
 		showDefaultCase(ALL_FOLDER);
-		casesListViewAll.getSelectionModel().clearAndSelect(0);
+		int indexOfAllFolder = casesListViewAll.getItems().indexOf(allCaseListItem);
+		casesListViewAll.getSelectionModel().clearAndSelect(indexOfAllFolder);
 	}
 
 	protected void showSentCase()
@@ -448,7 +449,6 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 	
 	protected void updateFolders()
 	{
-		System.out.println("FOlder content changeddddd");
 		Platform.runLater(() -> updateCases(null));
 	}
 	

@@ -219,6 +219,9 @@ public class BulletinEditorFooterController extends FxController
 	{
 		try
 		{
+			if (historyItems.getSelectionModel().isEmpty())
+				return;
+			
 			final ComboBoxChoiceItem selectedItem = historyItems.getSelectionModel().getSelectedItem();
 			selectedItem.onClick();
 		}
