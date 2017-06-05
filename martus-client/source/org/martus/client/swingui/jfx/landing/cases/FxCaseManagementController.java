@@ -181,6 +181,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 	public void onShowTrash(ActionEvent event)
 	{
 		updateButtons();
+		clearCasesListViewAllSelection();
 		
 		BulletinFolder trashFolder = getApp().getStore().getFolderDiscarded();
 		MartusLocalization localization = getLocalization();
@@ -192,7 +193,12 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		currentCasesListView.getSelectionModel().select(trashList);
 		updateCaseList();
 	}
-	
+
+	private void clearCasesListViewAllSelection()
+	{
+		casesListViewAll.getSelectionModel().clearSelection();
+	}
+
 	public void folderContentsHaveChanged()
 	{
 		Platform.runLater(() -> folderContentsHaveChangedOnFxThread());
