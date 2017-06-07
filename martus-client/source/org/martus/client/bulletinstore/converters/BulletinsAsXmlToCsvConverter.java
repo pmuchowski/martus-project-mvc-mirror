@@ -184,8 +184,7 @@ public class BulletinsAsXmlToCsvConverter
 		return retVal;
 	}
 
-
-	private void readMetaHeaders(Document doc)
+	protected void readMetaHeaders(Document doc)
 	{
 		NodeList metaList = doc.getElementsByTagName("BulletinMetaData");
 		Node metaData = getLatestVersionMetaHeaders(metaList);
@@ -228,7 +227,7 @@ public class BulletinsAsXmlToCsvConverter
 		}
 	}
 
-	private void addMetaDataToOutput(Element bulletin)
+	protected void addMetaDataToOutput(Element bulletin)
 	{
 		Element metaData = (Element)bulletin.getElementsByTagName("BulletinMetaData").item(0);
 
@@ -309,7 +308,7 @@ public class BulletinsAsXmlToCsvConverter
 		if (colList == null) 
 		{
 			colList = new ArrayList();
-			colList.add("LocalId");
+			addCustomGridColumns(colList);
 			NodeList colNodeList = gridDescNode.getElementsByTagName("Column");
 			int numCols = colNodeList.getLength();
 			for (int colNum = 0; colNum < numCols; colNum++) 
@@ -324,6 +323,11 @@ public class BulletinsAsXmlToCsvConverter
 			}
 			this.gridFieldNames.put(tag, colList);
 		}
+	}
+
+	protected void addCustomGridColumns(ArrayList<String> colList)
+	{
+		colList.add("LocalId");
 	}
 
 	private void extractGridColumnData(String gridLocalID, LinkedHashMap<String, Node> fieldMap)
@@ -341,11 +345,9 @@ public class BulletinsAsXmlToCsvConverter
 
 				for (int rowIndex = 0; rowIndex < rowList.getLength(); rowIndex++) 
 				{
-					String rowOutput = "";
-
 					Element row = (Element)rowList.item(rowIndex);
 					NodeList colList = row.getElementsByTagName("Column");
-					rowOutput = rowOutput + gridLocalID + getDelimeter();
+					String rowOutput = addCustomGridColumnsData(gridLocalID);
 					Boolean rowHasValues = Boolean.valueOf(false);
 					for (int colIndex = 0; colIndex < colList.getLength(); colIndex++) 
 					{
@@ -377,7 +379,10 @@ public class BulletinsAsXmlToCsvConverter
 		}
 	}
 
-
+	protected String addCustomGridColumnsData(String gridLocalID)
+	{
+		return gridLocalID + getDelimeter();
+	}
 
 	public HashMap<String, String> getAllGridInfo()
 	{
