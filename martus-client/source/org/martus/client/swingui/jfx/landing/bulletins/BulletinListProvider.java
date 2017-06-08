@@ -39,6 +39,7 @@ import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.packet.UniversalId;
 
+import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -115,7 +116,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 	public void updateContents()
 	{
-		loadBulletinsInBackground(new LoadBulletinsTask(loadBulletinsThread));
+		Platform.runLater(() -> loadBulletinsInBackground(new LoadBulletinsTask(loadBulletinsThread)));
 	}
 
 	private synchronized Set getUniversalIds()
