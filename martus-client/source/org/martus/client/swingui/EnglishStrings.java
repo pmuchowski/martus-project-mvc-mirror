@@ -744,7 +744,6 @@ public class EnglishStrings
 "field:Import=Import ",
 "field:TemplateSelector=Template Selector",
 "field:SystemTab=System",
-"field:TorTab=Tor",
 "field:CurrentConnection=Current Connection",
 "field:DefaultServerConnection=Default Server ",
 "field:ConnectToDefault=Connect to Default",

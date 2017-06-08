@@ -25,14 +25,14 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.jfx.landing.general;
 
+import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.jfx.generic.FxTabbedShellController;
+
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
-
-import org.martus.client.swingui.UiMainWindow;
-import org.martus.client.swingui.jfx.generic.FxTabbedShellController;
 
 public class SettingsController extends FxTabbedShellController
 {
@@ -49,8 +49,7 @@ public class SettingsController extends FxTabbedShellController
 		Parent shellContents = super.createContents();
 		loadControllerAndEmbedInPane(new SettingsForServerController(getMainWindow()), serverContentPane);
 		loadControllerAndEmbedInPane(new SettingsforSystemController(getMainWindow()), systemContentPane);
-		loadControllerAndEmbedInPane(new SettingsForTorController(getMainWindow()), torContentPane);
-		
+
 		selectInitialTabView();
 		return shellContents;
 	}
@@ -66,8 +65,6 @@ public class SettingsController extends FxTabbedShellController
 			return serverTab;
 		if(getFirstTabToDisplay().equals(SYSTEM_TAB))
 			return systemTab;
-		if(getFirstTabToDisplay().equals(TOR_TAB))
-			return torTab;
 		return null;
 	}
 
@@ -80,8 +77,7 @@ public class SettingsController extends FxTabbedShellController
 	
 	static public final String SERVER_TAB = "serverTab";
 	static public final String SYSTEM_TAB = "systemTab";
-	static public final String TOR_TAB = "torTab";
-	
+
 	@FXML
 	private TabPane settingTabPane;
 
@@ -92,14 +88,8 @@ public class SettingsController extends FxTabbedShellController
 	private Tab systemTab;
 
 	@FXML
-	private Tab torTab;
-
-	@FXML
 	private Pane serverContentPane;
 
 	@FXML
 	private Pane systemContentPane;
-
-	@FXML
-	private Pane torContentPane;
 }

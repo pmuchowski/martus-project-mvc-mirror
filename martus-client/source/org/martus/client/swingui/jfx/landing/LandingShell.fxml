@@ -17,7 +17,6 @@
                             <items>
                                 <MenuItem mnemonicParsing="false" onAction="#onConfigureServer" text="%Menu.ServerSettings" />
                                 <MenuItem mnemonicParsing="false" onAction="#onSystemPreferences" text="%Menu.SystemPreferences" />
-                                <MenuItem mnemonicParsing="false" onAction="#onTorPreferences" text="%Menu.TorPreferences" />
                                 <MenuItem mnemonicParsing="false" onAction="#onHelpMenu" text="%Menu.HelpMenu" />
                             </items>
                         </Menu>

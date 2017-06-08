@@ -16,10 +16,5 @@
         <AnchorPane fx:id="systemContentPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
       </content>
     </Tab>
-    <Tab id="torTab" fx:id="torTab" text="%TorTab">
-	  <content>
-	    <AnchorPane fx:id="torContentPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-	  </content>
-	</Tab>
   </tabs>
 </TabPane>
