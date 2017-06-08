@@ -245,7 +245,7 @@ public class ExportBulletins extends AbstractExport
 			File csvDestinationFile = new File(destinationDir, destinationFile.getName());
 			String bulletinsAsXml = exportBulletinsWithGroupedAttachments(bulletinsToExportForTemplate, destinationDir);
 			InputSource xmlAsInputSource = new InputSource(new StringReader(bulletinsAsXml));
-			BulletinsAsXmlToCsvConverter xmlToCsvConverter = new BulletinsAsXmlToCsvConverter(xmlAsInputSource, csvDestinationFile.getAbsolutePath());
+			BulletinsAsXmlToCsvConverter xmlToCsvConverter = createXmlToCsvConverter(xmlAsInputSource, csvDestinationFile.getAbsolutePath());
 			String errorMessagesDuringParsing = xmlToCsvConverter.parseAndTranslateFile();
 			if (!errorMessagesDuringParsing.isEmpty())
 			{
@@ -260,6 +260,11 @@ public class ExportBulletins extends AbstractExport
 			if (gridResults != null)
 				saveGridFiles(csvDestinationFile.getAbsolutePath(),  MartusApp.CSV_EXTENSION, gridResults);
 
+		}
+
+		protected BulletinsAsXmlToCsvConverter createXmlToCsvConverter(InputSource inputSourceToUse, String anOutFileName)
+		{
+			return new BulletinsAsXmlToCsvConverter(inputSourceToUse, anOutFileName);
 		}
 
 		private String findMatchingFormTemplate(Bulletin bulletinToExport) throws Exception

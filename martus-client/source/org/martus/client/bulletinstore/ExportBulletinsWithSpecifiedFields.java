@@ -27,11 +27,14 @@ package org.martus.client.bulletinstore;
 import java.io.File;
 import java.util.Vector;
 
+import org.martus.client.bulletinstore.converters.BulletinsAsXmlToCsvConverter;
+import org.martus.client.bulletinstore.converters.BulletinsAsXmlToCsvConverterWithoutMetadataFields;
 import org.martus.client.core.BulletinXmlExporterWithSpecifiedFieldsAndGroupedAttachments;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.common.ProgressMeterInterface;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.fieldspec.MiniFieldSpec;
+import org.xml.sax.InputSource;
 
 public class ExportBulletinsWithSpecifiedFields extends ExportBulletins
 {
@@ -71,6 +74,12 @@ public class ExportBulletinsWithSpecifiedFields extends ExportBulletins
 		protected void exportAsCsvs() throws Exception
 		{
 			exportBulletins("", bulletinsToExport);
+		}
+
+		@Override
+		protected BulletinsAsXmlToCsvConverter createXmlToCsvConverter(InputSource inputSourceToUse, String anOutFileName)
+		{
+			return new BulletinsAsXmlToCsvConverterWithoutMetadataFields(inputSourceToUse, anOutFileName);
 		}
 	}
 }
