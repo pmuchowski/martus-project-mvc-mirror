@@ -255,7 +255,7 @@ abstract public class AbstractBulletinXmlExporter
 	
 		dest.write(MartusXml.getTagStartWithNewline(BulletinXmlExportImportConstants.FIELD_VALUES));
 		
-		if (shouldGroupAttachments())
+		if (includeAttachments && shouldGroupAttachments())
 		{
 			String bulletinTitle = getAttachmentSubDirName(b);
 			attachmentsDirectory = new File(attachmentsDirectory, bulletinTitle);
