@@ -175,7 +175,7 @@
                                         <Insets right="10.0" top="15.0" />
                                     </padding>
                                     <children>
-                                        <TextField fx:id="searchText" visible="%isFullDesktopFlavor" maxWidth="500.0" minWidth="150.0" style="-fx-background-radius: 0px;" promptText="%SearchPrompt" />
+                                        <TextField fx:id="searchText" visible="%isFullDesktopFlavor" onAction="#onQuickSearch" maxWidth="500.0" minWidth="150.0" style="-fx-background-radius: 0px;" promptText="%SearchPrompt" />
                                         <Hyperlink onAction="#onAdvanceSearch" text="%Advanced" styleClass="searchLink" />
                                     </children>
                                 </VBox>
