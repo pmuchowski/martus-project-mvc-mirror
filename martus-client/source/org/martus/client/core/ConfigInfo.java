@@ -33,20 +33,22 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Vector;
 
+import org.martus.common.FieldSpecCollection;
+import org.martus.common.LegacyCustomFields;
+import org.martus.common.MartusAccountAccessToken;
+import org.martus.common.MartusAccountAccessToken.TokenInvalidException;
+import org.martus.common.MartusLogger;
+import org.martus.common.fieldspec.FormTemplate;
+import org.martus.common.fieldspec.StandardFieldSpecs;
+
 import javafx.beans.property.Property;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
-import org.martus.common.FieldSpecCollection;
-import org.martus.common.LegacyCustomFields;
-import org.martus.common.MartusAccountAccessToken;
-import org.martus.common.MartusLogger;
-import org.martus.common.MartusAccountAccessToken.TokenInvalidException;
-import org.martus.common.fieldspec.FormTemplate;
-import org.martus.common.fieldspec.StandardFieldSpecs;
-
 public class ConfigInfo
 {
+	private static final boolean PERMANENTLY_DISABLE_TOR = false;
+
 	public ConfigInfo()
 	{
 		martusAccountAccessTokens = new Vector();
@@ -124,7 +126,7 @@ public class ConfigInfo
 	public String getFieldDeskKeysXml() { return deprecatedFieldDeskKeysXml; }
 	public boolean hasBackedUpImprovedKeypairShare() {return backedUpImprovedKeypairShare;}
 	public boolean getDoZawgyiConversion() {return true;}
-	public boolean useInternalTor() {return useInternalTorProperty.getValue();}
+	public boolean useInternalTor() {return PERMANENTLY_DISABLE_TOR;}
 	public Property<Boolean> useInternalTorProperty() {return useInternalTorProperty;}
 	public Vector getMartusAccountAccessTokens() { return martusAccountAccessTokens;}
 	public boolean hasMartusAccountAccessToken() 

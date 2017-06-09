@@ -857,7 +857,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 //Version 17
 	final boolean sampleBackedUpImprovedKeypairShare = true;
 //Version 18
-	final boolean sampleUseInternalTor = true;
+	final boolean sampleUseInternalTor = false;
 //Version 19
 	final Vector sampleMartusAccountAccessTokens = new Vector();
 //Version 20
