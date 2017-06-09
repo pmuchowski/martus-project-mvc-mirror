@@ -744,7 +744,6 @@ public class EnglishStrings
 "field:Import=Import ",
 "field:TemplateSelector=Template Selector",
 "field:SystemTab=System",
-"field:TorTab=Tor",
 "field:CurrentConnection=Current Connection",
 "field:DefaultServerConnection=Default Server ",
 "field:ConnectToDefault=Connect to Default",
@@ -1880,10 +1879,8 @@ public class EnglishStrings
 "field:DisplaySettings=Your Display Settings",
 "field:TorSettings=Your Tor Settings",
 "field:UseTor=Use Tor",
-"field:UseTorInstructions=Tor is a security tool you can use to hide your identity when connecting to sites on the Internet. If Martus servers are blocked from your location, using Tor may help reach the servers.",
 "field:TorTip1=Turning Tor on here establishes the default setting for your use of Tor when in Martus. You can also, turn Tor ON or OFF at any time inside the Martus desktop application.",
 "field:TorTip2=Note: Using Tor will make sending and receiving of records slower.",
-"field:TorTip1Settings=Turn Tor ON or OFF at any time using the button in the task bar at the top of the main Martus screen.",
 "field:NeverDeleteVersionOnServer=Never Delete from Server",
 
 "field:GettingServerInformation=Getting server information",

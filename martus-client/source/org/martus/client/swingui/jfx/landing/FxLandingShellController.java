@@ -156,12 +156,6 @@ public class FxLandingShellController extends FxNonWizardShellController
 		//TODO remove this Old Swing doAction(new ActionMenuPreferences(getMainWindow()));
 		onSettings(SettingsController.SYSTEM_TAB);
 	}
-	
-	@FXML
-	private void onTorPreferences(ActionEvent event)
-	{
-		onSettings(SettingsController.TOR_TAB);
-	}
 
 	@FXML
 	private void onQuickSearch(ActionEvent event)
