@@ -89,9 +89,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		allRecordsTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		syncRecordsTableProvider = new SyncRecordsTableProvider(getMainWindow());
 		final SyncRecordsTableProvdiderTask task = new SyncRecordsTableProvdiderTask(syncRecordsTableProvider);
-		Thread thread = new Thread(task);
-		thread.setDaemon(false);
-		thread.start();		
+		createAndStartThread(task);
 	}
 
 	private BorderPane createProgressPlaceholder()
@@ -127,25 +125,32 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		{
 			try
 			{
-				updateStatusLabel(0, "Loading server drafts...");
-				serverMyDrafts = getServerMyDrafts();
+				updateStatusLabel(0, "Loading server records...");
 
-				updateStatusLabel(1, "Loading sealed records...");
-				serverMySealeds = getServerMySealeds();
+				ServerMyDraftsTask myDraftsTask = new ServerMyDraftsTask();
+				Thread myDraftsThread = createAndStartThread(myDraftsTask);
 
-				updateStatusLabel(2, "Loading HG drafts...");
-				serverHQDrafts = getServerHQDrafts();
+				ServerMySealedsTask mySealedsTask = new ServerMySealedsTask();
+				Thread mySealedsThread = createAndStartThread(mySealedsTask);
 
-				updateStatusLabel(3, "Loading HQ sealed records..");
-				serverHQSealeds = getServerHQSealeds();
+				ServerHQDraftsTask hqDraftsTask = new ServerHQDraftsTask();
+				Thread hqDraftsThread = createAndStartThread(hqDraftsTask);
 
-				updateStatusLabel(4, "Loading data...");
+				ServerHQSealedsTask hqSealedsTask = new ServerHQSealedsTask();
+				Thread hqSealedsThread = createAndStartThread(hqSealedsTask);
+
+				myDraftsThread.join();
+				mySealedsThread.join();
+				hqDraftsThread.join();
+				hqSealedsThread.join();
+
+				updateStatusLabel(1, "Loading data...");
 				allRecordsTable.setItems(syncRecordsTableProvider);
 				
 				updateLocationLinks();
 				updateSubFilterLinks();
 				loadData();
-				updateStatusLabel(5, "Finished");
+				updateStatusLabel(2, "Finished");
 			} 
 			catch (Exception e)
 			{
@@ -164,7 +169,87 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 			onShowAll(null);
 		}
 	}
-	
+
+	private Thread createAndStartThread(Task task)
+	{
+		Thread thread = new Thread(task);
+		thread.setDaemon(false);
+		thread.start();
+		return thread;
+	}
+
+	protected class ServerMyDraftsTask extends Task<Vector>
+	{
+
+		@Override
+		protected Vector call() throws Exception
+		{
+			return getServerMyDrafts();
+		}
+
+		@Override
+		protected void succeeded()
+		{
+			super.succeeded();
+
+			serverMyDrafts = getValue();
+		}
+	}
+
+	protected class ServerMySealedsTask extends Task<Vector>
+	{
+
+		@Override
+		protected Vector call() throws Exception
+		{
+			return getServerMySealeds();
+		}
+
+		@Override
+		protected void succeeded()
+		{
+			super.succeeded();
+
+			serverMySealeds = getValue();
+		}
+	}
+
+	protected class ServerHQDraftsTask extends Task<Vector>
+	{
+
+		@Override
+		protected Vector call() throws Exception
+		{
+			return getServerHQDrafts();
+		}
+
+		@Override
+		protected void succeeded()
+		{
+			super.succeeded();
+
+			serverHQDrafts = getValue();
+		}
+	}
+
+	protected class ServerHQSealedsTask extends Task<Vector>
+	{
+
+		@Override
+		protected Vector call() throws Exception
+		{
+			return getServerHQSealeds();
+		}
+
+		@Override
+		protected void succeeded()
+		{
+			super.succeeded();
+
+			serverHQSealeds = getValue();
+		}
+	}
+
 	protected void updateStatusLabel(long progressCount, String label)
 	{
 		Platform.runLater(new UpdateStatusProgressRunner(progressCount, label));
@@ -174,7 +259,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 	{
 		private double progressCount;
 		private String updateLabel;
-		private static final double MAX_PROGRESS_VALUE = 5;
+		private static final double MAX_PROGRESS_VALUE = 2;
 		
 		public UpdateStatusProgressRunner(double progressCountToUse, String updateLabelToUse)
 		{
