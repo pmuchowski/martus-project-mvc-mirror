@@ -109,7 +109,18 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		
 		return progressPane;
 	}
-	
+
+	private void createAndSetNoRecordsPlaceholder()
+	{
+		Label noBulletins = new Label(getLocalization().getFieldLabel("NoBulletinsInTable"));
+		allRecordsTable.setPlaceholder(noBulletins);
+	}
+
+	private void setNoRecordsPlaceholder()
+	{
+		Platform.runLater(() -> createAndSetNoRecordsPlaceholder());
+	}
+
 	protected class SyncRecordsTableProvdiderTask extends Task<SyncRecordsTableProvider>
 	{
 		private SyncRecordsTableProvider syncRecordsTableProvider;
@@ -154,6 +165,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 				updateSubFilterLinks();
 				loadData();
 				updateStatusLabel(PROGRESS_VALUE_FINISHED, "Finished");
+				setNoRecordsPlaceholder();
 			} 
 			catch (Exception e)
 			{
