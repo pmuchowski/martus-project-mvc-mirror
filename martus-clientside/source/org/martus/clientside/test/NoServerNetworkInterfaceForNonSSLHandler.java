@@ -43,4 +43,10 @@ public class NoServerNetworkInterfaceForNonSSLHandler
 	{
 		return null;
 	}
+	
+	@Override
+	public Vector verifyTokenAuthorityServer() throws Exception
+	{
+		return null;
+	}
 }

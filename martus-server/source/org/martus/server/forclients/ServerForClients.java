@@ -988,6 +988,54 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return coreServer.getServerInformation();
 	}
 	
+	@Override
+	public Vector verifyTokenAuthorityServer()
+	{
+		final String smokeTestAcccessTokenAsString = getSmokeTestAccessToken();
+		try 
+		{
+			MartusAccountAccessToken smokeTestAccessToken = new MartusAccountAccessToken(smokeTestAcccessTokenAsString);
+			String result = getAccountIdForTokenFromMartusCentralTokenAuthority(smokeTestAccessToken);
+			logInfo("Token authority response: " + result);
+			
+			final Vector vector = new Vector();
+			vector.add(NetworkInterfaceConstants.OK);
+			vector.add(result);
+			
+			return vector;
+		}
+		catch (TokenNotFoundException e)
+		{
+			final String errorMessage = "Token authority is available but token was not found.  Access Token not found = " + smokeTestAcccessTokenAsString;
+			logInfo(errorMessage);
+			Vector errorVector = new Vector();
+			errorVector.add(errorMessage);
+			
+			return errorVector;
+		}
+		catch (TokenInvalidException e)
+		{
+			final String errorMessage = "Ivalid Access Token = " + smokeTestAcccessTokenAsString;
+			logError(errorMessage);
+			Vector errorVector = new Vector();
+			errorVector.add(errorMessage);
+			
+			return errorVector;
+		}
+		catch (Exception e) 
+		{
+			logError(e);
+			Vector errorVector = new Vector();
+			errorVector.add(e.getMessage());
+			return errorVector;
+		} 
+	}
+
+	private String getSmokeTestAccessToken()
+	{
+		return "9028955";
+	}
+	
 	public String requestUploadRights(String clientId, String tryMagicWord)
 	{
 		boolean uploadGranted = false;
@@ -1338,4 +1386,10 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	private static final String CLIENTNEWSDIRECTORY = "news";
 	
 	private static final int[] defaultNonSSLPorts = {988, 80};
+
+	public String healthCheck()
+	{
+		System.out.println("health check called --------------------------------------------");
+		return "HEALTH CHECK RERTURNING DUMMY RESULT";
+	}
 }

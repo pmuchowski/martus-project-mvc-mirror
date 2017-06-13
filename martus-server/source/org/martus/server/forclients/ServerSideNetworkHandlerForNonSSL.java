@@ -66,6 +66,20 @@ public class ServerSideNetworkHandlerForNonSSL extends NonSSLNetworkAPIWithHelpe
 			server.clientConnectionExit();
 		}
 	}
+	
+	@Override
+	public Vector verifyTokenAuthorityServer() throws Exception
+	{
+		server.clientConnectionStart(null);
+		try
+		{
+			return server.verifyTokenAuthorityServer();
+		}
+		finally
+		{
+			server.clientConnectionExit();
+		}		
+	}
 
 	ServerForNonSSLClientsInterface server;
 }

@@ -34,6 +34,7 @@ public interface ServerForNonSSLClientsInterface extends LoggerInterface
 {
 	public String ping();
 	public Vector getServerInformation();
+	public Vector verifyTokenAuthorityServer();
 
 	public String getPublicCode(String clientId);
 	public void clientConnectionStart(String callerAccountId);

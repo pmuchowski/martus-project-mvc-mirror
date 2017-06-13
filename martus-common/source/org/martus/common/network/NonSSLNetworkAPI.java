@@ -31,5 +31,8 @@ import java.util.Vector;
 abstract public class NonSSLNetworkAPI
 {
 	abstract public String ping();
+	
 	abstract public Vector getServerInformation();
+	
+	abstract public Vector verifyTokenAuthorityServer() throws Exception;
 }

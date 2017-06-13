@@ -154,6 +154,12 @@ public class ClientSideNetworkHandlerUsingXmlRpcWithUnverifiedServer extends Non
 		
 		return result;
 	}
+	
+	@Override
+	public Vector verifyTokenAuthorityServer() throws Exception
+	{
+		throw new Exception("Verifying token athority server is only being called from a health smoke test.");
+	}
 
 	// end MartusXmlRpc interface
 

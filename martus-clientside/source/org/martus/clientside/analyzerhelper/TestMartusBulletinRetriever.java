@@ -151,6 +151,12 @@ public class TestMartusBulletinRetriever extends TestCaseEnhanced
 			return result;
 		}
 		
+		@Override
+		public Vector verifyTokenAuthorityServer() throws Exception
+		{
+			return new Vector();
+		}
+		
 		public String publicKeyString;
 	}
 	
