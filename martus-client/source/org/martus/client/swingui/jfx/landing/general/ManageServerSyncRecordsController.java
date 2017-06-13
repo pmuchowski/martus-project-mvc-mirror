@@ -67,6 +67,10 @@ import javafx.scene.layout.VBox;
 
 public class ManageServerSyncRecordsController extends AbstractFxLandingContentController
 {
+	private static final double PROGRESS_VALUE_LOADING = -1.0;
+	private static final double PROGRESS_VALUE_FINISHED = 1.0;
+	private static final double PROGRESS_VALUE_FAILED = 0.0;
+
 	public ManageServerSyncRecordsController(UiMainWindow mainWindowToUse) throws Exception
 	{
 		super(mainWindowToUse);
@@ -117,7 +121,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		@Override
 		protected void failed() 
 		{ 
-			updateStatusLabel((long) recordsProgressBar.getProgress(), "Failed to load data!");
+			updateStatusLabel(PROGRESS_VALUE_FAILED, "Failed to load data!");
 		}
 
 		@Override
@@ -125,7 +129,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		{
 			try
 			{
-				updateStatusLabel(0, "Loading server records...");
+				updateStatusLabel(PROGRESS_VALUE_LOADING, "Loading server records...");
 
 				ServerMyDraftsTask myDraftsTask = new ServerMyDraftsTask();
 				Thread myDraftsThread = createAndStartThread(myDraftsTask);
@@ -144,13 +148,12 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 				hqDraftsThread.join();
 				hqSealedsThread.join();
 
-				updateStatusLabel(1, "Loading data...");
 				allRecordsTable.setItems(syncRecordsTableProvider);
 				
 				updateLocationLinks();
 				updateSubFilterLinks();
 				loadData();
-				updateStatusLabel(2, "Finished");
+				updateStatusLabel(PROGRESS_VALUE_FINISHED, "Finished");
 			} 
 			catch (Exception e)
 			{
@@ -250,20 +253,19 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		}
 	}
 
-	protected void updateStatusLabel(long progressCount, String label)
+	protected void updateStatusLabel(double progressValue, String label)
 	{
-		Platform.runLater(new UpdateStatusProgressRunner(progressCount, label));
+		Platform.runLater(new UpdateStatusProgressRunner(progressValue, label));
 	}
 	
 	protected class UpdateStatusProgressRunner implements Runnable
 	{
-		private double progressCount;
+		private double progressValue;
 		private String updateLabel;
-		private static final double MAX_PROGRESS_VALUE = 2;
-		
-		public UpdateStatusProgressRunner(double progressCountToUse, String updateLabelToUse)
+
+		public UpdateStatusProgressRunner(double progressValueToUse, String updateLabelToUse)
 		{
-			progressCount = progressCountToUse;
+			progressValue = progressValueToUse;
 			updateLabel = updateLabelToUse;
 		}
 		
@@ -271,12 +273,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		public void run()
 		{
 			progressLabel.setText(updateLabel);
-			recordsProgressBar.setProgress(calculatePercentComplete());
-		}
-
-		private double calculatePercentComplete()
-		{
-			return progressCount/MAX_PROGRESS_VALUE;
+			recordsProgressBar.setProgress(progressValue);
 		}
 	}
 
