@@ -100,6 +100,8 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		startupFiles.add(getMagicWordsFile());
 		startupFiles.add(getBannedFile());
 		startupFiles.add(getTestAccountsFile());
+		startupFiles.add(getTokenAuthoritySmokeTestAccessTokensFile());
+		
 		return startupFiles;
 	}
 	
@@ -1033,7 +1035,27 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 
 	private String getSmokeTestAccessToken()
 	{
-		return "9028955";
+		final String DEFAULT_SMOKE_TEST_ACCESS_TOKEN = "9028955";
+		try
+		{
+			Vector listFromFile = MartusUtilities.loadListFromFile(getTokenAuthoritySmokeTestAccessTokensFile());
+			if (listFromFile.isEmpty())
+			{
+				logInfo("Token authority smoke test access file does not exist, make sure this file exists: " + TOKEN_AUTHORITY_SMOKE_TEST_ACCESS_TOKEN_FILENAME + " under this dir: " + getConfigDirectory().getAbsolutePath() + ". Using default baked in access token: " + DEFAULT_SMOKE_TEST_ACCESS_TOKEN);
+				return DEFAULT_SMOKE_TEST_ACCESS_TOKEN;
+			}
+			
+			if (listFromFile.size() > 1)
+				logInfo(TOKEN_AUTHORITY_SMOKE_TEST_ACCESS_TOKEN_FILENAME + " contains more than one acccess token, currently only using the first item in the list.");
+			
+			return listFromFile.firstElement().toString();
+		} 
+		catch (IOException e)
+		{
+			logError("Could not load token athority smoke test access tokens, using default access token: " + DEFAULT_SMOKE_TEST_ACCESS_TOKEN, e);
+			return DEFAULT_SMOKE_TEST_ACCESS_TOKEN;
+		}
+		
 	}
 	
 	public String requestUploadRights(String clientId, String tryMagicWord)
@@ -1099,6 +1121,11 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return result;
 	}
 
+	private File getTokenAuthoritySmokeTestAccessTokensFile()
+	{
+		return new File(getConfigDirectory(), TOKEN_AUTHORITY_SMOKE_TEST_ACCESS_TOKEN_FILENAME);
+	}
+	
 	private File getBannedFile()
 	{
 		return new File(getConfigDirectory(), BANNEDCLIENTSFILENAME);
@@ -1384,6 +1411,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	public static final String AUTHORIZELOGFILENAME = "authorizelog.txt";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 	private static final String CLIENTNEWSDIRECTORY = "news";
+	private static final String TOKEN_AUTHORITY_SMOKE_TEST_ACCESS_TOKEN_FILENAME = "tokenAuthoritySmokeTestAccessToken.txt";
 	
 	private static final int[] defaultNonSSLPorts = {988, 80};
 
