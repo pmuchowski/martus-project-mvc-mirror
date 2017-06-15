@@ -123,6 +123,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	{
 		if(folder == FxCaseManagementController.ALL_FOLDER)
 			return getAllBulletinUidsIncludingDiscardedItems();
+
 		return folder.getAllUniversalIdsUnsorted();
 	}
 

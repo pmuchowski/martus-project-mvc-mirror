@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -26,19 +27,7 @@
                     </HBox>
                     <HBox HBox.hgrow="ALWAYS" />
                     <HBox alignment="CENTER">
-                        <Button fx:id="immutableOnServerButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onImmutable">
-                            <graphic>
-                                <ImageView fx:id="immutableOnServerImageView" fitHeight="13" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../../images/toggle_off.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                            <styleClass>
-                                <String fx:value="button-minpadding" />
-                                <String fx:value="button-transparentNoHover" />
-                            </styleClass>
-                        </Button>
+                        <CheckBox fx:id="immutableOnServerButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onImmutable" />
                         <Label contentDisplay="CENTER" styleClass="headingLevel6" text="%NeverDeleteVersionOnServer" />
                     </HBox>
                 </children>

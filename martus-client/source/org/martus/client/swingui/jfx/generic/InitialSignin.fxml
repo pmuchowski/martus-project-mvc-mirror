@@ -44,13 +44,13 @@
                                             <children>
                                                 <GridPane fx:id="signInPane" vgap="5.0" hgap="5" xmlns:fx="http://javafx.com/fxml">
                                                     <children>
-                                                        <Label styleClass="headingLevel4" text="%CreateAccountUserName" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                                        <Label styleClass="headingLevel3" text="%CreateAccountUserName" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                                                         <TextField id="accountName" fx:id="userNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                                                        <Label styleClass="headingLevel4" text="%Password" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                                        <Label styleClass="headingLevel3" text="%Password" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                                                         <PasswordField id="password" fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                                                        <Label styleClass="headingLevel4" text="%LanguageLabel" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                                        <Label styleClass="headingLevel3" text="%LanguageLabel" GridPane.columnIndex="0" GridPane.rowIndex="2" />
                                                         <ChoiceBox fx:id="languagesDropdown" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="singIn-choice-box" />
                                                     </children>
                                                     <columnConstraints>
@@ -81,7 +81,7 @@
                                                     <children>
                                                         <HBox alignment="CENTER">
                                                             <Separator HBox.hgrow="ALWAYS" styleClass="singIn-separator" />
-                                                            <Label text="%NewToMartus" styleClass="headingLevel4" />
+                                                            <Label text="%NewToMartus" styleClass="signIn-separator-label" />
                                                             <Separator HBox.hgrow="ALWAYS" styleClass="singIn-separator" />
                                                         </HBox>
                                                         <Button fx:id="newAccountButton" onAction="#onNewAccount" text="%Button.CreateNewAccount" styleClass="button-gray" />
@@ -99,7 +99,7 @@
                                         <HBox HBox.hgrow="ALWAYS" />
                                         <VBox alignment="CENTER_LEFT" spacing="10">
                                             <children>
-                                                <Label styleClass="headingLevel4" text="%RecoverAccountOptions" />
+                                                <Label styleClass="headingLevel3" text="%RecoverAccountOptions" />
                                                 <Button onAction="#onRestoreFile" text="%Button.RecoverAccountByBackup" styleClass="button-green" />
                                                 <Button onAction="#onRestoreShare" text="%Button.RecoverAccountByShare" styleClass="button-green" />
                                             </children>

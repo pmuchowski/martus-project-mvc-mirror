@@ -470,7 +470,7 @@ public class EnglishStrings
 "button:RecoverAccountByShare=Restore account from multiple disks",
 "button:RecoverAccountByBackup=Restore account from backup key file",
 "field:RecoverAccountOptions=Click on an option below:",
-"field:NewToMartus=New to Martus?",
+"field:NewToMartus=New to Martus",
 "field:LanguageLabel=Language ",
 "button:CreateNewAccount=Create a new Martus account",
 "button:BulletinDetails=Record Details",

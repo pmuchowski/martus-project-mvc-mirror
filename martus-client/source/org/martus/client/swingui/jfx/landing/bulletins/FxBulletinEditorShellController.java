@@ -55,15 +55,11 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.control.CheckBox;
 import javafx.scene.layout.Pane;
 
 public class FxBulletinEditorShellController extends FxNonWizardShellController implements UiBulletinComponentInterface
 {
-	private static final String TOGGLE_ON_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_on.png";
-	private static final String TOGGLE_OFF_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/toggle_off.png";
-
 	public FxBulletinEditorShellController(UiMainWindow mainWindowToUse, UiBulletinModifyDlg parentDialogToUse)
 	{
 		super(mainWindowToUse);
@@ -147,7 +143,7 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 		initializeImmutableToggle();
 	}
 
-	private boolean getImmutableOnServerPropertyValue() {
+	private boolean isImmutableOnServer() {
 		return fxBulletin.getImmutableOnServerProperty().get();
 	}
 
@@ -171,7 +167,7 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 	@FXML
 	private void onImmutable(ActionEvent event)
 	{
-		boolean oldState = getImmutableOnServerPropertyValue();
+		boolean oldState = isImmutableOnServer();
 		boolean newState = !oldState;
 		setImmutableOnServerPropertyValue(newState);
 		updateImmutableToggle();
@@ -179,22 +175,7 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 
 	private void updateImmutableToggle()
 	{
-		boolean isImmutable = getImmutableOnServerPropertyValue();
-		immutableOnServerImageView.setImage(getUpdatedOnOffStatusImage(isImmutable));
-	}
-
-	private Image getUpdatedOnOffStatusImage(boolean isOn)
-	{
-		Image onOffImage = new Image(getOnOffImagePath(isOn));
-		return onOffImage;
-	}
-
-	private String getOnOffImagePath(boolean isOn)
-	{
-		if(isOn)
-			return TOGGLE_ON_IMAGE_PATH;
-
-		return TOGGLE_OFF_IMAGE_PATH;
+		immutableOnServerButton.setSelected(isImmutableOnServer());
 	}
 
 	@Override
@@ -331,7 +312,7 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 
 	private boolean shouldDisallowDeleteFromServer(final BulletinState state)
 	{
-		boolean neverDeleteFromServerSelected = getImmutableOnServerPropertyValue();
+		boolean neverDeleteFromServerSelected = isImmutableOnServer();
 		if(state.equals(BulletinState.STATE_SHARED) || state.equals(BulletinState.STATE_SNAPSHOT))
 			return neverDeleteFromServerSelected;
 		return false;
@@ -356,10 +337,7 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 	private Button shareButton;
 
 	@FXML
-	private Button immutableOnServerButton;
-
-	@FXML
-	private ImageView immutableOnServerImageView;
+	private CheckBox immutableOnServerButton;
 
 	private UiBulletinModifyDlg parentDialog;
 	private BulletinEditorHeaderController headerController;

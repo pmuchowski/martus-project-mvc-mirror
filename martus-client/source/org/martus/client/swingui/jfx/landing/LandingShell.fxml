@@ -74,7 +74,7 @@
                                                 <Font name="Helvetica" size="14.0" />
                                             </font>
                                             <graphic>
-                                                <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="35.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@../images/create.png" />
                                                     </image>
@@ -94,7 +94,7 @@
                                                 <Font name="Helvetica" size="14.0" />
                                             </font>
                                             <graphic>
-                                                <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="30.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@../images/template_manager.png" />
                                                     </image>
@@ -114,7 +114,7 @@
                                                 <Font name="Helvetica" size="12.0" />
                                             </font>
                                             <graphic>
-                                                <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="35.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@../images/manage_contacts.png" />
                                                     </image>
@@ -131,7 +131,7 @@
 
                                         <Button mnemonicParsing="false" onAction="#onServerSync" prefHeight="40.0" prefWidth="40.0">
                                             <graphic>
-                                                <ImageView fitHeight="40.0" pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="35.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@../images/sync_manager.png" />
                                                     </image>

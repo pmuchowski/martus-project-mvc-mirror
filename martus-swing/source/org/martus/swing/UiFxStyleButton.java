@@ -119,7 +119,11 @@ public class UiFxStyleButton extends UiButton
 		FontMetrics metrics = g2.getFontMetrics(getFont());
 		int y = ((getHeight() - metrics.getHeight()) / 2) + metrics.getAscent();
 		g2.setPaint(getForeground());
-		g2.drawString(getText(), padding, y);
+		
+		final int textWidth = metrics.stringWidth(getText());
+		final int emtpySpaceWidth = getWidth() - textWidth;
+		final int textStartXPosition = emtpySpaceWidth / 2;
+		g2.drawString(getText(), textStartXPosition, y);
 	}
 
 	public void setFontSize(float fontSize) {
