@@ -25,18 +25,18 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.jfx.contacts;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.jfx.WizardNavigationButtonsInterface;
 import org.martus.client.swingui.jfx.WizardNavigationHandlerInterface;
 import org.martus.client.swingui.jfx.generic.FxController;
 import org.martus.client.swingui.jfx.generic.FxWizardShellController;
 import org.martus.client.swingui.jfx.setupwizard.AbstractFxSetupWizardContentController;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Pane;
 
 public class ContactsShellController extends FxWizardShellController implements WizardNavigationButtonsInterface
 {
@@ -97,14 +97,7 @@ public class ContactsShellController extends FxWizardShellController implements 
 		getContentNavigationHandler().nextWasPressed();
 		getStage().close();
 	}
-	
-	@FXML
-	protected void importContactFromFile(ActionEvent event)
-	{
-		FxManageContactsController controller = (FxManageContactsController) getContentNavigationHandler();
-		controller.importContactFromFile();
-	}
-	
+
 	private WizardNavigationHandlerInterface getContentNavigationHandler()
 	{
 		return contentNavigationHandler;

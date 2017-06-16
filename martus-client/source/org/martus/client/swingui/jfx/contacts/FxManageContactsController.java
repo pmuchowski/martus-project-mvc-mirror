@@ -27,6 +27,11 @@ package org.martus.client.swingui.jfx.contacts;
 
 import org.martus.client.swingui.UiMainWindow;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 
 public class FxManageContactsController extends FxWizardAddContactsController
 {
@@ -48,16 +53,45 @@ public class FxManageContactsController extends FxWizardAddContactsController
 		showOldPublicCodeDuringVerification();
 	}
 
-	public void importContactFromFile()
+	@FXML
+	public void importContactFromFile(ActionEvent event)
 	{
 		doAction(new ImportContactAction(this));
 	}
-	
+
+	@FXML
+	public void updateButtonStatus(ActionEvent event)
+	{
+		if (addContactAccessTokenButton.isSelected())
+		{
+			accessTokenField.setDisable(false);
+			importContactButton.setDisable(true);
+			updateAddContactButtonState();
+			addContactLabel.setText(getLocalization().getFieldLabel("AddContactStep1AccessToken"));
+		}
+		else
+		{
+			accessTokenField.setDisable(true);
+			addContactButton.setDisable(true);
+			importContactButton.setDisable(false);
+			addContactLabel.setText(getLocalization().getFieldLabel("AddContactStep1PublicKey"));
+		}
+	}
+
 	@Override
 	public String getFxmlLocation()
 	{
 		return "contacts/ManageContacts.fxml";
 	}
-	
+
+	@FXML
+	protected RadioButton addContactAccessTokenButton;
+
+	@FXML
+	protected Button importContactButton;
+
+	@FXML
+	protected Label addContactLabel;
+
 	private static final int MAX_WIDTH_CONTACTS_TABLE = 960;
 }
