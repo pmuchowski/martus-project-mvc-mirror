@@ -26,6 +26,9 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui.jfx.contacts;
 
 import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.actions.ActionMenuExportMyPublicKey;
+import org.martus.common.MartusAccountAccessToken;
+import org.martus.common.MartusLogger;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -51,6 +54,8 @@ public class FxManageContactsController extends FxWizardAddContactsController
 
 		sendToByDefaultColumn.setVisible(true);
 		showOldPublicCodeDuringVerification();
+
+		accountAccessTokenLabel.setText(getAccountAccessToken());
 	}
 
 	@FXML
@@ -78,6 +83,27 @@ public class FxManageContactsController extends FxWizardAddContactsController
 		}
 	}
 
+	@FXML
+	private void onExportPublicKey(ActionEvent event)
+	{
+		doAction(new ActionMenuExportMyPublicKey(getMainWindow()));
+	}
+
+	private String getAccountAccessToken()
+	{
+		try {
+			MartusAccountAccessToken accountToken = getApp().getConfigInfo().getCurrentMartusAccountAccessToken();
+
+			return accountToken.getToken();
+		}
+		catch (MartusAccountAccessToken.TokenInvalidException e)
+		{
+			MartusLogger.logException(e);
+		}
+
+		return getLocalization().getFieldLabel("TokenNotAvailable");
+	}
+
 	@Override
 	public String getFxmlLocation()
 	{
@@ -92,6 +118,9 @@ public class FxManageContactsController extends FxWizardAddContactsController
 
 	@FXML
 	protected Label addContactLabel;
+
+	@FXML
+	protected Label accountAccessTokenLabel;
 
 	private static final int MAX_WIDTH_CONTACTS_TABLE = 960;
 }

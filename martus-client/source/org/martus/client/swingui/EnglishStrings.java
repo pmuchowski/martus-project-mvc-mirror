@@ -1799,6 +1799,8 @@ public class EnglishStrings
 "button:CopyItem=Copy",
 "wintitle:CopyItem=Copy",
 "button:YesCopyWithUnknownContent=Yes, copy what you can over",
+"field:MyAccessToken=My Access Token:",
+"button:ExportPublicKey=Export My Public Key",
 
 "wintitle:ExitWizard=Exit Martus Wizard",
 "field:ExitWizard=If you close this wizard now, you will not be able to return and use it to complete this account's setup \n(however, you can access the wizard to create other new accounts).\n\n" +
