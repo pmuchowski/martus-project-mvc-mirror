@@ -26,7 +26,15 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui.jfx.contacts;
 
 import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.actions.ActionMenuExportMyPublicKey;
+import org.martus.common.MartusAccountAccessToken;
+import org.martus.common.MartusLogger;
 
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 
 public class FxManageContactsController extends FxWizardAddContactsController
 {
@@ -46,18 +54,73 @@ public class FxManageContactsController extends FxWizardAddContactsController
 
 		sendToByDefaultColumn.setVisible(true);
 		showOldPublicCodeDuringVerification();
+
+		accountAccessTokenLabel.setText(getAccountAccessToken());
 	}
 
-	public void importContactFromFile()
+	@FXML
+	public void importContactFromFile(ActionEvent event)
 	{
 		doAction(new ImportContactAction(this));
 	}
-	
+
+	@FXML
+	public void updateButtonStatus(ActionEvent event)
+	{
+		if (addContactAccessTokenButton.isSelected())
+		{
+			accessTokenField.setDisable(false);
+			importContactButton.setDisable(true);
+			updateAddContactButtonState();
+			addContactLabel.setText(getLocalization().getFieldLabel("AddContactStep1AccessToken"));
+		}
+		else
+		{
+			accessTokenField.setDisable(true);
+			addContactButton.setDisable(true);
+			importContactButton.setDisable(false);
+			addContactLabel.setText(getLocalization().getFieldLabel("AddContactStep1PublicKey"));
+		}
+	}
+
+	@FXML
+	private void onExportPublicKey(ActionEvent event)
+	{
+		doAction(new ActionMenuExportMyPublicKey(getMainWindow()));
+	}
+
+	private String getAccountAccessToken()
+	{
+		try {
+			MartusAccountAccessToken accountToken = getApp().getConfigInfo().getCurrentMartusAccountAccessToken();
+
+			return accountToken.getToken();
+		}
+		catch (MartusAccountAccessToken.TokenInvalidException e)
+		{
+			MartusLogger.logException(e);
+		}
+
+		return getLocalization().getFieldLabel("TokenNotAvailable");
+	}
+
 	@Override
 	public String getFxmlLocation()
 	{
 		return "contacts/ManageContacts.fxml";
 	}
-	
+
+	@FXML
+	protected RadioButton addContactAccessTokenButton;
+
+	@FXML
+	protected Button importContactButton;
+
+	@FXML
+	protected Label addContactLabel;
+
+	@FXML
+	protected Label accountAccessTokenLabel;
+
 	private static final int MAX_WIDTH_CONTACTS_TABLE = 960;
 }

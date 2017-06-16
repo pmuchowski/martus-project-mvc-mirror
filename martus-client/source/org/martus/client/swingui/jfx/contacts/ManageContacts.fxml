@@ -8,12 +8,59 @@
 
 <VBox fx:id="contactsVbox" prefWidth="860.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <children>
-	<VBox styleClass="mainTextBox">
-    		<Label fx:id="fxAddManageContactLabel" styleClass="headingLevel1" text="%AddContacts" />
-    		<Label id="contactsOverviewLabel" prefWidth="840.0" styleClass="mainTextBoxText" text="%ManageContactsOverview1" wrapText="true" />
-    		<Label prefWidth="840.0" styleClass="mainTextBoxText" text="%ManageContactsOverview2" wrapText="true" />
-	</VBox>
+    <HBox alignment="CENTER">
+      <children>
+        <HBox styleClass="background-blue" HBox.hgrow="ALWAYS">
+          <children>
+            <Label text="%MyAccessToken" styleClass="headingLevel4" />
+            <Label fx:id="accountAccessTokenLabel" styleClass="headingLevel4" />
+          </children>
+        </HBox>
+        <HBox>
+          <children>
+            <Button fx:id="exportPublicKey" text="%Button.ExportPublicKey" onAction="#onExportPublicKey" styleClass="button-gray" />
+          </children>
+          <padding>
+            <Insets left="10" />
+          </padding>
+        </HBox>
+      </children>
+      <padding>
+        <Insets bottom="20" />
+      </padding>
+    </HBox>
+
     <BorderPane>
+      <top>
+        <fx:define><ToggleGroup fx:id="addContactToggleGroup"/></fx:define>
+        <GridPane>
+          <children>
+            <RadioButton fx:id="addContactAccessTokenButton" toggleGroup="$addContactToggleGroup" mnemonicParsing="false" selected="true" text="%AccessToken" GridPane.columnIndex="0" GridPane.rowIndex="0" onAction="#updateButtonStatus" />
+            <HBox GridPane.columnIndex="1" GridPane.rowIndex="0" alignment="CENTER_LEFT">
+              <TextField id="" fx:id="accessTokenField" promptText="%ContactAccessToken" />
+              <Button id="" fx:id="addContactButton" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addContact" styleClass="button-green" text="%Button.AddContact"/>
+            </HBox>
+            <RadioButton fx:id="importContactPublicKeyButton" toggleGroup="$addContactToggleGroup" mnemonicParsing="false" text="%ImportPublicKey" GridPane.columnIndex="0" GridPane.rowIndex="1" onAction="#updateButtonStatus" />
+            <Button fx:id="importContactButton" mnemonicParsing="false" onAction="#importContactFromFile" text="%Button.ImportContactFromFile" GridPane.columnIndex="1" GridPane.rowIndex="1" disable="true" GridPane.vgrow="ALWAYS" styleClass="button-gray" />
+            <VBox GridPane.columnIndex="2" GridPane.rowIndex="0" GridPane.rowSpan="2" styleClass="addContactStepsBorder">
+              <children>
+                <Label fx:id="addContactLabel" text="%AddContactStep1AccessToken" wrapText="true" />
+                <Label text="%AddContactStep2" wrapText="true" />
+                <Label text="%AddContactStep3" wrapText="true" />
+              </children>
+            </VBox>
+          </children>
+          <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="300.0" />
+            <ColumnConstraints hgrow="ALWAYS" />
+          </columnConstraints>
+          <rowConstraints>
+            <RowConstraints vgrow="SOMETIMES" valignment="CENTER" />
+            <RowConstraints vgrow="SOMETIMES" valignment="CENTER" />
+          </rowConstraints>
+        </GridPane>
+      </top>
       <center>
         <VBox BorderPane.alignment="CENTER">
           <children>
@@ -29,16 +76,6 @@
           </children>
         </VBox>
       </center>
-      <top>
-        <HBox prefHeight="53.0">
-          <children>
-            <Label styleClass="headingLevel3" text="%AccessToken" />
-            <TextField id="" fx:id="accessTokenField" promptText="%AccessTokenInstructions" />
-            <Label prefWidth="38.0" visible="false" />
-            <Button id="" fx:id="addContactButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#addContact" prefWidth="259.0" styleClass="button_guided_action" text="%Button.AddContact" />
-          </children>
-        </HBox>
-      </top>
     </BorderPane>
   </children>
   <padding>
