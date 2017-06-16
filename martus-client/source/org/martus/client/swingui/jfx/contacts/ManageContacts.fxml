@@ -8,11 +8,6 @@
 
 <VBox fx:id="contactsVbox" prefWidth="860.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">
   <children>
-	<VBox styleClass="mainTextBox">
-    		<Label fx:id="fxAddManageContactLabel" styleClass="headingLevel1" text="%AddContacts" />
-    		<Label id="contactsOverviewLabel" prefWidth="840.0" styleClass="mainTextBoxText" text="%ManageContactsOverview1" wrapText="true" />
-    		<Label prefWidth="840.0" styleClass="mainTextBoxText" text="%ManageContactsOverview2" wrapText="true" />
-	</VBox>
     <BorderPane>
       <center>
         <VBox BorderPane.alignment="CENTER">
