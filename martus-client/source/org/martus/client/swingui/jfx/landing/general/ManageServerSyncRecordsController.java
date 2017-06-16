@@ -140,6 +140,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		{
 			try
 			{
+				loadRecordsError = false;
 				updateStatusLabel(PROGRESS_VALUE_LOADING, "Loading server records...");
 
 				ServerMyDraftsTask myDraftsTask = new ServerMyDraftsTask();
@@ -159,6 +160,9 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 				hqDraftsThread.join();
 				hqSealedsThread.join();
 
+				if (loadRecordsError)
+					throw new Exception("Failed to load data");
+
 				allRecordsTable.setItems(syncRecordsTableProvider);
 				
 				updateLocationLinks();
@@ -169,6 +173,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 			} 
 			catch (Exception e)
 			{
+				updateStatusLabel(PROGRESS_VALUE_FAILED, "Failed to load data!");
 				MartusLogger.logException(e);
 			}
 			
@@ -193,7 +198,20 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		return thread;
 	}
 
-	protected class ServerMyDraftsTask extends Task<Vector>
+	protected abstract class LoadServerData extends Task<Vector>
+	{
+
+		@Override
+		protected void failed()
+		{
+			loadRecordsError = true;
+
+			if (getException() != null)
+				MartusLogger.logException(new Exception("Could not load the bulletins", getException()));
+		}
+	}
+
+	protected class ServerMyDraftsTask extends LoadServerData
 	{
 
 		@Override
@@ -211,7 +229,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		}
 	}
 
-	protected class ServerMySealedsTask extends Task<Vector>
+	protected class ServerMySealedsTask extends LoadServerData
 	{
 
 		@Override
@@ -229,7 +247,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		}
 	}
 
-	protected class ServerHQDraftsTask extends Task<Vector>
+	protected class ServerHQDraftsTask extends LoadServerData
 	{
 
 		@Override
@@ -247,7 +265,7 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		}
 	}
 
-	protected class ServerHQSealedsTask extends Task<Vector>
+	protected class ServerHQSealedsTask extends LoadServerData
 	{
 
 		@Override
@@ -648,6 +666,8 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 	protected Vector serverMySealeds;
 	protected Vector serverHQDrafts;
 	protected Vector serverHQSealeds;
-	
+
+	private boolean loadRecordsError;
+
 	private SyncRecordsTableProvider syncRecordsTableProvider;
 }
