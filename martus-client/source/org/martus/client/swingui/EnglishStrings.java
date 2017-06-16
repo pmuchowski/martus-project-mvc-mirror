@@ -1784,6 +1784,7 @@ public class EnglishStrings
 "field:AddContactStep2=2. Communicate in person or over an encrypted phone conversation. If that is not possible, use encrypted email",
 "field:AddContactStep3=3. Verify Public Code after adding contact, ideally over phone/in person",
 "field:ImportPublicKey=Import Public Key",
+"field:AddContact=Add Contacts",
 
 "button:ContactName=Name",
 "button:SendToByDefault=Send by Default",

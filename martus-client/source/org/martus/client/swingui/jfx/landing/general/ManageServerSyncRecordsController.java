@@ -200,7 +200,6 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 
 	protected abstract class LoadServerData extends Task<Vector>
 	{
-
 		@Override
 		protected void failed()
 		{
@@ -666,8 +665,6 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 	protected Vector serverMySealeds;
 	protected Vector serverHQDrafts;
 	protected Vector serverHQSealeds;
-
-	private boolean loadRecordsError;
-
+	protected boolean loadRecordsError;
 	private SyncRecordsTableProvider syncRecordsTableProvider;
 }

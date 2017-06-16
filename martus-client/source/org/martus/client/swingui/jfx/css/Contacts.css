@@ -82,6 +82,12 @@
     -fx-background-color:#00B050;
 }
 
+.label-green {
+    -fx-font-size: 15px;
+    -fx-padding: 5 5 5 5;
+    -fx-text-fill:#00B050;
+}
+
 .button-gray,
 .button-gray:hover,
 .button-gray:pressed {
@@ -135,7 +141,16 @@
 }
 
 .mainText {
-	-fx-text-fill: #4c5e70;
+	-fx-text-fill: #a31f1f;
+	-fx-background-color: #a31f1f;
+	-fx-alignment: center-left;
+	-fx-font-size: 12px;
+	-fx-padding: 0 10 0 10;
+}
+
+.tableColumn {
+	-fx-text-fill: white;
+	-fx-background-color: b7b5b5;
 	-fx-alignment: center-left;
 	-fx-font-size: 12px;
 	-fx-padding: 0 10 0 10;
@@ -143,7 +158,7 @@
 
 .mainTextBox {
 	-fx-background-color: #9ba5ae;
-  -fx-padding: 25 10 35 10;
+    -fx-padding: 25 10 35 10;
 	-fx-alignment: center-left;
 	-fx-background-radius: 7.0;
 	-fx-background-insets: 0 0 20 0;
@@ -252,7 +267,7 @@
 
 .table-cell {
 	-fx-background-color: transparent;
-	-fx-text-fill: #4c5e70;
+	-fx-text-fill: #707070;
 }
 
 
@@ -340,7 +355,7 @@
 #contacts-table {
 	-fx-table-cell-border-color: #e6e7e9;
 	-fx-font-size: 13px;
-	-fx-text-fill: #4c5e70;
+	-fx-text-fill: #707070;
 }
 
 
