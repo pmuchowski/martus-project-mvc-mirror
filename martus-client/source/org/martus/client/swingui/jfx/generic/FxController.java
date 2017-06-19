@@ -34,6 +34,17 @@ import java.net.URL;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import org.martus.client.core.MartusApp;
+import org.martus.client.swingui.MartusLocalization;
+import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.actions.ActionDoer;
+import org.martus.client.swingui.jfx.generic.data.MartusResourceBundle;
+import org.martus.client.swingui.jfx.setupwizard.tasks.AbstractAppTask;
+import org.martus.client.swingui.jfx.setupwizard.tasks.TaskWithTimeout;
+import org.martus.common.EnglishCommonStrings;
+import org.martus.common.MartusLogger;
+import org.martus.common.crypto.MartusCrypto;
+
 import javafx.beans.property.Property;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -46,17 +57,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-
-import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.MartusLocalization;
-import org.martus.client.swingui.UiMainWindow;
-import org.martus.client.swingui.actions.ActionDoer;
-import org.martus.client.swingui.jfx.generic.data.MartusResourceBundle;
-import org.martus.client.swingui.jfx.setupwizard.tasks.AbstractAppTask;
-import org.martus.client.swingui.jfx.setupwizard.tasks.TaskWithTimeout;
-import org.martus.common.EnglishCommonStrings;
-import org.martus.common.MartusLogger;
-import org.martus.common.crypto.MartusCrypto;
 
 abstract public class FxController implements Initializable
 {
@@ -343,6 +343,7 @@ abstract public class FxController implements Initializable
 		FxController.applyStyleSheets(scene.getStylesheets(), fxmlDir, getLocalization().getCurrentLanguageCode(), POPUP_CSS);
 
 		popupStage.setScene(scene);
+		popupStage.getActualStage().setAlwaysOnTop(true);
 		showModalPopupStage(popupStage);
 		MartusLogger.log("Back from showModalPopupStage");
 		if(controller.getThrownException() != null)
