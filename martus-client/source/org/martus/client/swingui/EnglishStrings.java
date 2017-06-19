@@ -481,7 +481,7 @@ public class EnglishStrings
 "button:FolderOrderDown=Down",
 "button:CloseHelp=Close Help",
 "button:SearchFinalBulletinsOnly=Only search the latest version of records",
-"button:SearchSameRowsOnly=Match multi-list item list details in search screen to a single item (Click \"Help\" to learn more)",
+"button:SearchSameRowsOnly=Match multi-item list details in search screen to a single item (Click \"Help\" to learn more)",
 "button:DontSearchTrash=Don't search Trash folder",
 "button:DeleteSelectedGridRow=Delete Selected Row",
 "button:InsertEmptyGridRow=+ Add Criteria",
