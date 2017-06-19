@@ -106,6 +106,9 @@ abstract public class OrchidTransportWrapper extends TransportWrapperWithOffline
 
 	public void updateStatus()
 	{
+		if (PERMANENTLY_DISABLE_TOR)
+			return;
+		
 		if(progressMeter == null)
 			return;
 		
@@ -195,6 +198,6 @@ abstract public class OrchidTransportWrapper extends TransportWrapperWithOffline
 
 	private TorClient tor;
 	private ProgressMeterInterface progressMeter;
-
+	private static final boolean PERMANENTLY_DISABLE_TOR = true;
 	private boolean isTorReady;
 }
