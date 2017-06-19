@@ -238,10 +238,10 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 
 	protected BulletinFolder getCurrentBulletinFolder()
 	{
-		int selectedIndex = currentCasesListView.getSelectionModel().getSelectedIndex();
-		if(selectedIndex == INVALID_INDEX)
+		if(isEmptyFolderSelection())
 			return defaultCaseBeingViewed;
 		
+		int selectedIndex = currentCasesListView.getSelectionModel().getSelectedIndex();
 		CaseListItem selectedCase = getCurrentCaseListProvider().get(selectedIndex);
 		BulletinFolder folder = getApp().findFolder(selectedCase.getName());
 		
@@ -449,8 +449,21 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 	
 	protected void updateFolders()
 	{
-		BulletinFolder currentFolder = currentSelectedCase.get().getFolder();
-		Platform.runLater(() -> updateCases(currentFolder.getName()));
+		Platform.runLater(() -> {updateCases(getSafeCurrentSelectedFolderName());});
+	}
+
+	private String getSafeCurrentSelectedFolderName()
+	{
+		if(isEmptyFolderSelection())
+			return null;
+		
+		return currentSelectedCase.get().getFolder().getName();
+	}
+
+	private boolean isEmptyFolderSelection()
+	{
+		int selectedIndex = currentCasesListView.getSelectionModel().getSelectedIndex();
+		return selectedIndex == INVALID_INDEX;
 	}
 	
 	class FolderDeletedHandler implements FolderDeletedListener
