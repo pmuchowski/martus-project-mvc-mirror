@@ -216,15 +216,8 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		@Override
 		protected Vector call() throws Exception
 		{
-			return getServerMyDrafts();
-		}
-
-		@Override
-		protected void succeeded()
-		{
-			super.succeeded();
-
-			serverMyDrafts = getValue();
+			serverMyDrafts = getServerMyDrafts();
+			return serverMyDrafts;
 		}
 	}
 
@@ -234,15 +227,8 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		@Override
 		protected Vector call() throws Exception
 		{
-			return getServerMySealeds();
-		}
-
-		@Override
-		protected void succeeded()
-		{
-			super.succeeded();
-
-			serverMySealeds = getValue();
+			serverMySealeds = getServerMySealeds();
+			return serverMySealeds;
 		}
 	}
 
@@ -252,15 +238,8 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		@Override
 		protected Vector call() throws Exception
 		{
-			return getServerHQDrafts();
-		}
-
-		@Override
-		protected void succeeded()
-		{
-			super.succeeded();
-
-			serverHQDrafts = getValue();
+			serverHQDrafts = getServerHQDrafts();
+			return serverHQDrafts;
 		}
 	}
 
@@ -270,15 +249,8 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		@Override
 		protected Vector call() throws Exception
 		{
-			return getServerHQSealeds();
-		}
-
-		@Override
-		protected void succeeded()
-		{
-			super.succeeded();
-
-			serverHQSealeds = getValue();
+			serverHQSealeds = getServerHQSealeds();
+			return serverHQSealeds;
 		}
 	}
 
