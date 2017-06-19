@@ -549,7 +549,7 @@ public class ManageTemplatesController extends FxController
 
 	final private String TRASH_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/trash.png";
 	final private String UPLOAD_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/upload.png";
-	final private String EXPORT_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/export.png";
+	final private String EXPORT_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/template_manager_export.png";
 	final private String EDIT_IMAGE_PATH = "/org/martus/client/swingui/jfx/images/edit.png";
 	
 	@FXML

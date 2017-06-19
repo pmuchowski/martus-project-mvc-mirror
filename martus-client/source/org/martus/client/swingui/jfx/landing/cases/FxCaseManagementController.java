@@ -449,7 +449,8 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 	
 	protected void updateFolders()
 	{
-		Platform.runLater(() -> updateCases(null));
+		BulletinFolder currentFolder = currentSelectedCase.get().getFolder();
+		Platform.runLater(() -> updateCases(currentFolder.getName()));
 	}
 	
 	class FolderDeletedHandler implements FolderDeletedListener
