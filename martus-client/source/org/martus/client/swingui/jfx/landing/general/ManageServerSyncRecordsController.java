@@ -198,59 +198,65 @@ public class ManageServerSyncRecordsController extends AbstractFxLandingContentC
 		return thread;
 	}
 
-	protected abstract class LoadServerData extends Task<Vector>
+	protected abstract class LoadServerData extends Task<Void>
 	{
 		@Override
-		protected void failed()
+		protected Void call() throws Exception
+		{
+			try
+			{
+				loadData();
+			}
+			catch (Exception e)
+			{
+				failedToLoadData(e);
+			}
+			return null;
+		}
+
+		protected abstract void loadData() throws Exception;
+
+		private void failedToLoadData(Exception e)
 		{
 			loadRecordsError = true;
 
-			if (getException() != null)
-				MartusLogger.logException(new Exception("Could not load the bulletins", getException()));
+			MartusLogger.logException(e);
 		}
 	}
 
 	protected class ServerMyDraftsTask extends LoadServerData
 	{
 
-		@Override
-		protected Vector call() throws Exception
+		protected void loadData() throws Exception
 		{
 			serverMyDrafts = getServerMyDrafts();
-			return serverMyDrafts;
 		}
 	}
 
 	protected class ServerMySealedsTask extends LoadServerData
 	{
 
-		@Override
-		protected Vector call() throws Exception
+		protected void loadData() throws Exception
 		{
 			serverMySealeds = getServerMySealeds();
-			return serverMySealeds;
 		}
 	}
 
 	protected class ServerHQDraftsTask extends LoadServerData
 	{
 
-		@Override
-		protected Vector call() throws Exception
+		protected void loadData() throws Exception
 		{
 			serverHQDrafts = getServerHQDrafts();
-			return serverHQDrafts;
 		}
 	}
 
 	protected class ServerHQSealedsTask extends LoadServerData
 	{
 
-		@Override
-		protected Vector call() throws Exception
+		protected void loadData() throws Exception
 		{
 			serverHQSealeds = getServerHQSealeds();
-			return serverHQSealeds;
 		}
 	}
 
