@@ -343,7 +343,8 @@ abstract public class FxController implements Initializable
 		FxController.applyStyleSheets(scene.getStylesheets(), fxmlDir, getLocalization().getCurrentLanguageCode(), POPUP_CSS);
 
 		popupStage.setScene(scene);
-		popupStage.getActualStage().setAlwaysOnTop(true);
+		//FIXME: we beleive this is causing unwanted behavior on some mac machines.  Need further research.
+		//popupStage.getActualStage().setAlwaysOnTop(true);
 		showModalPopupStage(popupStage);
 		MartusLogger.log("Back from showModalPopupStage");
 		if(controller.getThrownException() != null)
