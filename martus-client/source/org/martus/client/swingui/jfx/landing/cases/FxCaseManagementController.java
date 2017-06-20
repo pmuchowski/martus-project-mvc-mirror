@@ -457,7 +457,15 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		if(isEmptyFolderSelection())
 			return null;
 		
-		return currentSelectedCase.get().getFolder().getName();
+		final CaseListItem caseListItem = currentSelectedCase.get();
+		if (caseListItem == null)
+			return null;
+		
+		final BulletinFolder folder = caseListItem.getFolder();
+		if (folder == ALL_FOLDER)
+			return null;
+		
+		return folder.getName();
 	}
 
 	private boolean isEmptyFolderSelection()
