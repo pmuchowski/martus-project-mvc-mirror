@@ -1,4 +1,4 @@
-Martus(tm) Desktop Software Version 5.2.0 README.txt
+Martus(tm) Desktop Software Version 6.0.0 README.txt
 ----------------------------------------------------------------
 
 See https://www.martus.org for information about the Martus software.
@@ -56,6 +56,26 @@ Installing and Running Martus:
 
 
 Martus desktop release information by version and release date:
+
+
+Version 6.0.0 		2017-06
+
+This release is available in English and Spanish with partial translations in several 
+other languages. Other languages may be available in the future, as language-packs on https://www.martus.org 
+
+Changes in this release:  
+
+- Updated UI/UX for Martus signup, sign in, main dashboard, record creation and report creation dialogues
+- Ability to export Martus report as CSV
+- Performance upgrades including faster sync, load-time and better scrolling experience
+
+Bug fixes and cleanup, including:
+- Several bug fixes for report creation
+ 
+Known Issues:
+- Pop-up dialogue boxes may appear behind main dialogue box on Mac computers 
+- Users might experience Martus dashboard flickering while deleting or moving files
+- Deleting a record in Trash folder, empties the trash folder
 
 
 Version 5.2.0 		2016-11
