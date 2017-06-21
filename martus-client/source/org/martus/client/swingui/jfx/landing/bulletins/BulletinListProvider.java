@@ -46,7 +46,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 
-public class BulletinListProvider extends ArrayObservableList<BulletinTableRowData> implements FolderSelectionListener, FolderContentsListener
+public class BulletinListProvider extends ArrayObservableList<BulletinTableRowData> implements FolderSelectionListener
 {
 	public BulletinListProvider(UiMainWindow mainWindowToUse)
 	{
@@ -56,8 +56,10 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		allFolderBeingDisplayedProperty = new SimpleBooleanProperty();
 		searchFolderBeingDisplayedProperty = new SimpleBooleanProperty();
 		numberOfRecordsBeingDisplayedProperty = new SimpleStringProperty();
+
+		bulletinFolderContentChangedHandler = new BulletinFolderContentChangedHandler();
 	}
-	
+
 	@Override
 	public void folderWasSelected(BulletinFolder newFolder)
 	{
@@ -67,7 +69,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	public synchronized void setFolder(BulletinFolder newFolder)
 	{
 		if(folder != null)
-			folder.removeFolderContentsListener(this);
+			folder.removeFolderContentsListener(bulletinFolderContentChangedHandler);
 		folder = newFolder;
 		boolean isTrashBeingDisplayed = false;
 		boolean isAllBeingDisplayed = false;
@@ -78,7 +80,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		}
 		else
 		{
-			folder.addFolderContentsListener(this);
+			folder.addFolderContentsListener(bulletinFolderContentChangedHandler);
 			isTrashBeingDisplayed = folder.isDiscardedFolder();
 		}
 		
@@ -133,27 +135,30 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		return allBulletinUids;
 	}
 
-	@Override
-	public void folderWasRenamed(String newName)
+	protected class BulletinFolderContentChangedHandler implements FolderContentsListener
 	{
-	}
+		@Override
+		public void folderWasRenamed(String newName)
+		{
+		}
 
-	@Override
-	public void bulletinWasAdded(UniversalId added)
-	{
-		updateContents();
-	}
+		@Override
+		public void bulletinWasAdded(UniversalId added)
+		{
+			updateContents();
+		}
 
-	@Override
-	public void bulletinWasRemoved(UniversalId removed)
-	{
-		updateContents();
-	}
+		@Override
+		public void bulletinWasRemoved(UniversalId removed)
+		{
+			updateContents();
+		}
 
-	@Override
-	public void folderWasSorted()
-	{
-		updateContents();
+		@Override
+		public void folderWasSorted()
+		{
+			updateContents();
+		}
 	}
 
 	void updateAllItemsInCurrentFolder()
@@ -346,6 +351,8 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	private LoadBulletinsTask loadBulletinsTask;
 	private Thread loadBulletinsThread;
 	private RefreshViewHandler refreshViewHandler;
+
+	private final BulletinFolderContentChangedHandler bulletinFolderContentChangedHandler;
 
 	private UiMainWindow mainWindow;
 	private BulletinFolder folder;
