@@ -238,7 +238,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		private void refreshView()
 		{
 			if (refreshViewHandler != null)
-				refreshViewHandler.refresh();
+				Platform.runLater(() -> refreshViewHandler.refresh());
 		}
 	}
 
