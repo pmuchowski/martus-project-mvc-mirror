@@ -88,7 +88,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
-public class BulletinsListController extends AbstractFxLandingContentController implements FolderSelectionListener
+public class BulletinsListController extends AbstractFxLandingContentController implements FolderSelectionListener, RefreshViewHandler
 {
 	public BulletinsListController(UiMainWindow mainWindowToUse, BulletinListProvider bulletinListProviderToUse, FxCaseManagementController caseManagementControllerToUse)
 	{
@@ -116,7 +116,7 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 	@Override
 	public void initializeMainContentPane()
 	{
-		bulletinTableProvider.setRefreshViewHandler(new TableViewRefreshHandler());
+		bulletinTableProvider.setRefreshViewHandler(this);
 		initalizeColumns();
 		initalizeItemsTable();
 		initalizeButtons();
@@ -394,14 +394,10 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 			itemsTable.getSortOrder().clear();
 	}
 
-	private class TableViewRefreshHandler implements RefreshViewHandler
+	@Override
+	public void refresh()
 	{
-
-		@Override
-		public void refresh()
-		{
-			Platform.runLater(() -> itemsTable.refresh());
-		}
+		Platform.runLater(() -> itemsTable.refresh());
 	}
 
 	@FXML
