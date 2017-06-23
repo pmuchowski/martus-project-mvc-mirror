@@ -178,9 +178,9 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 	private synchronized void loadBulletinsInBackground(LoadBulletinsTask task)
 	{
-		if (loadBulletinsTask != null && loadBulletinsTask.isRunning())
+		if (loadBulletinsTask != null)
 		{
-			loadBulletinsTask.cancel();
+			loadBulletinsTask.cancelTask();
 		}
 
 		loadBulletinsTask = task;
@@ -192,15 +192,20 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	class LoadBulletinsTask extends Task<Void>
 	{
 		private Thread previousSearch;
+		private boolean taskCancelled;
 
-		public LoadBulletinsTask(Thread previousSearch)
+		public LoadBulletinsTask(Thread previousSearchToUse)
 		{
-			this.previousSearch = previousSearch;
+			previousSearch = previousSearchToUse;
+			taskCancelled = false;
 		}
 
 		@Override
 		protected Void call() throws Exception
 		{
+			if (isTaskCancelled())
+				return null;
+
 			waitForPreviousSearch();
 
 			loadBulletinData(getUniversalIds());
@@ -213,8 +218,24 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 				previousSearch.join();
 		}
 
+		public void cancelTask()
+		{
+			if (isRunning())
+				cancel();
+
+			taskCancelled = true;
+		}
+
+		protected boolean isTaskCancelled()
+		{
+			return taskCancelled;
+		}
+
 		protected void loadBulletinData(Set bulletinUids)
 		{
+			if (isTaskCancelled())
+				return;
+
 			// FIXME: To avoid the bulletin list flickering,
 			// we should just add or remove as needed, instead of
 			// clearing and re-populating from scratch
@@ -223,7 +244,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 			{
 				for (Object bulletinUid : bulletinUids)
 				{
-					if (isCancelled())
+					if (isTaskCancelled())
 						return;
 
 					UniversalId leafBulletinUid = (UniversalId) bulletinUid;
@@ -260,6 +281,9 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		@Override
 		protected Void call() throws Exception
 		{
+			if (isTaskCancelled())
+				return null;
+
 			waitForPreviousSearch();
 
 			loadBulletinData(bulletinUids);
