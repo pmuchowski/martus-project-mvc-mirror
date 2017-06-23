@@ -168,7 +168,7 @@ public class BulletinFolder
 		rawIdList.remove(id);
 		if(sortedIdList != null)
 			sortedIdList.remove(id);
-		listeners.forEach(listener -> listener.bulletinWasAdded(id));
+		listeners.forEach(listener -> listener.bulletinWasRemoved(id));
 	}
 
 	public synchronized void removeAll()
