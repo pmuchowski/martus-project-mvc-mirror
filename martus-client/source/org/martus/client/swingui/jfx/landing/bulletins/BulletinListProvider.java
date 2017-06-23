@@ -191,12 +191,12 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 	class LoadBulletinsTask extends Task<Void>
 	{
-		private Thread previousSearch;
+		private Thread previousLoadThread;
 		private boolean taskCancelled;
 
-		public LoadBulletinsTask(Thread previousSearchToUse)
+		public LoadBulletinsTask(Thread previousLoadThreadToUse)
 		{
-			previousSearch = previousSearchToUse;
+			previousLoadThread = previousLoadThreadToUse;
 			taskCancelled = false;
 		}
 
@@ -214,8 +214,8 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 		protected void waitForPreviousSearch() throws Exception
 		{
-			if (previousSearch != null && previousSearch.isAlive())
-				previousSearch.join();
+			if (previousLoadThread != null && previousLoadThread.isAlive())
+				previousLoadThread.join();
 		}
 
 		public void cancelTask()
