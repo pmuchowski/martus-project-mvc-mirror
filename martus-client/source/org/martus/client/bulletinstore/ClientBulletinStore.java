@@ -44,9 +44,6 @@ import java.util.Set;
 import java.util.Vector;
 import java.util.zip.ZipFile;
 
-import javafx.beans.property.Property;
-import javafx.collections.ObservableSet;
-
 import org.martus.client.core.MartusClientXml;
 import org.martus.client.core.templates.FormTemplateManager;
 import org.martus.client.swingui.bulletintable.BulletinTableModel;
@@ -81,6 +78,9 @@ import org.martus.util.xml.SimpleXmlParser;
 import org.martus.util.xml.SimpleXmlStringLoader;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXParseException;
+
+import javafx.beans.property.Property;
+import javafx.collections.ObservableSet;
 
 
 
@@ -1223,6 +1223,11 @@ public class ClientBulletinStore extends BulletinStore
 		return true;
 	}
 
+	public void setFolderListListener(FolderListListener listener)
+	{
+		folderListListener = listener;
+	}
+
 	private synchronized BulletinFolder rawCreateFolder(String name)
 	{
 		if(findFolder(name) != null)
@@ -1230,6 +1235,10 @@ public class ClientBulletinStore extends BulletinStore
 
 		BulletinFolder folder = new BulletinFolder(this, name);
 		folders.add(folder);
+
+		if (folderListListener != null)
+			folderListListener.folderWasAdded(folder.getName());
+
 		return folder;
 	}
 
@@ -1670,6 +1679,8 @@ public class ClientBulletinStore extends BulletinStore
 	private BulletinFolder folderDraftOutbox;
 	private BulletinFolder folderSealedOutbox;
 	private boolean loadedLegacyFolders;
+
+	private FolderListListener folderListListener;
 
 	PartialBulletinCache bulletinDataCache;
 	KnownFieldSpecCache knownFieldSpecCache;
