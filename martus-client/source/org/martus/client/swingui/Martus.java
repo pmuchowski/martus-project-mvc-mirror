@@ -211,8 +211,10 @@ public class Martus
 				boolean isModernWindows = (isWin2KOrLater || isWinME); 
 				if(!isModernWindows)
 				{
-					window.rawError("Martus requires Windows ME or later");
-					System.exit(1);
+					//FIXME we are no longer exiting the app.  There is a bug in the above logic for windows 10. 
+					//"10".compareTo("5") >= 0 Will be false since its treating the version number as a string and not an int. 
+					//window.rawError("Martus requires Windows ME or later");
+					//System.exit(1);
 				}
 			}
 			
