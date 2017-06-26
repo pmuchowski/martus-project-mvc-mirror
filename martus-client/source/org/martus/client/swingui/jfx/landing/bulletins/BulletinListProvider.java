@@ -203,9 +203,6 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		@Override
 		protected Void call() throws Exception
 		{
-			if (isTaskCancelled())
-				return null;
-
 			waitForPreviousSearch();
 
 			loadBulletinData(getUniversalIds());
@@ -220,9 +217,6 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 		public void cancelTask()
 		{
-			if (isRunning())
-				cancel();
-
 			taskCancelled = true;
 		}
 
