@@ -42,8 +42,6 @@ import org.martus.common.packet.UniversalId;
 import javafx.application.Platform;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
 
 public class BulletinListProvider extends ArrayObservableList<BulletinTableRowData> implements FolderSelectionListener
@@ -55,7 +53,6 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		trashFolderBeingDisplayedProperty = new SimpleBooleanProperty();
 		allFolderBeingDisplayedProperty = new SimpleBooleanProperty();
 		searchFolderBeingDisplayedProperty = new SimpleBooleanProperty();
-		numberOfRecordsBeingDisplayedProperty = new SimpleStringProperty();
 
 		bulletinFolderContentChangedHandler = new BulletinFolderContentChangedHandler();
 	}
@@ -251,7 +248,6 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 				MartusLogger.logException(e);
 			}
 
-			updateNumberOfRecordsBeingDisplayed();
 			refreshView();
 		}
 
@@ -283,18 +279,6 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 			loadBulletinData(bulletinUids);
 			return null;
 		}
-	}
-
-	private void updateNumberOfRecordsBeingDisplayed()
-	{
-		int currentCount = size();
-		String countString = "(" + String.valueOf(currentCount) + ")";
-		numberOfRecordsBeingDisplayedProperty.setValue(countString);
-	}
-	
-	public StringProperty getRecordsBeingDisplayedProperty()
-	{
-		return numberOfRecordsBeingDisplayedProperty;
 	}
 
 	protected BulletinTableRowData getCurrentBulletinData(UniversalId leafBulletinUid) throws Exception
@@ -377,5 +361,4 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	private BooleanProperty trashFolderBeingDisplayedProperty;
 	private BooleanProperty allFolderBeingDisplayedProperty;
 	private BooleanProperty searchFolderBeingDisplayedProperty;
-	private StringProperty numberOfRecordsBeingDisplayedProperty;
 }
