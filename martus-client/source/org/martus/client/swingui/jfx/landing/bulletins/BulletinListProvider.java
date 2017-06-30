@@ -307,8 +307,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		return BULLETIN_NOT_IN_TABLE;
 	}
 
-	//FIXME: medium: this method always returns false,  its caller ends having dead code 
-	public boolean updateBulletin(Bulletin bulletin) throws Exception
+	public void updateBulletin(Bulletin bulletin) throws Exception
 	{
 		UniversalId bulletinId = bulletin.getUniversalId();
 		int bulletinIndexInTable = BULLETIN_NOT_IN_TABLE;
@@ -324,7 +323,6 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 			BulletinTableRowData updatedBulletinData = getCurrentBulletinData(bulletinId);
 			set(bulletinIndexInTable, updatedBulletinData);
 		}
-		return false;
 	}
 
 	private boolean hasBulletinBeenDiscarded(UniversalId bulletinId)

@@ -370,9 +370,7 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 			try
 			{
 				clearBulletinListSortedOrder();
-				boolean shouldReSortTable = bulletinTableProvider.updateBulletin(bulletin);
-				if(shouldReSortTable)
-					sortByMostRecentBulletins();
+				bulletinTableProvider.updateBulletin(bulletin);
 			} 
 			catch (Exception e)
 			{
