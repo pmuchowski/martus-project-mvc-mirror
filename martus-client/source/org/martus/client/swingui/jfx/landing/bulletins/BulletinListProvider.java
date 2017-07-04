@@ -366,6 +366,20 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		}
 	}
 
+	class UpdateBulletinTask extends ChangeBulletinTask
+	{
+		public UpdateBulletinTask(UniversalId bulletinIdToUse, LoadBulletinsTask loadTaskToUse, Thread loadThreadToUse)
+		{
+			super(bulletinIdToUse, loadTaskToUse, loadThreadToUse);
+		}
+
+		@Override
+		void changeBulletin() throws Exception
+		{
+			updateBulletin(getBulletinId());
+		}
+	}
+
 	protected BulletinTableRowData getCurrentBulletinData(UniversalId leafBulletinUid) throws Exception
 	{
 		ClientBulletinStore clientBulletinStore = getBulletinStore();
@@ -421,19 +435,30 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	public void updateBulletin(Bulletin bulletin) throws Exception
 	{
 		UniversalId bulletinId = bulletin.getUniversalId();
-		int bulletinIndexInTable = BULLETIN_NOT_IN_TABLE;
-		if (!hasBulletinBeenDiscarded(bulletinId))
-			bulletinIndexInTable = findBulletinIndexInTable(bulletinId);
-		
-		if(bulletinIndexInTable <= BULLETIN_NOT_IN_TABLE)
+
+		if (folder == FxCaseManagementController.ALL_FOLDER || getUniversalIds().contains(bulletinId))
+			startBackgroundTask(new UpdateBulletinTask(bulletinId, loadBulletinsTask, loadBulletinsThread));
+	}
+
+	public synchronized void updateBulletin(UniversalId bulletinId) throws Exception
+	{
+		int bulletinIndexInTable = findBulletinIndexInTable(bulletinId);
+
+		if (bulletinIndexInTable == BULLETIN_NOT_IN_TABLE)
 		{
-			updateAllItemsInCurrentFolder();
+			if (folder == FxCaseManagementController.ALL_FOLDER)
+				addBulletin(bulletinId);
+			return;
 		}
-		else
+
+		if (hasBulletinBeenDiscarded(bulletinId))
 		{
-			BulletinTableRowData updatedBulletinData = getCurrentBulletinData(bulletinId);
-			set(bulletinIndexInTable, updatedBulletinData);
+			remove(bulletinIndexInTable);
+			return;
 		}
+
+		BulletinTableRowData updatedBulletinData = getCurrentBulletinData(bulletinId);
+		set(bulletinIndexInTable, updatedBulletinData);
 	}
 
 	private boolean hasBulletinBeenDiscarded(UniversalId bulletinId)
