@@ -148,7 +148,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		@Override
 		public void bulletinWasRemoved(UniversalId removed)
 		{
-			updateContents();
+			startBackgroundTask(new RemoveBulletinTask(removed, loadBulletinsTask, loadBulletinsThread));
 		}
 
 		@Override
@@ -352,6 +352,20 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		}
 	}
 
+	class RemoveBulletinTask extends ChangeBulletinTask
+	{
+		public RemoveBulletinTask(UniversalId bulletinIdToUse, LoadBulletinsTask loadTaskToUse, Thread loadThreadToUse)
+		{
+			super(bulletinIdToUse, loadTaskToUse, loadThreadToUse);
+		}
+
+		@Override
+		void changeBulletin() throws Exception
+		{
+			removeBulletin(getBulletinId());
+		}
+	}
+
 	protected BulletinTableRowData getCurrentBulletinData(UniversalId leafBulletinUid) throws Exception
 	{
 		ClientBulletinStore clientBulletinStore = getBulletinStore();
@@ -366,6 +380,13 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	private Bulletin getRevisedBulletin(UniversalId leafBulletinUid)
 	{
 		return getBulletinStore().getBulletinRevision(leafBulletinUid);
+	}
+
+	public synchronized void removeBulletin(UniversalId removed)
+	{
+		int bulletinIndex = findBulletinIndexInTable(removed);
+		if (bulletinIndex != BULLETIN_NOT_IN_TABLE)
+			remove(bulletinIndex);
 	}
 
 	public synchronized void addBulletin(UniversalId bulletinId) throws Exception

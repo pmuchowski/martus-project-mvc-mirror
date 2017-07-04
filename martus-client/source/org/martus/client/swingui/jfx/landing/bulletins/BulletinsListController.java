@@ -448,7 +448,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 			logAndNotifyUnexpectedError(e);
 		}
 		clearBulletinListSortedOrder();
-		bulletinTableProvider.updateContents();
 	}
 	
 	@FXML
