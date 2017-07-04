@@ -142,7 +142,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		@Override
 		public void bulletinWasAdded(UniversalId added)
 		{
-			updateContents();
+			startBackgroundTask(new AddBulletinTask(added, loadBulletinsTask, loadBulletinsThread));
 		}
 
 		@Override
@@ -184,6 +184,12 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		loadBulletinsThread = new Thread(loadBulletinsTask);
 		loadBulletinsThread.setDaemon(false);
 		loadBulletinsThread.start();
+	}
+
+	private void startBackgroundTask(Runnable task)
+	{
+		Thread thread = new Thread(task);
+		thread.start();
 	}
 
 	class LoadBulletinsTask extends Task<Void>
@@ -239,8 +245,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 						return;
 
 					UniversalId leafBulletinUid = (UniversalId) bulletinUid;
-					BulletinTableRowData bulletinData = getCurrentBulletinData(leafBulletinUid);
-					add(bulletinData);
+					addBulletin(leafBulletinUid);
 				}
 			}
 			catch (Exception e)
@@ -281,6 +286,72 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		}
 	}
 
+	abstract class ChangeBulletinTask implements Runnable
+	{
+		public ChangeBulletinTask(UniversalId bulletinIdToUse, LoadBulletinsTask loadTaskToUse, Thread loadThreadToUse)
+		{
+			bulletinId = bulletinIdToUse;
+			loadTask = loadTaskToUse;
+			loadThread = loadThreadToUse;
+		}
+
+		@Override
+		public void run()
+		{
+			try
+			{
+				if (continueAfterLoadFinished())
+				{
+					changeBulletin();
+					refreshView();
+				}
+			}
+			catch (Exception e)
+			{
+				MartusLogger.logException(e);
+			}
+		}
+
+		abstract void changeBulletin() throws Exception;
+
+		public UniversalId getBulletinId()
+		{
+			return bulletinId;
+		}
+
+		private boolean continueAfterLoadFinished() throws Exception
+		{
+			if (loadThread != null && loadThread.isAlive())
+				loadThread.join();
+
+			return loadTask == null || !loadTask.isTaskCancelled();
+		}
+
+		private void refreshView()
+		{
+			if (refreshViewHandler != null)
+				Platform.runLater(() -> refreshViewHandler.refresh());
+		}
+
+		private UniversalId bulletinId;
+		private LoadBulletinsTask loadTask;
+		private Thread loadThread;
+	}
+
+	class AddBulletinTask extends ChangeBulletinTask
+	{
+		public AddBulletinTask(UniversalId bulletinIdToUse, LoadBulletinsTask loadTaskToUse, Thread loadThreadToUse)
+		{
+			super(bulletinIdToUse, loadTaskToUse, loadThreadToUse);
+		}
+
+		@Override
+		void changeBulletin() throws Exception
+		{
+			addBulletinIfNotExist(getBulletinId());
+		}
+	}
+
 	protected BulletinTableRowData getCurrentBulletinData(UniversalId leafBulletinUid) throws Exception
 	{
 		ClientBulletinStore clientBulletinStore = getBulletinStore();
@@ -295,6 +366,25 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	private Bulletin getRevisedBulletin(UniversalId leafBulletinUid)
 	{
 		return getBulletinStore().getBulletinRevision(leafBulletinUid);
+	}
+
+	public synchronized void addBulletin(UniversalId bulletinId) throws Exception
+	{
+		BulletinTableRowData bulletinData = getCurrentBulletinData(bulletinId);
+		add(bulletinData);
+	}
+
+	public synchronized void addBulletinIfNotExist(UniversalId bulletinId) throws Exception
+	{
+		int bulletinIndex = findBulletinIndexInTable(bulletinId);
+		if (bulletinIndex == BULLETIN_NOT_IN_TABLE)
+			addBulletin(bulletinId);
+	}
+
+	@Override
+	public synchronized void clear()
+	{
+		super.clear();
 	}
 
 	protected int findBulletinIndexInTable(UniversalId uid)
