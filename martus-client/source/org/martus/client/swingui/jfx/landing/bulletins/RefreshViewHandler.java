@@ -26,5 +26,5 @@ package org.martus.client.swingui.jfx.landing.bulletins;
 
 public interface RefreshViewHandler
 {
-	void refresh();
+	void refresh(Object monitor);
 }

@@ -393,9 +393,14 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 	}
 
 	@Override
-	public void refresh()
+	public void refresh(Object monitor)
 	{
-		Platform.runLater(() -> itemsTable.refresh());
+		Platform.runLater(() -> {
+			synchronized (monitor)
+			{
+				itemsTable.refresh();
+			}
+		});
 	}
 
 	@FXML

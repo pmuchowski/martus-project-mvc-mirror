@@ -257,12 +257,6 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 			refreshView();
 		}
-
-		private void refreshView()
-		{
-			if (refreshViewHandler != null)
-				Platform.runLater(() -> refreshViewHandler.refresh());
-		}
 	}
 
 	class LoadBulletinsWithIdsTask extends LoadBulletinsTask
@@ -327,12 +321,6 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 				loadThread.join();
 
 			return loadTask == null || !loadTask.isTaskCancelled();
-		}
-
-		private void refreshView()
-		{
-			if (refreshViewHandler != null)
-				Platform.runLater(() -> refreshViewHandler.refresh());
 		}
 
 		private UniversalId bulletinId;
@@ -476,6 +464,12 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 			BulletinTableRowData updatedBulletinData = getCurrentBulletinData(bulletinId);
 			set(bulletinIndexInTable, updatedBulletinData);
 		}
+	}
+
+	protected void refreshView()
+	{
+		if (refreshViewHandler != null)
+			refreshViewHandler.refresh(bulletinListMonitor);
 	}
 
 	private boolean hasBulletinBeenDiscarded(UniversalId bulletinId)
