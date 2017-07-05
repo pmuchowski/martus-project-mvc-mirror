@@ -55,6 +55,8 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		searchFolderBeingDisplayedProperty = new SimpleBooleanProperty();
 
 		bulletinFolderContentChangedHandler = new BulletinFolderContentChangedHandler();
+
+		bulletinListMonitor = new Object();
 	}
 
 	@Override
@@ -396,30 +398,42 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		return getBulletinStore().getBulletinRevision(leafBulletinUid);
 	}
 
-	public synchronized void removeBulletin(UniversalId removed)
+	public void removeBulletin(UniversalId removed)
 	{
-		int bulletinIndex = findBulletinIndexInTable(removed);
-		if (bulletinIndex != BULLETIN_NOT_IN_TABLE)
-			remove(bulletinIndex);
+		synchronized (bulletinListMonitor)
+		{
+			int bulletinIndex = findBulletinIndexInTable(removed);
+			if (bulletinIndex != BULLETIN_NOT_IN_TABLE)
+				remove(bulletinIndex);
+		}
 	}
 
-	public synchronized void addBulletin(UniversalId bulletinId) throws Exception
+	public void addBulletin(UniversalId bulletinId) throws Exception
 	{
-		BulletinTableRowData bulletinData = getCurrentBulletinData(bulletinId);
-		add(bulletinData);
+		synchronized (bulletinListMonitor)
+		{
+			BulletinTableRowData bulletinData = getCurrentBulletinData(bulletinId);
+			add(bulletinData);
+		}
 	}
 
-	public synchronized void addBulletinIfNotExist(UniversalId bulletinId) throws Exception
+	public void addBulletinIfNotExist(UniversalId bulletinId) throws Exception
 	{
-		int bulletinIndex = findBulletinIndexInTable(bulletinId);
-		if (bulletinIndex == BULLETIN_NOT_IN_TABLE)
-			addBulletin(bulletinId);
+		synchronized (bulletinListMonitor)
+		{
+			int bulletinIndex = findBulletinIndexInTable(bulletinId);
+			if (bulletinIndex == BULLETIN_NOT_IN_TABLE)
+				addBulletin(bulletinId);
+		}
 	}
 
 	@Override
-	public synchronized void clear()
+	public void clear()
 	{
-		super.clear();
+		synchronized (bulletinListMonitor)
+		{
+			super.clear();
+		}
 	}
 
 	protected int findBulletinIndexInTable(UniversalId uid)
@@ -440,25 +454,28 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 			startBackgroundTask(new UpdateBulletinTask(bulletinId, loadBulletinsTask, loadBulletinsThread));
 	}
 
-	public synchronized void updateBulletin(UniversalId bulletinId) throws Exception
+	public void updateBulletin(UniversalId bulletinId) throws Exception
 	{
-		int bulletinIndexInTable = findBulletinIndexInTable(bulletinId);
-
-		if (bulletinIndexInTable == BULLETIN_NOT_IN_TABLE)
+		synchronized (bulletinListMonitor)
 		{
-			if (folder == FxCaseManagementController.ALL_FOLDER)
-				addBulletin(bulletinId);
-			return;
-		}
+			int bulletinIndexInTable = findBulletinIndexInTable(bulletinId);
 
-		if (hasBulletinBeenDiscarded(bulletinId))
-		{
-			remove(bulletinIndexInTable);
-			return;
-		}
+			if (bulletinIndexInTable == BULLETIN_NOT_IN_TABLE)
+			{
+				if (folder == FxCaseManagementController.ALL_FOLDER)
+					addBulletin(bulletinId);
+				return;
+			}
 
-		BulletinTableRowData updatedBulletinData = getCurrentBulletinData(bulletinId);
-		set(bulletinIndexInTable, updatedBulletinData);
+			if (hasBulletinBeenDiscarded(bulletinId))
+			{
+				remove(bulletinIndexInTable);
+				return;
+			}
+
+			BulletinTableRowData updatedBulletinData = getCurrentBulletinData(bulletinId);
+			set(bulletinIndexInTable, updatedBulletinData);
+		}
 	}
 
 	private boolean hasBulletinBeenDiscarded(UniversalId bulletinId)
@@ -495,4 +512,6 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	private BooleanProperty trashFolderBeingDisplayedProperty;
 	private BooleanProperty allFolderBeingDisplayedProperty;
 	private BooleanProperty searchFolderBeingDisplayedProperty;
+
+	private final Object bulletinListMonitor;
 }
