@@ -2131,7 +2131,32 @@ public class TestClientBulletinStore extends TestCaseEnhanced
 		assertEquals("xForms Field wasn't saved?", newAge, loaded.get(XFORMS_AGE_TAG));
 		
 	}
-	
+
+	public void testFolderListListenerCreateFolder() throws Exception
+	{
+		TestFolderListListener listener = new TestFolderListListener();
+		testStore.setFolderListListener(listener);
+
+		BulletinFolder folder = testStore.createFolder("%Test");
+		assertNotNull(folder);
+
+		assertEquals(1, listener.getFolderAddedCalls());
+	}
+
+	public void testFolderListListenerCreateExistingFolder() throws Exception
+	{
+		BulletinFolder folder = testStore.createFolder("%Test");
+		assertNotNull(folder);
+
+		TestFolderListListener listener = new TestFolderListListener();
+		testStore.setFolderListListener(listener);
+
+		folder = testStore.createFolder("%Test");
+		assertNull(folder);
+
+		assertEquals(0, listener.getFolderAddedCalls());
+	}
+
 	private static MockBulletinStore testStore;
 	private static MockMartusSecurity security;
 	private static MockDatabase db;
@@ -2148,4 +2173,26 @@ public class TestClientBulletinStore extends TestCaseEnhanced
 	private static final String ATTACHMENT_1_DATA = "Attachment 1's Data";
 	private static final String ATTACHMENT_1_EXTENSION = ".txt";
 
+}
+
+class TestFolderListListener implements FolderListListener
+{
+
+	public TestFolderListListener()
+	{
+		folderAddedCalls = 0;
+	}
+
+	@Override
+	public void folderWasAdded(String folderName)
+	{
+		folderAddedCalls++;
+	}
+
+	public int getFolderAddedCalls()
+	{
+		return folderAddedCalls;
+	}
+
+	private int folderAddedCalls;
 }

@@ -33,6 +33,7 @@ import java.util.Vector;
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.bulletinstore.FolderContentsListener;
+import org.martus.client.bulletinstore.FolderListListener;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.actions.ActionDoer;
@@ -78,6 +79,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		currentSelectedCase = currentCasesListView.getSelectionModel().selectedItemProperty();
 		showTrashFolder.visibleProperty().bind(getFxLandingShellController().getShowTrashBinding());
 		addFolderContentsListener();
+		addFolderListListener();
 		showAllCases();
 		casesListViewAll.getSelectionModel().selectedItemProperty().addListener(caseListChangeListener);
 	}
@@ -89,6 +91,11 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		{
 			visibleFolder.addFolderContentsListener(new FolderContentChangedHandler());
 		}
+	}
+
+	private void addFolderListListener()
+	{
+		getApp().getStore().setFolderListListener(new FolderListChangedHandler());
 	}
 
 	protected FxLandingShellController getFxLandingShellController()
@@ -510,7 +517,19 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 			updateFolderLabelName(newLabel);
 		}
 	}
-	
+
+	protected class FolderListChangedHandler implements FolderListListener
+	{
+		@Override
+		public void folderWasAdded(String folderName)
+		{
+			BulletinFolder folder = getApp().getStore().findFolder(folderName);
+
+			if (folder.isVisible())
+				folder.addFolderContentsListener(new FolderContentChangedHandler());
+		}
+	}
+
 	protected class FolderContentChangedHandler implements FolderContentsListener
 	{
 		@Override
