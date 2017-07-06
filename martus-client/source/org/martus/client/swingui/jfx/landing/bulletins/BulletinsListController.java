@@ -370,9 +370,7 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 			try
 			{
 				clearBulletinListSortedOrder();
-				boolean shouldReSortTable = bulletinTableProvider.updateBulletin(bulletin);
-				if(shouldReSortTable)
-					sortByMostRecentBulletins();
+				bulletinTableProvider.updateBulletin(bulletin);
 			} 
 			catch (Exception e)
 			{
@@ -395,9 +393,14 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 	}
 
 	@Override
-	public void refresh()
+	public void refresh(Object monitor)
 	{
-		Platform.runLater(() -> itemsTable.refresh());
+		Platform.runLater(() -> {
+			synchronized (monitor)
+			{
+				itemsTable.refresh();
+			}
+		});
 	}
 
 	@FXML
@@ -450,7 +453,6 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 			logAndNotifyUnexpectedError(e);
 		}
 		clearBulletinListSortedOrder();
-		bulletinTableProvider.updateContents();
 	}
 	
 	@FXML
