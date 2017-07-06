@@ -67,6 +67,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		
 		listeners = new HashSet<FolderSelectionListener>();
 		folderContentsListeners = new HashSet<>();
+		folderContentChangedHandler = new FolderContentChangedHandler();
 	}
 
 	@Override
@@ -89,7 +90,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		Vector<BulletinFolder> visibleFolders = getApp().getStore().getAllVisibleFolders();
 		for (BulletinFolder visibleFolder : visibleFolders)
 		{
-			visibleFolder.addFolderContentsListener(new FolderContentChangedHandler());
+			visibleFolder.addFolderContentsListener(folderContentChangedHandler);
 		}
 	}
 
@@ -101,6 +102,16 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 	protected FxLandingShellController getFxLandingShellController()
 	{
 		return (FxLandingShellController)getShellController();
+	}
+
+	public void removeFolderContentChangedHandler(BulletinFolder folder)
+	{
+		folder.removeFolderContentsListener(folderContentChangedHandler);
+	}
+
+	public void addFolderContentChangedHandler(BulletinFolder folder)
+	{
+		folder.addFolderContentsListener(folderContentChangedHandler);
 	}
 
 	@Override
@@ -526,7 +537,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 			BulletinFolder folder = getApp().getStore().findFolder(folderName);
 
 			if (folder.isVisible())
-				folder.addFolderContentsListener(new FolderContentChangedHandler());
+				folder.addFolderContentsListener(folderContentChangedHandler);
 		}
 	}
 
@@ -581,4 +592,6 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 	private Set<FolderSelectionListener> listeners;
 	private HashSet<FolderContentsListener> folderContentsListeners;
 	private BulletinFolder defaultCaseBeingViewed;
+
+	private final FolderContentChangedHandler folderContentChangedHandler;
 }
