@@ -59,10 +59,10 @@
 -8624-button:CloseHelp=Закрыть справку
 
 #________________________=Connect Later
--7943-button:ConnectLater=
+-7943-button:ConnectLater=Подключиться позже
 
 #______________________=Connect Now
--8dbd-button:ConnectNow=
+-8dbd-button:ConnectNow=Подключиться сейчас
 
 #___________________________=Connect to Server
 -ca09-button:ConnectToServer=Подключение к серверу 
@@ -98,7 +98,7 @@
 -6e15-button:CreateFolder=Создать
 
 #____________________________=Create a new Martus account
--dae0-button:CreateNewAccount=
+-dae0-button:CreateNewAccount=Создайте новую учетную запись Martus
 
 #____________________________=Create New Page Report
 -1d7a-button:CreatePageReport=Создать новый текстовый отчет
@@ -152,7 +152,7 @@
 -cbf6-button:ExportMultiKey=Экспорт составного ключа
 
 #___________________________=Export My Public Key
--5b90-button:ExportPublicKey=
+-5b90-button:ExportPublicKey=Экспорт моего открытого ключа
 
 #____________________=Send To
 -d11f-button:ExportTo=Отправить
@@ -218,7 +218,7 @@
 -c47a-button:Help=Помощь
 
 #_________________________________=Choose File
--54a2-button:ImportContactFromFile=
+-54a2-button:ImportContactFromFile=Выберите файл
 
 #__________________________=Import From File
 -85a7-button:ImportFromFile=Импорт из файла
@@ -1301,7 +1301,7 @@
 -90ab-field:ImportProgress=Импортируется
 
 #__________________________=Import Public Key
--500e-field:ImportPublicKey=
+-500e-field:ImportPublicKey=Импорт открытого ключа
 
 #_______________________________=This template currently does not have a name.  Enter a new title for this template.
 -7f51-field:ImportTemplateNoName=Этот шаблон в настоящее время не имеет названия. Введите новое название для этого шаблона.
@@ -1388,7 +1388,7 @@
 -00a9-field:MayBeDamaged=Предупреждение: Части могут быть утрачены или повреждены
 
 #________________________=My Access Token:
--d92a-field:MyAccessToken=
+-d92a-field:MyAccessToken=Мой токен доступа:
 
 #____________________=My Records
 -5fb3-field:MyRecords=Мои записи
@@ -1403,7 +1403,7 @@
 -bc98-field:NewAccountWizardNextButton=Далее
 
 #______________________=New to Martus
--f85d-field:NewToMartus=
+-f85d-field:NewToMartus=Новое в Martus
 
 #_____________________________=No Records.
 -aea7-field:NoBulletinsInTable=Нет записей.
@@ -1943,7 +1943,7 @@
 -9894-field:UseDefaultServer=Использовать сервер по умолчанию
 
 #___________________________=Use Private Server
--11c2-field:UsePrivateServer=
+-11c2-field:UsePrivateServer=Использовать частный сервер
 
 #_________________=Use Tor
 -bc93-field:UseTor=Использовать Tor

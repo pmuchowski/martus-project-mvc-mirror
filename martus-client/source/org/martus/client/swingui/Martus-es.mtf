@@ -152,7 +152,7 @@
 -cbf6-button:ExportMultiKey=Exportar par de claves en múltiples-partes
 
 #___________________________=Export My Public Key
--5b90-button:ExportPublicKey=
+-5b90-button:ExportPublicKey=Exportar mi clave pública
 
 #____________________=Send To
 -d11f-button:ExportTo=Enviar a 
@@ -218,7 +218,7 @@
 -c47a-button:Help=Ayuda
 
 #_________________________________=Choose File
--54a2-button:ImportContactFromFile=
+-54a2-button:ImportContactFromFile=Elija el archivo
 
 #__________________________=Import From File
 -85a7-button:ImportFromFile=Importar desde archivo
@@ -569,16 +569,16 @@
 -70e8-field:AddContactInstructions=Para enviar información a través de Martus a alguno de sus contactos, obtenga la clave pública del contacto desde el servidor Martus usando la credencial de acceso de este. Verifique que ha obtenido la clave correcta comprobando el código público de la clave del contacto. Pida a sus contactos sus credenciales de acceso y códigos públicos para añadirlos aquí. Si no tiene esta información ahora, podrá añadir contactos más tarde.
 
 #_____________________________________=1. Ask your contacts for their \"Access Token\"
--d4a6-field:AddContactStep1AccessToken=
+-d4a6-field:AddContactStep1AccessToken=1. Pregunte a sus contactos por su "Token de acceso"
 
 #___________________________________=1. Ask your contacts for their \"Public Key\"
--0bf9-field:AddContactStep1PublicKey=
+-0bf9-field:AddContactStep1PublicKey=1. Pregunte a sus contactos por su "clave pública"
 
 #__________________________=2. Communicate in person or over an encrypted phone conversation. If that is not possible, use encrypted email
--b88d-field:AddContactStep2=
+-b88d-field:AddContactStep2=2. Comuníquese en persona o durante una conversación telefónica cifrada. Si eso no es posible, utilice correo electrónico cifrado
 
 #__________________________=3. Verify Public Code after adding contact, ideally over phone/in person
--e6b5-field:AddContactStep3=
+-e6b5-field:AddContactStep3=3. Verificar el código público después de agregar el contacto, idealmente por teléfono / en persona
 
 #______________________=Contacts
 -b0dd-field:AddContacts=Contactos
@@ -1301,7 +1301,7 @@
 -90ab-field:ImportProgress=Importando
 
 #__________________________=Import Public Key
--500e-field:ImportPublicKey=
+-500e-field:ImportPublicKey=Importar clave pública
 
 #_______________________________=This template currently does not have a name.  Enter a new title for this template.
 -7f51-field:ImportTemplateNoName=Ahora mismo esta plantilla no tiene un nombre. Introduzca un nuevo título para esta plantilla.
@@ -1388,7 +1388,7 @@
 -00a9-field:MayBeDamaged=Advertencia: Algunas partes pueden estar dañadas o perdidas.
 
 #________________________=My Access Token:
--d92a-field:MyAccessToken=
+-d92a-field:MyAccessToken=Mi token de acceso:
 
 #____________________=My Records
 -5fb3-field:MyRecords=Mis expedientes
