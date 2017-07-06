@@ -63,7 +63,24 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	@Override
 	public void folderWasSelected(BulletinFolder newFolder)
 	{
-		setFolder(newFolder);
+		if (wasFolderChanged(newFolder))
+			setFolder(newFolder);
+	}
+
+	private boolean wasFolderChanged(BulletinFolder newFolder)
+	{
+		if (isAllFolder(newFolder) && getAllFolderBeingDisplayedBooleanProperty().get())
+			return false;
+
+		if (isAllFolder(newFolder) || isAllFolder(folder))
+			return true;
+
+		return !newFolder.getName().equals(folder.getName());
+	}
+
+	private boolean isAllFolder(BulletinFolder folder)
+	{
+		return folder == FxCaseManagementController.ALL_FOLDER;
 	}
 
 	public synchronized void setFolder(BulletinFolder newFolder)
@@ -74,7 +91,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		boolean isTrashBeingDisplayed = false;
 		boolean isAllBeingDisplayed = false;
 		boolean isSearchBeingDisplayed = false;
-		if(folder == FxCaseManagementController.ALL_FOLDER)
+		if(isAllFolder(folder))
 		{
 			isAllBeingDisplayed = true;
 		}
@@ -123,7 +140,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 
 	private synchronized Set getUniversalIds()
 	{
-		if(folder == FxCaseManagementController.ALL_FOLDER)
+		if(isAllFolder(folder))
 			return getAllBulletinUidsIncludingDiscardedItems();
 
 		return folder.getAllUniversalIdsUnsorted();
