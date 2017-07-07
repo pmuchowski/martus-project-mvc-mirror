@@ -165,6 +165,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 			CaseListItem caseList = new CaseListItem(folder, localization);
 			caseListProviderAll.add(caseList);
 		}
+		clearCasesListViewAllSelection();
 		casesListViewAll.setItems(caseListProviderAll);
 		orderCases();
 		selectCase(caseNameToSelect);
@@ -470,7 +471,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		
 		final BulletinFolder folder = caseListItem.getFolder();
 		if (folder == ALL_FOLDER)
-			return null;
+			return AllCaseListItem.RAW_NAME;
 		
 		return folder.getName();
 	}
