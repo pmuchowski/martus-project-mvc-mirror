@@ -105,8 +105,10 @@ public class ImportVariousTypesAction implements ActionDoer
 		try
 		{
 			BulletinFolder folderToImportInto = getImportFolder();
+			getFxCaseManagementController().removeFolderContentChangedHandler(folderToImportInto);
 			ImporterOfXmlFilesOfBulletins importer = new ImporterOfXmlFilesOfBulletins(fileToImport, getApp().getStore(), folderToImportInto, System.out);
 			importer.importFiles();
+			getFxCaseManagementController().addFolderContentChangedHandler(folderToImportInto);
 			updateCases();
 		}
 		catch (Exception e)
@@ -120,7 +122,9 @@ public class ImportVariousTypesAction implements ActionDoer
 		try
 		{
 			BulletinFolder folderToImportInto = getImportFolder();
+			getFxCaseManagementController().removeFolderContentChangedHandler(folderToImportInto);
 			getApp().getStore().importZipFileBulletin(fileToImport, folderToImportInto, false);
+			getFxCaseManagementController().addFolderContentChangedHandler(folderToImportInto);
 			updateCases();
 		}
 		catch (Exception e)
@@ -128,7 +132,7 @@ public class ImportVariousTypesAction implements ActionDoer
 			MartusLogger.logException(e);
 		}
 	}
-	
+
 	private void updateCases()
 	{
 		Platform.runLater(new UpdateCasesWorker());
