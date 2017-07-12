@@ -8,9 +8,9 @@
    <bottom>
       <HBox styleClass="margin" alignment="BOTTOM_RIGHT" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="ok" mnemonicParsing="false" onMouseClicked="#onOkClicked" text="%Button.ok" />
+            <Button fx:id="ok" mnemonicParsing="false" onMouseClicked="#onOkClicked" text="%Button.ok" styleClass="button-green" />
             <Separator visible="false" HBox.hgrow="ALWAYS" />
-            <Button fx:id="cancel" mnemonicParsing="false" onMouseClicked="#onCancelClicked" text="%Button.cancel" />
+            <Button fx:id="cancel" mnemonicParsing="false" onMouseClicked="#onCancelClicked" text="%Button.cancel" styleClass="button-gray" />
          </children>
       </HBox>
    </bottom>
