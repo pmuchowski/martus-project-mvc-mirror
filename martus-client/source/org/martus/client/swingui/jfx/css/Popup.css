@@ -127,3 +127,25 @@
 	-fx-font-size: 15px;
 	-fx-text-fill: #8b0000;
 }
+
+.button-green,
+.button-green:hover,
+.button-green:pressed {
+    -fx-border-radius: 20 20 20 20;
+    -fx-text-fill: White;
+    -fx-alignment: center;
+    -fx-font-size: 15px;
+    -fx-padding: 7 35 7 35;
+    -fx-background-color:#00B050;
+}
+
+.button-gray,
+.button-gray:hover,
+.button-gray:pressed {
+    -fx-border-radius: 20 20 20 20;
+    -fx-text-fill: White;
+    -fx-alignment: center;
+    -fx-font-size: 15px;
+    -fx-padding: 7 35 7 35;
+    -fx-background-color:#808080;
+}
