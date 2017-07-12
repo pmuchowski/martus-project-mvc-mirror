@@ -14,10 +14,10 @@
    <bottom>
       <BorderPane BorderPane.alignment="CENTER">
          <right>
-            <Button fx:id="fxNoButton" mnemonicParsing="false" onAction="#noPressed" BorderPane.alignment="CENTER" />
+            <Button fx:id="fxNoButton" mnemonicParsing="false" onAction="#noPressed" BorderPane.alignment="CENTER" styleClass="button-gray" />
          </right>
          <left>
-            <Button fx:id="fxYesButton" mnemonicParsing="false" onAction="#yesPressed" BorderPane.alignment="CENTER" />
+            <Button fx:id="fxYesButton" mnemonicParsing="false" onAction="#yesPressed" BorderPane.alignment="CENTER" styleClass="button-green" />
          </left>
       </BorderPane>
    </bottom>
