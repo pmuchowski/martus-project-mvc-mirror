@@ -403,6 +403,17 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		});
 	}
 
+	@Override
+	public void sort(Object monitor)
+	{
+		Platform.runLater(() -> {
+			synchronized (monitor)
+			{
+				sortByMostRecentBulletins();
+			}
+		});
+	}
+
 	@FXML
 	public void onMouseClick(MouseEvent mouseEvent) 
 	{

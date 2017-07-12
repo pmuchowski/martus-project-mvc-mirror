@@ -316,7 +316,6 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 				if (continueAfterLoadFinished())
 				{
 					changeBulletin();
-					refreshView();
 				}
 			}
 			catch (Exception e)
@@ -356,6 +355,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		void changeBulletin() throws Exception
 		{
 			addBulletinIfNotExist(getBulletinId());
+			sortTableByMostRecentBulletins();
 		}
 	}
 
@@ -370,6 +370,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		void changeBulletin() throws Exception
 		{
 			removeBulletin(getBulletinId());
+			refreshView();
 		}
 	}
 
@@ -384,6 +385,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 		void changeBulletin() throws Exception
 		{
 			updateBulletin(getBulletinId());
+			sortTableByMostRecentBulletins();
 		}
 	}
 
@@ -487,6 +489,12 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 	{
 		if (refreshViewHandler != null)
 			refreshViewHandler.refresh(bulletinListMonitor);
+	}
+
+	protected void sortTableByMostRecentBulletins()
+	{
+		if (refreshViewHandler != null)
+			refreshViewHandler.sort(bulletinListMonitor);
 	}
 
 	private boolean hasBulletinBeenDiscarded(UniversalId bulletinId)
