@@ -1038,15 +1038,24 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		final String DEFAULT_SMOKE_TEST_ACCESS_TOKEN = "9028955";
 		try
 		{
-			Vector listFromFile = MartusUtilities.loadListFromFile(getTokenAuthoritySmokeTestAccessTokensFile());
-			if (listFromFile.isEmpty())
+			final File tokenAuthoritySmokeTestAccessTokensFile = getTokenAuthoritySmokeTestAccessTokensFile();
+			if (!tokenAuthoritySmokeTestAccessTokensFile.exists())
 			{
 				logInfo("Token authority smoke test access file does not exist, make sure this file exists: " + TOKEN_AUTHORITY_SMOKE_TEST_ACCESS_TOKEN_FILENAME + " under this dir: " + getConfigDirectory().getAbsolutePath() + ". Using default baked in access token: " + DEFAULT_SMOKE_TEST_ACCESS_TOKEN);
 				return DEFAULT_SMOKE_TEST_ACCESS_TOKEN;
 			}
 			
+			Vector listFromFile = MartusUtilities.loadListFromFile(tokenAuthoritySmokeTestAccessTokensFile);
+			if (listFromFile.isEmpty())
+			{
+				logInfo("Token authority smoke test access file contains no access tokens, make sure the file contains a valid access token.");
+				return DEFAULT_SMOKE_TEST_ACCESS_TOKEN;
+			}
+			
 			if (listFromFile.size() > 1)
+			{
 				logInfo(TOKEN_AUTHORITY_SMOKE_TEST_ACCESS_TOKEN_FILENAME + " contains more than one acccess token, currently only using the first item in the list.");
+			}
 			
 			return listFromFile.firstElement().toString();
 		} 
@@ -1055,7 +1064,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 			logError("Could not load token athority smoke test access tokens, using default access token: " + DEFAULT_SMOKE_TEST_ACCESS_TOKEN, e);
 			return DEFAULT_SMOKE_TEST_ACCESS_TOKEN;
 		}
-		
 	}
 	
 	public String requestUploadRights(String clientId, String tryMagicWord)
