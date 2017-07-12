@@ -17,7 +17,7 @@
     <VBox>
       <children>
         <Label minHeight="40.0" text="" />
-        <Button mnemonicParsing="false" onAction="#createSingelEncryptedFile" text="%Button.CreateSingleEncryptedFile" />
+        <Button mnemonicParsing="false" onAction="#createSingelEncryptedFile" text="%Button.CreateSingleEncryptedFile" styleClass="button-green" />
         <Label id="backupMessageLabel" minHeight="54.0" prefHeight="54.0" prefWidth="600.0" styleClass="mainText" text="%CreateSingleEncryptedFileInformation" wrapText="true" />
         <Label fx:id="backupMessageLabel" minHeight="75.0" prefHeight="75.0" prefWidth="600.0" styleClass="hintText" text="" wrapText="true" />
       </children>

@@ -16,7 +16,7 @@
             <VBox BorderPane.alignment="CENTER">
                <children>
               <Pane fx:id="contentPane" prefHeight="250.0" />
-              <Button mnemonicParsing="false" onAction="#onExportMultiKey" text="%Button.ExportMultiKey" />
+              <Button mnemonicParsing="false" onAction="#onExportMultiKey" text="%Button.ExportMultiKey" styleClass="button-green" />
                   <Label />
                   <Label text="%ExportMultiKeyNote" />
                </children>
