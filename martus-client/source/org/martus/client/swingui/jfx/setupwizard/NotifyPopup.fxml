@@ -14,7 +14,7 @@
         <CheckBox fx:id="hideForSessionCheckBox" visible="FALSE" mnemonicParsing="false" text="%DoNotShowAgainThisSession" />
         <HBox id="fxLowerHBox" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" >
           <children>
-            <Button fx:id="fxOkButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#okPressed" prefHeight="42.999900000002526" prefWidth="148.0" text="" />
+            <Button fx:id="fxOkButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#okPressed" prefHeight="42.999900000002526" prefWidth="148.0" text="" styleClass="button-green" />
           </children>
         </HBox>
       </children>
