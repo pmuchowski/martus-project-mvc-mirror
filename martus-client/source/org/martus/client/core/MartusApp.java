@@ -603,7 +603,6 @@ public class MartusApp
 			throw new SaveConfigInfoException();
 		}
 
-		turnNetworkOnOrOffAsRequested();
 		startOrStopTorAsRequested();
 	}
 	
