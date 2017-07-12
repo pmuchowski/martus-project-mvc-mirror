@@ -31,7 +31,7 @@
 								</TableView>
 								<HBox alignment="CENTER_RIGHT">
 									<children>
-										<Button mnemonicParsing="false" onAction="#onAvailableTabOkButton" text="%Button.InputServerNameOk">
+										<Button mnemonicParsing="false" onAction="#onAvailableTabOkButton" text="%Button.InputServerNameOk" styleClass="button-green" >
 										</Button>
 									</children>
 									<padding>
@@ -73,7 +73,7 @@
 										<ChoiceBox fx:id="downloadChoiceBox" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
 										<RadioButton fx:id="importFileRadioButton" mnemonicParsing="false" onAction="#onChooseFromFile" text="%Button.ImportFromFile" toggleGroup="$importTemplateHow" GridPane.rowIndex="2" />
-										<Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#onImportFromFile" text="%Button.Choose" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+										<Button fx:id="chooseFileButton" mnemonicParsing="false" onAction="#onImportFromFile" text="%Button.Choose" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="button-green" />
 
 									</children>
 								</GridPane>
@@ -84,7 +84,7 @@
                                     <Insets right="10.0" />
                                  </padding>
                               </Label>
-										<Button fx:id="addTemplateButton" mnemonicParsing="false" onAction="#onAdd" text="%Button.AddTemplate">
+										<Button fx:id="addTemplateButton" mnemonicParsing="false" onAction="#onAdd" text="%Button.AddTemplate" styleClass="button-green" >
 										</Button>
 									</children>
 								</HBox>

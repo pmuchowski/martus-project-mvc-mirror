@@ -14,10 +14,10 @@
       <Label fx:id="chooseFormTemplateLabel" styleClass="headingLevel3" text="%ChooseForm" GridPane.columnIndex="0" GridPane.rowIndex="2" />
       <ChoiceBox fx:id="templatesChoiceBox" prefWidth="557.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <Label fx:id="noTemplatesAvailableLabel" styleClass="headingLevel3" text="%NoTemplatesAvailable" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-      <Button mnemonicParsing="false" onAction="#onCancel" text="%Button.cancel" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+      <Button mnemonicParsing="false" onAction="#onCancel" text="%Button.cancel" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="button-gray" />
       <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
         <children>
-          <Button fx:id="continueButton" mnemonicParsing="false" onAction="#onContinue" text="%Button.Continue" textAlignment="LEFT" />
+          <Button fx:id="continueButton" mnemonicParsing="false" onAction="#onContinue" text="%Button.Continue" textAlignment="LEFT" styleClass="button-green" />
         </children>
       </HBox>
     </children>
