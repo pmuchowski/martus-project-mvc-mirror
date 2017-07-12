@@ -39,7 +39,7 @@
 		<bottom>
 			<VBox styleClass="mainTextBox">
    <children>
-   				<Button mnemonicParsing="false" onAction="#onSaveChanges" text="%Button.SaveChanges" />
+   				<Button mnemonicParsing="false" onAction="#onSaveChanges" text="%Button.SaveChanges" styleClass="button-green" />
    </children>
 			</VBox>
 		</bottom>
