@@ -14,15 +14,15 @@
     <TextField fx:id="accessTokenTextField" promptText="%AccessTokenInstructions" GridPane.columnIndex="1" GridPane.rowIndex="1" />
     <ChoiceBox fx:id="formTemplateChoiceBox" prefWidth="289.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
     <Label fx:id="noTemplatesAvailableLabel" styleClass="headingLevel3" text="%NoTemplatesAvailable" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-    <Button mnemonicParsing="false" onAction="#onCancel" text="%Button.cancel" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+    <Button mnemonicParsing="false" onAction="#onCancel" text="%Button.cancel" GridPane.columnIndex="0" GridPane.rowIndex="3" styleClass="button-gray" />
     <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="3">
       <children>
-        <Button fx:id="continueButton" mnemonicParsing="false" onAction="#onContinue" text="%Button.Continue" />
+        <Button fx:id="continueButton" mnemonicParsing="false" onAction="#onContinue" text="%Button.Continue" styleClass="button-green" />
       </children>
     </HBox>
     <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
       <children>
-        <Button fx:id="seeFormTemplatesButton" mnemonicParsing="false" onAction="#onSeeForms" text="%Button.SeeForms" />
+        <Button fx:id="seeFormTemplatesButton" mnemonicParsing="false" onAction="#onSeeForms" text="%Button.SeeForms" styleClass="button-green" />
       </children>
     </HBox>
   </children>

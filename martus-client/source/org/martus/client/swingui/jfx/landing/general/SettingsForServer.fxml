@@ -50,7 +50,7 @@
                                     <Font name="Helvetica" size="14.0" />
                                  </font>
                               </Label>
-                              <Button mnemonicParsing="false" onMouseClicked="#onConnectToDefaultServer" text="%ConnectToDefault">
+                              <Button mnemonicParsing="false" onMouseClicked="#onConnectToDefaultServer" text="%ConnectToDefault" styleClass="button-green">
                                  <VBox.margin>
                                     <Insets bottom="10.0" top="10.0" />
                                  </VBox.margin>
@@ -76,7 +76,7 @@
                                     <TextField fx:id="advanceServerPublicCode" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                  </children>
                               </GridPane>
-                              <Button fx:id="connectToAdvanceServer" mnemonicParsing="false" onMouseClicked="#onConnectToAdvanceServer" text="%Button.ConnectToServer">
+                              <Button fx:id="connectToAdvanceServer" mnemonicParsing="false" onMouseClicked="#onConnectToAdvanceServer" text="%Button.ConnectToServer" styleClass="button-green">
                                  <VBox.margin>
                                     <Insets top="20.0" />
                                  </VBox.margin>
@@ -126,7 +126,7 @@
                                  </children>
                               </HBox>
                               <ChoiceBox visible="%isFullDesktopFlavor" fx:id="automaticSyncFrequencyMinutes" prefWidth="150.0" />
-                              <Button mnemonicParsing="false" onMouseClicked="#onSaveServerPreferenceChanges" text="%Button.SaveChanges">
+                              <Button mnemonicParsing="false" onMouseClicked="#onSaveServerPreferenceChanges" text="%Button.SaveChanges" styleClass="button-green">
                                  <VBox.margin>
                                     <Insets top="15.0" />
                                  </VBox.margin>

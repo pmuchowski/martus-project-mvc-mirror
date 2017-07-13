@@ -15,9 +15,9 @@
     	<TextField fx:id="accountPublicCode" styleClass="headingLevel3" text="" />
       <Label />
 
-             	<Button mnemonicParsing="false" onAction="#onExportPublicKey" text="%Button.ExportAccountPublicKey" />
+             	<Button mnemonicParsing="false" onAction="#onExportPublicKey" text="%Button.ExportAccountPublicKey" styleClass="button-green" />
       <Label />
-      <Button mnemonicParsing="false" onAction="#onChangeUsernameAndPassword" text="%Button.ChangeUsernameAndPassword" />
+      <Button mnemonicParsing="false" onAction="#onChangeUsernameAndPassword" text="%Button.ChangeUsernameAndPassword" styleClass="button-green" />
    </children>
    <padding>
       <Insets left="10.0" top="10.0" />

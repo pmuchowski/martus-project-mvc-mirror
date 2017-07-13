@@ -42,10 +42,10 @@
           <RowConstraints />
         </rowConstraints>
          <children>
-     <Button mnemonicParsing="false" onAction="#verifyContact" text="%Button.VerifyContactNow" textAlignment="CENTER" />
+     <Button mnemonicParsing="false" onAction="#verifyContact" text="%Button.VerifyContactNow" textAlignment="CENTER" styleClass="button-green" />
             <HBox alignment="TOP_RIGHT" GridPane.columnIndex="1">
                <children>
-           <Button alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#willVerifyLater" text="%Button.VerifyContactLater" />
+           <Button alignment="CENTER" contentDisplay="RIGHT" mnemonicParsing="false" onAction="#willVerifyLater" text="%Button.VerifyContactLater" styleClass="button-gray" />
                </children>
             </HBox>
          </children>
