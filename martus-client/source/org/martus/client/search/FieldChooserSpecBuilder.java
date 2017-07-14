@@ -84,18 +84,32 @@ public class FieldChooserSpecBuilder
 		return buildFieldChoicesByLabel(storeToUse, storeToUse.getAllKnownFieldSpecs(), specsToInclude);
 	}
 
-	public FieldChoicesByLabel buildFieldChoicesByLabel(ClientBulletinStore storeToUse, Set fieldSpecsToBuildFrom, MiniFieldSpec[] specsToInclude)
+	public FieldChoicesByLabel buildFieldChoicesByLabel(Set fieldSpecsToBuildFrom, MiniFieldSpec[] specsToInclude, PoolOfReusableChoicesLists reusableChoicesLists)
 	{
 		FieldChoicesByLabel allAvailableFields = new FieldChoicesByLabel(localization);
 		if(shouldIncludeLastSaved())
 			allAvailableFields.add(createLastSavedDateChoice());
-		allAvailableFields.addAll(convertToChoiceItems(fieldSpecsToBuildFrom, storeToUse.getAllReusableChoiceLists()));
+		allAvailableFields.addAll(convertToChoiceItems(fieldSpecsToBuildFrom, reusableChoicesLists));
 		if(specsToInclude != null)
 		{
 			allAvailableFields.onlyKeep(specsToInclude);
 		}
 		addSpecialFields(allAvailableFields);
 		return allAvailableFields;
+	}
+
+	public FieldChoicesByLabel buildFieldChoicesByLabel(ClientBulletinStore storeToUse, Set fieldSpecsToBuildFrom, MiniFieldSpec[] specsToInclude, PoolOfReusableChoicesLists templateReusableChoicesLists)
+	{
+		PoolOfReusableChoicesLists reusableChoicesLists = new PoolOfReusableChoicesLists();
+		reusableChoicesLists.addAll(storeToUse.getAllReusableChoiceLists());
+		reusableChoicesLists.addAll(templateReusableChoicesLists);
+
+		return buildFieldChoicesByLabel(fieldSpecsToBuildFrom, specsToInclude, reusableChoicesLists);
+	}
+
+	public FieldChoicesByLabel buildFieldChoicesByLabel(ClientBulletinStore storeToUse, Set fieldSpecsToBuildFrom, MiniFieldSpec[] specsToInclude)
+	{
+		return buildFieldChoicesByLabel(fieldSpecsToBuildFrom, specsToInclude, storeToUse.getAllReusableChoiceLists());
 	}
 
 	protected boolean shouldIncludeLastSaved()
