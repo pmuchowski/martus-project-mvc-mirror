@@ -45,6 +45,11 @@ public class PoolOfReusableChoicesLists
 		namedReusableChoices.put(choices.getCode(), choices);
 	}
 
+	public void addAll(PoolOfReusableChoicesLists reusableChoicesLists)
+	{
+		namedReusableChoices.putAll(reusableChoicesLists.namedReusableChoices);
+	}
+
 	public ChoiceItem findChoiceFromFullOrPartialCode(String[] reusableChoiceListCodes, String fullOrPartialCode)
 	{
 		int levelCount = reusableChoiceListCodes.length;

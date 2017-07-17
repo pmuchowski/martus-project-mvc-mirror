@@ -55,6 +55,7 @@ import org.martus.common.EnglishCommonStrings;
 import org.martus.common.FieldSpecCollection;
 import org.martus.common.MartusLogger;
 import org.martus.common.MiniLocalization;
+import org.martus.common.PoolOfReusableChoicesLists;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.FormTemplate;
 import org.martus.swing.FontHandler;
@@ -222,11 +223,17 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 	protected void fillSelectorPanel(ChoiceBoxItem selectedFormTemplate)
 	{
 		FieldSpecCollection allFieldsForTemplate = new FieldSpecCollection();
-		allFieldsForTemplate.addAll(selectedFormTemplate.getTopFields());
-		allFieldsForTemplate.addAll(selectedFormTemplate.getBottomFields());
-		
+		FieldSpecCollection topTemplateFields = selectedFormTemplate.getTopFields();
+		FieldSpecCollection bottomTemplateFields = selectedFormTemplate.getBottomFields();
+		allFieldsForTemplate.addAll(topTemplateFields);
+		allFieldsForTemplate.addAll(bottomTemplateFields);
+
+		PoolOfReusableChoicesLists reusableChoicesLists = new PoolOfReusableChoicesLists();
+		reusableChoicesLists.addAll(topTemplateFields.getAllReusableChoiceLists());
+		reusableChoicesLists.addAll(bottomTemplateFields.getAllReusableChoiceLists());
+
 		FieldChooserSpecBuilder fieldChooserSpecBuilder = new PageReportFieldChooserSpecBuilder(getMainWindow().getLocalization());
-		FieldChoicesByLabel allFieldsForFormTemplate = fieldChooserSpecBuilder.buildFieldChoicesByLabel(getMainWindow().getStore(), allFieldsForTemplate.asSet(), null);
+		FieldChoicesByLabel allFieldsForFormTemplate = fieldChooserSpecBuilder.buildFieldChoicesByLabel(getMainWindow().getStore(), allFieldsForTemplate.asSet(), null, reusableChoicesLists);
 		fieldSelector.rebuildTableWithNewFieldSpecs(allFieldsForFormTemplate.asArray(getMainWindow().getLocalization()));
 	}
 	
