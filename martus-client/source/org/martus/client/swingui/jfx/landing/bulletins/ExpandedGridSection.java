@@ -26,6 +26,14 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui.jfx.landing.bulletins;
 
 
+import org.martus.client.core.FxBulletin;
+import org.martus.client.core.FxBulletinField;
+import org.martus.client.core.FxBulletinGridField;
+import org.martus.client.core.GridFieldData;
+import org.martus.client.swingui.MartusLocalization;
+import org.martus.common.fieldspec.FieldSpec;
+import org.martus.common.fieldspec.GridFieldSpec;
+
 import javafx.geometry.Orientation;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -34,14 +42,6 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import org.martus.client.core.FxBulletin;
-import org.martus.client.core.FxBulletinField;
-import org.martus.client.core.FxBulletinGridField;
-import org.martus.client.core.GridFieldData;
-import org.martus.client.swingui.MartusLocalization;
-import org.martus.common.fieldspec.FieldSpec;
-import org.martus.common.fieldspec.GridFieldSpec;
 
 public class ExpandedGridSection extends TitledPane
 {
@@ -91,6 +91,7 @@ public class ExpandedGridSection extends TitledPane
 			return;
 		HBox bottom = new HBox();
 		Button appendItemButton = new Button("Add Item");
+		appendItemButton.getStyleClass().add("button-green");
 		appendItemButton.setOnAction((event) -> appendItem()); 
 		bottom.getChildren().add(appendItemButton);
 		mainBorderPane.setBottom(bottom);
@@ -101,6 +102,7 @@ public class ExpandedGridSection extends TitledPane
 		if(!fieldCreator.isFieldEditable())
 			return;
 		Button deleteButton = new Button("Delete");
+		deleteButton.getStyleClass().add("button-gray");
 		deleteButton.setOnAction(event -> deleteItem(rowData));
 		itemBox.getChildren().add(deleteButton);
 	}
