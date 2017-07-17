@@ -272,7 +272,7 @@ public class BulletinListProvider extends ArrayObservableList<BulletinTableRowDa
 				MartusLogger.logException(e);
 			}
 
-			refreshView();
+			sortTableByMostRecentBulletins();
 		}
 	}
 
