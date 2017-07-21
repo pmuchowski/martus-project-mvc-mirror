@@ -191,7 +191,8 @@ public class MartusSecurity extends MartusCrypto
         allowAllCrypto.setAccessible(true);
         defaultPolicy.add((Permission) allowAllCrypto.get(null));
 
-        MartusLogger.log("Successfully removed limitations and enabled strong cryptography");
+        MartusLogger.log("Successfully removed limitations and enabled strong cryptography, session key length: "
+            + MartusCrypto.bitsInSessionKey + ", public key length: " + MartusCrypto.bitsInPublicKey);
 	}
 
 	//NOTE: In Java 1.8 build 102 the "isRestricted" variable was set to final.  
@@ -210,7 +211,6 @@ public class MartusSecurity extends MartusCrypto
 			throws NoSuchAlgorithmException
 	{
 		int maxAllowedKeyLength = Cipher.getMaxAllowedKeyLength("AES");
-		MartusLogger.log("AES Key Length: " + String.valueOf(maxAllowedKeyLength));
 		return maxAllowedKeyLength >= 256;
 	}
 
