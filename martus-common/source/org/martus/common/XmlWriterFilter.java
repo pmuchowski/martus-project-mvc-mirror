@@ -31,6 +31,7 @@ import java.io.Writer;
 
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.SignatureEngine;
+import org.martus.common.crypto.SignatureEngineSha1;
 import org.martus.util.xml.XmlUtilities;
 
 public class XmlWriterFilter
@@ -78,7 +79,7 @@ public class XmlWriterFilter
 	{
 		try
 		{
-			engine = SignatureEngine.createSigner(sigGenToUse.getKeyPair());
+			engine = SignatureEngineSha1.createSigner(sigGenToUse.getKeyPair());
 		}
 		catch (Exception e)
 		{

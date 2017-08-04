@@ -269,7 +269,7 @@ public class MartusSecurity extends MartusCrypto
 	{
 		try
 		{
-			SignatureEngine engine = SignatureEngine.createSigner(getKeyPair());
+			SignatureEngine engine = SignatureEngineSha1.createSigner(getKeyPair());
 			engine.digest(inputStream);
 			return engine.getSignature();
 		}
@@ -292,7 +292,7 @@ public class MartusSecurity extends MartusCrypto
 	{
 		try
 		{
-			SignatureEngine engine = SignatureEngine.createVerifier(publicKeyString);
+			SignatureEngine engine = SignatureEngineSha1.createVerifier(publicKeyString);
 			engine.digest(inputStream);
 			return engine.isValidSignature(signature);
 		}
@@ -769,14 +769,14 @@ public class MartusSecurity extends MartusCrypto
 
 	public SignatureEngine createSignatureVerifier(String signedByPublicKey) throws Exception
 	{
-		return SignatureEngine.createVerifier(signedByPublicKey);
+		return SignatureEngineSha1.createVerifier(signedByPublicKey);
 	}
 	
 	public synchronized String createSignatureOfVectorOfStrings(Vector dataToSign) throws MartusCrypto.MartusSignatureException 
 	{
 		try
 		{
-			SignatureEngine signer = SignatureEngine.createSigner(getKeyPair());
+			SignatureEngine signer = SignatureEngineSha1.createSigner(getKeyPair());
 			for(int element = 0; element < dataToSign.size(); ++element)
 			{
 				String thisElement = dataToSign.get(element).toString();
@@ -798,7 +798,7 @@ public class MartusSecurity extends MartusCrypto
 	{
 		try
 		{
-			SignatureEngine verifier = SignatureEngine.createVerifier(signedBy);
+			SignatureEngine verifier = SignatureEngineSha1.createVerifier(signedBy);
 			for(int index = 0; index < dataToTest.size(); ++index)
 			{
 				byte[] bytesToSign = extractBytes(dataToTest.get(index));
