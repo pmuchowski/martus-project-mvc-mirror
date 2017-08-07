@@ -269,7 +269,7 @@ public class MartusSecurity extends MartusCrypto
 	{
 		try
 		{
-			SignatureEngine engine = SignatureEngineSha1.createSigner(getKeyPair());
+			SignatureEngine engine = createSigner();
 			engine.digest(inputStream);
 			return engine.getSignature();
 		}
@@ -771,12 +771,17 @@ public class MartusSecurity extends MartusCrypto
 	{
 		return SignatureEngineSha1.createVerifier(signedByPublicKey);
 	}
-	
+
+	public SignatureEngine createSigner() throws Exception
+	{
+		return SignatureEngineSha1.createSigner(getKeyPair());
+	}
+
 	public synchronized String createSignatureOfVectorOfStrings(Vector dataToSign) throws MartusCrypto.MartusSignatureException 
 	{
 		try
 		{
-			SignatureEngine signer = SignatureEngineSha1.createSigner(getKeyPair());
+			SignatureEngine signer = createSigner();
 			for(int element = 0; element < dataToSign.size(); ++element)
 			{
 				String thisElement = dataToSign.get(element).toString();

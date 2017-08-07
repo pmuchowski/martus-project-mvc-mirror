@@ -90,6 +90,7 @@ public abstract class MartusCrypto
 		return verifySignatureOfVectorOfStrings(dataToTest, signedBy, sig);
 	}
 	public abstract SignatureEngine createSignatureVerifier(String signedByPublicKey) throws Exception;
+	public abstract SignatureEngine createSigner() throws Exception;
 		
 	// session keys
 	public abstract SessionKey createSessionKey();
