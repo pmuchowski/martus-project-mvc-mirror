@@ -154,7 +154,7 @@ public class MockMartusSecurity extends MartusSecurity
 		setKeyPairFromData(StreamableBase64.decode(nonEncryptedSampleKeyPair));
 	}
 
-	public SignatureEngineSha1 createSignatureVerifier(String signedByPublicKey)
+	public SignatureEngine createSignatureVerifier(String signedByPublicKey)
 			throws Exception
 	{
 		if(fakeSigVerifyFailure)

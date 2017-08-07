@@ -292,7 +292,7 @@ public class MartusSecurity extends MartusCrypto
 	{
 		try
 		{
-			SignatureEngine engine = SignatureEngineSha1.createVerifier(publicKeyString);
+			SignatureEngine engine = createSignatureVerifier(publicKeyString);
 			engine.digest(inputStream);
 			return engine.isValidSignature(signature);
 		}
@@ -798,7 +798,7 @@ public class MartusSecurity extends MartusCrypto
 	{
 		try
 		{
-			SignatureEngine verifier = SignatureEngineSha1.createVerifier(signedBy);
+			SignatureEngine verifier = createSignatureVerifier(signedBy);
 			for(int index = 0; index < dataToTest.size(); ++index)
 			{
 				byte[] bytesToSign = extractBytes(dataToTest.get(index));
