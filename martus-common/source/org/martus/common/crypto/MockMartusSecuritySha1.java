@@ -80,6 +80,11 @@ public class MockMartusSecuritySha1 extends AbstractMockMartusSecurity
 		if(fakeSigVerifyFailure)
 			return null;
 
-		return super.createSignatureVerifier(signedByPublicKey);
+		return SignatureEngineSha1.createVerifier(signedByPublicKey);
+	}
+
+	public SignatureEngine createSigner() throws Exception
+	{
+		return SignatureEngineSha1.createSigner(getKeyPair());
 	}
 }
