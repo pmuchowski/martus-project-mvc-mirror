@@ -35,7 +35,7 @@ import org.martus.common.FieldCollection;
 import org.martus.common.FieldCollectionForTesting;
 import org.martus.common.FieldSpecCollection;
 import org.martus.common.LegacyCustomFields;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.fieldspec.FormTemplate.FutureVersionException;
 import org.martus.util.StreamableBase64;
 import org.martus.util.TestCaseEnhanced;
@@ -56,7 +56,7 @@ public class TestFormTemplate extends TestCaseEnhanced
 		super.setUp();
 		if(security == null)
 		{
-			security = new MockMartusSecurity();
+			security = new MockMartusSecuritySha1();
 			security.createKeyPair(512);
 		}
 	}
@@ -144,7 +144,7 @@ public class TestFormTemplate extends TestCaseEnhanced
 		byte[] signedBundleBottomSection = security.createSignedBundle(UnicodeUtilities.toUnicodeBytes(defaultFieldsBottomSection.toXml()));
 		byte[] signedBundleTitle = security.createSignedBundle(UnicodeUtilities.toUnicodeBytes(formTemplateTitle));
 
-		MockMartusSecurity otherSecurity = new MockMartusSecurity();
+		MockMartusSecuritySha1 otherSecurity = new MockMartusSecuritySha1();
 		otherSecurity.createKeyPair(512);
 
 		byte[] signedBundleDescription = otherSecurity.createSignedBundle(UnicodeUtilities.toUnicodeBytes(formTemplateDescription));
@@ -352,5 +352,5 @@ public class TestFormTemplate extends TestCaseEnhanced
 		}
 	}
 	
-	static MockMartusSecurity security;
+	static MockMartusSecuritySha1 security;
 }

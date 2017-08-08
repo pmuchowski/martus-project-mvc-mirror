@@ -46,7 +46,7 @@ import org.martus.amplifier.test.AbstractAmplifierTestCase;
 import org.martus.common.FieldSpecCollection;
 import org.martus.common.LoggerToNull;
 import org.martus.common.bulletin.AttachmentProxy;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.FieldTypeNormal;
 import org.martus.common.packet.FieldDataPacket;
@@ -65,7 +65,7 @@ public abstract class CommonSearchTest
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		MartusAmplifier.setStaticSecurity(new MockMartusSecurity());
+		MartusAmplifier.setStaticSecurity(new MockMartusSecuritySha1());
 		MartusAmplifier.getSecurity().createKeyPair();
 		MartusAmplifier.dataManager = new FileSystemDataManager(getTestBasePath());
 	}

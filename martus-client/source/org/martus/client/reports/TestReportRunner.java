@@ -47,7 +47,7 @@ import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.fieldspec.ChoiceItem;
@@ -75,7 +75,7 @@ public class TestReportRunner extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
-		MartusApp app = MockMartusApp.create(MockMartusSecurity.createClient(), getName());
+		MartusApp app = MockMartusApp.create(MockMartusSecuritySha1.createClient(), getName());
 		rr = new ReportRunner(app);
 		context = new VelocityContext();
 	}	

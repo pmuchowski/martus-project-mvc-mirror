@@ -33,7 +33,7 @@ import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MartusSecurity;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestAttachmentProxyFile extends TestCaseEnhanced
@@ -48,7 +48,7 @@ public class TestAttachmentProxyFile extends TestCaseEnhanced
 	{
 		super.setUp();
 
-		security = MockMartusSecurity.createClient();
+		security = MockMartusSecuritySha1.createClient();
 		store = new MockBulletinStore();
 	}
 	

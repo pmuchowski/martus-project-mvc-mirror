@@ -64,7 +64,7 @@ import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.crypto.MartusSecurity;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.BulletinUploadRecord;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
@@ -121,23 +121,23 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		if(clientSecurity == null)
 		{
-			clientSecurity = MockMartusSecurity.createClient();
+			clientSecurity = MockMartusSecuritySha1.createClient();
 			clientAccountId = clientSecurity.getPublicKeyString();
 		}
 		
 		if(serverSecurity == null)
 		{
-			serverSecurity = MockMartusSecurity.createServer();
+			serverSecurity = MockMartusSecuritySha1.createServer();
 		}
 		
 		if(otherServerSecurity == null)
 		{
-			otherServerSecurity = MockMartusSecurity.createOtherServer();
+			otherServerSecurity = MockMartusSecuritySha1.createOtherServer();
 		}
 
 		if(hqSecurity == null)
 		{
-			hqSecurity = MockMartusSecurity.createHQ();
+			hqSecurity = MockMartusSecuritySha1.createHQ();
 		}
 		if(tempFile == null)
 		{
@@ -253,7 +253,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	
 	public void testDoesDraftExist() throws Exception
 	{
-		MartusCrypto security = MockMartusSecurity.createClient();
+		MartusCrypto security = MockMartusSecuritySha1.createClient();
 	
 		ServerBulletinStore serverStore = new ServerBulletinStore(smdFactory);
 		serverStore.setSignatureGenerator(security);
@@ -478,7 +478,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString);
 		
-		MartusCrypto newClientSecurity = MockMartusSecurity.createOtherClient();
+		MartusCrypto newClientSecurity = MockMartusSecuritySha1.createOtherClient();
 
 		Vector result = getBulletinChunk(newClientSecurity, testServerInterface, b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.CLIENT_MAX_CHUNK_SIZE);
 		assertEquals("Succeeded?  You are not the owner or the HQ", NetworkInterfaceConstants.NOTYOURBULLETIN, result.get(0));
@@ -718,7 +718,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		tmpPacketDir.delete();
 		tmpPacketDir.mkdir();
 
-		MartusCrypto security = MockMartusSecurity.createServer();
+		MartusCrypto security = MockMartusSecuritySha1.createServer();
 		ServerFileDatabase db = new ServerFileDatabase(tmpPacketDir, security);
 		db.initialize();
 		MockMartusServer mock = new MockMartusServer(db, this);
@@ -1351,7 +1351,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_BEGIN("testBadlySignedBulletinUpload");
 
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
-		MockMartusSecurity mockServerSecurity = MockMartusSecurity.createServer();
+		MockMartusSecuritySha1 mockServerSecurity = MockMartusSecuritySha1.createServer();
 		mockServerSecurity.fakeSigVerifyFailure = true;
 		testServer.setSecurity(mockServerSecurity);
 
@@ -1460,7 +1460,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.setSecurity(serverSecurity);
 
 		BulletinStore otherStore = new MockBulletinStore(this);
-		MartusCrypto nonFieldSecurity = MockMartusSecurity.createClient();
+		MartusCrypto nonFieldSecurity = MockMartusSecuritySha1.createClient();
 		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 
 		Bulletin b = new Bulletin(nonFieldSecurity);

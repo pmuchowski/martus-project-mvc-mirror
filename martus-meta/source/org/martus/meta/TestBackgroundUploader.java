@@ -44,7 +44,7 @@ import org.martus.common.ProgressMeterInterface;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.Bulletin.BulletinState;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.network.ClientSideNetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.server.forclients.MockMartusServer;
@@ -65,10 +65,10 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		super.setUp();
 		TRACE_BEGIN("setUp");
 		if(mockSecurityForApp == null)
-			mockSecurityForApp = MockMartusSecurity.createClient();
+			mockSecurityForApp = MockMartusSecuritySha1.createClient();
 		
 		if(mockSecurityForServer == null)
-			mockSecurityForServer = MockMartusSecurity.createServer();
+			mockSecurityForServer = MockMartusSecuritySha1.createServer();
 
 		mockServer = new MockMartusServer(this);
 		mockServer.verifyAndLoadConfigurationFiles();
@@ -328,8 +328,8 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		return StreamableBase64.decode(BulletinForTesting.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForApp));
 	}
 		
-	private static MockMartusSecurity mockSecurityForApp;
-	private static MockMartusSecurity mockSecurityForServer;
+	private static MockMartusSecuritySha1 mockSecurityForApp;
+	private static MockMartusSecuritySha1 mockSecurityForServer;
 
 	private static MockMartusApp appWithoutServer;
 	private MockMartusApp appWithServer;

@@ -43,7 +43,7 @@ import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin.BulletinState;
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
 import org.martus.common.database.MockDatabase;
@@ -96,7 +96,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 		if(security == null)
 		{
-			security = MockMartusSecurity.createClient();
+			security = MockMartusSecuritySha1.createClient();
 		}
 		store = new MockBulletinStore(this);
     }
@@ -410,7 +410,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b1.setHistory(localHistory);
 		store.saveEncryptedBulletinForTesting(b1);
 
-		MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
+		MartusCrypto hqSecurity = MockMartusSecuritySha1.createHQ();
 		MockBulletinStore hqStore = new MockBulletinStore(this);
 		Bulletin b2 = new Bulletin(hqSecurity);
 		b2.createDraftCopyOf(b1, getDb());
@@ -448,7 +448,7 @@ public class TestBulletin extends TestCaseEnhanced
 		ExtendedHistoryList extendedHistory = new ExtendedHistoryList();
 		BulletinHistory otherHistory = new BulletinHistory();
 		otherHistory.add("older1");
-		extendedHistory.add(MockMartusSecurity.createOtherClient().getPublicKeyString(), otherHistory);
+		extendedHistory.add(MockMartusSecuritySha1.createOtherClient().getPublicKeyString(), otherHistory);
 		store.saveEncryptedBulletinForTesting(b1);
 		assertEquals(2, b1.getHistory().size());
 		assertEquals(3, b1.getVersion());
@@ -565,7 +565,7 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals(1, b1.getAuthorizedToReadKeysIncludingPending().size());
 		assertEquals("", b1.getBulletinHeaderPacket().getLegacyHQPublicKey());
 		
-		MartusCrypto other = MockMartusSecurity.createHQ();
+		MartusCrypto other = MockMartusSecuritySha1.createHQ();
 		HeadquartersKey hq2 = new HeadquartersKey(other.getPublicKeyString());
 		HeadquartersKeys newHQs = b1.getAuthorizedToReadKeysIncludingPending();
 		newHQs.add(hq2);
@@ -579,7 +579,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 		Bulletin b1copy = new Bulletin(security);
 		b1copy.createDraftCopyOf(b1, getDb());
-		MartusCrypto other2 = MockMartusSecurity.createOtherClient();
+		MartusCrypto other2 = MockMartusSecuritySha1.createOtherClient();
 		HeadquartersKey hq3 = new HeadquartersKey(other2.getPublicKeyString());
 		HeadquartersKeys with3HQs = b1copy.getAuthorizedToReadKeysIncludingPending();
 		assertEquals(2, with3HQs.size());
@@ -609,7 +609,7 @@ public class TestBulletin extends TestCaseEnhanced
 		bulletinWith3HQsInitially.changeState(BulletinState.STATE_SAVE);
 		assertEquals(3, bulletinWith3HQsInitially.getAuthorizedToReadKeysIncludingPending().size());
 
-		MartusCrypto otherClient = MockMartusSecurity.createOtherClient();
+		MartusCrypto otherClient = MockMartusSecuritySha1.createOtherClient();
 		HeadquartersKey hq4 = new HeadquartersKey(otherClient.getPublicKeyString());
 		HeadquartersKeys oneHQ = new HeadquartersKeys(hq4);
 		bulletinWith3HQsInitially.setAuthorizedToReadKeys(oneHQ);
@@ -857,7 +857,7 @@ public class TestBulletin extends TestCaseEnhanced
 	{
 		Bulletin b1 = new Bulletin(security);
 		assertEquals(Bulletin.BulletinState.STATE_SAVE, b1.getState());
-		MartusCrypto hq = MockMartusSecurity.createHQ();
+		MartusCrypto hq = MockMartusSecuritySha1.createHQ();
 
 		HeadquartersKeys hqKeys = new HeadquartersKeys(new HeadquartersKey(hq.getPublicKeyString()));
 		b1.setAuthorizedToReadKeys(hqKeys);

@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Vector;
 
 import org.martus.common.MartusUtilities.FileVerificationException;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.BulletinUploadRecord;
 import org.martus.common.database.ClientFileDatabase;
 import org.martus.common.database.Database;
@@ -65,7 +65,7 @@ public class TestDatabase extends TestCaseEnhanced
 	{
 		super.setUp();
 		mockDb = new MockServerDatabase();
-		security = MockMartusSecurity.createClient();
+		security = MockMartusSecuritySha1.createClient();
 
 		goodDir1 = createTempFile();
 		goodDir1.delete();
@@ -164,7 +164,7 @@ public class TestDatabase extends TestCaseEnhanced
 		writer.writeln("anacct=string");
 		writer.close();
 		
-		MockMartusSecurity otherSecurity = MockMartusSecurity.createOtherClient();
+		MockMartusSecuritySha1 otherSecurity = MockMartusSecuritySha1.createOtherClient();
 		MartusServerUtilities.createSignatureFileFromFileOnServer(accountMap, otherSecurity);
 		
 		try
@@ -1099,7 +1099,7 @@ public class TestDatabase extends TestCaseEnhanced
 		return result;
 	}
 
-	MockMartusSecurity security;
+	MockMartusSecuritySha1 security;
 	DatabaseKey smallKey = DatabaseKey.createImmutableKey(UniversalIdForTesting.createFromAccountAndPrefix("small account", "x"));
 	DatabaseKey largeKey = DatabaseKey.createImmutableKey(UniversalIdForTesting.createFromAccountAndPrefix("large account", "x"));
 	String smallString = "How are you doing?";

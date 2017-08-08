@@ -41,7 +41,7 @@ import org.martus.common.ReusableChoices;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.MockClientDatabase;
 import org.martus.common.fieldspec.ChoiceItem;
 import org.martus.common.fieldspec.CustomDropDownFieldSpec;
@@ -62,7 +62,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
-		security = MockMartusSecurity.createClient();
+		security = MockMartusSecuritySha1.createClient();
 		app = MockMartusApp.create(security, getName());
 		ClientBulletinStore store = app.getStore();
 		cache = store.knownFieldSpecCache;
@@ -131,7 +131,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 
 	public void testIgnoreUnauthorizedBulletins() throws Exception
 	{
-		MockMartusSecurity otherSecurity = MockMartusSecurity.createOtherClient();
+		MockMartusSecuritySha1 otherSecurity = MockMartusSecuritySha1.createOtherClient();
 
 		MockMartusApp otherApp = MockMartusApp.create(otherSecurity, getName());
 		Bulletin notOurs = createSampleBulletin(otherSecurity);
@@ -340,7 +340,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 	FieldSpecCollection publicSpecs = new FieldSpecCollection(new FieldSpec[] {FieldSpec.createCustomField("frodo", "Younger Baggins", new FieldTypeMultiline()),}); 
 	FieldSpecCollection privateSpecs = new FieldSpecCollection(new FieldSpec[] {FieldSpec.createCustomField("bilbo", "Older Baggins", new FieldTypeDateRange()),});
 	
-	MockMartusSecurity security;
+	MockMartusSecuritySha1 security;
 	MockMartusApp app;
 	KnownFieldSpecCache cache;
 }

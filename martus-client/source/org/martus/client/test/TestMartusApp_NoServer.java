@@ -77,7 +77,7 @@ import org.martus.common.ProgressMeterInterface;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.AuthorizationFailedException;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.FileDatabase;
@@ -110,7 +110,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		super.setUp();
 		TRACE_BEGIN("setUp");
 
-		mockSecurityForApp = MockMartusSecurity.createClient();
+		mockSecurityForApp = MockMartusSecuritySha1.createClient();
 
 		testAppLocalization = new MartusLocalization(null, UiSession.getAllEnglishStrings());
 		CurrentUiState currentUi = new CurrentUiState();
@@ -150,7 +150,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		{
 			public FakeRetrieveApp(File tempDir) throws Exception
 			{
-				super(MockMartusSecurity.createClient(), tempDir, new MartusLocalization(tempDir, EnglishStrings.strings));
+				super(MockMartusSecuritySha1.createClient(), tempDir, new MartusLocalization(tempDir, EnglishStrings.strings));
 				initializeMockApp(this, tempDir);
 			}
 
@@ -2567,7 +2567,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 	public void testGetPublicCodeFromAccount() throws Exception
 	{
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		String publicKeyString = security.getPublicKeyString();
 		String publicCode = MartusCrypto.computePublicCode(publicKeyString);
 		assertEquals("wrong code?", "71887634433124687372", publicCode);
@@ -2633,7 +2633,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testEncryptPublicData() throws Exception
 	{
 		TRACE_BEGIN("testEncryptPublicData");
-		MartusCrypto security = MockMartusSecurity.createClient();
+		MartusCrypto security = MockMartusSecuritySha1.createClient();
 		MartusApp app = MockMartusApp.create(security, getName());
 		try
 		{
@@ -3046,7 +3046,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 
 	
-	private MockMartusSecurity mockSecurityForApp;
+	private MockMartusSecuritySha1 mockSecurityForApp;
 
 	MartusLocalization testAppLocalization;
 	private MockMartusApp appWithAccount;

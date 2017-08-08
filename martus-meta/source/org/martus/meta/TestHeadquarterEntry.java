@@ -32,7 +32,7 @@ import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestHeadquarterEntry extends TestCaseEnhanced 
@@ -55,7 +55,7 @@ public class TestHeadquarterEntry extends TestCaseEnhanced
 
 	public void testBasics() throws Exception
 	{
-		MartusCrypto appSecurityAndHQ = MockMartusSecurity.createHQ();
+		MartusCrypto appSecurityAndHQ = MockMartusSecuritySha1.createHQ();
 		MockUiLocalization localization = new MockUiLocalization(getName());
 		MockMartusApp app = MockMartusApp.create(appSecurityAndHQ, localization, getName());
 

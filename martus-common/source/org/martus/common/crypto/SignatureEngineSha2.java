@@ -1,0 +1,106 @@
+/*
+
+Martus(TM) is a trademark of Beneficent Technology, Inc.
+This software is (c) Copyright 2001-2017, Beneficent Technology, Inc.
+
+Martus is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version with the additions and exceptions described in the
+accompanying Martus license file entitled "license.txt".
+
+It is distributed WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, including warranties of fitness of purpose or
+merchantability.  See the accompanying Martus License and
+GPL license for more details on the required license terms
+for this software.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+
+*/
+package org.martus.common.crypto;
+
+import java.io.InputStream;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.Signature;
+
+import org.martus.common.MartusConstants;
+
+public class SignatureEngineSha2 implements SignatureEngine
+{
+	public static SignatureEngine createSigner(MartusKeyPair keyPair) throws Exception
+	{
+		SignatureEngineSha2 engine = new SignatureEngineSha2();
+		engine.prepareToSign(keyPair.getPrivateKey());
+		return engine;
+	}
+
+	public static SignatureEngine createVerifier(String signedByPublicKey) throws Exception
+	{
+		SignatureEngineSha2 engine = new SignatureEngineSha2();
+		engine.prepareToVerify(signedByPublicKey);
+		return engine;
+	}
+
+	public void digest(byte b) throws Exception
+	{
+		engine.update(b);
+	}
+
+	public void digest(byte[] bytes) throws Exception
+	{
+		engine.update(bytes);
+	}
+
+	public void digest(byte[] buffer, int off, int len) throws Exception
+	{
+		engine.update(buffer, off, len);
+	}
+
+	public void digest(InputStream in) throws Exception
+	{
+		int got;
+		byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
+		while ((got = in.read(bytes)) >= 0)
+			engine.update(bytes, 0, got);
+	}
+
+	public byte[] getSignature() throws Exception
+	{
+		return engine.sign();
+	}
+
+	public boolean isValidSignature(byte[] sig) throws Exception
+	{
+		return engine.verify(sig);
+	}
+
+
+
+
+	private SignatureEngineSha2() throws Exception
+	{
+		engine = Signature.getInstance(SIGN_ALGORITHM, "BC");
+	}
+
+	private void prepareToSign(PrivateKey key) throws Exception
+	{
+		engine.initSign(key);
+	}
+
+	private void prepareToVerify(String signedByPublicKey) throws Exception
+	{
+		PublicKey key = MartusJceKeyPair.extractPublicKey(signedByPublicKey);
+		engine.initVerify(key);
+	}
+
+	private Signature engine;
+
+
+	private static final String SIGN_ALGORITHM = "SHA512WithRSA";
+}

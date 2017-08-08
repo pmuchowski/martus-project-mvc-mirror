@@ -34,7 +34,7 @@ import java.util.Vector;
 import org.martus.common.LoggerToNull;
 import org.martus.common.MartusUtilities;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.Database;
 import org.martus.common.database.MockServerDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
@@ -64,7 +64,7 @@ public class MockMartusServer extends MartusServer
 	public MockMartusServer(File dataDir, Database databaseToUse, TestCaseEnhanced testCase) throws Exception
 	{
 		super(dataDir, new LoggerToNull(), ServerMetaDatabaseForTesting.getEmptyDatabase(testCase));
-		getStore().setSignatureGenerator(MockMartusSecurity.createServer());
+		getStore().setSignatureGenerator(MockMartusSecuritySha1.createServer());
 		initializeBulletinStore(databaseToUse);
 	}
 	

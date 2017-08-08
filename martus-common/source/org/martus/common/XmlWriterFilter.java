@@ -78,7 +78,7 @@ public class XmlWriterFilter
 	{
 		try
 		{
-			engine = SignatureEngine.createSigner(sigGenToUse.getKeyPair());
+			engine = sigGenToUse.createSigner();
 		}
 		catch (Exception e)
 		{

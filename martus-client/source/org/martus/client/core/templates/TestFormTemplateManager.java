@@ -34,7 +34,7 @@ import java.util.Set;
 import org.martus.client.core.templates.FormTemplateManager.InvalidTemplateNameException;
 import org.martus.common.FieldSpecCollection;
 import org.martus.common.MartusLogger;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.fieldspec.FormTemplate;
 import org.martus.common.fieldspec.StandardFieldSpecs;
 import org.martus.util.DirectoryUtils;
@@ -52,7 +52,7 @@ public class TestFormTemplateManager extends TestCaseEnhanced
 	{
 		super.setUp();
 		
-		security = MockMartusSecurity.createClient();
+		security = MockMartusSecuritySha1.createClient();
 	}
 	
 	public void testCreateFails() throws Exception
@@ -266,6 +266,6 @@ public class TestFormTemplateManager extends TestCaseEnhanced
 		return template;
 	}
 	
-	public MockMartusSecurity security;
+	public MockMartusSecuritySha1 security;
 }
 

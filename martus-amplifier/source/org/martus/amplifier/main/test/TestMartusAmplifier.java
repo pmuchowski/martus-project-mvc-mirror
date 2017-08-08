@@ -33,7 +33,7 @@ import org.martus.amplifier.datasynch.BackupServerInfo;
 import org.martus.amplifier.main.MartusAmplifier;
 import org.martus.common.LoggerToNull;
 import org.martus.common.MartusUtilities;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.util.DirectoryUtils;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.UnicodeWriter;
@@ -47,7 +47,7 @@ public class TestMartusAmplifier extends TestCaseEnhanced
 	
 	public void testGetBackupServersList() throws Exception
 	{
-		MockMartusSecurity security = MockMartusSecurity.createServer();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createServer();
 		File dir = createTempFile();
 		dir.delete();
 		dir.mkdirs();
@@ -87,7 +87,7 @@ public class TestMartusAmplifier extends TestCaseEnhanced
 	{
 		File unamplified = createTempFile();
 
-		MockMartusSecurity security = MockMartusSecurity.createServer();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createServer();
 
 		MockMartusServer server = new MockMartusServer(unamplified, new LoggerToNull(), security);
 		MartusAmplifier amp =  new MartusAmplifier(server); 

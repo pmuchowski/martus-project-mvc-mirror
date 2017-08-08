@@ -41,7 +41,7 @@ import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.BulletinHtmlGenerator;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.FileDatabase.MissingAccountMapException;
 import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
 import org.martus.common.packet.BulletinHeaderPacket;
@@ -65,7 +65,7 @@ public class TestFileSystemDataManager
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		MockMartusSecurity security = new MockMartusSecurity();
+		MockMartusSecuritySha1 security = new MockMartusSecuritySha1();
 		security.createKeyPair();
 		dataManager = new FileSystemDataManager(getTestBasePath(), security);
 	}
@@ -139,7 +139,7 @@ public class TestFileSystemDataManager
 	
 	public void testPutGetFieldDataPackets() throws Exception
 	{
-		MockMartusSecurity security = new MockMartusSecurity();
+		MockMartusSecuritySha1 security = new MockMartusSecuritySha1();
 		security.createKeyPair();
 		Bulletin b = new Bulletin(security);
 		b.set(BulletinField.TAGAUTHOR, "paul");
@@ -223,7 +223,7 @@ public class TestFileSystemDataManager
 	
 	public void testGetContactInfo() throws Exception
 	{
-		MockMartusSecurity client = new MockMartusSecurity();
+		MockMartusSecuritySha1 client = new MockMartusSecuritySha1();
 		client.createKeyPair();
 		MartusAmplifier.setStaticSecurity(client);
 

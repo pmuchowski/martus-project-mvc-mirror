@@ -29,7 +29,7 @@ import org.martus.common.EnglishCommonStrings;
 import org.martus.common.FieldSpecCollection;
 import org.martus.common.GridData;
 import org.martus.common.MiniLocalization;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.fieldspec.ChoiceItem;
 import org.martus.common.fieldspec.CustomDropDownFieldSpec;
 import org.martus.common.fieldspec.FieldSpec;
@@ -56,7 +56,7 @@ public class TestBulletinHtmlGenerator extends TestCaseEnhanced
     {
     	super.setUp();
 		if(security == null)
-			security = MockMartusSecurity.createClient();
+			security = MockMartusSecuritySha1.createClient();
 		if(loc == null)
 		{
 			loc = new MiniLocalization(EnglishCommonStrings.strings);
@@ -314,7 +314,7 @@ public class TestBulletinHtmlGenerator extends TestCaseEnhanced
 		}
 	}
 	
-	private static MockMartusSecurity security;
+	private static MockMartusSecuritySha1 security;
 	private static MiniLocalization loc;
 	private static MockBulletinStore store;
 }

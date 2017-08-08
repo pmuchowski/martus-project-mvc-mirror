@@ -30,7 +30,7 @@ import java.util.Vector;
 import org.junit.Test;
 import org.martus.client.test.MockClientSideNetworkHandler;
 import org.martus.clientside.ClientSideNetworkGateway;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NetworkResponse;
 import org.martus.common.network.SummaryOfAvailableBulletins;
@@ -58,7 +58,7 @@ public class TestListAvailableRevisionsSince extends TestCaseEnhanced
 		MockClientSideNetworkHandler clientHandler = new MockClientSideNetworkHandler(serverHandler);
 		ClientSideNetworkGateway gateway = new ClientSideNetworkGateway(clientHandler);
 		
-		MockMartusSecurity client = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 client = MockMartusSecuritySha1.createClient();
 		final String EVERYTHING = "";
 		verifyNothingAvailable(gateway, EVERYTHING, client);
 		
@@ -67,7 +67,7 @@ public class TestListAvailableRevisionsSince extends TestCaseEnhanced
 		
 	}
 
-	public void verifyNothingAvailable(ClientSideNetworkGateway gateway, String since, MockMartusSecurity client) throws Exception 
+	public void verifyNothingAvailable(ClientSideNetworkGateway gateway, String since, MockMartusSecuritySha1 client) throws Exception
 	{
 		NetworkResponse response = gateway.listAvailableRevisionsSince(client, since);
 		assertEquals(NetworkInterfaceConstants.OK, response.getResultCode());
