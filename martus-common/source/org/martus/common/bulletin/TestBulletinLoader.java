@@ -35,7 +35,7 @@ import org.martus.common.bulletin.Bulletin.BulletinState;
 import org.martus.common.bulletin.Bulletin.DamagedBulletinException;
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockDatabase;
 import org.martus.common.packet.BulletinHeaderPacket;
@@ -56,7 +56,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		super.setUp();
 		if(security == null)
 		{
-			security = MockMartusSecurity.createClient();
+			security = MockMartusSecuritySha1.createClient();
 		}
 		store = new MockBulletinStore(this);
 	}

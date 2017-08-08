@@ -42,7 +42,7 @@ import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.bulletin.BulletinFromXFormsLoader;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.fieldspec.ChoiceItem;
 import org.martus.common.fieldspec.CustomDropDownFieldSpec;
 import org.martus.common.fieldspec.DropDownFieldSpec;
@@ -73,7 +73,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 	{
 		super.setUp();
 		
-		security = MockMartusSecurity.createClient();
+		security = MockMartusSecuritySha1.createClient();
 		localization = new MiniLocalization();
 		store = new MockBulletinStore(this);
 		store.setSignatureGenerator(security);
@@ -552,8 +552,8 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 	
 	public void testOwnershipOfXFormsRecordWhenCreatingACopy() throws Exception
 	{
-		MockMartusSecurity secureAppAccount = MockMartusSecurity.createOtherClient();
-		MockMartusSecurity martusDesktopAccount = MockMartusSecurity.createHQ();
+		MockMartusSecuritySha1 secureAppAccount = MockMartusSecuritySha1.createOtherClient();
+		MockMartusSecuritySha1 martusDesktopAccount = MockMartusSecuritySha1.createHQ();
 		store.setSignatureGenerator(martusDesktopAccount);	
 
 		String secureAppPublicKey = secureAppAccount.getPublicKeyString();
@@ -1273,7 +1273,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 
 	private static final int REQUIRED_FOUR_STANDARD_FIELDS_COUNT = 4;
 
-	private MockMartusSecurity security;
+	private MockMartusSecuritySha1 security;
 	private MiniLocalization localization;
 	private MockBulletinStore store;
 }

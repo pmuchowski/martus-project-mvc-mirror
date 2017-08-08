@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.FileInputStream;
 
 import org.martus.common.crypto.MartusSecurity;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.test.MockBulletinStore;
 import org.martus.util.StreamableBase64;
 import org.martus.util.TestCaseEnhanced;
@@ -45,7 +45,7 @@ public class TestBulletinZipUtilities extends TestCaseEnhanced
 
 	public void testTimestamps() throws Exception
 	{
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		MockBulletinStore store = new MockBulletinStore(this);
 		Bulletin b = new Bulletin(security);
 		store.saveBulletinForTesting(b);

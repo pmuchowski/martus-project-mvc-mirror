@@ -42,7 +42,7 @@ import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
@@ -67,15 +67,15 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		super.setUp();
 		if(localization != null)
 			return;	
-		MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
+		MartusCrypto hqSecurity = MockMartusSecuritySha1.createHQ();
 		localization = new MockUiLocalization(getName());
 		hqApp = MockMartusApp.create(hqSecurity, getName());
 
-		MartusCrypto fieldSecurity1 = MockMartusSecurity.createClient();
+		MartusCrypto fieldSecurity1 = MockMartusSecuritySha1.createClient();
 		fieldApp1 = MockMartusApp.create(fieldSecurity1, getName());
 		ReadableDatabase db1 = fieldApp1.getStore().getDatabase();
 
-		MartusCrypto fieldSecurity2 = MockMartusSecurity.createOtherClient();
+		MartusCrypto fieldSecurity2 = MockMartusSecuritySha1.createOtherClient();
 		fieldApp2 = MockMartusApp.create(fieldSecurity2, getName());
 		ReadableDatabase db2 = fieldApp2.getStore().getDatabase();
 
@@ -294,7 +294,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		MockServer(TestCaseEnhanced testCase) throws Exception
 		{
 			super(testCase);
-			setSecurity(MockMartusSecurity.createServer());
+			setSecurity(MockMartusSecuritySha1.createServer());
 		}
 		
 		public ServerForClients createServerForClients()

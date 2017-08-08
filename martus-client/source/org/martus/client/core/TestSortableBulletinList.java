@@ -28,7 +28,7 @@ package org.martus.client.core;
 import org.martus.common.FieldSpecCollection;
 import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.field.MartusDateRangeField;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.FieldTypeDate;
@@ -51,7 +51,7 @@ public class TestSortableBulletinList extends TestCaseEnhanced
 	{
 		MiniLocalization localization = new MiniLocalization();
 		localization.setCurrentLanguageCode(MiniLocalization.ENGLISH);
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		
 		MiniFieldSpec tags[] = {
 			new MiniFieldSpec(StandardFieldSpecs.findStandardFieldSpec(Bulletin.TAGAUTHOR)), 
@@ -81,7 +81,7 @@ public class TestSortableBulletinList extends TestCaseEnhanced
 	{
 		MiniLocalization localization = new MiniLocalization();
 		localization.setCurrentLanguageCode(MiniLocalization.ENGLISH);
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		
 		MultiCalendar lowDate = MultiCalendar.createFromGregorianYearMonthDay(1995, 12, 27);
 		MultiCalendar middleDate = MultiCalendar.createFromGregorianYearMonthDay(2003, 07, 25);
@@ -114,7 +114,7 @@ public class TestSortableBulletinList extends TestCaseEnhanced
 	{
 		MiniLocalization localization = new MiniLocalization();
 		localization.setCurrentLanguageCode(MiniLocalization.ENGLISH);
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		
 		String tag = "tag";
 		FieldSpec[] publicFields = new FieldSpec[] {
@@ -139,7 +139,7 @@ public class TestSortableBulletinList extends TestCaseEnhanced
 	{
 		MiniLocalization localization = new MiniLocalization();
 		localization.setCurrentLanguageCode(MiniLocalization.ENGLISH);
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		
 		MiniFieldSpec tags[] = {
 			new MiniFieldSpec(StandardFieldSpecs.findStandardFieldSpec(Bulletin.TAGAUTHOR)), 

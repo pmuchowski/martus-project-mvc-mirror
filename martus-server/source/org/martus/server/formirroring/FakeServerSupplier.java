@@ -36,7 +36,7 @@ import java.util.Vector;
 import org.martus.common.MartusLogger;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.Database;
 import org.martus.common.database.Database.RecordHiddenException;
 import org.martus.common.database.DatabaseKey;
@@ -52,7 +52,7 @@ class FakeServerSupplier implements ServerSupplierInterface
 		bulletinsToMirror = new Vector();
 		availableIdsToMirror = new Vector();
 		templatesForAccount = new HashMap<String, HashMap<String, Template>>();
-		security = MockMartusSecurity.createOtherServer();
+		security = MockMartusSecuritySha1.createOtherServer();
 		
 		burContentsDraft = new HashMap();
 		burContentsSealed = new HashMap();

@@ -32,51 +32,51 @@ import java.security.KeyPair;
 
 import org.martus.util.StreamableBase64;
 
-public class MockMartusSecurity extends MartusSecurity
+public class MockMartusSecuritySha1 extends MartusSecurity
 {
-	public static MockMartusSecurity createClient() throws Exception
+	public static MockMartusSecuritySha1 createClient() throws Exception
 	{
-		MockMartusSecurity security = new MockMartusSecurity();
+		MockMartusSecuritySha1 security = new MockMartusSecuritySha1();
 		security.loadSampleAccount();
 		return security;
 	}
 	
-	public static MockMartusSecurity createOtherClient() throws Exception
+	public static MockMartusSecuritySha1 createOtherClient() throws Exception
 	{
-		MockMartusSecurity security = new MockMartusSecurity();
+		MockMartusSecuritySha1 security = new MockMartusSecuritySha1();
 		security.createKeyPairForOtherClient();
 		return security;
 	}
 	
-	public static MockMartusSecurity createHQ() throws Exception
+	public static MockMartusSecuritySha1 createHQ() throws Exception
 	{
-		MockMartusSecurity security = new MockMartusSecurity();
+		MockMartusSecuritySha1 security = new MockMartusSecuritySha1();
 		security.createKeyPairForHQ();
 		return security;
 	}
 	
-	public static MockMartusSecurity createServer() throws Exception
+	public static MockMartusSecuritySha1 createServer() throws Exception
 	{
-		MockMartusSecurity security = new MockMartusSecurity();
+		MockMartusSecuritySha1 security = new MockMartusSecuritySha1();
 		security.createKeyPairForServer();
 		return security;
 	}
 	
-	public static MockMartusSecurity createOtherServer() throws Exception
+	public static MockMartusSecuritySha1 createOtherServer() throws Exception
 	{
-		MockMartusSecurity security = new MockMartusSecurity();
+		MockMartusSecuritySha1 security = new MockMartusSecuritySha1();
 		security.createKeyPairForOtherServer();
 		return security;
 	}
 	
-	public static MockMartusSecurity createAmplifier() throws Exception
+	public static MockMartusSecuritySha1 createAmplifier() throws Exception
 	{
-		MockMartusSecurity security = new MockMartusSecurity();
+		MockMartusSecuritySha1 security = new MockMartusSecuritySha1();
 		security.createKeyPairForAmplifier();
 		return security;
 	}
 	
-	public MockMartusSecurity() throws Exception
+	public MockMartusSecuritySha1() throws Exception
 	{
 	}
 

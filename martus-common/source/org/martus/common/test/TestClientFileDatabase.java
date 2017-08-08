@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.InputStream;
 
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.ClientFileDatabase;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
@@ -49,7 +49,7 @@ public class TestClientFileDatabase extends TestCaseEnhanced
 	public void testFindLegacyRecords() throws Exception
 	{
 		Database mockDatabase = new MockClientDatabase();
-		MartusCrypto security = MockMartusSecurity.createClient();
+		MartusCrypto security = MockMartusSecuritySha1.createClient();
 
 		File tempDir = createTempFile();
 		tempDir.delete();
@@ -65,7 +65,7 @@ public class TestClientFileDatabase extends TestCaseEnhanced
 
 	private void internalTestFindLegacyRecords(Database db) throws Exception
 	{
-		MartusCrypto security = MockMartusSecurity.createClient();
+		MartusCrypto security = MockMartusSecuritySha1.createClient();
 
 		UniversalId uid = UniversalIdForTesting.createDummyUniversalId();
 		DatabaseKey legacyKey = DatabaseKey.createLegacyKey(uid);

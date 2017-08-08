@@ -47,7 +47,7 @@ import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.fieldspec.CustomDropDownFieldSpec;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.FieldTypeBoolean;
@@ -75,7 +75,7 @@ public class TestFxBulletin extends TestCaseEnhanced
 	{
 		super.setUp();
 		
-		security = MockMartusSecurity.createClient();
+		security = MockMartusSecuritySha1.createClient();
 		localization = new MiniLocalization();
 		store = new MockBulletinStore();
 	}
@@ -711,7 +711,7 @@ public class TestFxBulletin extends TestCaseEnhanced
 	public static final String BURMESE_UNICODE_TEST_STRING = "\u104E\u1004\u103A\u1038";
 	public static final String BURMESE_ZAWGYI_TEST_STRING = "\u104E";
 	
-	private MockMartusSecurity security;
+	private MockMartusSecuritySha1 security;
 	private MiniLocalization localization;
 	private MockBulletinStore store;
 }

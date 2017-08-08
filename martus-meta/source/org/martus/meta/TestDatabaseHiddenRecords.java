@@ -30,7 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockServerDatabase;
@@ -50,7 +50,7 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 	protected void setUp() throws Exception
 	{
 		super.setUp();
-		security = MockMartusSecurity.createServer(); 
+		security = MockMartusSecuritySha1.createServer();
 		tempDirectory = createTempFile();
 		tempDirectory.delete();
 		tempDirectory.mkdir(); 
@@ -291,7 +291,7 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		db.hide(key.getUniversalId());
 	}
 	
-	MockMartusSecurity security;
+	MockMartusSecuritySha1 security;
 	File tempDirectory;	
 	Database fileDatabase;
 	Database mockDatabase;

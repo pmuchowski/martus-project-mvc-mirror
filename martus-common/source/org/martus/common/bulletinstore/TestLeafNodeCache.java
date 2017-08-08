@@ -31,7 +31,7 @@ import java.io.StringWriter;
 
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusSecurity;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockServerDatabase;
 import org.martus.common.database.ServerFileDatabase;
@@ -65,7 +65,7 @@ public class TestLeafNodeCache extends TestCaseEnhanced
 		BulletinStore store = new BulletinStore();
 		store.doAfterSigninInitialization(tempDirectory, new MockServerDatabase());
 		
-		MockMartusSecurity client = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 client = MockMartusSecuritySha1.createClient();
 		
 		BulletinHeaderPacket bhp1 = new BulletinHeaderPacket(client);
 		BulletinHeaderPacket bhp2 = new BulletinHeaderPacket(client);
@@ -136,7 +136,7 @@ public class TestLeafNodeCache extends TestCaseEnhanced
 		store.doAfterSigninInitialization(tempDirectory, new MockServerDatabase());
 		BulletinHistoryAndHqCache cache = store.getHistoryAndHqCache();
 
-		MockMartusSecurity client = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 client = MockMartusSecuritySha1.createClient();
 		
 		BulletinHeaderPacket grandparent = new BulletinHeaderPacket(client);
 		saveHeaderPacket(store, grandparent, client);
@@ -192,7 +192,7 @@ public class TestLeafNodeCache extends TestCaseEnhanced
 		cache.revisionWasSaved(child.getUniversalId());
 	}
 
-	private void saveHeaderPacket(BulletinStore store, BulletinHeaderPacket bhp, MockMartusSecurity client) throws IOException, RecordHiddenException
+	private void saveHeaderPacket(BulletinStore store, BulletinHeaderPacket bhp, MockMartusSecuritySha1 client) throws IOException, RecordHiddenException
 	{
 		StringWriter writer = new StringWriter();
 		bhp.writeXml(writer, client);
@@ -242,11 +242,11 @@ public class TestLeafNodeCache extends TestCaseEnhanced
 		
 		BulletinStore store = new BulletinStore();
 		File tempDirectory = createTempDirectory();
-		MartusSecurity security = MockMartusSecurity.createServer();
+		MartusSecurity security = MockMartusSecuritySha1.createServer();
 		ServerFileDatabase db = new ServerFileDatabase(tempDirectory, security);
 		store.doAfterSigninInitialization(tempDirectory, db);
 		
-		MartusSecurity clientSecurity = MockMartusSecurity.createClient();
+		MartusSecurity clientSecurity = MockMartusSecuritySha1.createClient();
 		Stopwatch watch = new Stopwatch();
 		for(int i = 0; i < 100; ++i)
 		{

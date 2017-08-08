@@ -34,7 +34,7 @@ import java.security.interfaces.RSAPublicKey;
 
 import org.martus.common.MartusLogger;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.network.MartusSecureWebServer;
 import org.martus.common.network.SimpleX509TrustManager;
 import org.martus.util.TestCaseEnhanced;
@@ -52,9 +52,9 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 		super.setUp();
 		if(securityForSSL == null)
 		{
-			securityForSSL = MockMartusSecurity.createClient();
-			martusServerSecurity = MockMartusSecurity.createServer();
-			MartusSecureWebServer.security = MockMartusSecurity.createOtherServer();
+			securityForSSL = MockMartusSecuritySha1.createClient();
+			martusServerSecurity = MockMartusSecuritySha1.createServer();
+			MartusSecureWebServer.security = MockMartusSecuritySha1.createOtherServer();
 			
 			RSAPublicKey sslPublicKey = (RSAPublicKey)securityForSSL.getKeyPair().getPublicKey();
 			RSAPrivateCrtKey sslPrivateKey = (RSAPrivateCrtKey)securityForSSL.getKeyPair().getPrivateKey();
@@ -180,8 +180,8 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 		}
 	}
 
-	static MockMartusSecurity securityForSSL;
-	static MockMartusSecurity martusServerSecurity;
+	static MockMartusSecuritySha1 securityForSSL;
+	static MockMartusSecuritySha1 martusServerSecurity;
 	static X509Certificate cert0;
 	static X509Certificate cert1;
 	static X509Certificate cert2;

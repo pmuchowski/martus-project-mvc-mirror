@@ -50,7 +50,7 @@ import org.martus.common.bulletin.BulletinXmlExportImportConstants;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.common.crypto.MartusCrypto.EncryptionException;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.fieldspec.ChoiceItem;
 import org.martus.common.fieldspec.CustomDropDownFieldSpec;
@@ -425,7 +425,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 		fakeLocalHistory.add(localId1);
 		fakeLocalHistory.add(localId2);
 		ExtendedHistoryList history = new ExtendedHistoryList();
-		String otherAccountId = MockMartusSecurity.createOtherClient().getPublicKeyString();
+		String otherAccountId = MockMartusSecuritySha1.createOtherClient().getPublicKeyString();
 		history.add(otherAccountId, fakeLocalHistory);
 
 		Bulletin b = new Bulletin(store.getSignatureGenerator());

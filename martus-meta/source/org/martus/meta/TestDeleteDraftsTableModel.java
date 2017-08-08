@@ -35,7 +35,7 @@ import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.BulletinSummary;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
@@ -55,7 +55,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		MartusCrypto appSecurity = MockMartusSecurity.createClient();
+		MartusCrypto appSecurity = MockMartusSecuritySha1.createClient();
 		localization = new MockUiLocalization(getName());
 		app = MockMartusApp.create(appSecurity, getName());
 
@@ -68,7 +68,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		
 		testServer = new MockServer(this);
 		testServer.verifyAndLoadConfigurationFiles();
-		MockMartusSecurity serverSecurity = MockMartusSecurity.createServer();
+		MockMartusSecuritySha1 serverSecurity = MockMartusSecuritySha1.createServer();
 		testServer.setSecurity(serverSecurity);
 		ServerSideNetworkHandler testSSLServerInterface = new ServerSideNetworkHandler(testServer.serverForClients);
 		

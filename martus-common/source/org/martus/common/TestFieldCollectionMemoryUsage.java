@@ -29,7 +29,7 @@ import java.util.Arrays;
 
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.FieldTypeMessage;
 import org.martus.common.fieldspec.StandardFieldSpecs;
@@ -57,7 +57,7 @@ public class TestFieldCollectionMemoryUsage extends TestCaseEnhanced
 	
 	public void testBugInRequiredFieldCacheing() throws Exception
 	{
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		Bulletin b = new BulletinForTesting(security);
 		b.getField(Bulletin.TAGAUTHOR).getFieldSpec().setRequired();
 

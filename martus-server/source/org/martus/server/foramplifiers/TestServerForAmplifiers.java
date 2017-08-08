@@ -38,7 +38,7 @@ import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.BulletinUploadRecord;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
@@ -62,13 +62,13 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 			logger = new LoggerToNull();
 		if(clientSecurity == null)
 		{
-			clientSecurity = new MockMartusSecurity();
+			clientSecurity = new MockMartusSecuritySha1();
 			clientSecurity.createKeyPair();
 		}
 		
 		if(coreServer == null)
 		{
-			MockMartusSecurity mockServer = MockMartusSecurity.createServer();
+			MockMartusSecuritySha1 mockServer = MockMartusSecuritySha1.createServer();
 			coreServer = new MockMartusServer(this);
 			coreServer.setSecurity(mockServer);
 			coreServer.serverForClients.clearCanUploadList();
@@ -77,7 +77,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		
 		if(otherServer == null)
 		{
-			MockMartusSecurity mockOtherServer = MockMartusSecurity.createOtherServer();
+			MockMartusSecuritySha1 mockOtherServer = MockMartusSecuritySha1.createOtherServer();
 			otherServer = new MockMartusServer(this);
 			otherServer.setSecurity(mockOtherServer);
 			otherServer.serverForClients.clearCanUploadList();
@@ -141,7 +141,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 	
 	public void testAmplifierGetContactInfo() throws Exception
 	{
-		MockMartusSecurity amplifier = MockMartusSecurity.createAmplifier();
+		MockMartusSecuritySha1 amplifier = MockMartusSecuritySha1.createAmplifier();
 
 		Vector parameters = new Vector();
 		parameters.add(clientSecurity.getPublicKeyString());
@@ -259,7 +259,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 	
 	public void testAmplifierServer() throws Exception
 	{
-		MockMartusSecurity amplifier = MockMartusSecurity.createAmplifier();
+		MockMartusSecuritySha1 amplifier = MockMartusSecuritySha1.createAmplifier();
 
 
 		Vector parameters = new Vector();
@@ -315,7 +315,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 
 	public void testGetAmplifierBulletinChunk() throws Exception
 	{
-		MockMartusSecurity amplifier = MockMartusSecurity.createAmplifier();
+		MockMartusSecuritySha1 amplifier = MockMartusSecuritySha1.createAmplifier();
 
 		Vector parameters = new Vector();
 		parameters.add(clientSecurity.getPublicKeyString());

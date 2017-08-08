@@ -52,7 +52,7 @@ import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.EncryptionException;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockServerDatabase;
@@ -84,7 +84,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		super.setUp();
 		if(security == null)
 		{
-			security = MockMartusSecurity.createClient();
+			security = MockMartusSecuritySha1.createClient();
 		}
     }
 
@@ -208,7 +208,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 
 	public void testImportServerPublicKeyFromFileBadSig() throws Exception
 	{
-		MockMartusSecurity other = MockMartusSecurity.createOtherServer();
+		MockMartusSecuritySha1 other = MockMartusSecuritySha1.createOtherServer();
 		String key = other.getPublicKeyString();
 		byte[] publicKeyBytes = StreamableBase64.decode(key);
 		InputStream in = new ByteArrayInputStream(publicKeyBytes);
@@ -558,8 +558,8 @@ public class TestMartusUtilities extends TestCaseEnhanced
 	
 	public void testHeaderInWrongPlace() throws Exception
 	{
-		MockMartusSecurity client1 = MockMartusSecurity.createClient();
-		MockMartusSecurity client2 = MockMartusSecurity.createOtherClient();
+		MockMartusSecuritySha1 client1 = MockMartusSecuritySha1.createClient();
+		MockMartusSecuritySha1 client2 = MockMartusSecuritySha1.createOtherClient();
 		UniversalId realUid = BulletinHeaderPacket.createUniversalId(client1);
 		UniversalId wrongUid = BulletinHeaderPacket.createUniversalId(client2);
 		BulletinHeaderPacket bhp1 = new BulletinHeaderPacket(realUid);

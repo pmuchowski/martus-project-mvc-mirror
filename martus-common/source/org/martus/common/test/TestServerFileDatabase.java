@@ -28,7 +28,7 @@ package org.martus.common.test;
 import java.util.Vector;
 
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.BulletinUploadRecord;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.DeleteRequestRecord;
@@ -50,7 +50,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		super.setUp();
 		if(security == null)
 		{
-			security = MockMartusSecurity.createServer();
+			security = MockMartusSecuritySha1.createServer();
 			db = new ServerFileDatabase(createTempDirectory(), security);
 			db.initialize();
 		}		
@@ -108,6 +108,6 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 	
 
 	
-	static MockMartusSecurity security; 
+	static MockMartusSecuritySha1 security;
 	static ServerFileDatabase db;
 }

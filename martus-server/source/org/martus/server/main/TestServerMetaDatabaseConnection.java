@@ -35,7 +35,7 @@ import java.util.Set;
 import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.network.ShortServerBulletinSummary;
 import org.martus.common.network.SummaryOfAvailableBulletins;
 import org.martus.common.packet.BulletinHeaderPacket;
@@ -78,14 +78,14 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 
 	public void verifyAccounts(ServerMetaDatabaseConnection connection) throws Exception 
 	{
-		MockMartusSecurity clientSecurity = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 clientSecurity = MockMartusSecuritySha1.createClient();
 		assertEquals(0, connection.countAccounts());
 		connection.putAccount(clientSecurity.getPublicKeyString());
 		assertEquals(1, connection.countAccounts());
 		connection.putAccount(clientSecurity.getPublicKeyString());
 		assertEquals(1, connection.countAccounts());
 		
-		MockMartusSecurity otherSecurity = MockMartusSecurity.createOtherClient();
+		MockMartusSecuritySha1 otherSecurity = MockMartusSecuritySha1.createOtherClient();
 		connection.putAccount(otherSecurity.getPublicKeyString());
 		assertEquals(2, connection.countAccounts());
 	}
@@ -97,7 +97,7 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 
 	public void verifyBulletins(ServerMetaDatabaseConnection connection) throws Exception 
 	{
-		MockMartusSecurity clientSecurity = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 clientSecurity = MockMartusSecuritySha1.createClient();
 		
 		Bulletin b1 = new BulletinForTesting(clientSecurity);
 		Instant b1Timestamp = Instant.now().plusSeconds(100);
@@ -116,7 +116,7 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 		assertEquals(2, connection.countBulletins());
 		assertEquals(b2Timestamp, connection.getTimestamp(b2.getUniversalId()));
 		
-		MockMartusSecurity otherClient = MockMartusSecurity.createOtherClient();
+		MockMartusSecuritySha1 otherClient = MockMartusSecuritySha1.createOtherClient();
 		Bulletin b3 = new BulletinForTesting(otherClient);
 		Instant b3Timestamp = Instant.now().plusSeconds(300);
 		connection.revisionWasSaved(b3.getBulletinHeaderPacket(), b3Timestamp);
@@ -138,7 +138,7 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 
 		Instant serverFileTimestamp = Instant.now().plusSeconds(1000);
 
-		MockMartusSecurity fd = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 fd = MockMartusSecuritySha1.createClient();
 		BulletinForTesting b1 = new BulletinForTesting(fd);
 
 		{
@@ -153,7 +153,7 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 			assertEquals(b1.getLocalId(), summary.getLocalId());
 		}
 
-		MockMartusSecurity hq = MockMartusSecurity.createHQ();
+		MockMartusSecuritySha1 hq = MockMartusSecuritySha1.createHQ();
 		BulletinForTesting b2 = new BulletinForTesting(fd);
 		
 		{
@@ -184,9 +184,9 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 	private void verifySpeed(ServerMetaDatabaseConnection connection) throws Exception 
 	{
 		Stopwatch sw = new Stopwatch();
-		MockMartusSecurity author = MockMartusSecurity.createClient();
-		MockMartusSecurity hq1 = MockMartusSecurity.createHQ();
-		MockMartusSecurity hq2 = MockMartusSecurity.createOtherClient();
+		MockMartusSecuritySha1 author = MockMartusSecuritySha1.createClient();
+		MockMartusSecuritySha1 hq1 = MockMartusSecuritySha1.createHQ();
+		MockMartusSecuritySha1 hq2 = MockMartusSecuritySha1.createOtherClient();
 		
 		// NOTE: This has been tested with 100,000 records and a 1000 ratio
 		// On Kevin's laptop, it takes 5 minutes to create the records, 
@@ -238,7 +238,7 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 
 	private void verifyUpdateBulletin(ServerMetaDatabaseConnection connection) throws Exception 
 	{
-		MockMartusSecurity author = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 author = MockMartusSecuritySha1.createClient();
 		BulletinForTesting b = new BulletinForTesting(author);
 		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
 		bhp.updateLastSavedTime();
@@ -252,7 +252,7 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 		assertEquals(timestamp2, connection.getTimestamp(b.getUniversalId()));
 		assertEquals(1, connection.countBulletins());
 
-		MockMartusSecurity hq = MockMartusSecurity.createHQ();
+		MockMartusSecuritySha1 hq = MockMartusSecuritySha1.createHQ();
 		b.addAuthorizedToReadKeys(new HeadquartersKeys(new HeadquartersKey(hq.getPublicKeyString())));
 		Instant timestamp3 = timestamp2.plusSeconds(1000);
 		connection.revisionWasSaved(bhp, timestamp3);
@@ -279,7 +279,7 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 
 	private void verifyRemoveBulletin(ServerMetaDatabaseConnection connection) throws Exception 
 	{
-		MockMartusSecurity author = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 author = MockMartusSecuritySha1.createClient();
 		BulletinForTesting b = new BulletinForTesting(author);
 		Instant timestamp1 = Instant.now();
 		connection.revisionWasSaved(b.getBulletinHeaderPacket(), timestamp1);
@@ -297,7 +297,7 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 
 	private void verifyLastModifiedField(ServerMetaDatabaseConnection connection) throws Exception 
 	{
-		MockMartusSecurity author = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 author = MockMartusSecuritySha1.createClient();
 		BulletinForTesting b = new BulletinForTesting(author);
 		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
 		bhp.updateLastSavedTime();
@@ -324,7 +324,7 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 
 	private void verifyGetRecentBulletins(ServerMetaDatabaseConnection connection) throws Exception 
 	{
-		MockMartusSecurity author = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 author = MockMartusSecuritySha1.createClient();
 		String authorId = author.getPublicKeyString();
 		
 		final String FOREVER = "";
@@ -366,7 +366,7 @@ public class TestServerMetaDatabaseConnection extends TestCaseEnhanced
 
 	private void verifyListAvailableTimestampCornerCases(ServerMetaDatabaseConnection connection) throws Exception 
 	{
-		MockMartusSecurity author = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 author = MockMartusSecuritySha1.createClient();
 		String authorId = author.getPublicKeyString();
 		
 		Instant recentPast = Instant.now().minus(Duration.ofHours(1));

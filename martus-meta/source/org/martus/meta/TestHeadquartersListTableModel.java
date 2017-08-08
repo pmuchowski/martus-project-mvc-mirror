@@ -33,7 +33,7 @@ import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestHeadquartersListTableModel extends TestCaseEnhanced 
@@ -50,7 +50,7 @@ public class TestHeadquartersListTableModel extends TestCaseEnhanced
 		if(localization!=null)
 			return;
 		localization = new MockUiLocalization(getName());
-		appSecurityAndHQ = MockMartusSecurity.createHQ();
+		appSecurityAndHQ = MockMartusSecuritySha1.createHQ();
 		app = MockMartusApp.create(appSecurityAndHQ, localization, getName());
 
 		modelWithData = new HeadquartersListTableModel(app);

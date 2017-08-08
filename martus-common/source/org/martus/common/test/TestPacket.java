@@ -37,7 +37,7 @@ import org.martus.common.MartusXml;
 import org.martus.common.VersionBuildDate;
 import org.martus.common.XmlWriterFilter;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.fieldspec.StandardFieldSpecs;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.FieldDataPacket;
@@ -60,7 +60,7 @@ public class TestPacket extends TestCaseEnhanced
     	super.setUp();
     	if(security == null)
     	{
-			security = MockMartusSecurity.createClient();
+			security = MockMartusSecuritySha1.createClient();
     	}
     }
 
@@ -308,7 +308,7 @@ public class TestPacket extends TestCaseEnhanced
 
 		byte[] bytes = out.toByteArray();
 		ByteArrayInputStreamWithSeek in0 = new ByteArrayInputStreamWithSeek(bytes);
-		MartusCrypto security2 = MockMartusSecurity.createOtherClient();
+		MartusCrypto security2 = MockMartusSecuritySha1.createOtherClient();
 		Packet.verifyPacketSignature(in0, security2);
 	}
 

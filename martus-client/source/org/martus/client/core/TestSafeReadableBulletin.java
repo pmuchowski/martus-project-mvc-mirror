@@ -34,7 +34,7 @@ import org.martus.common.GridData;
 import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.field.MartusDateRangeField;
 import org.martus.common.field.MartusField;
 import org.martus.common.field.MartusGridField;
@@ -68,7 +68,7 @@ public class TestSafeReadableBulletin extends TestCaseEnhanced
 	public void testRemovePrivateFieldData() throws Exception
 	{
 		MiniLocalization localization = new MiniLocalization();
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		Bulletin b = new Bulletin(security);
 		b.setAllPrivate(false);
 		b.set(Bulletin.TAGPUBLICINFO, "public");
@@ -87,7 +87,7 @@ public class TestSafeReadableBulletin extends TestCaseEnhanced
 	public void testMissingField() throws Exception
 	{
 		MiniLocalization localization = new MiniLocalization();
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		Bulletin b = new Bulletin(security);
 		SafeReadableBulletin srb = new SafeReadableBulletin(b, localization);
 		MartusField noSuchField = srb.field("whoop-de-doo!");
@@ -104,7 +104,7 @@ public class TestSafeReadableBulletin extends TestCaseEnhanced
 		String sampleAuthor = "Mark Twain";
 		
 		MiniLocalization localization = new MiniLocalization();
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		FieldSpec[] customBottomSpecs = {
 			FieldSpec.createCustomField("tag", "Label", new FieldTypeNormal()),	
 		};
@@ -130,7 +130,7 @@ public class TestSafeReadableBulletin extends TestCaseEnhanced
 	public void testDateRangeMiniSpecs() throws Exception
 	{
 		MiniLocalization localization = new MiniLocalization();
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 
 		Bulletin b = new Bulletin(security);
 		MultiCalendar beginDate = MultiCalendar.createFromGregorianYearMonthDay(2007, 5, 29);
@@ -157,7 +157,7 @@ public class TestSafeReadableBulletin extends TestCaseEnhanced
 	public void testGridFieldColumn() throws Exception
 	{
 		MiniLocalization localization = new MiniLocalization();
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 
 		GridFieldSpec gridSpec = new GridFieldSpec();
 		gridSpec.setTag("Tag");
@@ -193,7 +193,7 @@ public class TestSafeReadableBulletin extends TestCaseEnhanced
 	public void testXFormRecord() throws Exception
 	{
 		MiniLocalization localization = new MiniLocalization();
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		Bulletin b = createSampleXFormsBulletin(security);
 		SafeReadableBulletin srb = new SafeReadableBulletin(b, localization);
 		assertTrue("Original Bulletin should be an xForms record", b.isXFormsBulletin());
@@ -206,7 +206,7 @@ public class TestSafeReadableBulletin extends TestCaseEnhanced
 	public void testXFormUids() throws Exception
 	{
 		MiniLocalization localization = new MiniLocalization();
-		MockMartusSecurity security = MockMartusSecurity.createClient();
+		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
 		Bulletin b = createSampleXFormsBulletin(security);
 		SafeReadableBulletin srb = new SafeReadableBulletin(b, localization);
 		assertEquals("Original UId different from SafeReadableBulletin?", b.getUniversalId(), srb.getUniversalId());

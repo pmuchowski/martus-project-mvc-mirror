@@ -32,7 +32,7 @@ import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.MockClientDatabase;
 import org.martus.util.TestCaseEnhanced;
 
@@ -47,7 +47,7 @@ public class TestBulletinStoreCache extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 	   	db = new MockClientDatabase();
-    	security = MockMartusSecurity.createClient();
+    	security = MockMartusSecuritySha1.createClient();
 		store = new BulletinStore();
 		store.doAfterSigninInitialization(createTempDirectory(), db);
 		store.setSignatureGenerator(security);
@@ -66,7 +66,7 @@ public class TestBulletinStoreCache extends TestCaseEnhanced
     	Vector none = store.getFieldOffices("not a real account");
     	assertEquals(0, none.size());
     	
-    	MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
+    	MartusCrypto hqSecurity = MockMartusSecuritySha1.createHQ();
 		Bulletin b = new Bulletin(security);
 		b.addAuthorizedToReadKeys(new HeadquartersKeys(new HeadquartersKey(hqSecurity.getPublicKeyString())));
 		store.saveBulletinForTesting(b);
@@ -74,7 +74,7 @@ public class TestBulletinStoreCache extends TestCaseEnhanced
     	assertEquals(1, one.size());
     	assertEquals(security.getPublicKeyString(), one.get(0));
     	
-    	MartusCrypto hqOther = MockMartusSecurity.createOtherClient();
+    	MartusCrypto hqOther = MockMartusSecuritySha1.createOtherClient();
     	Bulletin b2 = new Bulletin(security);
     	HeadquartersKeys twoHqs = new HeadquartersKeys();
     	twoHqs.add(new HeadquartersKey(hqSecurity.getPublicKeyString()));
@@ -97,7 +97,7 @@ public class TestBulletinStoreCache extends TestCaseEnhanced
     	BulletinHistoryAndHqCache cache = store.getHistoryAndHqCache();
     	assertFalse("cache already valid?", cache.isCacheValid());
     	
-    	MartusCrypto client = MockMartusSecurity.createClient();
+    	MartusCrypto client = MockMartusSecuritySha1.createClient();
     	Bulletin b = new Bulletin(client);
 		store.saveBulletinForTesting(b);
     	
@@ -120,6 +120,6 @@ public class TestBulletinStoreCache extends TestCaseEnhanced
     }
     
 	private static BulletinStore store;
-	private static MockMartusSecurity security;
+	private static MockMartusSecuritySha1 security;
 	private static MockClientDatabase db;
 }

@@ -42,7 +42,7 @@ import org.martus.common.MiniLocalization;
 import org.martus.common.ReusableChoices;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusSecurity;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.fieldspec.ChoiceItem;
 import org.martus.common.fieldspec.CustomDropDownFieldSpec;
 import org.martus.common.fieldspec.DataInvalidException;
@@ -71,7 +71,7 @@ public class TestFxBulletinField extends TestCaseEnhanced
 		super.setUp();
 		
 		localization = new MiniLocalization();
-		security = MockMartusSecurity.createClient();
+		security = MockMartusSecuritySha1.createClient();
 		fsc = new FieldSpecCollection();
 
 		statesChoices = new ReusableChoices(STATES_CHOICES_TAG, "States");

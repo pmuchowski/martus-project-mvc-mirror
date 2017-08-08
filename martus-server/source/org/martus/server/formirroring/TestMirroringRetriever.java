@@ -45,7 +45,7 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CreateDigestException;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.BulletinUploadRecord;
 import org.martus.common.database.Database;
 import org.martus.common.database.Database.RecordHiddenException;
@@ -362,9 +362,9 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		assertTrue("not ready to sleep?", mirroringRetriever.isSleeping());
 		
 		BulletinStore serverStore = new MockBulletinStore(this);
-		MartusCrypto otherServerSecurity = MockMartusSecurity.createOtherServer();
+		MartusCrypto otherServerSecurity = MockMartusSecuritySha1.createOtherServer();
 
-		MartusCrypto clientSecurity = MockMartusSecurity.createClient();
+		MartusCrypto clientSecurity = MockMartusSecuritySha1.createClient();
 		supplier.addAccountToMirror(clientSecurity.getPublicKeyString());
 		Vector expectedBulletinLocalIds = new Vector();
 		HashMap delRecords = new HashMap();
@@ -515,7 +515,7 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 	
 	public void testListPacketsWeWant() throws Exception
 	{
-		MartusCrypto clientSecurity = MockMartusSecurity.createClient();
+		MartusCrypto clientSecurity = MockMartusSecuritySha1.createClient();
 		String accountId = clientSecurity.getPublicKeyString();
 		Vector infos = new Vector();
 
@@ -616,7 +616,7 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		tmpPacketDir.delete();
 		tmpPacketDir.mkdir();
 
-		MartusCrypto security = MockMartusSecurity.createServer();
+		MartusCrypto security = MockMartusSecuritySha1.createServer();
 		ServerFileDatabase db = new ServerFileDatabase(tmpPacketDir, security);
 		db.initialize();
 		MockMartusServer mock = new MockMartusServer(db, this);

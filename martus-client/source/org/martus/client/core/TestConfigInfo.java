@@ -38,7 +38,7 @@ import org.martus.common.LegacyCustomFields;
 import org.martus.common.MartusAccountAccessToken;
 import org.martus.common.MartusAccountAccessToken.TokenInvalidException;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.FieldTypeNormal;
 import org.martus.common.fieldspec.FormTemplate;
@@ -307,7 +307,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 
 	public void testGetContactInfo() throws Exception
 	{
-		MartusCrypto signer = MockMartusSecurity.createClient();
+		MartusCrypto signer = MockMartusSecuritySha1.createClient();
 		ContactInfo contactInfo = new ContactInfo(sampleAuthor, "org", "email", "web", samplePhone, sampleAddress);
 		Vector contactInfoVector = contactInfo.getSignedEncodedVector(signer);
 		assertEquals("Not encoded?",NetworkInterfaceConstants.BASE_64_ENCODED,contactInfoVector.get(0));
