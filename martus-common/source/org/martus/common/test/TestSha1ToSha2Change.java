@@ -150,6 +150,34 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		}
 	}
 
+	public void testVerifySessionKeyCacheSignedWithSha1UsingSha2Verifier() throws Exception
+	{
+		byte[] original = securitySha1.getSessionKeyCache();
+
+		try
+		{
+			securitySha2.setSessionKeyCache(original);
+		}
+		catch (Exception e)
+		{
+			fail("setSessionKeyCache should succeed without any exceptions");
+		}
+	}
+
+	public void testVerifySessionKeyCacheSignedWithSha2UsingSha1Verifier() throws Exception
+	{
+		byte[] original = securitySha2.getSessionKeyCache();
+
+		try
+		{
+			securitySha1.setSessionKeyCache(original);
+			fail("setSessionKeyCache should have thrown MartusSignatureException");
+		}
+		catch(MartusCrypto.MartusSignatureException ignoreExpectedException)
+		{
+		}
+	}
+
 	private static MartusCrypto securitySha1;
 	private static MartusCrypto securitySha2;
 }
