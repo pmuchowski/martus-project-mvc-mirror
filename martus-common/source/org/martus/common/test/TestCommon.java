@@ -141,6 +141,7 @@ public class TestCommon
 		suite.addTest(new TestSuite(TestPacket.class));
 		suite.addTest(new TestSuite(TestServerBulletinSummary.class));
 		suite.addTest(new TestSuite(TestServerFileDatabase.class));
+		suite.addTest(new TestSuite(TestSha1ToSha2Change.class));
 		suite.addTest(new TestSuite(TestShortServerBulletinSummary.class));
 		suite.addTest(new TestSuite(TestUnicodeFileReader.class));
 		suite.addTest(new TestSuite(TestUnicodeFileWriter.class));
