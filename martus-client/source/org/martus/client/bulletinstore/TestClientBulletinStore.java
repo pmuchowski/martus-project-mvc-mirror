@@ -1528,10 +1528,10 @@ public class TestClientBulletinStore extends TestCaseEnhanced
 		DatabaseKey headerKey = DatabaseKey.createLegacyKey(b.getUniversalId());
 		UniversalId.createFromAccountAndLocalId(b.getAccount(), fdp.getLocalId());
 
-		security.fakeSigVerifyFailure = true;
+		security.endableFakeSigVerifyFailure();
 		testStore.loadFolders();
 
-		security.fakeSigVerifyFailure = false;
+		security.disableFakeSigVerifyFailure();
 		testStore.loadFolders();
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();

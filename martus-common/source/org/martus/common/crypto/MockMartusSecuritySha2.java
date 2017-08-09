@@ -75,7 +75,7 @@ public class MockMartusSecuritySha2 extends AbstractMockMartusSecurity
 	public SignatureEngine createSignatureVerifier(String signedByPublicKey)
 			throws Exception
 	{
-		if(fakeSigVerifyFailure)
+		if(shouldFakeSignatureVerifyFailure())
 			return null;
 
 		return SignatureEngineSha2.createVerifier(signedByPublicKey);
