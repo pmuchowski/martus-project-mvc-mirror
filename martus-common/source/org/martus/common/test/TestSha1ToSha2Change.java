@@ -25,14 +25,21 @@ Boston, MA 02111-1307, USA.
 package org.martus.common.test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
+import org.martus.common.FieldSpecCollection;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.crypto.MockMartusSecuritySha2;
+import org.martus.common.fieldspec.CustomFieldError;
+import org.martus.common.fieldspec.FormTemplate;
+import org.martus.common.fieldspec.StandardFieldSpecs;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.Packet;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.inputstreamwithseek.ByteArrayInputStreamWithSeek;
+import org.martus.util.inputstreamwithseek.FileInputStreamWithSeek;
+import org.martus.util.inputstreamwithseek.InputStreamWithSeek;
 
 public class TestSha1ToSha2Change extends TestCaseEnhanced
 {
@@ -91,6 +98,56 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 
 		byte[] bytes = out.toByteArray();
 		return new ByteArrayInputStreamWithSeek(bytes);
+	}
+
+	public void testImportTemplateSignedWithSha1UsingSha2Verifier() throws Exception
+	{
+		File exportFile = createAndExportTestTemplate(securitySha1);
+		assertTrue(exportFile.exists());
+
+		FormTemplate importedTemplate = new FormTemplate();
+		assertTrue("Should import successfully", importTemplate(importedTemplate, exportFile, securitySha2));
+
+		exportFile.delete();
+	}
+
+	public void testImportTemplateSignedWithSha2UsingSha1Verifier() throws Exception
+	{
+		File exportFile = createAndExportTestTemplate(securitySha2);
+		assertTrue(exportFile.exists());
+
+		FormTemplate importedTemplate = new FormTemplate();
+		assertFalse("Import should fail", importTemplate(importedTemplate, exportFile, securitySha1));
+		assertEquals(CustomFieldError.CODE_SIGNATURE_ERROR, ((CustomFieldError)importedTemplate.getErrors().get(0)).getCode());
+
+		exportFile.delete();
+	}
+
+	private File createAndExportTestTemplate(MartusCrypto security) throws Exception
+	{
+		File exportFile = createTempFileFromName("$$$testExportXml");
+		exportFile.deleteOnExit();
+		String formTemplateTitle = "New Form Title";
+		String formTemplateDescription = "New Form Description";
+		FieldSpecCollection defaultFieldsTopSection = new FieldSpecCollection(StandardFieldSpecs.getDefaultTopSectionFieldSpecs().asArray());
+		FieldSpecCollection defaultFieldsBottomSection = new FieldSpecCollection(StandardFieldSpecs.getDefaultBottomSectionFieldSpecs().asArray());
+		FormTemplate template = new FormTemplate(formTemplateTitle, formTemplateDescription, defaultFieldsTopSection, defaultFieldsBottomSection);
+		template.exportTemplate(security, exportFile);
+
+		return exportFile;
+	}
+
+	private boolean importTemplate(FormTemplate template, File exportFile, MartusCrypto security) throws Exception
+	{
+		InputStreamWithSeek inputStreamWithSeek = new FileInputStreamWithSeek(exportFile);
+		try
+		{
+			return template.importTemplate(security, inputStreamWithSeek);
+		}
+		finally
+		{
+			inputStreamWithSeek.close();
+		}
 	}
 
 	private static MartusCrypto securitySha1;
