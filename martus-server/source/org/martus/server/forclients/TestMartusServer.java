@@ -1359,8 +1359,11 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		assertEquals("didn't verify sig for 1 chunk?", NetworkInterfaceConstants.SIG_ERROR, uploadBulletinChunk(testServer, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
 
-		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServer, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 		assertEquals("didn't verify sig for chunks?", NetworkInterfaceConstants.SIG_ERROR, uploadBulletinChunk(testServer, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
+
+		mockServerSecurity.fakeSigVerifyFailure = false;
+
+		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServer, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 
 		testServer.setSecurity(serverSecurity);
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServer, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
