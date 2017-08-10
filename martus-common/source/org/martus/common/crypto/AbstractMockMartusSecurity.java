@@ -112,7 +112,22 @@ public class AbstractMockMartusSecurity extends MartusSecurity
 
 	static final int SMALLEST_LEGAL_KEY_FOR_TESTING = 1024;
 
-	public boolean fakeSigVerifyFailure;
+	public boolean shouldFakeSignatureVerifyFailure()
+	{
+		return fakeSigVerifyFailure;
+	}
+
+	public void endableFakeSigVerifyFailure()
+	{
+		this.fakeSigVerifyFailure = true;
+	}
+
+	public void disableFakeSigVerifyFailure()
+	{
+		this.fakeSigVerifyFailure = false;
+	}
+
+	private boolean fakeSigVerifyFailure;
 	public boolean fakeAuthorizationFailure;
 	public boolean fakeKeyPairVersionFailure;
 
