@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 
+import org.martus.server.forclients.AbstractMockMartusServer;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.util.DirectoryUtils;
 import org.martus.util.TestCaseEnhanced;
@@ -45,7 +46,7 @@ public class TestServerDeleteStartupFilesAndFolders extends TestCaseEnhanced
 
 	public void testStartupFiles() throws Exception
 	{
-		MockMartusServer testServer = new MockMartusServer(this);
+		AbstractMockMartusServer testServer = new MockMartusServer(this);
 		testServer.enterSecureMode();
 		File triggerDirectory = testServer.getTriggerDirectory();
 		triggerDirectory.deleteOnExit();
@@ -81,7 +82,7 @@ public class TestServerDeleteStartupFilesAndFolders extends TestCaseEnhanced
 
 	public void testStartupFolders() throws Exception
 	{
-		MockMartusServer testServer = new MockMartusServer(this);
+		AbstractMockMartusServer testServer = new MockMartusServer(this);
 		testServer.enterSecureMode();
 		File triggerDirectory = testServer.getTriggerDirectory();
 		triggerDirectory.deleteOnExit();

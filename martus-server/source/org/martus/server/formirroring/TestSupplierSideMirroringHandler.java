@@ -47,6 +47,7 @@ import org.martus.common.network.mirroring.PassThroughMirroringGateway;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.test.UniversalIdForTesting;
+import org.martus.server.forclients.AbstractMockMartusServer;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.util.StreamableBase64;
 import org.martus.util.TestCaseEnhanced;
@@ -316,7 +317,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		
 		CallerSideMirroringGateway gateway = new CallerSideMirroringGateway(wrappedHandler);
 		LoggerToNull logger = new LoggerToNull();
-		MockMartusServer server = new MockMartusServer(this);
+		AbstractMockMartusServer server = new MockMartusServer(this);
 
 		MirroringRetriever mirroringRetriever = new MirroringRetriever(server.getStore(), gateway, "Dummy IP", logger);
 		Vector returnedListWeWantToMirror = mirroringRetriever.listOnlyPacketsThatWeWantUsingBulletinMirroringInformation(authorSecurity.getPublicKeyString(), infosAsVector);

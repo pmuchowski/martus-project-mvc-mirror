@@ -36,7 +36,7 @@ import org.martus.util.StreamableBase64;
 
 public class MockServerForClients extends ServerForClients implements ServerForNonSSLClientsInterface
 {
-	public MockServerForClients(MockMartusServer coreServer)
+	public MockServerForClients(AbstractMockMartusServer coreServer)
 	{
 		super(coreServer);
 	}

@@ -52,6 +52,7 @@ import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.test.UniversalIdForTesting;
+import org.martus.server.forclients.AbstractMockMartusServer;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerForClients;
 import org.martus.server.main.ServerBulletinStore;
@@ -201,13 +202,13 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	
 	public void testIsAuthorizedForMirroring() throws Exception
 	{
-		MockMartusServer nobodyAuthorizedCore = new MockMartusServer(this);
+		AbstractMockMartusServer nobodyAuthorizedCore = new MockMartusServer(this);
 		ServerForMirroring nobodyAuthorized = new ServerForMirroring(nobodyAuthorizedCore, logger);
 		nobodyAuthorized.loadConfigurationFiles();
 		assertFalse("client already authorized?", nobodyAuthorized.isAuthorizedForMirroring(clientSecurity1.getPublicKeyString()));
 		nobodyAuthorizedCore.deleteAllFiles();
 		
-		MockMartusServer twoAuthorizedCore = new MockMartusServer(this);
+		AbstractMockMartusServer twoAuthorizedCore = new MockMartusServer(this);
 		twoAuthorizedCore.enterSecureMode();
 		File mirrorsWhoCallUs = new File(twoAuthorizedCore.getStartupConfigDirectory(), "mirrorsWhoCallUs");
 		mirrorsWhoCallUs.mkdirs();
@@ -328,7 +329,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	}
 
 	ServerForMirroring server;
-	MockMartusServer coreServer;
+	AbstractMockMartusServer coreServer;
 	LoggerToNull logger;
 
 	MockMartusSecuritySha1 clientSecurity1;

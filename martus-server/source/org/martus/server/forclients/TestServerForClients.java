@@ -452,7 +452,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		writer.writeln(sampleMagicWordline4);
 		writer.close();
 
-		MockMartusServer other = new MockMartusServer(mockServer.getDataDirectory(), this);
+		AbstractMockMartusServer other = new MockMartusServer(mockServer.getDataDirectory(), this);
 		other.setClientListenerEnabled(true);
 		other.verifyAndLoadConfigurationFiles();
 		MartusCrypto otherServerSecurity = MockMartusSecuritySha1.createOtherServer();
@@ -491,7 +491,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		String dummyMagicWord = "elwijfjf";
 		
 		testServer.allowUploads(sampleId, dummyMagicWord);
-		MockMartusServer other = new MockMartusServer(mockServer.getDataDirectory(), this);
+		AbstractMockMartusServer other = new MockMartusServer(mockServer.getDataDirectory(), this);
 		other.setSecurity(mockServer.getSecurity());
 		other.setClientListenerEnabled(true);
 		other.verifyAndLoadConfigurationFiles();
@@ -1085,7 +1085,7 @@ public class TestServerForClients extends TestCaseEnhanced
 
 	static File tempFile;
 
-	MockMartusServer mockServer; 
+	AbstractMockMartusServer mockServer; 
 	ServerForClients testServer;
 	NetworkInterface testServerInterface;
 }

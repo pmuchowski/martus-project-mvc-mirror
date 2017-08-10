@@ -37,6 +37,7 @@ import org.martus.common.database.MockServerDatabase;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.test.UniversalIdForTesting;
 import org.martus.common.utilities.MartusServerUtilities;
+import org.martus.server.forclients.AbstractMockMartusServer;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.util.TestCaseEnhanced;
 
@@ -118,7 +119,7 @@ public class TestDeleteRequestRecord extends TestCaseEnhanced
 		assertTrue(delRequest.doesSignatureMatch(serverSecurity));
 
 		MockServerDatabase db = new MockServerDatabase();
-		MockMartusServer server = new MockMartusServer(db, this);
+		AbstractMockMartusServer server = new MockMartusServer(db, this);
 		ServerBulletinStore store = server.getStore();
 		store.writeDel(b1.getUniversalId(), delRequest);
 		

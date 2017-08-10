@@ -69,6 +69,7 @@ import org.martus.common.packet.UniversalId;
 import org.martus.common.test.MockBulletinStore;
 import org.martus.common.test.UniversalIdForTesting;
 import org.martus.common.utilities.MartusServerUtilities;
+import org.martus.server.forclients.AbstractMockMartusServer;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.main.ServerBulletinStore;
 import org.martus.util.DirectoryUtils;
@@ -619,7 +620,7 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		MartusCrypto security = MockMartusSecuritySha1.createServer();
 		ServerFileDatabase db = new ServerFileDatabase(tmpPacketDir, security);
 		db.initialize();
-		MockMartusServer mock = new MockMartusServer(db, this);
+		AbstractMockMartusServer mock = new MockMartusServer(db, this);
 		try
 		{
 			internalTestDatabasemTime(mock);
@@ -631,7 +632,7 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		}
 	}
 
-	private void internalTestDatabasemTime(MockMartusServer internalServer) throws Exception
+	private void internalTestDatabasemTime(AbstractMockMartusServer internalServer) throws Exception
 	{
 		MartusCrypto security = internalServer.getSecurity();
 		BulletinStore store = internalServer.getStore();
@@ -680,7 +681,7 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 
 	final static int databaseRecordsPerBulletin = 4;
 
-	MockMartusServer server;
+	AbstractMockMartusServer server;
 	FakeServerSupplier supplier;
 	SupplierSideMirroringHandler realHandler;
 	CallerSideMirroringInterface wrappedHandler;

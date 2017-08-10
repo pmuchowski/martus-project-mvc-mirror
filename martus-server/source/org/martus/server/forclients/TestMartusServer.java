@@ -285,7 +285,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		serverStore.saveZipFileToDatabase(zip2, security.getPublicKeyString());
 		zip2.delete();
 		
-		MockMartusServer server = new MockMartusServer((Database)serverStore.getDatabase(), this);
+		AbstractMockMartusServer server = new MockMartusServer((Database)serverStore.getDatabase(), this);
 		assertFalse(server.doesDraftExist(bulletinImmutable.getUniversalId()));
 		assertTrue(server.doesDraftExist(bulletinMutable.getUniversalId()));
 		
@@ -528,7 +528,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String[] localIds)
 		throws Exception
 	{
-		MockMartusServer server = new MockMartusServer(this);
+		AbstractMockMartusServer server = new MockMartusServer(this);
 		byte[] bytes = isHiddenNoTrailingNewline.getBytes("UTF-8");
 		UnicodeReader reader = new UnicodeReader(new ByteArrayInputStream(bytes));
 		Vector hiddenPackets = MartusServerUtilities.getHiddenPacketsList(reader);		
@@ -721,7 +721,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		MartusCrypto security = MockMartusSecuritySha1.createServer();
 		ServerFileDatabase db = new ServerFileDatabase(tmpPacketDir, security);
 		db.initialize();
-		MockMartusServer mock = new MockMartusServer(db, this);
+		AbstractMockMartusServer mock = new MockMartusServer(db, this);
 		mock.serverForClients.loadBannedClients();
 		mock.setSecurity(security);
 		mock.verifyAndLoadConfigurationFiles();
@@ -985,7 +985,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		TRACE_BEGIN("testGetAccountInformationNoAccount");
 
-		MockMartusServer serverWithoutKeypair = new MockMartusServer(this);
+		AbstractMockMartusServer serverWithoutKeypair = new MockMartusServer(this);
 		serverWithoutKeypair.getSecurity().clearKeyPair();
 
 		Vector errorInfo = serverWithoutKeypair.getServerInformation();
@@ -1205,7 +1205,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String draftZipString = BulletinForTesting.saveToZipString(getClientDatabase(), draftBulletin, clientSecurity);
 		byte[] draftZipBytes = StreamableBase64.decode(draftZipString);
 
-		MockMartusServer tempServer = new MockMartusServer(new MockDraftDatabase(), this);
+		AbstractMockMartusServer tempServer = new MockMartusServer(new MockDraftDatabase(), this);
 		try
 		{
 			tempServer.setSecurity(serverSecurity);
@@ -1225,7 +1225,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		TRACE_BEGIN("testUploadSealedStatus");
 
-		MockMartusServer tempServer = new MockMartusServer(new MockSealedDatabase(), this);
+		AbstractMockMartusServer tempServer = new MockMartusServer(new MockSealedDatabase(), this);
 		try
 		{
 			tempServer.setSecurity(serverSecurity);
@@ -1359,11 +1359,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		assertEquals("didn't verify sig for 1 chunk?", NetworkInterfaceConstants.SIG_ERROR, uploadBulletinChunk(testServer, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
 
-		assertEquals("didn't verify sig for chunks?", NetworkInterfaceConstants.SIG_ERROR, uploadBulletinChunk(testServer, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
-
-		mockServerSecurity.disableFakeSigVerifyFailure();
-
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServer, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
+		assertEquals("didn't verify sig for chunks?", NetworkInterfaceConstants.SIG_ERROR, uploadBulletinChunk(testServer, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
 
 		testServer.setSecurity(serverSecurity);
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServer, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
@@ -1663,11 +1660,11 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.serverForClients.clearCanUploadList();
 		testServer.serverForClients.addMagicWordForTesting(sampleMagicWord,null);
 		
-		assertEquals("any upload attemps?", 0, testServer.getNumFailedUploadRequestsForIp(MockMartusServer.CLIENT_IP_ADDRESS));
+		assertEquals("any upload attemps?", 0, testServer.getNumFailedUploadRequestsForIp(AbstractMockMartusServer.CLIENT_IP_ADDRESS));
 		
 		String failed = testServer.requestUploadRights(sampleId, sampleMagicWord + "x");
 		assertEquals("didn't work?", NetworkInterfaceConstants.REJECTED, failed);
-		assertEquals("incorrect upload attempt noted?", 1, testServer.getNumFailedUploadRequestsForIp(MockMartusServer.CLIENT_IP_ADDRESS));
+		assertEquals("incorrect upload attempt noted?", 1, testServer.getNumFailedUploadRequestsForIp(AbstractMockMartusServer.CLIENT_IP_ADDRESS));
 		
 		String worked = testServer.requestUploadRights(sampleId, sampleMagicWord);
 		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
@@ -1685,36 +1682,36 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.serverForClients.clearCanUploadList();
 		testServer.serverForClients.addMagicWordForTesting(sampleMagicWord,null);
 		
-		assertEquals("counter 1?", 0, testServer.getNumFailedUploadRequestsForIp(MockMartusServer.CLIENT_IP_ADDRESS));
+		assertEquals("counter 1?", 0, testServer.getNumFailedUploadRequestsForIp(AbstractMockMartusServer.CLIENT_IP_ADDRESS));
 		
 		String result = testServer.requestUploadRights(sampleId, sampleMagicWord + "x");
 		assertEquals("upload request 1?", NetworkInterfaceConstants.REJECTED, result);
-		assertEquals("counter 2?", 1, testServer.getNumFailedUploadRequestsForIp(MockMartusServer.CLIENT_IP_ADDRESS));
+		assertEquals("counter 2?", 1, testServer.getNumFailedUploadRequestsForIp(AbstractMockMartusServer.CLIENT_IP_ADDRESS));
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord);
 		assertEquals("upload request 2?", NetworkInterfaceConstants.OK, result);
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord + "x");
 		assertEquals("upload request 3?", NetworkInterfaceConstants.REJECTED, result);
-		assertEquals("counter 3?", 2, testServer.getNumFailedUploadRequestsForIp(MockMartusServer.CLIENT_IP_ADDRESS));
+		assertEquals("counter 3?", 2, testServer.getNumFailedUploadRequestsForIp(AbstractMockMartusServer.CLIENT_IP_ADDRESS));
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord);
 		assertEquals("upload request 4?", NetworkInterfaceConstants.SERVER_ERROR, result);
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord + "x");
 		assertEquals("upload request 5?", NetworkInterfaceConstants.SERVER_ERROR, result);
-		assertEquals("counter 4?", 3, testServer.getNumFailedUploadRequestsForIp(MockMartusServer.CLIENT_IP_ADDRESS));
+		assertEquals("counter 4?", 3, testServer.getNumFailedUploadRequestsForIp(AbstractMockMartusServer.CLIENT_IP_ADDRESS));
 		
 		testServer.subtractMaxFailedUploadAttemptsFromServerCounter();
 		
-		assertEquals("counter 5?", 1, testServer.getNumFailedUploadRequestsForIp(MockMartusServer.CLIENT_IP_ADDRESS));
+		assertEquals("counter 5?", 1, testServer.getNumFailedUploadRequestsForIp(AbstractMockMartusServer.CLIENT_IP_ADDRESS));
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord);
 		assertEquals("upload request 6?", NetworkInterfaceConstants.OK, result);
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord+ "x");
 		assertEquals("upload request 7?", NetworkInterfaceConstants.REJECTED, result);
-		assertEquals("counter 6?", 2, testServer.getNumFailedUploadRequestsForIp(MockMartusServer.CLIENT_IP_ADDRESS));
+		assertEquals("counter 6?", 2, testServer.getNumFailedUploadRequestsForIp(AbstractMockMartusServer.CLIENT_IP_ADDRESS));
 
 		TRACE_END();
 	}
@@ -1797,7 +1794,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String result = testServer.authenticateServer(notBase64);
 		assertEquals("error not correct?", NetworkInterfaceConstants.INVALID_DATA, result);
 
-		MockMartusServer server = new MockMartusServer(this);
+		AbstractMockMartusServer server = new MockMartusServer(this);
 		server.setSecurity(new MartusSecurity());
 		String base64data = StreamableBase64.encode(new byte[]{1,2,3});
 		result = server.authenticateServer(base64data);
@@ -1901,7 +1898,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		int ports[] = {1,2};
 		
-		MockMartusServer mainServer = new MockMartusServer(this);
+		AbstractMockMartusServer mainServer = new MockMartusServer(this);
 		
 		int[] developmentLinuxPorts = mainServer.shiftToDevelopmentPortsIfNotInSecureMode(ports);
 		for(int i=0; i < ports.length; ++i)
@@ -2018,7 +2015,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	final static byte[] file1Bytes = {1,2,3,4,4,3,2,1};
 	final static byte[] file2Bytes = {1,2,3,4,4,3,2,1,0};
 	
-	MockMartusServer testServer;
+	AbstractMockMartusServer testServer;
 	NetworkInterface testServerInterface;
 	
 	private ServerMetaDatabaseForTesting smdFactory;

@@ -5,6 +5,7 @@ import java.io.File;
 import org.martus.common.LoggerToNull;
 import org.martus.common.MartusUtilities;
 import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.server.forclients.AbstractMockMartusServer;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.util.TestCaseEnhanced;
 
@@ -28,13 +29,13 @@ public class TestMirrorPuller extends TestCaseEnhanced
 	
 	public void testLoadMirrorsToCall() throws Exception
 	{
-		MockMartusServer noCallsToMakeCore = new MockMartusServer(this);
+		AbstractMockMartusServer noCallsToMakeCore = new MockMartusServer(this);
 		MirrorPuller noCallsToMake = new MirrorPuller(noCallsToMakeCore, logger);
 		noCallsToMake.createMirroringRetrievers();
 		assertEquals(0, noCallsToMake.retrieversWeWillCall.size());
 		noCallsToMakeCore.deleteAllFiles();
 		
-		MockMartusServer twoCallsToMakeCore = new MockMartusServer(this);
+		AbstractMockMartusServer twoCallsToMakeCore = new MockMartusServer(this);
 		twoCallsToMakeCore.enterSecureMode();
 		File mirrorsWhoWeCall = new File(twoCallsToMakeCore.getStartupConfigDirectory(), "mirrorsWhoWeCall");
 		mirrorsWhoWeCall.mkdirs();

@@ -173,7 +173,7 @@ public class TestSummaryCollector extends TestCaseEnhanced
 		assertStartsWith(expectedHistoryDateSizeStart, gotHistoryDateSize);
 	}
 
-	MockMartusServer server;
+	AbstractMockMartusServer server;
 	MockMartusSecuritySha1 authorSecurity;
 	Bulletin original;
 	Bulletin firstClone;

@@ -146,7 +146,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 	}
 	
 	ServerSideNetworkHandler handler;
-	MockMartusServer mockServer;
+	AbstractMockMartusServer mockServer;
 	MartusCrypto mySecurity;
 	MartusCrypto otherSecurity;
 }

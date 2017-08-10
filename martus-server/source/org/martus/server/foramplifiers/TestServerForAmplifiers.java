@@ -44,6 +44,7 @@ import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.test.MockBulletinStore;
+import org.martus.server.forclients.AbstractMockMartusServer;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.UnicodeWriter;
@@ -210,14 +211,14 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 
 	public void testIsAuthorizedForAmplifying() throws Exception
 	{
-		MockMartusServer nobodyAuthorizedCore = new MockMartusServer(this);
+		AbstractMockMartusServer nobodyAuthorizedCore = new MockMartusServer(this);
 		ServerForAmplifiers nobodyAuthorized = new ServerForAmplifiers(nobodyAuthorizedCore, logger);
 		nobodyAuthorizedCore.setAmplifierListenerEnabled(true);
 		nobodyAuthorized.loadConfigurationFiles();
 		assertFalse("client already authorized?", nobodyAuthorized.isAuthorizedAmp(clientSecurity.getPublicKeyString()));
 		nobodyAuthorizedCore.deleteAllFiles();
 		
-		MockMartusServer oneAuthorizedCore = new MockMartusServer(this);
+		AbstractMockMartusServer oneAuthorizedCore = new MockMartusServer(this);
 		oneAuthorizedCore.setAmplifierListenerEnabled(true);
 		oneAuthorizedCore.enterSecureMode();
 		File ampsWhoCallUs = new File(oneAuthorizedCore.getStartupConfigDirectory(), "ampsWhoCallUs");
@@ -237,7 +238,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 
 	public void testCanAccountBeAmplified() throws Exception
 	{
-		MockMartusServer localCoreServer = new MockMartusServer(this);
+		AbstractMockMartusServer localCoreServer = new MockMartusServer(this);
 		ServerForAmplifiers ampServer = new ServerForAmplifiers(localCoreServer, logger);
 		ampServer.loadConfigurationFiles();
 		assertTrue("client not authorized?", ampServer.canAccountBeAmplified(clientSecurity.getPublicKeyString()));
@@ -337,7 +338,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		//TODO:More tests needed here
 	}
 	
-	void uploadSampleBulletin(MockMartusServer serverToUse, String bulletinLocalId, String bulletinZip ) 
+	void uploadSampleBulletin(AbstractMockMartusServer serverToUse, String bulletinLocalId, String bulletinZip ) 
 	{
 		serverToUse.serverForClients.clearCanUploadList();
 		serverToUse.allowUploads(clientSecurity.getPublicKeyString());
@@ -349,8 +350,8 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		return (MockClientDatabase)store.getDatabase();
 	}
 
-	MockMartusServer coreServer;
-	MockMartusServer otherServer;
+	AbstractMockMartusServer coreServer;
+	AbstractMockMartusServer otherServer;
 	LoggerToNull logger;
 	private static Bulletin b1;
 	private static String b1ZipString;
