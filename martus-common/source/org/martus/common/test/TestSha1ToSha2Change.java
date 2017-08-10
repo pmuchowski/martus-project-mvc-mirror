@@ -33,11 +33,13 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.ClientFileDatabase;
+import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.fieldspec.CustomFieldError;
 import org.martus.common.fieldspec.FormTemplate;
 import org.martus.common.fieldspec.StandardFieldSpecs;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.Packet;
+import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.DirectoryUtils;
 import org.martus.util.TestCaseEnhanced;
 import org.martus.util.UnicodeWriter;
@@ -270,6 +272,60 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		writer.close();
 
 		MartusUtilities.createSignatureFileFromFile(accountMap, security);
+
+		return dir;
+	}
+
+	public void testServerFileDbInitializerWhenAccountMapSignedWithSha1UsingSha2Verifier() throws Exception
+	{
+		File dir = createServerAccountMapAndSignature(securitySha1);
+
+		try
+		{
+			ServerFileDatabase cfdb = new ServerFileDatabase(dir, securitySha2);
+			cfdb.initialize();
+		}
+		catch (Exception e)
+		{
+			fail("initialize should succeed without any exceptions");
+		}
+		finally
+		{
+			DirectoryUtils.deleteEntireDirectoryTree(dir);
+		}
+	}
+
+	public void testServerFileDbInitializerWhenAccountMapSignedWithSha2UsingSha1Verifier() throws Exception
+	{
+		File dir = createServerAccountMapAndSignature(securitySha2);
+
+		try
+		{
+			ServerFileDatabase cfdb = new ServerFileDatabase(dir, securitySha1);
+			cfdb.initialize();
+			fail("initialize should have thrown FileVerificationException");
+		}
+		catch(MartusUtilities.FileVerificationException ignoreExpectedException)
+		{
+		}
+		finally
+		{
+			DirectoryUtils.deleteEntireDirectoryTree(dir);
+		}
+	}
+
+	private File createServerAccountMapAndSignature(MartusCrypto security) throws Exception
+	{
+		File dir = createTempFile();
+		dir.delete();
+		dir.mkdir();
+
+		File accountMap = new File(dir, "acctmap.txt");
+		UnicodeWriter writer = new UnicodeWriter(accountMap);
+		writer.writeln("user=dir");
+		writer.close();
+
+		MartusServerUtilities.createSignatureFileFromFileOnServer(accountMap, security);
 
 		return dir;
 	}
