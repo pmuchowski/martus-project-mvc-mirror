@@ -32,12 +32,15 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.crypto.MockMartusSecuritySha2;
+import org.martus.common.database.ClientFileDatabase;
 import org.martus.common.fieldspec.CustomFieldError;
 import org.martus.common.fieldspec.FormTemplate;
 import org.martus.common.fieldspec.StandardFieldSpecs;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.Packet;
+import org.martus.util.DirectoryUtils;
 import org.martus.util.TestCaseEnhanced;
+import org.martus.util.UnicodeWriter;
 import org.martus.util.inputstreamwithseek.ByteArrayInputStreamWithSeek;
 import org.martus.util.inputstreamwithseek.FileInputStreamWithSeek;
 import org.martus.util.inputstreamwithseek.InputStreamWithSeek;
@@ -215,6 +218,60 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 
 		signatureFile.delete();
 		testFile.delete();
+	}
+
+	public void testClientFileDbInitializerWhenAccountMapSignedWithSha1UsingSha2Verifier() throws Exception
+	{
+		File dir = createAccountMapAndSignature(securitySha1);
+
+		try
+		{
+			ClientFileDatabase cfdb = new ClientFileDatabase(dir, securitySha2);
+			cfdb.initialize();
+		}
+		catch (Exception e)
+		{
+			fail("initialize should succeed without any exceptions");
+		}
+		finally
+		{
+			DirectoryUtils.deleteEntireDirectoryTree(dir);
+		}
+	}
+
+	public void testClientFileDbInitializerWhenAccountMapSignedWithSha2UsingSha1Verifier() throws Exception
+	{
+		File dir = createAccountMapAndSignature(securitySha2);
+
+		try
+		{
+			ClientFileDatabase cfdb = new ClientFileDatabase(dir, securitySha1);
+			cfdb.initialize();
+			fail("initialize should have thrown FileVerificationException");
+		}
+		catch(MartusUtilities.FileVerificationException ignoreExpectedException)
+		{
+		}
+		finally
+		{
+			DirectoryUtils.deleteEntireDirectoryTree(dir);
+		}
+	}
+
+	private File createAccountMapAndSignature(MartusCrypto security) throws Exception
+	{
+		File dir = createTempFile();
+		dir.delete();
+		dir.mkdir();
+
+		File accountMap = new File(dir, "acctmap.txt");
+		UnicodeWriter writer = new UnicodeWriter(accountMap);
+		writer.writeln("user=dir");
+		writer.close();
+
+		MartusUtilities.createSignatureFileFromFile(accountMap, security);
+
+		return dir;
 	}
 
 	private static MartusCrypto securitySha1;
