@@ -28,6 +28,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import org.martus.common.FieldSpecCollection;
+import org.martus.common.MartusUtilities;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.crypto.MockMartusSecuritySha2;
@@ -176,6 +177,44 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		catch(MartusCrypto.MartusSignatureException ignoreExpectedException)
 		{
 		}
+	}
+
+	public void testVerifyFileSignedWithSha1UsingSha2Verifier() throws Exception
+	{
+		String string1 = "The string to write into the file to sign.";
+		File testFile = createTempFileWithData(string1);
+		File signatureFile = MartusUtilities.createSignatureFileFromFile(testFile, securitySha1);
+
+		try
+		{
+			MartusUtilities.verifyFileAndSignature(testFile, signatureFile, securitySha2, securitySha2.getPublicKeyString());
+		}
+		catch (Exception e)
+		{
+			fail("verifyFileAndSignature should succeed without any exceptions");
+		}
+
+		signatureFile.delete();
+		testFile.delete();
+	}
+
+	public void testVerifyFileSignedWithSha2UsingSha1Verifier() throws Exception
+	{
+		String string1 = "The string to write into the file to sign.";
+		File testFile = createTempFileWithData(string1);
+		File signatureFile = MartusUtilities.createSignatureFileFromFile(testFile, securitySha2);
+
+		try
+		{
+			MartusUtilities.verifyFileAndSignature(testFile, signatureFile, securitySha1, securitySha1.getPublicKeyString());
+			fail("verifyFileAndSignature should have thrown FileVerificationException");
+		}
+		catch (MartusUtilities.FileVerificationException ignoreExpectedException)
+		{
+		}
+
+		signatureFile.delete();
+		testFile.delete();
 	}
 
 	private static MartusCrypto securitySha1;
