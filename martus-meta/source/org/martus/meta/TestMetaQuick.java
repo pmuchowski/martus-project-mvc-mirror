@@ -72,6 +72,7 @@ public class TestMetaQuick extends TestCaseEnhanced
 		suite.addTestSuite(TestRetrieveMyTableModel.class);
 		suite.addTestSuite(TestRetrieveTableModel.class);
 		suite.addTestSuite(TestScrubFile.class);
+		suite.addTestSuite(TestSha1ToSha2Change.class);
 		suite.addTestSuite(TestSimpleX509TrustManager.class);
 		suite.addTestSuite(TestSSL.class);
 		
