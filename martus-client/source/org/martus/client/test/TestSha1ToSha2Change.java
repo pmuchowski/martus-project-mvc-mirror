@@ -28,12 +28,14 @@ import java.io.File;
 
 import org.martus.client.core.templates.FormTemplateManager;
 import org.martus.common.FieldSpecCollection;
+import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.fieldspec.FormTemplate;
 import org.martus.common.fieldspec.StandardFieldSpecs;
 import org.martus.common.packet.Packet;
+import org.martus.common.packet.UniversalId;
 import org.martus.util.DirectoryUtils;
 import org.martus.util.TestCaseEnhanced;
 
@@ -156,6 +158,76 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 	{
 		FormTemplateManager manager = FormTemplateManager.createOrOpen(security, templateDirectory);
 		manager.setCurrentFormTemplate("");
+	}
+
+	public void testReadBulletinSignedWithSha1UsingSha2Verifier() throws Exception
+	{
+		MockBulletinStore testStore = new MockBulletinStore(securitySha1);
+		assertEquals(0, testStore.getBulletinCount());
+
+		final String initialSummary = "New bulletin";
+
+		Bulletin bulletin = testStore.createEmptyBulletin();
+		bulletin.set(Bulletin.TAGSUMMARY, initialSummary);
+
+		testStore.saveBulletin(bulletin);
+		assertEquals(1, testStore.getBulletinCount());
+
+		testStore = changeBulletinStoreSecurity(testStore, securitySha2);
+		UniversalId uId = bulletin.getUniversalId();
+
+		bulletin = testStore.getBulletinRevision(uId);
+		assertEquals("not saved initially?", initialSummary, bulletin.get(Bulletin.TAGSUMMARY));
+	}
+
+	public void testReadBulletinSignedWithSha2UsingSha1Verifier() throws Exception
+	{
+		MockBulletinStore testStore = new MockBulletinStore(securitySha2);
+		assertEquals(0, testStore.getBulletinCount());
+
+		Bulletin bulletin = testStore.createEmptyBulletin();
+
+		testStore.saveBulletin(bulletin);
+		assertEquals(1, testStore.getBulletinCount());
+
+		testStore = changeBulletinStoreSecurity(testStore, securitySha1);
+		UniversalId uId = bulletin.getUniversalId();
+		assertNull("should not find bulletin", testStore.getBulletinRevision(uId));
+	}
+
+	public void testEditBulletinSignedWithSha1UsingSha2Verifier() throws Exception
+	{
+		MockBulletinStore testStore = new MockBulletinStore(securitySha1);
+		assertEquals(0, testStore.getBulletinCount());
+
+		final String initialSummary = "New bulletin";
+
+		Bulletin bulletin = testStore.createEmptyBulletin();
+		bulletin.set(Bulletin.TAGSUMMARY, initialSummary);
+
+		testStore.saveBulletin(bulletin);
+		assertEquals(1, testStore.getBulletinCount());
+
+		testStore = changeBulletinStoreSecurity(testStore, securitySha2);
+
+		UniversalId uId = bulletin.getUniversalId();
+
+		bulletin = testStore.getBulletinRevision(uId);
+
+		assertEquals("not saved initially?", initialSummary, bulletin.get(Bulletin.TAGSUMMARY));
+
+		final String changedSummary = "Changed bulletin";
+
+		bulletin.set(Bulletin.TAGSUMMARY, changedSummary);
+		testStore.saveBulletin(bulletin);
+
+		bulletin = testStore.getBulletinRevision(uId);
+		assertEquals("not saved initially?", changedSummary, bulletin.get(Bulletin.TAGSUMMARY));
+	}
+
+	private MockBulletinStore changeBulletinStoreSecurity(MockBulletinStore oldStore, MartusCrypto newSecurity) throws Exception
+	{
+		return new MockBulletinStore(oldStore.getStoreRootDir(), oldStore.getWriteableDatabase(), newSecurity);
 	}
 
 	private static MartusCrypto securitySha1;

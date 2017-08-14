@@ -60,7 +60,14 @@ public class MockBulletinStore extends ClientBulletinStore
 		doAfterSigninInitialization(dir, db);
 		createFieldSpecCacheFromDatabase();
 	}
-	
+
+	public MockBulletinStore(File dir, Database db, MartusCrypto crypto) throws Exception
+	{
+		super(crypto);
+		doAfterSigninInitialization(dir, db);
+		createFieldSpecCacheFromDatabase();
+	}
+
 	public void deleteAllData() throws Exception
 	{
 		super.deleteAllData();
