@@ -378,6 +378,58 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		TRACE_END();
 	}
 
+	public void testCreateAccountWithSha2AttemptToSinginWithSha2() throws Exception
+	{
+		TRACE_BEGIN("testCreateAccountWithSha2AttemptToSinginWithSha2");
+		File rootDir = createTempDirectory();
+		try
+		{
+			MartusApp app = new MartusApp(securitySha2, rootDir, testAppLocalization);
+
+			String username = "name";
+			String password = "pass";
+			createAccount(app, username, password);
+
+			app = new MartusApp(securitySha2, rootDir, testAppLocalization);
+			signin(app, username, password);
+		}
+		catch (Exception e)
+		{
+			fail("Should signin without and exceptions");
+		}
+		finally
+		{
+			DirectoryUtils.deleteEntireDirectoryTree(rootDir);
+		}
+		TRACE_END();
+	}
+
+	public void testCreateAccountWithSha1AttemptToSinginWithSha2() throws Exception
+	{
+		TRACE_BEGIN("testCreateAccountWithSha1AttemptToSinginWithSha2");
+		File rootDir = createTempDirectory();
+		try
+		{
+			MartusApp app = new MartusApp(securitySha1, rootDir, testAppLocalization);
+
+			String username = "name";
+			String password = "pass";
+			createAccount(app, username, password);
+
+			app = new MartusApp(securitySha2, rootDir, testAppLocalization);
+			signin(app, username, password);
+		}
+		catch (Exception e)
+		{
+			fail("Should signin without and exceptions");
+		}
+		finally
+		{
+			DirectoryUtils.deleteEntireDirectoryTree(rootDir);
+		}
+		TRACE_END();
+	}
+
 	private void saveConfigInfo(MartusApp app) throws Exception
 	{
 		File configFile1 = app.getConfigInfoFile();
@@ -390,6 +442,13 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 	private void createAccount(MartusApp app, String username, String password) throws Exception
 	{
 		app.createAccount(username, password.toCharArray());
+		app.doAfterSigninInitalization();
+	}
+
+	private void signin(MartusApp app, String username, String password) throws Exception
+	{
+		app.attemptSignIn(username, password.toCharArray());
+		app.loadConfigInfo();
 		app.doAfterSigninInitalization();
 	}
 
