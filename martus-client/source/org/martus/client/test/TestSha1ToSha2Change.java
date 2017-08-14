@@ -31,6 +31,7 @@ import org.martus.client.core.templates.FormTemplateManager;
 import org.martus.client.network.RetrieveCommand;
 import org.martus.clientside.test.ServerSideNetworkHandlerNotAvailable;
 import org.martus.common.FieldSpecCollection;
+import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecuritySha1;
@@ -282,6 +283,38 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		uids.add(UniversalIdForTesting.createDummyUniversalId());
 
 		return uids;
+	}
+
+	public void testExtractPublicInfoSignedWithSha1UsingSha2Verifier() throws Exception
+	{
+		File temp = createTempFile();
+		temp.delete();
+
+		appSha1.exportPublicInfo(temp);
+
+		String publicKey = appSha2.extractPublicInfo(temp);
+		assertEquals("Public Key wrong?", appSha2.getSecurity().getPublicKeyString(), publicKey);
+
+		temp.delete();
+	}
+
+	public void testExtractPublicInfoSignedWithSha2UsingSha1Verifier() throws Exception
+	{
+		File temp = createTempFile();
+		temp.delete();
+
+		appSha2.exportPublicInfo(temp);
+
+		try
+		{
+			appSha1.extractPublicInfo(temp);
+			fail("testExtractPublicInfoSignedWithSha2UsingSha1Verifier should have thrown PublicInformationInvalidException");
+		}
+		catch (MartusUtilities.PublicInformationInvalidException ignoreExpectedException)
+		{
+		}
+
+		temp.delete();
 	}
 
 	private static MartusCrypto securitySha1;
