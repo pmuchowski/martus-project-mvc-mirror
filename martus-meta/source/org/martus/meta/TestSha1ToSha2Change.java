@@ -24,11 +24,16 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.meta;
 
+import java.util.Vector;
+
 import org.martus.client.core.MartusApp;
 import org.martus.client.network.BackgroundUploader;
+import org.martus.client.network.Retriever;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
 import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpc;
+import org.martus.common.HeadquartersKey;
+import org.martus.common.HeadquartersKeys;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecuritySha1;
@@ -58,12 +63,21 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		if(appSecuritySha2 == null)
 			appSecuritySha2 = MockMartusSecuritySha2.createClient();
 
+		if(hqAppSecuritySha1 == null)
+			hqAppSecuritySha1 = MockMartusSecuritySha1.createHQ();
+
+		if(hqAppSecuritySha2 == null)
+			hqAppSecuritySha2 = MockMartusSecuritySha2.createHQ();
+
 		serverSha2 = new MockMartusServerSha2(this);
 		serverSha2.serverForClients.loadBannedClients();
 		serverSha2.verifyAndLoadConfigurationFiles();
 
 		appSha1 = setUpMockMartusApp(appSecuritySha1, serverSha2);
 		appSha2 = setUpMockMartusApp(appSecuritySha2, serverSha2);
+
+		hqAppSha1 = setUpMockMartusApp(hqAppSecuritySha1, serverSha2);
+		hqAppSha2 = setUpMockMartusApp(hqAppSecuritySha2, serverSha2);
 
 		sha1AppUploader = new BackgroundUploader(appSha1, new NullProgressMeter());
 		sha2AppUploader = new BackgroundUploader(appSha2, new NullProgressMeter());
@@ -95,6 +109,9 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		appSha1.deleteAllFiles();
 		appSha2.deleteAllFiles();
 
+		hqAppSha1.deleteAllFiles();
+		hqAppSha2.deleteAllFiles();
+
 		super.tearDown();
 	}
 
@@ -107,13 +124,14 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		server.verifyAndLoadConfigurationFiles();
 		server.deleteAllData();
 
+		server.allowUploads(appSha2.getAccountId());
+
 		ServerSideNetworkHandler serverSideNetworkHandler = new ServerSideNetworkHandler(server.serverForClients);
 		appSha2.setSSLNetworkInterfaceHandlerForTesting(serverSideNetworkHandler);
 
 		Bulletin b1 = createTestBulletin(appSha2);
 
-		server.allowUploads(appSha2.getAccountId());
-		assertEquals(NetworkInterfaceConstants.SIG_ERROR, sha2AppUploader.uploadBulletin(b1));
+		uploadBulletinAndVerifyResult(sha2AppUploader, b1, NetworkInterfaceConstants.SIG_ERROR);
 
 		server.deleteAllFiles();
 
@@ -126,10 +144,94 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 
 		Bulletin b1 = createTestBulletin(appSha1);
 
-		serverSha2.allowUploads(appSha1.getAccountId());
-		assertEquals(NetworkInterfaceConstants.OK, sha1AppUploader.uploadBulletin(b1));
+		uploadBulletinAndVerifyResult(sha1AppUploader, b1, NetworkInterfaceConstants.OK);
 
 		TRACE_END();
+	}
+
+	public void testSha1ClientShareBulletinWithSha1Contact() throws Exception
+	{
+		TRACE_BEGIN("testSha1ClientShareBulletinWithSha1Contact");
+
+		addHqForClient(appSha1, hqAppSha1.getAccountId());
+
+		Bulletin b1 = createTestBulletin(appSha1);
+		Bulletin b2 = createTestBulletin(appSha1);
+
+		uploadBulletinAndVerifyResult(sha1AppUploader, b1, NetworkInterfaceConstants.OK);
+		uploadBulletinAndVerifyResult(sha1AppUploader, b2, NetworkInterfaceConstants.OK);
+
+		retrieveBulletinsAndVerifyResult(NetworkInterfaceConstants.OK, hqAppSha1, b1, b2);
+
+		TRACE_END();
+	}
+
+	public void testSha2ClientShareBulletinWithSha1Contact() throws Exception
+	{
+		TRACE_BEGIN("testSha2ClientShareBulletinWithSha1Contact");
+
+		addHqForClient(appSha2, hqAppSha1.getAccountId());
+
+		Bulletin b1 = createTestBulletin(appSha2);
+		Bulletin b2 = createTestBulletin(appSha2);
+
+		uploadBulletinAndVerifyResult(sha2AppUploader, b1, NetworkInterfaceConstants.OK);
+		uploadBulletinAndVerifyResult(sha2AppUploader, b2, NetworkInterfaceConstants.OK);
+
+		retrieveBulletinsAndVerifyResult(NetworkInterfaceConstants.INCOMPLETE, hqAppSha1, b1, b2);
+
+		TRACE_END();
+	}
+
+	public void testSha1ClientShareBulletinWithSha2Contact() throws Exception
+	{
+		TRACE_BEGIN("testSha1ClientShareBulletinWithSha1Contact");
+
+		addHqForClient(appSha1, hqAppSha2.getAccountId());
+
+		Bulletin b1 = createTestBulletin(appSha1);
+		Bulletin b2 = createTestBulletin(appSha1);
+
+		uploadBulletinAndVerifyResult(sha1AppUploader, b1, NetworkInterfaceConstants.OK);
+		uploadBulletinAndVerifyResult(sha1AppUploader, b2, NetworkInterfaceConstants.OK);
+
+		retrieveBulletinsAndVerifyResult(NetworkInterfaceConstants.OK, hqAppSha2, b1, b2);
+
+		TRACE_END();
+	}
+
+	public void testSha2ClientShareBulletinWithSha2Contact() throws Exception
+	{
+		TRACE_BEGIN("testSha2ClientShareBulletinWithSha2Contact");
+
+		addHqForClient(appSha2, hqAppSha2.getAccountId());
+
+		Bulletin b1 = createTestBulletin(appSha2);
+		Bulletin b2 = createTestBulletin(appSha2);
+
+		uploadBulletinAndVerifyResult(sha2AppUploader, b1, NetworkInterfaceConstants.OK);
+		uploadBulletinAndVerifyResult(sha2AppUploader, b2, NetworkInterfaceConstants.OK);
+
+		retrieveBulletinsAndVerifyResult(NetworkInterfaceConstants.OK, hqAppSha2, b1, b2);
+
+		TRACE_END();
+	}
+
+	private void uploadBulletinAndVerifyResult(BackgroundUploader uploader, Bulletin bulletin, String expectedResult) throws Exception
+	{
+		assertEquals("failed upload?", expectedResult, uploader.uploadBulletin(bulletin));
+	}
+
+	private void retrieveBulletinsAndVerifyResult(String expectedResult, MartusApp app, Bulletin... bulletins)
+	{
+		Vector uidList = new Vector();
+
+		for (Bulletin b : bulletins)
+			uidList.add(b.getUniversalId());
+
+		Retriever retriever = new Retriever(app, null);
+		retriever.retrieveBulletins(uidList, app.createFolderRetrievedFieldOffice());
+		assertEquals("retrieve field office bulletins failed?", expectedResult, retriever.getResult());
 	}
 
 	private Bulletin createTestBulletin(MartusApp martusApp) throws Exception
@@ -146,15 +248,29 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		return b1;
 	}
 
+	private void addHqForClient(MockMartusApp app, String hqAccountId) throws Exception
+	{
+		HeadquartersKeys keys = new HeadquartersKeys();
+		HeadquartersKey key = new HeadquartersKey(hqAccountId);
+		keys.add(key);
+		app.setAndSaveHQKeys(keys, keys);
+	}
+
 	private static final String MOCK_SERVER_NAME = "mock";
 
 	private MockMartusApp appSha1;
 	private MockMartusApp appSha2;
 
+	private MockMartusApp hqAppSha1;
+	private MockMartusApp hqAppSha2;
+
 	private AbstractMockMartusServer serverSha2;
 
 	private static MartusCrypto appSecuritySha1;
 	private static MartusCrypto appSecuritySha2;
+
+	private static MartusCrypto hqAppSecuritySha1;
+	private static MartusCrypto hqAppSecuritySha2;
 
 	private BackgroundUploader sha1AppUploader;
 	private BackgroundUploader sha2AppUploader;
