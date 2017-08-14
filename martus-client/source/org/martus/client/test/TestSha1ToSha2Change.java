@@ -27,11 +27,16 @@ package org.martus.client.test;
 import java.io.File;
 import java.util.Vector;
 
+import org.martus.client.core.MartusApp;
 import org.martus.client.core.templates.FormTemplateManager;
 import org.martus.client.network.RetrieveCommand;
+import org.martus.client.swingui.MartusLocalization;
+import org.martus.client.swingui.UiSession;
+import org.martus.clientside.CurrentUiState;
 import org.martus.clientside.test.ServerSideNetworkHandlerNotAvailable;
 import org.martus.common.FieldSpecCollection;
 import org.martus.common.MartusUtilities;
+import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecuritySha1;
@@ -63,6 +68,12 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 
 		appSha2 = MockMartusApp.create(securitySha2, getName());
 		appSha2.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandlerNotAvailable());
+
+		testAppLocalization = new MartusLocalization(null, UiSession.getAllEnglishStrings());
+		CurrentUiState currentUi = new CurrentUiState();
+		currentUi.setCurrentLanguage(MiniLocalization.ENGLISH);
+		currentUi.setCurrentDateFormat(MDY_SLASH);
+		testAppLocalization.setLanguageSettingsProvider(currentUi);
 	}
 
 	public void tearDown() throws Exception
@@ -317,9 +328,78 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		temp.delete();
 	}
 
+	public void testGetAccountDirectoryCreatedWithSha1UsingSha2() throws Exception
+	{
+		TRACE_BEGIN("testGetAccountDirectoryCreatedWithSha1UsingSha2");
+		File rootDir = createTempDirectory();
+		try
+		{
+			MartusApp app = new MartusApp(securitySha1, rootDir, testAppLocalization);
+
+			String username = "name";
+			String password = "pass";
+			createAccount(app, username, password);
+			String realAccountId1 = app.getAccountId();
+			saveConfigInfo(app);
+
+			app = new MartusApp(securitySha2, rootDir, testAppLocalization);
+			File rootAccountDirectory = app.getAccountDirectory(realAccountId1);
+			assertEquals(rootDir.getAbsolutePath(), rootAccountDirectory.getAbsolutePath());
+		}
+		finally
+		{
+			DirectoryUtils.deleteEntireDirectoryTree(rootDir);
+		}
+		TRACE_END();
+	}
+
+	public void testGetAccountDirectoryCreatedWithSha2UsingSha1() throws Exception
+	{
+		TRACE_BEGIN("testGetAccountDirectoryCreatedWithSha2UsingSha1");
+		File rootDir = createTempDirectory();
+		try
+		{
+			MartusApp app = new MartusApp(securitySha2, rootDir, testAppLocalization);
+
+			String username = "name";
+			String password = "pass";
+			createAccount(app, username, password);
+			String realAccountId1 = app.getAccountId();
+			saveConfigInfo(app);
+
+			app = new MartusApp(securitySha1, rootDir, testAppLocalization);
+			File rootAccountDirectory = app.getAccountDirectory(realAccountId1);
+			assertNotEquals(rootDir.getAbsolutePath(), rootAccountDirectory.getAbsolutePath());
+		}
+		finally
+		{
+			DirectoryUtils.deleteEntireDirectoryTree(rootDir);
+		}
+		TRACE_END();
+	}
+
+	private void saveConfigInfo(MartusApp app) throws Exception
+	{
+		File configFile1 = app.getConfigInfoFile();
+		app.saveConfigInfo();
+		assertTrue("no config?", configFile1.exists());
+		File sigFile1 = app.getConfigInfoSignatureFile();
+		assertTrue("no config sig?", sigFile1.exists());
+	}
+
+	private void createAccount(MartusApp app, String username, String password) throws Exception
+	{
+		app.createAccount(username, password.toCharArray());
+		app.doAfterSigninInitalization();
+	}
+
 	private static MartusCrypto securitySha1;
 	private static MartusCrypto securitySha2;
 
 	private MockMartusApp appSha1;
 	private MockMartusApp appSha2;
+
+	private MartusLocalization testAppLocalization;
+
+	private static final String MDY_SLASH = "MM/dd/yyyy";
 }
