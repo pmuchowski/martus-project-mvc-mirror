@@ -49,17 +49,20 @@ public class SignatureEngineSha2 implements SignatureEngine
 
 	public void digest(byte b) throws Exception
 	{
-		engine.update(b);
+		engineSha2.update(b);
+		engineSha1.update(b);
 	}
 
 	public void digest(byte[] bytes) throws Exception
 	{
-		engine.update(bytes);
+		engineSha2.update(bytes);
+		engineSha1.update(bytes);
 	}
 
 	public void digest(byte[] buffer, int off, int len) throws Exception
 	{
-		engine.update(buffer, off, len);
+		engineSha2.update(buffer, off, len);
+		engineSha1.update(buffer, off, len);
 	}
 
 	public void digest(InputStream in) throws Exception
@@ -67,17 +70,20 @@ public class SignatureEngineSha2 implements SignatureEngine
 		int got;
 		byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
 		while ((got = in.read(bytes)) >= 0)
-			engine.update(bytes, 0, got);
+		{
+			engineSha2.update(bytes, 0, got);
+			engineSha1.update(bytes, 0, got);
+		}
 	}
 
 	public byte[] getSignature() throws Exception
 	{
-		return engine.sign();
+		return engineSha2.sign();
 	}
 
 	public boolean isValidSignature(byte[] sig) throws Exception
 	{
-		return engine.verify(sig);
+		return engineSha2.verify(sig) || engineSha1.verify(sig);
 	}
 
 
@@ -85,22 +91,27 @@ public class SignatureEngineSha2 implements SignatureEngine
 
 	private SignatureEngineSha2() throws Exception
 	{
-		engine = Signature.getInstance(SIGN_ALGORITHM, "BC");
+		engineSha2 = Signature.getInstance(SIGN_ALGORITHM_SHA2, "BC");
+		engineSha1 = Signature.getInstance(SIGN_ALGORITHM_SHA1, "BC");
 	}
 
 	private void prepareToSign(PrivateKey key) throws Exception
 	{
-		engine.initSign(key);
+		engineSha2.initSign(key);
+		engineSha1.initSign(key);
 	}
 
 	private void prepareToVerify(String signedByPublicKey) throws Exception
 	{
 		PublicKey key = MartusJceKeyPair.extractPublicKey(signedByPublicKey);
-		engine.initVerify(key);
+		engineSha2.initVerify(key);
+		engineSha1.initVerify(key);
 	}
 
-	private Signature engine;
+	private Signature engineSha2;
+	private Signature engineSha1;
 
 
-	private static final String SIGN_ALGORITHM = "SHA512WithRSA";
+	private static final String SIGN_ALGORITHM_SHA2 = "SHA512WithRSA";
+	private static final String SIGN_ALGORITHM_SHA1 = "SHA1WithRSA";
 }
