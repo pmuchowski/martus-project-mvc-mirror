@@ -25,8 +25,11 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.test;
 
 import java.io.File;
+import java.util.Vector;
 
 import org.martus.client.core.templates.FormTemplateManager;
+import org.martus.client.network.RetrieveCommand;
+import org.martus.clientside.test.ServerSideNetworkHandlerNotAvailable;
 import org.martus.common.FieldSpecCollection;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
@@ -36,6 +39,7 @@ import org.martus.common.fieldspec.FormTemplate;
 import org.martus.common.fieldspec.StandardFieldSpecs;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
+import org.martus.common.test.UniversalIdForTesting;
 import org.martus.util.DirectoryUtils;
 import org.martus.util.TestCaseEnhanced;
 
@@ -52,6 +56,19 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 
 		securitySha1 = MockMartusSecuritySha1.createClient();
 		securitySha2 = MockMartusSecuritySha2.createClient();
+
+		appSha1 = MockMartusApp.create(securitySha1, getName());
+		appSha1.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandlerNotAvailable());
+
+		appSha2 = MockMartusApp.create(securitySha2, getName());
+		appSha2.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandlerNotAvailable());
+	}
+
+	public void tearDown() throws Exception
+	{
+		appSha1.deleteAllFiles();
+		appSha2.deleteAllFiles();
+		super.tearDown();
 	}
 
 	public void testLoadTemplateSignedWithSha1UsingSha2Verifier() throws Exception
@@ -230,6 +247,46 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		return new MockBulletinStore(oldStore.getStoreRootDir(), oldStore.getWriteableDatabase(), newSecurity);
 	}
 
+	public void testParseRetrieveCommandBundleSignedWithSha1UsingSha2Verifier() throws Exception
+	{
+		Vector uids = createTestIdsVector();
+		RetrieveCommand rc = new RetrieveCommand("folder", uids);
+		byte[] bundle = appSha1.createRetrieveCommandBundle(rc);
+
+		RetrieveCommand got = appSha2.parseRetrieveCommandBundle(bundle);
+		assertEquals("wrong folder?", rc.getFolderName(), got.getFolderName());
+		assertEquals("wrong count?", rc.getRemainingToRetrieveCount(), got.getRemainingToRetrieveCount());
+		assertEquals("wrong next uid?", rc.getNextToRetrieve(), got.getNextToRetrieve());
+	}
+
+	public void testParseRetrieveCommandBundleSignedWithSha2UsingSha1Verifier() throws Exception
+	{
+		Vector uids = createTestIdsVector();
+		RetrieveCommand rc = new RetrieveCommand("folder", uids);
+		byte[] bundle = appSha2.createRetrieveCommandBundle(rc);
+
+		try
+		{
+			appSha1.parseRetrieveCommandBundle(bundle);
+			fail("testParseRetrieveCommandBundleSignedWithSha2UsingSha1Verifier should have thrown MartusSignatureException");
+		}
+		catch (MartusCrypto.MartusSignatureException ignoreExpectedException)
+		{
+		}
+	}
+
+	private Vector createTestIdsVector()
+	{
+		Vector uids = new Vector();
+		uids.add(UniversalIdForTesting.createDummyUniversalId());
+		uids.add(UniversalIdForTesting.createDummyUniversalId());
+
+		return uids;
+	}
+
 	private static MartusCrypto securitySha1;
 	private static MartusCrypto securitySha2;
+
+	private MockMartusApp appSha1;
+	private MockMartusApp appSha2;
 }
