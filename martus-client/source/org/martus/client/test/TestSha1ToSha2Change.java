@@ -115,6 +115,48 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		return template;
 	}
 
+	public void testLoadTemplateManagerStateSignedWithSha1UsingSha2Verifier() throws Exception
+	{
+		File tempDirectory = createTempDirectory();
+		File templateDirectory = new File(tempDirectory, "templates");
+		try
+		{
+			selectDefaultFormTemplate(templateDirectory, securitySha1);
+
+			FormTemplateManager manager = FormTemplateManager.createOrOpen(securitySha2, templateDirectory);
+			assertEquals("", manager.getCurrentFormTemplate().getTitle());
+		}
+		finally
+		{
+			DirectoryUtils.deleteEntireDirectoryTree(tempDirectory);
+		}
+	}
+
+	public void testLoadTemplateManagerStateSignedWithSha2UsingSha1Verifier() throws Exception
+	{
+		File tempDirectory = createTempDirectory();
+		File templateDirectory = new File(tempDirectory, "templates");
+		try
+		{
+			selectDefaultFormTemplate(templateDirectory, securitySha2);
+
+			FormTemplateManager.createOrOpen(securitySha1, templateDirectory);
+			fail("Should have thrown UnableToLoadCurrentTemplateException");
+		}
+		catch (FormTemplateManager.UnableToLoadCurrentTemplateException ignoreExpectedException)
+		{
+		}
+		finally
+		{
+			DirectoryUtils.deleteEntireDirectoryTree(tempDirectory);
+		}
+	}
+
+	private void selectDefaultFormTemplate(File templateDirectory, MartusCrypto security) throws Exception
+	{
+		FormTemplateManager manager = FormTemplateManager.createOrOpen(security, templateDirectory);
+		manager.setCurrentFormTemplate("");
+	}
 
 	private static MartusCrypto securitySha1;
 	private static MartusCrypto securitySha2;
