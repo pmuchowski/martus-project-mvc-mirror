@@ -45,7 +45,7 @@ import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletin.PendingAttachmentList;
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
@@ -70,7 +70,7 @@ public class TestImporterOfXmlFilesOfBulletins extends TestCaseEnhanced
 		super.setUp();
 		if(security == null)
 		{
-			security = MockMartusSecuritySha1.createClient();
+			security = MockMartusSecuritySha2.createClient();
 			clientStore = new ClientBulletinStore(security);
 			dataDirectory = createTempDirectory();
 			clientStore.doAfterSigninInitialization(dataDirectory);

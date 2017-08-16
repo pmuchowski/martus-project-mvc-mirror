@@ -35,7 +35,7 @@ import java.util.Vector;
 import org.martus.common.ContactInfo;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.common.utilities.MartusServerUtilities.MartusSignatureFileDoesntExistsException;
 import org.martus.util.TestCaseEnhanced;
@@ -57,7 +57,7 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 		
 		if(serverSecurity == null)
 		{
-			serverSecurity = MockMartusSecuritySha1.createServer();
+			serverSecurity = MockMartusSecuritySha2.createServer();
 		}
 
 		TRACE_END();

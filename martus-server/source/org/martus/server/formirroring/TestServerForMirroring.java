@@ -38,7 +38,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
 import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.BulletinUploadRecord;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
@@ -70,13 +70,13 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	{
 		super.setUp();
 		logger = new LoggerToNull();
-		MockMartusSecuritySha1 serverSecurity = MockMartusSecuritySha1.createServer();
+		MockMartusSecuritySha2 serverSecurity = MockMartusSecuritySha2.createServer();
 		coreServer = new MockMartusServer(this);
 		coreServer.setSecurity(serverSecurity);
 		server = new ServerForMirroring(coreServer, logger);
 		
-		clientSecurity1 = MockMartusSecuritySha1.createClient();
-		clientSecurity2 = MockMartusSecuritySha1.createOtherClient();
+		clientSecurity1 = MockMartusSecuritySha2.createClient();
+		clientSecurity2 = MockMartusSecuritySha2.createOtherClient();
 
 		Database db = coreServer.getWriteableDatabase();
 
@@ -332,8 +332,8 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	AbstractMockMartusServer coreServer;
 	LoggerToNull logger;
 
-	MockMartusSecuritySha1 clientSecurity1;
-	MockMartusSecuritySha1 clientSecurity2;
+	MockMartusSecuritySha2 clientSecurity1;
+	MockMartusSecuritySha2 clientSecurity2;
 
 	BulletinHeaderPacket bhp1;
 	BulletinHeaderPacket bhp2;

@@ -31,7 +31,7 @@ import java.util.Vector;
 import org.martus.client.network.OrchidTransportWrapperWithActiveProperty;
 import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpc;
 import org.martus.common.MartusLogger;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.network.MartusSecureWebServer;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NetworkResponse;
@@ -58,7 +58,7 @@ public class TestSSL extends TestCaseEnhanced
 		{
 			int[] nonSslPorts = {1988};
 			int[] sslPorts = {1987};
-			mockSecurityForServer = MockMartusSecuritySha1.createServer();
+			mockSecurityForServer = MockMartusSecuritySha2.createServer();
 			mockServer = new MockMartusServer(this);
 			mockServer.verifyAndLoadConfigurationFiles();
 			mockServer.setSecurity(mockSecurityForServer);
@@ -126,7 +126,7 @@ public class TestSSL extends TestCaseEnhanced
 		assertEquals(NetworkInterfaceConstants.VERSION, response.getResultVector().get(0));
 	}
 	
-	static MockMartusSecuritySha1 mockSecurityForServer;
+	static MockMartusSecuritySha2 mockSecurityForServer;
 	static MockMartusServer mockServer;
 	static ServerSideNetworkHandler mockSSLServerInterface;
 	static ClientSideNetworkHandlerUsingXmlRpc proxy1;

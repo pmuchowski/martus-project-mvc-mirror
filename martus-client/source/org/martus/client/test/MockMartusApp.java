@@ -37,7 +37,7 @@ import org.martus.clientside.MtfAwareLocalization;
 import org.martus.clientside.UiLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.Database;
 import org.martus.common.database.MockClientDatabase;
 import org.martus.common.test.UnicodeConstants;
@@ -102,9 +102,9 @@ public class MockMartusApp extends MartusApp
 	}
 
 	
-	public static MockMartusSecuritySha1 createFakeSecurity() throws Exception
+	public static MockMartusSecuritySha2 createFakeSecurity() throws Exception
 	{
-		return MockMartusSecuritySha1.createClient();
+		return MockMartusSecuritySha2.createClient();
 	}
 	
 	public static File createFakeDataDirectory(String name) throws IOException

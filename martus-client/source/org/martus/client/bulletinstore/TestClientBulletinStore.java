@@ -60,7 +60,7 @@ import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockDatabase;
@@ -100,7 +100,7 @@ public class TestClientBulletinStore extends TestCaseEnhanced
     		super.setUp();
 		testStore = new MockBulletinStore();
 		db = (MockDatabase)testStore.getDatabase();
-		security = (MockMartusSecuritySha1)testStore.getSignatureGenerator();
+		security = (MockMartusSecuritySha2)testStore.getSignatureGenerator();
 
     	if(tempFile1 == null)
     	{
@@ -294,7 +294,7 @@ public class TestClientBulletinStore extends TestCaseEnhanced
     
     public void testCreateDraftCopyOfNotMyBulletin() throws Exception
 	{
-		MartusCrypto otherSecurity = MockMartusSecuritySha1.createOtherClient();
+		MartusCrypto otherSecurity = MockMartusSecuritySha2.createOtherClient();
 		Bulletin original = createImmutableBulletinWithAttachment(otherSecurity);
 		Bulletin clone = testStore.createNewDraft(original, customPublicSpecs, customPrivateSpecs);
 		assertEquals("wrong account?", testStore.getAccountId(), clone.getAccount());
@@ -312,7 +312,7 @@ public class TestClientBulletinStore extends TestCaseEnhanced
     public void testCreateCloneWithTemplateAndDataFrom() throws Exception
     {
 		MockBulletinStore clientStore = new MockBulletinStore(security);
-		MartusCrypto otherSecurity = MockMartusSecuritySha1.createOtherClient();
+		MartusCrypto otherSecurity = MockMartusSecuritySha2.createOtherClient();
 		Bulletin original = createImmutableBulletinWithAttachment(otherSecurity);
 		original.setAuthorizedToReadKeys(new HeadquartersKeys(new HeadquartersKey(security.getPublicKeyString())));
 		clientStore.saveBulletin(original);
@@ -370,11 +370,11 @@ public class TestClientBulletinStore extends TestCaseEnhanced
     	ExtendedHistoryList fakeExtendedHistory = new ExtendedHistoryList();
     	BulletinHistory fakeOtherHistory = new BulletinHistory();
     	fakeOtherHistory.add("OtherLocalId");
-    	fakeExtendedHistory.add(MockMartusSecuritySha1.createClient().getPublicKeyString(), fakeOtherHistory);
+    	fakeExtendedHistory.add(MockMartusSecuritySha2.createClient().getPublicKeyString(), fakeOtherHistory);
     	BulletinHeaderPacket originalHeader = original.getBulletinHeaderPacket();
 		originalHeader.setExtendedHistory(fakeExtendedHistory);
     	
-    	original.getAuthorizedToReadKeys().add(new HeadquartersKey(MockMartusSecuritySha1.createServer().getPublicKeyString()));
+    	original.getAuthorizedToReadKeys().add(new HeadquartersKey(MockMartusSecuritySha2.createServer().getPublicKeyString()));
     	clientStore.saveBulletin(original);
 
     	Bulletin clone = clientStore.createNewDraftWithCurrentTemplateButIdAndDataAndHistoryFrom(original);
@@ -2078,7 +2078,7 @@ public class TestClientBulletinStore extends TestCaseEnhanced
 
 	private ClientBulletinStore createTempStore() throws Exception
 	{
-		MockMartusSecuritySha1 tempSecurity = MockMartusSecuritySha1.createOtherClient();
+		MockMartusSecuritySha2 tempSecurity = MockMartusSecuritySha2.createOtherClient();
 		return new MockBulletinStore(tempSecurity);
 	}
 	
@@ -2158,7 +2158,7 @@ public class TestClientBulletinStore extends TestCaseEnhanced
 	}
 
 	private static MockBulletinStore testStore;
-	private static MockMartusSecuritySha1 security;
+	private static MockMartusSecuritySha2 security;
 	private static MockDatabase db;
 	private static FieldSpecCollection customPublicSpecs;
 	private static FieldSpecCollection customPrivateSpecs;

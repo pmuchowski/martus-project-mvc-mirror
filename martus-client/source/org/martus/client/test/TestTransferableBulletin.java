@@ -37,7 +37,7 @@ import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestTransferableBulletin extends TestCaseEnhanced
@@ -56,7 +56,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		super.setUp();
 		if(security == null)
 		{
-			security = MockMartusSecuritySha1.createClient();
+			security = MockMartusSecuritySha2.createClient();
 		}
 		store = new MockBulletinStore(security);
 		folder = store.createFolder("Wow");

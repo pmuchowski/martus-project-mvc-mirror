@@ -34,7 +34,7 @@ import org.martus.common.HeadquartersKeys;
 import org.martus.common.MartusXml;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.BulletinHistory;
 import org.martus.common.packet.ExtendedHistoryEntry;
@@ -58,7 +58,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		super.setUp();
 		if(security == null)
 		{
-			security = MockMartusSecuritySha1.createClient();
+			security = MockMartusSecuritySha2.createClient();
 		}
 		bhp = new BulletinHeaderPacket(security);
 	}
@@ -340,12 +340,12 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		ExtendedHistoryList history = new ExtendedHistoryList();
 
 		BulletinHistory firstClone = createFakeHistory();
-		String firstClientAccountId = MockMartusSecuritySha1.createClient().getPublicKeyString();
+		String firstClientAccountId = MockMartusSecuritySha2.createClient().getPublicKeyString();
 		history.add(firstClientAccountId, firstClone);
 
 		BulletinHistory secondClone = new BulletinHistory();
 		secondClone.add("random");
-		String secondClientAccountId = MockMartusSecuritySha1.createOtherClient().getPublicKeyString();
+		String secondClientAccountId = MockMartusSecuritySha2.createOtherClient().getPublicKeyString();
 		history.add(secondClientAccountId, secondClone);
 
 		bhp.setExtendedHistory(history);
@@ -485,12 +485,12 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		ExtendedHistoryList history = new ExtendedHistoryList();
 
 		BulletinHistory firstClone = createFakeHistory();
-		String firstClientAccountId = MockMartusSecuritySha1.createClient().getPublicKeyString();
+		String firstClientAccountId = MockMartusSecuritySha2.createClient().getPublicKeyString();
 		history.add(firstClientAccountId, firstClone);
 
 		BulletinHistory secondClone = new BulletinHistory();
 		secondClone.add("random");
-		String secondClientAccountId = MockMartusSecuritySha1.createOtherClient().getPublicKeyString();
+		String secondClientAccountId = MockMartusSecuritySha2.createOtherClient().getPublicKeyString();
 		history.add(secondClientAccountId, secondClone);
 
 		bhp.setExtendedHistory(history);

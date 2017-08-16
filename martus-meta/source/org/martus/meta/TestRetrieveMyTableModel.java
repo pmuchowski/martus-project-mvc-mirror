@@ -36,7 +36,7 @@ import org.martus.common.BulletinSummary;
 import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NonSSLNetworkAPI;
 import org.martus.common.network.ServerSideNetworkInterface;
@@ -60,7 +60,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		MartusCrypto appSecurity = MockMartusSecuritySha1.createClient();
+		MartusCrypto appSecurity = MockMartusSecuritySha2.createClient();
 		localization = new MockUiLocalization(getName());
 		app = MockMartusApp.create(appSecurity, getName());
 

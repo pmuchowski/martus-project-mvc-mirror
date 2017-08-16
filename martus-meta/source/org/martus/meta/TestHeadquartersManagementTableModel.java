@@ -31,7 +31,7 @@ import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.util.StreamableBase64.InvalidBase64Exception;
 import org.martus.util.TestCaseEnhanced;
 
@@ -49,7 +49,7 @@ public class TestHeadquartersManagementTableModel extends TestCaseEnhanced
 		if(localization!=null)
 			return;
 		localization = new MockUiLocalization(getName());
-		appSecurityAndHQ = MockMartusSecuritySha1.createHQ();
+		appSecurityAndHQ = MockMartusSecuritySha2.createHQ();
 		app = MockMartusApp.create(appSecurityAndHQ, localization, getName());
 
 		modelWithData = new HeadquartersManagementTableModel(app);

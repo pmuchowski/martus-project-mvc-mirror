@@ -38,7 +38,7 @@ import org.martus.amplifier.presentation.DoSearch;
 import org.martus.amplifier.search.BulletinIndexException;
 import org.martus.amplifier.search.BulletinInfo;
 import org.martus.amplifier.velocity.AmplifierServletRequest;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.test.UniversalIdForTesting;
 import org.martus.util.DirectoryUtils;
@@ -63,7 +63,7 @@ public class TestContactInfo extends TestCaseEnhanced
 	}
 	public void testCorrectContactInfoPageRetrieved() throws Exception
 	{
-		MockMartusSecuritySha1 client = new MockMartusSecuritySha1();
+		MockMartusSecuritySha2 client = new MockMartusSecuritySha2();
 		client.createKeyPair();
 		MartusAmplifier.setStaticSecurity(client);
 		

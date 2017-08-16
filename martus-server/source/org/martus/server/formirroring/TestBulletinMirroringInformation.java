@@ -29,7 +29,7 @@ import java.util.Vector;
 
 import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockDatabase;
 import org.martus.common.database.MockServerDatabase;
@@ -45,7 +45,7 @@ public class TestBulletinMirroringInformation extends TestCaseEnhanced
 
 	public void testBasics() throws Exception
 	{
-		MartusCrypto authorSecurity = MockMartusSecuritySha1.createOtherClient();
+		MartusCrypto authorSecurity = MockMartusSecuritySha2.createOtherClient();
 		
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(authorSecurity);
 		bhp.setStatus(BulletinConstants.STATUSMUTABLE);

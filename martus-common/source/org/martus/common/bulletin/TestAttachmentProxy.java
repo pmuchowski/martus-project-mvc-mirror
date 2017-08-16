@@ -30,7 +30,7 @@ import java.io.File;
 import java.util.Arrays;
 
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.crypto.SessionKey;
 import org.martus.common.packet.AttachmentPacket;
 import org.martus.common.packet.UniversalId;
@@ -51,7 +51,7 @@ public class TestAttachmentProxy extends TestCaseEnhanced
 		writer.writeln("This is some text");
 		writer.close();
 
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		SessionKey sessionKey = security.createSessionKey();
 
 		AttachmentProxy a = new AttachmentProxy(file);
@@ -74,7 +74,7 @@ public class TestAttachmentProxy extends TestCaseEnhanced
 	{
 		File file = createTempFile();
 		AttachmentProxy proxy = new AttachmentProxy(file);
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		SessionKey sessionKey = new SessionKey(new byte[] {1,2,3});
 		String accountId = security.getPublicKeyString();
 		AttachmentPacket packet = new AttachmentPacket(accountId, sessionKey, file, security); 

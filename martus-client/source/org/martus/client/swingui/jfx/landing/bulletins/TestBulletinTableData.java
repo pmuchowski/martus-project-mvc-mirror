@@ -29,7 +29,7 @@ import org.martus.client.core.TestFxBulletin;
 import org.martus.common.ContactKey;
 import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.swing.FontHandler;
 import org.martus.util.TestCaseEnhanced;
 
@@ -46,7 +46,7 @@ public class TestBulletinTableData extends TestCaseEnhanced
 		String title = "My Title";
 		String author = "Goofy";
 		boolean onServer = true;
-		MockMartusSecuritySha1 security = new MockMartusSecuritySha1();
+		MockMartusSecuritySha2 security = new MockMartusSecuritySha2();
 		MiniLocalization localization = new MiniLocalization();
 		Bulletin b = new Bulletin(security);
 		b.set(Bulletin.TAGTITLE, title);
@@ -64,7 +64,7 @@ public class TestBulletinTableData extends TestCaseEnhanced
 	
 	public void testZawgyi() throws Exception
 	{
-		MockMartusSecuritySha1 security = new MockMartusSecuritySha1();
+		MockMartusSecuritySha2 security = new MockMartusSecuritySha2();
 		MiniLocalization localization = new MiniLocalization();
 		Bulletin b = new Bulletin(security);
 		b.set(Bulletin.TAGAUTHOR, TestFxBulletin.BURMESE_UNICODE_TEST_STRING);

@@ -39,7 +39,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
 import org.martus.common.database.MockDatabase;
@@ -69,7 +69,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 	{
 		super.setUp();
 		db = new MockClientDatabase();
-		security = MockMartusSecuritySha1.createClient();
+		security = MockMartusSecuritySha2.createClient();
 	}
 
 	public void testLoadFromFile() throws Exception
@@ -291,7 +291,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		original.set(Bulletin.TAGPRIVATEINFO, "private info");
 		File tempFile = createTempFile();
 
-		MartusCrypto otherSecurity = MockMartusSecuritySha1.createOtherClient();
+		MartusCrypto otherSecurity = MockMartusSecuritySha2.createOtherClient();
 
 		original.setMutable();
 		original.setAllPrivate(true);

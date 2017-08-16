@@ -37,7 +37,7 @@ import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
@@ -68,8 +68,8 @@ public class TestBulletinStore extends TestCaseEnhanced
     {
     	super.setUp();
     	db = new MockClientDatabase();
-    	security1 = MockMartusSecuritySha1.createClient();
-    	security2 = MockMartusSecuritySha1.createOtherClient();
+    	security1 = MockMartusSecuritySha2.createClient();
+    	security2 = MockMartusSecuritySha2.createOtherClient();
 		store = new BulletinStore();
 		store.doAfterSigninInitialization(createTempDirectory(), db);
 		store.setSignatureGenerator(security1);
@@ -361,7 +361,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testImportBulletinPacketsFromZipFileToDatabase() throws Exception
 	{
-		MartusCrypto authorSecurity = MockMartusSecuritySha1.createClient();
+		MartusCrypto authorSecurity = MockMartusSecuritySha2.createClient();
 		BulletinStore fromStore = new MockBulletinStore(this);
 		Bulletin b = new Bulletin(authorSecurity);
 		b.setAllPrivate(false);
@@ -374,12 +374,12 @@ public class TestBulletinStore extends TestCaseEnhanced
 		ZipFile zip = new ZipFile(destFile);
 		
 		BulletinStore hqStore = new MockBulletinStore(this);
-		hqStore.setSignatureGenerator(MockMartusSecuritySha1.createHQ());
+		hqStore.setSignatureGenerator(MockMartusSecuritySha2.createHQ());
 		verifyImportZip(hqStore, key, zip);
 		hqStore.deleteAllData();
 		
 		BulletinStore otherStore = new MockBulletinStore(this);
-		otherStore.setSignatureGenerator(MockMartusSecuritySha1.createOtherClient());
+		otherStore.setSignatureGenerator(MockMartusSecuritySha2.createOtherClient());
 		verifyImportZip(otherStore, key, zip);
 		otherStore.deleteAllData();
 
@@ -410,7 +410,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertFalse(msg+ ": original is leaf?", store.isLeaf(original.getUniversalId()));
 	}
 
-	private Bulletin createAndSaveBulletin(MockMartusSecuritySha1 security) throws Exception
+	private Bulletin createAndSaveBulletin(MockMartusSecuritySha2 security) throws Exception
 	{
 		Bulletin b = new Bulletin(security);
 		store.saveBulletinForTesting(b);
@@ -438,8 +438,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 
 	private static BulletinStore store;
-	private static MockMartusSecuritySha1 security1;
-	private static MockMartusSecuritySha1 security2;
+	private static MockMartusSecuritySha2 security1;
+	private static MockMartusSecuritySha2 security2;
 	private static MockClientDatabase db;
 
 	private static File tempFile1;

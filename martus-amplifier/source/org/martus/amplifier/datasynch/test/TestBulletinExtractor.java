@@ -63,7 +63,7 @@ import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.packet.FieldDataPacket;
@@ -85,7 +85,7 @@ public class TestBulletinExtractor extends AbstractAmplifierTestCase
 	protected void setUp() throws Exception 
 	{
 		super.setUp();
-		security = new MockMartusSecuritySha1();
+		security = new MockMartusSecuritySha2();
 		security.createKeyPair();
 		attachmentManager = 
 			new FileSystemDataManager(getTestBasePath(), security);

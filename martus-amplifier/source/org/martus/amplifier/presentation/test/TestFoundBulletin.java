@@ -51,7 +51,7 @@ import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.BulletinHtmlGenerator;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.common.database.Database.RecordHiddenException;
 import org.martus.common.packet.BulletinHeaderPacket;
@@ -71,7 +71,7 @@ public class TestFoundBulletin extends AbstractAmplifierTestCase
 		super.setUp();
 		if(security == null)
 		{
-			security = new MockMartusSecuritySha1();
+			security = new MockMartusSecuritySha2();
 			security.createKeyPair();
 			MartusAmplifier.setStaticSecurity(security);
 			MartusAmplifier.dataManager = new FileSystemDataManager(getTestBasePath(), security);
@@ -287,7 +287,7 @@ public class TestFoundBulletin extends AbstractAmplifierTestCase
 		clearContextSetBySearchResults(context);
 		return context;
 	}
-	static MockMartusSecuritySha1 security;
+	static MockMartusSecuritySha2 security;
 	static Bulletin b1 = null;
 	static Bulletin b2 = null;
 	static Bulletin b3 = null;

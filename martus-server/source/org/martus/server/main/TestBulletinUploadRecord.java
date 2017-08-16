@@ -31,7 +31,7 @@ import java.io.StringReader;
 
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.BulletinUploadRecord;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.packet.UniversalId;
@@ -51,8 +51,8 @@ public class TestBulletinUploadRecord extends TestCaseEnhanced
 
 	public void testCreateBulletinUploadRecord() throws Exception
 	{
-		MartusCrypto serverSecurity = MockMartusSecuritySha1.createServer();
-		MockMartusSecuritySha1 clientSecurity = MockMartusSecuritySha1.createClient();
+		MartusCrypto serverSecurity = MockMartusSecuritySha2.createServer();
+		MockMartusSecuritySha2 clientSecurity = MockMartusSecuritySha2.createClient();
 		Bulletin b1 = new Bulletin(clientSecurity);
 		b1.set(Bulletin.TAGTITLE, "Title1");
 
@@ -93,8 +93,8 @@ public class TestBulletinUploadRecord extends TestCaseEnhanced
 	
 	public void testWasBurCreatedByThisCrypto() throws Exception
 	{
-		MartusCrypto serverSecurity = MockMartusSecuritySha1.createServer();
-		MockMartusSecuritySha1 otherSecurity = MockMartusSecuritySha1.createOtherServer();
+		MartusCrypto serverSecurity = MockMartusSecuritySha2.createServer();
+		MockMartusSecuritySha2 otherSecurity = MockMartusSecuritySha2.createOtherServer();
 		UniversalId uid = UniversalIdForTesting.createDummyUniversalId();
 		String burRecord = BulletinUploadRecord.createBulletinUploadRecord(uid.getLocalId(), otherSecurity);
 		assertTrue("This burRecord was not created by this security?", BulletinUploadRecord.wasBurCreatedByThisCrypto(burRecord, otherSecurity));

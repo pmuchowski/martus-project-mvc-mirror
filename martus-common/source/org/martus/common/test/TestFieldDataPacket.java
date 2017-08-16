@@ -48,7 +48,7 @@ import org.martus.common.MartusXml;
 import org.martus.common.XmlWriterFilter;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.GridFieldSpec;
 import org.martus.common.fieldspec.StandardFieldSpecs;
@@ -76,11 +76,11 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		super.setUp();
 		if(security == null)
 		{
-			security = MockMartusSecuritySha1.createClient();
+			security = MockMartusSecuritySha2.createClient();
 		}
 		if(securityHQ == null)
 		{
-			securityHQ = MockMartusSecuritySha1.createHQ();
+			securityHQ = MockMartusSecuritySha2.createHQ();
 		}
 		UniversalId uid = FieldDataPacket.createUniversalId(security);
 		fdp = new FieldDataPacket(uid, fieldTags);
@@ -671,7 +671,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		got.loadFromXml(in2, security);
 		assertEquals("account", fdp.getAccountId(), got.getAccountId());
 
-		MartusCrypto otherSecurity = new MockMartusSecuritySha1();
+		MartusCrypto otherSecurity = new MockMartusSecuritySha2();
 		otherSecurity.createKeyPair();
 		try
 		{
@@ -687,7 +687,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 	public void testWriteAndLoadXmlEncryptedWithMultipleHQ() throws Exception
 	{
 		fdp.setEncrypted(true);
-		MartusCrypto seconndHQ = MockMartusSecuritySha1.createOtherServer();
+		MartusCrypto seconndHQ = MockMartusSecuritySha2.createOtherServer();
 		HeadquartersKeys keys = new HeadquartersKeys();
 		HeadquartersKey key1 = new HeadquartersKey(securityHQ.getPublicKeyString());
 		HeadquartersKey key2 = new HeadquartersKey(seconndHQ.getPublicKeyString());
@@ -733,7 +733,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("encrypted", fdp.isEncrypted(), got.isEncrypted());
 
 		
-		MartusCrypto otherSecurity = MockMartusSecuritySha1.createOtherClient();
+		MartusCrypto otherSecurity = MockMartusSecuritySha2.createOtherClient();
 		try
 		{
 			ByteArrayInputStreamWithSeek in4 = new ByteArrayInputStreamWithSeek(bytes);

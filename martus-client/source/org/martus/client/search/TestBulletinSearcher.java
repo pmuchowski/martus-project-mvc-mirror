@@ -39,7 +39,7 @@ import org.martus.common.ReusableChoices;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.field.MartusDateRangeField;
 import org.martus.common.field.MartusField;
 import org.martus.common.field.MartusSearchableGridColumnField;
@@ -73,7 +73,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 	
 	public void testDoesMatchSpecificField() throws Exception
 	{
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin realBulletin = new Bulletin(security);
 
 		FieldSpec fieldToSearch = FieldSpec.createStandardField(Bulletin.TAGLOCATION, new FieldTypeNormal());
@@ -94,7 +94,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 	
 	public void testDoesMatchNoSuchField() throws Exception
 	{
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin realBulletin = new Bulletin(security);
 		
 		FieldSpec noSuchField = FieldSpec.createStandardField("nosuchfield", new FieldTypeNormal());
@@ -109,7 +109,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 
 	public void testDoesMatchComparisons() throws Exception
 	{
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin b = new Bulletin(security);
 
 		FieldSpec fieldToSearch = FieldSpec.createStandardField(Bulletin.TAGLOCATION, new FieldTypeNormal());
@@ -154,7 +154,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 	
 	public void testGetPossiblyNestedField() throws Exception
 	{
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin realBulletin = new Bulletin(security);
 		SafeReadableBulletin b = new SafeReadableBulletin(realBulletin, localization);
 		FieldSpec noSuchField = FieldSpec.createStandardField("no.such.field", new FieldTypeNormal());
@@ -174,7 +174,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 		gridSpec.addColumn(FieldSpec.createCustomField("", "Second column", new FieldTypeNormal()));
 		FieldSpecCollection specs = new FieldSpecCollection(new FieldSpec[] {gridSpec});
 		
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin realBulletin = new Bulletin(security, specs, StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
 		GridData data = new GridData(gridSpec, noReusableChoices);
 		data.addEmptyRow();
@@ -220,7 +220,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 		gridSpec.addColumn(columnSpec3);
 		FieldSpecCollection specs = new FieldSpecCollection(new FieldSpec[] {gridSpec});
 
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin realBulletin = new Bulletin(security, specs, StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
 		GridData data = new GridData(gridSpec, noReusableChoices);
 		data.addEmptyRow();
@@ -302,7 +302,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 		gridSpec.addColumn(columnSpec1);
 		FieldSpecCollection specs = new FieldSpecCollection(new FieldSpec[] {gridSpec});
 
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin realBulletin = new Bulletin(security, specs, StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
 		GridData data = new GridData(gridSpec, noReusableChoices);
 		data.addEmptyRow();
@@ -356,7 +356,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 		gridSpec.addColumn(columnSpec1);
 		FieldSpecCollection specs = new FieldSpecCollection(new FieldSpec[] {gridSpec});
 
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin realBulletin = new Bulletin(security, specs, StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
 		GridData data = new GridData(gridSpec, noReusableChoices);
 		data.addEmptyRow();
@@ -403,7 +403,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 	
 	public void testDoesMatch() throws Exception
 	{
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin realBulletin = new Bulletin(security);
 		realBulletin.set("author", "hello");
 		realBulletin.set("summary", "summary");
@@ -480,7 +480,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 
 	public void testLocalId() throws Exception
 	{
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin b = new Bulletin(security);
 		
 		FieldSpec spec = FieldSpec.createStandardField("_localId", new FieldTypeNormal());
@@ -489,7 +489,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 		
 	public void testDateMatchesLastSaved() throws Exception
 	{
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin b = new Bulletin(security);
 		b.getBulletinHeaderPacket().updateLastSavedTime();
 		FieldSpec spec = SearchFieldChooserSpecBuilder.createLastSavedDateChoice(localization).getSpec();
@@ -506,7 +506,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 		
 	public void testFlexiDateMatches() throws Exception
 	{
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin b = new Bulletin(security);
 		b.set(Bulletin.TAGEVENTDATE, "2003-08-20,20030820+3");
 		
@@ -534,7 +534,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 	
 	public void testBooleanMatches() throws Exception
 	{
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		
 		final FieldSpec trueField = FieldSpec.createCustomField("true", "should be true", new FieldTypeBoolean());
 		final FieldSpec falseField = FieldSpec.createCustomField("false", "should be false", new FieldTypeBoolean());
@@ -566,7 +566,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 	
 	public void testMatchingSearchableNotRaw() throws Exception
 	{
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin b = new Bulletin(security);
 		
 		FieldSpec fieldToSearch = FieldSpec.createStandardField(Bulletin.TAGLANGUAGE, new FieldTypeLanguage());
@@ -610,7 +610,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 		fieldSpecs.add(countryDropdownFieldSpec);
 		fieldSpecs.add(cityDropdownFieldSpec);
 		fieldSpecs.add(chooseLocationDropdownSpec);
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		Bulletin bulletinToSearch = new Bulletin(security, fieldSpecs, StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
 		
 		GridData data = new GridData(gridSpec, createPoolOfResuableChoices());

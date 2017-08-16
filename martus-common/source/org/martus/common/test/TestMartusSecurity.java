@@ -50,7 +50,7 @@ import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
 import org.martus.common.crypto.MartusJceKeyPair;
 import org.martus.common.crypto.MartusKeyPair;
 import org.martus.common.crypto.MartusSecurity;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.crypto.SessionKey;
 import org.martus.util.StreamableBase64;
 import org.martus.util.TestCaseEnhanced;
@@ -275,7 +275,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		
 		try
 		{
-			MartusSecurity otherSecurity = MockMartusSecuritySha1.createOtherClient();
+			MartusSecurity otherSecurity = MockMartusSecuritySha2.createOtherClient();
 			otherSecurity.setSessionKeyCache(original);
 			fail("Should have thrown for not our cache");
 		}
@@ -310,7 +310,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 
 	public void testGetDigestOfPartOfPrivateKey() throws Exception
 	{
-		MartusCrypto knownKey = MockMartusSecuritySha1.createClient();
+		MartusCrypto knownKey = MockMartusSecuritySha2.createClient();
 		String digest = StreamableBase64.encode(knownKey.getDigestOfPartOfPrivateKey());
 		assertEquals("PY7HmxJgqLy76WNx3mKfaNnxFc8=", digest);
 	}

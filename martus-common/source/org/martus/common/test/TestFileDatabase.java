@@ -41,7 +41,7 @@ import java.util.Vector;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.BulletinUploadRecord;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
@@ -61,7 +61,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		security = MockMartusSecuritySha1.createClient();
+		security = MockMartusSecuritySha2.createClient();
 		dir = createTempFileFromName("$$$MartusTestFileDatabaseSetup");
 		dir.delete();
 		dir.mkdir();
@@ -441,7 +441,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 
 	public void testAccountMapSigning()  throws Exception
 	{
-		security = MockMartusSecuritySha1.createClient();
+		security = MockMartusSecuritySha2.createClient();
 
 		File tmpDataDir = createTempFile();
 		if( tmpDataDir.exists() ) tmpDataDir.delete();
@@ -594,7 +594,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 
 	}
 
-	MockMartusSecuritySha1 security;
+	MockMartusSecuritySha2 security;
 	MyFileDatabase db;
 	File dir;
 	String accountString1 = "acct1";
