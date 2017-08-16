@@ -52,9 +52,9 @@ public class TestMartusBulletinWrapper extends TestCaseEnhanced
 	  	if(security == null)
 	  	{
 			security = new MartusSecurity();
-			security.createKeyPair(512);
+			security.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
 			fosecurity = new MartusSecurity();
-			fosecurity.createKeyPair(512);
+			fosecurity.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
 	  	}
 	}
 	
@@ -267,4 +267,6 @@ public class TestMartusBulletinWrapper extends TestCaseEnhanced
 	static final byte[] sampleBytes1 = {1,1,2,3,0,5,7,11};
 	static final byte[] sampleBytes2 = {3,1,4,0,1,5,9,2,7};
 	static final byte[] sampleBytes3 = {6,5,0,4,7,5,5,4,4,0};
+
+	private static final int SMALLEST_LEGAL_KEY_FOR_TESTING = 1024;
 }

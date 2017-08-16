@@ -953,6 +953,6 @@ public class TestMartusSecurity extends TestCaseEnhanced
 	private static MartusSecurity security;
 	private static MartusSecurity securityWithoutKeyPair;
 	private static KeyPair invalidKeyPair;
-	final int SMALLEST_LEGAL_KEY_FOR_TESTING = 512;
+	private static final int SMALLEST_LEGAL_KEY_FOR_TESTING = 1024;
 
 }
