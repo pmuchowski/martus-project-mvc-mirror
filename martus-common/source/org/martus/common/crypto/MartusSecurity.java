@@ -769,12 +769,12 @@ public class MartusSecurity extends MartusCrypto
 
 	public SignatureEngine createSignatureVerifier(String signedByPublicKey) throws Exception
 	{
-		return SignatureEngineSha1.createVerifier(signedByPublicKey);
+		return SignatureEngineSha2.createVerifier(signedByPublicKey);
 	}
 
 	public SignatureEngine createSigner() throws Exception
 	{
-		return SignatureEngineSha1.createSigner(getKeyPair());
+		return SignatureEngineSha2.createSigner(getKeyPair());
 	}
 
 	public synchronized String createSignatureOfVectorOfStrings(Vector dataToSign) throws MartusCrypto.MartusSignatureException 
