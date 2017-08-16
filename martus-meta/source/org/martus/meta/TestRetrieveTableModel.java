@@ -50,7 +50,7 @@ import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.MiniLocalization;
 import org.martus.common.ProgressMeterInterface;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
@@ -78,10 +78,10 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			localization = new MockUiLocalization(getName());
 	 
 		if(mockSecurityForApp == null)
-			mockSecurityForApp = MockMartusSecuritySha1.createClient();
+			mockSecurityForApp = MockMartusSecuritySha2.createClient();
 		
 		if(mockSecurityForServer == null)
-			mockSecurityForServer = MockMartusSecuritySha1.createServer();
+			mockSecurityForServer = MockMartusSecuritySha2.createServer();
 
 		if(mockServer == null)
 		{
@@ -347,7 +347,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public void testRetrieveFieldOfficeSealedBulletinsMarksAllAsOnServer() throws Exception
 	{
-		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecuritySha1.createHQ(), getName());
+		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecuritySha2.createHQ(), getName());
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		HeadquartersKeys hqKeys = new HeadquartersKeys();
 		hqKeys.add(new HeadquartersKey(hqApp.getAccountId()));
@@ -386,7 +386,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public void testRetrieveFieldOfficeDraftBulletinsMarksAllAsOnServer() throws Exception
 	{
-		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecuritySha1.createHQ(), getName());
+		MockMartusApp hqApp = MockMartusApp.create(MockMartusSecuritySha2.createHQ(), getName());
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		HeadquartersKeys hqKeys = new HeadquartersKeys();
 		hqKeys.add(new HeadquartersKey(hqApp.getAccountId()));
@@ -760,13 +760,13 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 	public void testGetFieldOfficeSummaries() throws Exception
 	{
-		MockMartusSecuritySha1 hqSecurity = MockMartusSecuritySha1.createHQ();
+		MockMartusSecuritySha2 hqSecurity = MockMartusSecuritySha2.createHQ();
 		MockMartusApp hqApp = MockMartusApp.create(hqSecurity, getName());
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithServer.getAccountId(), hqApp.getAccountId());
 		
-		MockMartusSecuritySha1 hq2Security = MockMartusSecuritySha1.createHQ();
+		MockMartusSecuritySha2 hq2Security = MockMartusSecuritySha2.createHQ();
 		MockMartusApp hq2App = MockMartusApp.create(hq2Security, getName());
 		hq2App.setServerInfo("mock", mockServer.getAccountId(), "");
 		hq2App.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
@@ -1035,8 +1035,8 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	String title2 = "Even cooler";
 
 	static MiniLocalization localization;
-	private static MockMartusSecuritySha1 mockSecurityForApp;
-	private static MockMartusSecuritySha1 mockSecurityForServer;
+	private static MockMartusSecuritySha2 mockSecurityForApp;
+	private static MockMartusSecuritySha2 mockSecurityForServer;
 
 	private MockMartusApp appWithServer;
 	private MockMartusApp appWithoutServer;

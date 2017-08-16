@@ -83,9 +83,9 @@ public class TestMartusBulletinRetriever extends TestCaseEnhanced
 	  	if(security == null)
 	  	{
 			security = new MartusSecurity();
-			security.createKeyPair(512);
+			security.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
 			serverSecurity = new MartusSecurity();
-			serverSecurity.createKeyPair(512);
+			serverSecurity.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
 	  	}
 		streamOut = new ByteArrayOutputStream();
 		security.writeKeyPair(streamOut, password);
@@ -503,6 +503,7 @@ public class TestMartusBulletinRetriever extends TestCaseEnhanced
 	}
 	
 	private static final String TEST_SERVER_IP = "1.2.3.4";
+	private static final int SMALLEST_LEGAL_KEY_FOR_TESTING = 1024;
 	
 	private static MartusSecurity security;
 	static MartusSecurity serverSecurity;

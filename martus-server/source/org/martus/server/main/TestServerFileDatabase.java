@@ -30,7 +30,7 @@ import java.io.File;
 import java.util.Vector;
 
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.BulletinUploadRecord;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
@@ -52,7 +52,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		security = MockMartusSecuritySha1.createServer();
+		security = MockMartusSecuritySha2.createServer();
 
 		mockDb = new MockServerDatabase();
 
@@ -214,7 +214,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 	String smallString = "How are you doing?";
 	String smallString2 = "Just another string 123";
 
-	MockMartusSecuritySha1 security;
+	MockMartusSecuritySha2 security;
 	MockServerDatabase mockDb;
 	ServerFileDatabase serverFileDb;
 }

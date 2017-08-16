@@ -32,7 +32,7 @@ import org.martus.client.swingui.bulletintable.BulletinTableModel;
 import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.MockClientDatabase;
 import org.martus.common.packet.UniversalId;
 import org.martus.util.TestCaseEnhanced;
@@ -193,7 +193,7 @@ public class TestBulletinTableModel extends TestCaseEnhanced
 		BulletinTableModel list = new BulletinTableModel(app);
 		list.setFolder(folderSaved);
 
-		MockMartusSecuritySha1 otherSecurity = MockMartusSecuritySha1.createOtherClient();
+		MockMartusSecuritySha2 otherSecurity = MockMartusSecuritySha2.createOtherClient();
 		Bulletin notMine = new Bulletin(otherSecurity);
 		app.getStore().saveBulletinForTesting(notMine);
 		UniversalId uid = notMine.getUniversalId();

@@ -37,7 +37,7 @@ import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.FileDatabase;
 import org.martus.common.database.MockClientDatabase;
@@ -76,15 +76,15 @@ public class TestServerBulletinStore extends TestCaseEnhanced
 		
 		ServerBulletinStore store = new ServerBulletinStore(smdFactory);
 		store.setDatabase(new MockServerDatabase());
-		store.setSignatureGenerator(MockMartusSecuritySha1.createServer());
+		store.setSignatureGenerator(MockMartusSecuritySha2.createServer());
 		try
 		{
 			Vector none = store.getFieldOfficeAccountIdsWithResultCode("Not even a real account id", logger);
 			assertEquals(1, none.size());
 			assertEquals(NetworkInterfaceConstants.OK, none.get(0));
 			
-			MartusCrypto fieldOfficeSecurity1 = MockMartusSecuritySha1.createClient();
-			MartusCrypto hqSecurity = MockMartusSecuritySha1.createHQ();
+			MartusCrypto fieldOfficeSecurity1 = MockMartusSecuritySha2.createClient();
+			MartusCrypto hqSecurity = MockMartusSecuritySha2.createHQ();
 			
 			MockClientDatabase foDatabase1 = new MockClientDatabase();
 			BulletinStore foStore1 = new BulletinStore();
@@ -151,10 +151,10 @@ public class TestServerBulletinStore extends TestCaseEnhanced
 		File tempDirectory = createTempDirectory();
 		try
 		{
-			MockMartusSecuritySha1 client = MockMartusSecuritySha1.createClient();
+			MockMartusSecuritySha2 client = MockMartusSecuritySha2.createClient();
 
 			ServerBulletinStore store = new ServerBulletinStore(smdFactory);
-			store.setSignatureGenerator(MockMartusSecuritySha1.createServer());
+			store.setSignatureGenerator(MockMartusSecuritySha2.createServer());
 			FileDatabase db = new ServerFileDatabase(tempDirectory, client);
 
 			store.doAfterSigninInitialization(tempDirectory, db);

@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.martus.common.LoggerToNull;
 import org.martus.common.MartusUtilities;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.server.forclients.AbstractMockMartusServer;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.util.TestCaseEnhanced;
@@ -23,8 +23,8 @@ public class TestMirrorPuller extends TestCaseEnhanced
 
 		logger = new LoggerToNull();
 
-		clientSecurity1 = MockMartusSecuritySha1.createClient();
-		clientSecurity2 = MockMartusSecuritySha1.createOtherClient();
+		clientSecurity1 = MockMartusSecuritySha2.createClient();
+		clientSecurity2 = MockMartusSecuritySha2.createOtherClient();
 	}
 	
 	public void testLoadMirrorsToCall() throws Exception
@@ -51,6 +51,6 @@ public class TestMirrorPuller extends TestCaseEnhanced
 	}
 	
 	LoggerToNull logger;
-	MockMartusSecuritySha1 clientSecurity1;
-	MockMartusSecuritySha1 clientSecurity2;
+	MockMartusSecuritySha2 clientSecurity1;
+	MockMartusSecuritySha2 clientSecurity2;
 }

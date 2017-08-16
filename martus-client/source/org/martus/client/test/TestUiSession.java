@@ -28,7 +28,7 @@ package org.martus.client.test;
 import org.martus.client.swingui.UiSession;
 import org.martus.clientside.CurrentUiState;
 import org.martus.common.MiniLocalization;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestUiSession extends TestCaseEnhanced
@@ -42,7 +42,7 @@ public class TestUiSession extends TestCaseEnhanced
     {
 		super.setUp();
 		TRACE_BEGIN("setUp");
-   		mockSecurityForApp = MockMartusSecuritySha1.createClient();
+   		mockSecurityForApp = MockMartusSecuritySha2.createClient();
 		appWithAccount = MockMartusApp.create(mockSecurityForApp, getName());
 		TRACE_END();
 	}
@@ -89,6 +89,6 @@ public class TestUiSession extends TestCaseEnhanced
    }
 	
 	
-	private MockMartusSecuritySha1 mockSecurityForApp;
+	private MockMartusSecuritySha2 mockSecurityForApp;
 	private MockMartusApp appWithAccount;
 }

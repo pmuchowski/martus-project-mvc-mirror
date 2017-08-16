@@ -36,7 +36,7 @@ import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockDatabase;
 import org.martus.util.TestCaseEnhanced;
@@ -68,7 +68,7 @@ public class TestBulletinStoreSaveBulletin extends TestCaseEnhanced
 		proxy5 = new AttachmentProxy(tempFile5);
 		proxy6 = new AttachmentProxy(tempFile6);
 
-		security = MockMartusSecuritySha1.createClient();
+		security = MockMartusSecuritySha2.createClient();
 		store = new MockBulletinStore(this);
 		store.setSignatureGenerator(security);
 	}

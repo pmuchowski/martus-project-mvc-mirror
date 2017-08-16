@@ -30,7 +30,7 @@ import org.martus.common.GridData;
 import org.martus.common.MiniLocalization;
 import org.martus.common.PoolOfReusableChoicesLists;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.field.MartusDateRangeField;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.FieldTypeNormal;
@@ -54,7 +54,7 @@ public class TestPartialBulletin extends TestCaseEnhanced
 	
 	public void testBasics() throws Exception
 	{
-		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
+		MockMartusSecuritySha2 security = MockMartusSecuritySha2.createClient();
 		Bulletin b = new Bulletin(security);
 		String[] tagsToStore = new String[] {
 			Bulletin.TAGTITLE,
@@ -75,7 +75,7 @@ public class TestPartialBulletin extends TestCaseEnhanced
 	public void testPseudoTags() throws Exception
 	{
 		String tags[] = {Bulletin.PSEUDOFIELD_LAST_SAVED_DATE, Bulletin.PSEUDOFIELD_LOCAL_ID, Bulletin.TAGSTATUS,};
-		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
+		MockMartusSecuritySha2 security = MockMartusSecuritySha2.createClient();
 		Bulletin b = new Bulletin(security);
 		for(int i = 0; i < tags.length; ++i)
 			assertNotEquals("Pseudotag not working: " + tags[i] + "?", "", b.get(tags[i]));
@@ -86,7 +86,7 @@ public class TestPartialBulletin extends TestCaseEnhanced
 	
 	public void testSubFields() throws Exception
 	{
-		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
+		MockMartusSecuritySha2 security = MockMartusSecuritySha2.createClient();
 		Bulletin b = new Bulletin(security);
 
 		MultiCalendar beginDate = MultiCalendar.createFromGregorianYearMonthDay(2003, 07, 25);
@@ -106,7 +106,7 @@ public class TestPartialBulletin extends TestCaseEnhanced
 	
 	public void testGridColumns() throws Exception
 	{
-		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
+		MockMartusSecuritySha2 security = MockMartusSecuritySha2.createClient();
 		GridFieldSpec gridSpec = new GridFieldSpec();
 		gridSpec.setTag("grid");
 		gridSpec.setLabel("Grid");
@@ -127,7 +127,7 @@ public class TestPartialBulletin extends TestCaseEnhanced
 	
 	public void testEquals() throws Exception
 	{
-		MockMartusSecuritySha1 security = MockMartusSecuritySha1.createClient();
+		MockMartusSecuritySha2 security = MockMartusSecuritySha2.createClient();
 		Bulletin b1 = new Bulletin(security);
 		Bulletin b2 = new Bulletin(security);
 		String[] tagsToStore = new String[] {

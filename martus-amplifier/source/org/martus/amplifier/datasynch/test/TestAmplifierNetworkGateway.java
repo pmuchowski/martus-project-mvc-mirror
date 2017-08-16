@@ -34,7 +34,7 @@ import org.martus.amplifier.datasynch.BackupServerInfo;
 import org.martus.amplifier.network.AmplifierBulletinRetrieverGatewayInterface;
 import org.martus.common.LoggerToNull;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NetworkResponse;
@@ -52,7 +52,7 @@ public class TestAmplifierNetworkGateway extends TestAbstractAmplifierDataSynch
 		//System.out.println("AmplifierNetworkGatewayTest:testGetAllAccountIds");
 		AmplifierBulletinRetrieverGatewayInterface abrgi = new MockGatewayInterface();
 		BackupServerInfo serverToCall = new BackupServerInfo("test", "10.1.1.1", 1, "key");
-		AmplifierNetworkGateway amplifierGateway = new AmplifierNetworkGateway(abrgi, serverToCall, dummyLogger, MockMartusSecuritySha1.createOtherServer());
+		AmplifierNetworkGateway amplifierGateway = new AmplifierNetworkGateway(abrgi, serverToCall, dummyLogger, MockMartusSecuritySha2.createOtherServer());
 		Vector list = amplifierGateway.getAllAccountIds();
 		for(int i =0; i<list.size(); i++)
 		{
@@ -65,7 +65,7 @@ public class TestAmplifierNetworkGateway extends TestAbstractAmplifierDataSynch
 	{
 		AmplifierBulletinRetrieverGatewayInterface gateway = new MockGatewayInterface();
 		BackupServerInfo serverToCall = new BackupServerInfo("test", "10.1.1.1", 1, "key");
-		AmplifierNetworkGateway amplifierGateway = new AmplifierNetworkGateway(gateway, serverToCall, dummyLogger, MockMartusSecuritySha1.createOtherServer());
+		AmplifierNetworkGateway amplifierGateway = new AmplifierNetworkGateway(gateway, serverToCall, dummyLogger, MockMartusSecuritySha2.createOtherServer());
 		Vector contactInfo = amplifierGateway.getContactInfo(sampleAccountId);
 		assertNull("Should not find account since data isn't there yet", contactInfo);
 
@@ -80,7 +80,7 @@ public class TestAmplifierNetworkGateway extends TestAbstractAmplifierDataSynch
 		assertNull("Should not return this invalid contactInfo", invalidSignatureForContactInfo);
 
 		info.clear();
-		MockMartusSecuritySha1 client = MockMartusSecuritySha1.createClient();
+		MockMartusSecuritySha2 client = MockMartusSecuritySha2.createClient();
 		String clientId = client.getPublicKeyString();
 		info.add(clientId);
 		info.add(new Integer(1));
@@ -101,7 +101,7 @@ public class TestAmplifierNetworkGateway extends TestAbstractAmplifierDataSynch
 	{
 		AmplifierBulletinRetrieverGatewayInterface abrgi = new MockGatewayInterface();
 		BackupServerInfo serverToCall = new BackupServerInfo("test", "10.1.1.1", 1, "key");
-		AmplifierNetworkGateway amplifierGateway = new AmplifierNetworkGateway(abrgi, serverToCall,  dummyLogger, MockMartusSecuritySha1.createOtherServer());
+		AmplifierNetworkGateway amplifierGateway = new AmplifierNetworkGateway(abrgi, serverToCall,  dummyLogger, MockMartusSecuritySha2.createOtherServer());
 		
 		Vector list = amplifierGateway.getAccountPublicBulletinLocalIds(sampleAccountId);
 		assertTrue(list.size() > 0);

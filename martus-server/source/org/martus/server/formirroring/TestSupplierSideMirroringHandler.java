@@ -35,7 +35,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockDatabase;
 import org.martus.common.database.MockServerDatabase;
@@ -66,10 +66,10 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplierSecurity = supplier.getSecurity();
 		handler = new SupplierSideMirroringHandler(supplier, supplierSecurity);
 		
-		callerSecurity = MockMartusSecuritySha1.createClient();
+		callerSecurity = MockMartusSecuritySha2.createClient();
 		callerAccountId = callerSecurity.getPublicKeyString();
 		
-		authorSecurity = MockMartusSecuritySha1.createOtherClient();
+		authorSecurity = MockMartusSecuritySha2.createOtherClient();
 	}
 
 	public void testBadSignature() throws Exception

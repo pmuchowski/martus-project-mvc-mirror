@@ -45,7 +45,7 @@ import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.DeleteRequestRecord;
 import org.martus.common.database.FileDatabase;
@@ -80,23 +80,23 @@ public class TestServerForClients extends TestCaseEnhanced
 
 		if(clientSecurity == null)
 		{
-			clientSecurity = MockMartusSecuritySha1.createClient();
+			clientSecurity = MockMartusSecuritySha2.createClient();
 			clientAccountId = clientSecurity.getPublicKeyString();
 		}
 		
 		if(serverSecurity == null)
 		{
-			serverSecurity = MockMartusSecuritySha1.createServer();
+			serverSecurity = MockMartusSecuritySha2.createServer();
 		}
 		
 		if(testServerSecurity == null)
 		{
-			testServerSecurity = MockMartusSecuritySha1.createOtherServer();
+			testServerSecurity = MockMartusSecuritySha2.createOtherServer();
 		}
 
 		if(hqSecurity == null)
 		{
-			hqSecurity = MockMartusSecuritySha1.createHQ();
+			hqSecurity = MockMartusSecuritySha2.createHQ();
 		}
 		if(tempFile == null)
 		{
@@ -227,7 +227,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		MartusCrypto fieldSecurity1 = clientSecurity;
 		mockServer.allowUploads(fieldSecurity1.getPublicKeyString());
 
-		MartusCrypto nonFieldSecurity = MockMartusSecuritySha1.createOtherClient();
+		MartusCrypto nonFieldSecurity = MockMartusSecuritySha2.createOtherClient();
 		mockServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 
 		Vector list1 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString(), new Vector());
@@ -236,7 +236,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		assertNotNull("null id1 [0] list1", list1.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list1.get(0));
 		
-		MartusCrypto otherServerSecurity = MockMartusSecuritySha1.createOtherServer();
+		MartusCrypto otherServerSecurity = MockMartusSecuritySha2.createOtherServer();
 
 		Bulletin bulletinImmutable = new Bulletin(clientSecurity);
 		HeadquartersKeys keys = new HeadquartersKeys();
@@ -455,7 +455,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		AbstractMockMartusServer other = new MockMartusServer(mockServer.getDataDirectory(), this);
 		other.setClientListenerEnabled(true);
 		other.verifyAndLoadConfigurationFiles();
-		MartusCrypto otherServerSecurity = MockMartusSecuritySha1.createOtherServer();
+		MartusCrypto otherServerSecurity = MockMartusSecuritySha2.createOtherServer();
 		other.setSecurity(otherServerSecurity);
 		
 		String worked = other.requestUploadRights("whatever", sampleMagicWord1);
@@ -713,7 +713,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		accessToken = new MartusAccountAccessToken(rawToken[0].toString());
 		assertEquals("Should be same token as MTA was given initially", validMartusAccessToken1String, accessToken.getToken());
 		
-		MockMartusSecuritySha1 client2Security = MockMartusSecuritySha1.createOtherClient();
+		MockMartusSecuritySha2 client2Security = MockMartusSecuritySha2.createOtherClient();
 		String clientAccount2Id = client2Security.getPublicKeyString();
 		
 		String validTokenGivenByToken2Authority = createJsonTokenResponse(clientAccount2Id, validMartusAccessToken2String);
@@ -793,7 +793,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		String emptyTokenInitiallyIndicatesNonResponseFromTokenAuthority = "";
 		mockServerForClients.setAccessAccountJsonTokenResponse(emptyTokenInitiallyIndicatesNonResponseFromTokenAuthority);
 
-		MockMartusSecuritySha1 client2Security = MockMartusSecuritySha1.createOtherClient();
+		MockMartusSecuritySha2 client2Security = MockMartusSecuritySha2.createOtherClient();
 		String clientAccount2Id = client2Security.getPublicKeyString();
 		MartusAccountAccessToken token1ToFind = new MartusAccountAccessToken(validMartusAccessToken1String);
 		Vector clientAccountIdsForToken = mockServerForClients.getMartusAccountIdFromAccessToken(clientAccount2Id, token1ToFind);

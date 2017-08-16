@@ -60,7 +60,7 @@ import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.fieldspec.FormTemplate;
 import org.martus.common.fieldspec.StandardFieldSpecs;
 import org.martus.common.network.ClientSideNetworkInterface;
@@ -94,10 +94,10 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
     		TRACE_BEGIN("setUp");
 		
 		if(mockSecurityForApp == null)
-			mockSecurityForApp = MockMartusSecuritySha1.createClient();
+			mockSecurityForApp = MockMartusSecuritySha2.createClient();
 		
 		if(mockSecurityForServer == null)
-			mockSecurityForServer = MockMartusSecuritySha1.createServer();
+			mockSecurityForServer = MockMartusSecuritySha2.createServer();
 
 		mockServer = new MockMartusServer(this);
 		mockServer.serverForClients.loadBannedClients();
@@ -153,7 +153,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testDownloadFieldOfficeBulletins");
 	
-		MockMartusSecuritySha1 hqSecurity = MockMartusSecuritySha1.createHQ();
+		MockMartusSecuritySha2 hqSecurity = MockMartusSecuritySha2.createHQ();
 		MockMartusApp hqApp = MockMartusApp.create(hqSecurity, getName());
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
@@ -420,7 +420,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertTrue("Did not return the description for the 2nd template?",returnedDescritions2.contains(formTemplateDescription2));
 		assertTrue("Did not return the empty description for the 3rd template?",returnedDescritions2.contains(formTemplateDescriptionEmpty));
 		
-		MockMartusSecuritySha1 otherSecurity = MockMartusSecuritySha1.createOtherClient();
+		MockMartusSecuritySha2 otherSecurity = MockMartusSecuritySha2.createOtherClient();
 		MockMartusApp otherClient = MockMartusApp.create(otherSecurity, "new Client");
 		try 
 		{
@@ -650,7 +650,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	
 	public void testGetServerPublicKey() throws Exception
 	{
-		MockMartusSecuritySha1 securityWithAccount = MockMartusSecuritySha1.createOtherClient();
+		MockMartusSecuritySha2 securityWithAccount = MockMartusSecuritySha2.createOtherClient();
 		mockServer.setSecurity(securityWithAccount);
 		String publicKey = appWithServer.getServerPublicKey(mockNonSSLServerHandler);
 		assertEquals("wrong key?", securityWithAccount.getPublicKeyString(), publicKey);
@@ -1167,7 +1167,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		MockGateway gateway = new MockGateway();
 
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		MockMartusApp app= MockMartusApp.create(security, getName());
 		app.currentNetworkInterfaceGateway = gateway;
 		
@@ -1218,7 +1218,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		MockGateway gateway = new MockGateway();
 
-		MartusCrypto security = MockMartusSecuritySha1.createClient();
+		MartusCrypto security = MockMartusSecuritySha2.createClient();
 		MockMartusApp app= MockMartusApp.create(security, getName());
 		app.currentNetworkInterfaceGateway = gateway;
 		
@@ -1558,8 +1558,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	}
 	
 	final private String mockServerName = "mock";
-	private static MockMartusSecuritySha1 mockSecurityForApp;
-	private static MockMartusSecuritySha1 mockSecurityForServer;
+	private static MockMartusSecuritySha2 mockSecurityForApp;
+	private static MockMartusSecuritySha2 mockSecurityForServer;
 
 	private static MockMartusApp appWithoutServer;
 	private MockMartusApp appWithServer;

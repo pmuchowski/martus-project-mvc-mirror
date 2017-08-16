@@ -29,7 +29,7 @@ package org.martus.server.forclients;
 import java.util.Vector;
 
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.util.TestCaseEnhanced;
 
@@ -44,7 +44,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		super.setUp();
-		mySecurity = MockMartusSecuritySha1.createServer();
+		mySecurity = MockMartusSecuritySha2.createServer();
 		
 		mockServer = new MockMartusServer(this);
 		mockServer.serverForClients.loadBannedClients();
@@ -52,7 +52,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 		mockServer.setSecurity(mySecurity);
 		handler = new ServerSideNetworkHandler(mockServer.serverForClients);
 
-		otherSecurity = MockMartusSecuritySha1.createClient();
+		otherSecurity = MockMartusSecuritySha2.createClient();
 	}
 	
 	public void tearDown() throws Exception

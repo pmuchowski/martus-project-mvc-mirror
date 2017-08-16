@@ -27,28 +27,28 @@ package org.martus.server.forclients;
 import java.io.File;
 
 import org.martus.common.crypto.AbstractMockMartusSecurity;
-import org.martus.common.crypto.MockMartusSecuritySha2;
+import org.martus.common.crypto.MockMartusSecuritySha1;
 import org.martus.common.database.Database;
 import org.martus.util.TestCaseEnhanced;
 
-public class MockMartusServerSha2 extends AbstractMockMartusServer
+public class MockMartusServerSha1 extends AbstractMockMartusServer
 {
-	public MockMartusServerSha2(TestCaseEnhanced testCase) throws Exception
+	public MockMartusServerSha1(TestCaseEnhanced testCase) throws Exception
 	{
 		super(testCase);
 	}
 	
-	public MockMartusServerSha2(Database databaseToUse, TestCaseEnhanced testCase) throws Exception
+	public MockMartusServerSha1(Database databaseToUse, TestCaseEnhanced testCase) throws Exception
 	{
 		super(databaseToUse, testCase);
 	}
 	
-	public MockMartusServerSha2(File dataDir, TestCaseEnhanced testCase) throws Exception
+	public MockMartusServerSha1(File dataDir, TestCaseEnhanced testCase) throws Exception
 	{
 		super(dataDir, testCase);
 	}
 	
-	public MockMartusServerSha2(File dataDir, Database databaseToUse, TestCaseEnhanced testCase) throws Exception
+	public MockMartusServerSha1(File dataDir, Database databaseToUse, TestCaseEnhanced testCase) throws Exception
 	{
 		super(dataDir, databaseToUse, testCase);
 	}
@@ -56,6 +56,6 @@ public class MockMartusServerSha2 extends AbstractMockMartusServer
 	@Override
 	protected AbstractMockMartusSecurity createServer() throws Exception
 	{
-		return MockMartusSecuritySha2.createServer();
+		return MockMartusSecuritySha1.createServer();
 	}
 }

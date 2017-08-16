@@ -33,7 +33,7 @@ import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.Database;
 import org.martus.common.database.MockClientDatabase;
 
@@ -42,7 +42,7 @@ public class MockBulletinStore extends ClientBulletinStore
 {
 	public MockBulletinStore() throws Exception
 	{
-		this(MockMartusSecuritySha1.createClient());
+		this(MockMartusSecuritySha2.createClient());
 	}
 
 	public MockBulletinStore(MartusCrypto crypto) throws Exception

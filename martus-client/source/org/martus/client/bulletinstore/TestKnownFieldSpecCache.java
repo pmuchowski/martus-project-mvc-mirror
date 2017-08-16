@@ -65,7 +65,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 	{
 		securitySha1 = MockMartusSecuritySha1.createClient();
 		securitySha2 = MockMartusSecuritySha2.createClient();
-		app = MockMartusApp.create(securitySha1, getName());
+		app = MockMartusApp.create(securitySha2, getName());
 		ClientBulletinStore store = app.getStore();
 		cache = store.knownFieldSpecCache;
 	}
@@ -78,7 +78,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 
 	public void testClearAndInitialize() throws Exception
 	{
-		Bulletin one = createSampleBulletin(securitySha1);
+		Bulletin one = createSampleBulletin(securitySha2);
 		app.saveBulletin(one, app.getFolderDraftOutbox());
 		Set specs = cache.getAllKnownFieldSpecs();
 		assertEquals("wrong number of specs?", 2, specs.size());
@@ -88,7 +88,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 
 	public void testSaveBulletin() throws Exception
 	{
-		Bulletin withCustom = createSampleBulletin(securitySha1);
+		Bulletin withCustom = createSampleBulletin(securitySha2);
 		app.saveBulletin(withCustom, app.getFolderDraftOutbox());
 		Set specsAfterSave = cache.getAllKnownFieldSpecs();
 		int newExpectedCount = publicSpecs.size() + privateSpecs.size();
@@ -101,10 +101,10 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 
 	public void testSaveXFormsBulletin() throws Exception
 	{
-		Bulletin normalBulletin = new Bulletin(securitySha1, StandardFieldSpecs.getDefaultTopSectionFieldSpecs(), StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
+		Bulletin normalBulletin = new Bulletin(securitySha2, StandardFieldSpecs.getDefaultTopSectionFieldSpecs(), StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
 		app.saveBulletin(normalBulletin, app.getFolderDraftOutbox());
 
-		Bulletin withXForms = createSampleXFormsBulletin(securitySha1);
+		Bulletin withXForms = createSampleXFormsBulletin(securitySha2);
 		Set specsBeforeXFormsSaved = cache.getAllKnownFieldSpecs();
 		app.saveBulletin(withXForms, app.getFolderDraftOutbox());
 		Set specsAfterXFormsSaved = cache.getAllKnownFieldSpecs();
@@ -133,7 +133,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 
 	public void testIgnoreUnauthorizedBulletins() throws Exception
 	{
-		MockMartusSecuritySha1 otherSecurity = MockMartusSecuritySha1.createOtherClient();
+		MockMartusSecuritySha2 otherSecurity = MockMartusSecuritySha2.createOtherClient();
 
 		MockMartusApp otherApp = MockMartusApp.create(otherSecurity, getName());
 		Bulletin notOurs = createSampleBulletin(otherSecurity);
@@ -152,13 +152,13 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 	public void testDeleteAndImportBulletin() throws Exception
 	{
 		int expectedCountAfterSaveOrImport = publicSpecs.size() + privateSpecs.size();
-		Bulletin toImport = createSampleBulletin(securitySha1);
+		Bulletin toImport = createSampleBulletin(securitySha2);
 		app.saveBulletin(toImport, app.getFolderDraftOutbox());
 		assertEquals("save didn't add specs?", expectedCountAfterSaveOrImport, cache.getAllKnownFieldSpecs().size());
 
 		File zipFile = createTempFile();
 		ClientBulletinStore store = app.getStore();
-		BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(store.getDatabase(), toImport.getDatabaseKey(), zipFile, securitySha1);
+		BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(store.getDatabase(), toImport.getDatabaseKey(), zipFile, securitySha2);
 		store.destroyBulletin(toImport);
 		Set specsAfterDelete = cache.getAllKnownFieldSpecs();
 		assertEquals("didn't remove specs from deleted bulletin?", 0, specsAfterDelete.size());
@@ -175,7 +175,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 		ByteArrayOutputStream saved = new ByteArrayOutputStream();
 		cache.saveToStream(saved);
 		ByteArrayInputStream loadable = new ByteArrayInputStream(saved.toByteArray());
-		KnownFieldSpecCache reloaded = new KnownFieldSpecCache(new MockClientDatabase(), securitySha1);
+		KnownFieldSpecCache reloaded = new KnownFieldSpecCache(new MockClientDatabase(), securitySha2);
 		reloaded.loadFromStream(loadable);
 		Set specs = reloaded.getAllKnownFieldSpecs();
 		assertEquals("Didn't reload properly?", cache.getAllKnownFieldSpecs(), specs);
@@ -189,13 +189,13 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 		reusableChoices.add(new ChoiceItem("code1", "Label1"));
 		reusableChoices.add(new ChoiceItem("code2", "Label2"));
 		topSpecs.addReusableChoiceList(reusableChoices);
-		Bulletin b = new Bulletin(securitySha1, topSpecs, StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
+		Bulletin b = new Bulletin(securitySha2, topSpecs, StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
 		cache.revisionWasSaved(b);
 		
 		ByteArrayOutputStream saved = new ByteArrayOutputStream();
 		cache.saveToStream(saved);
 		ByteArrayInputStream loadable = new ByteArrayInputStream(saved.toByteArray());
-		KnownFieldSpecCache reloadedCache = new KnownFieldSpecCache(new MockClientDatabase(), securitySha1);
+		KnownFieldSpecCache reloadedCache = new KnownFieldSpecCache(new MockClientDatabase(), securitySha2);
 		reloadedCache.loadFromStream(loadable);
 		ReusableChoices reloadedChoices = reloadedCache.getAllReusableChoiceLists().getChoices(reusableChoices.getCode());
 		assertEquals(reusableChoices, reloadedChoices);
@@ -205,7 +205,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 	{
 		byte[] badData = {1, 22, 15, 121, 1, 0};
 		ByteArrayInputStream badIn = new ByteArrayInputStream(badData);
-		KnownFieldSpecCache scratch = new KnownFieldSpecCache(new MockClientDatabase(), securitySha1);
+		KnownFieldSpecCache scratch = new KnownFieldSpecCache(new MockClientDatabase(), securitySha2);
 		try
 		{
 			scratch.loadFromStream(badIn);
@@ -223,8 +223,8 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 		DropDownFieldSpec spec1 = new DropDownFieldSpec(choices1);
 		DropDownFieldSpec spec2 = new DropDownFieldSpec(choices2);
 		
-		Bulletin b1 = new Bulletin(securitySha1, new FieldSpecCollection(new FieldSpec[] {spec1}), new FieldSpecCollection());
-		Bulletin b2 = new Bulletin(securitySha1, new FieldSpecCollection(new FieldSpec[] {spec2}), new FieldSpecCollection());
+		Bulletin b1 = new Bulletin(securitySha2, new FieldSpecCollection(new FieldSpec[] {spec1}), new FieldSpecCollection());
+		Bulletin b2 = new Bulletin(securitySha2, new FieldSpecCollection(new FieldSpec[] {spec2}), new FieldSpecCollection());
 		
 		assertEquals(0, cache.getAllKnownFieldSpecs().size());
 		cache.revisionWasSaved(b1);
@@ -268,7 +268,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 		reusableChoices1.addAll(choices1);
 		FieldSpecCollection topSpecs1 = new FieldSpecCollection(new FieldSpec[] {spec});
 		topSpecs1.addReusableChoiceList(reusableChoices1);
-		return new Bulletin(securitySha1, topSpecs1, new FieldSpecCollection());
+		return new Bulletin(securitySha2, topSpecs1, new FieldSpecCollection());
 	}
 	
 	public void testReallyBigFieldSpec() throws Exception
@@ -284,7 +284,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 		MessageFieldSpec spec1 = new MessageFieldSpec();
 		spec1.setLabel(reallyLongString.toString());
 		
-		Bulletin b = new Bulletin(securitySha1, new FieldSpecCollection(new FieldSpec[] {spec1}), new FieldSpecCollection());
+		Bulletin b = new Bulletin(securitySha2, new FieldSpecCollection(new FieldSpec[] {spec1}), new FieldSpecCollection());
 		cache.revisionWasSaved(b);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		cache.saveToStream(out);
@@ -300,7 +300,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 		choices.add(new ChoiceItem("b", "B"));
 		choices.add(new ChoiceItem("c", "C"));
 		topSpecs.addReusableChoiceList(choices);
-		Bulletin b = new Bulletin(securitySha1, topSpecs, StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
+		Bulletin b = new Bulletin(securitySha2, topSpecs, StandardFieldSpecs.getDefaultBottomSectionFieldSpecs());
 		assertEquals("Already have reusable choices?", 0, cache.getAllReusableChoiceLists().size());
 		cache.revisionWasSaved(b);
 		assertEquals("Didn't memorize reusable choices?", 1, cache.getAllReusableChoiceLists().size());
@@ -319,7 +319,7 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 
 	public void testLoadKnownFieldSpecCacheSignedWithSha1UsingSha2Verifier() throws Exception
 	{
-		ByteArrayInputStream loadable = createAndSaveCache(securitySha2);
+		ByteArrayInputStream loadable = createAndSaveCache(securitySha1);
 
 		KnownFieldSpecCache reloaded = new KnownFieldSpecCache(new MockClientDatabase(), securitySha2);
 

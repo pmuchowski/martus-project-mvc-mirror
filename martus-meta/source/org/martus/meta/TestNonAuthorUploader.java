@@ -31,7 +31,7 @@ import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
@@ -61,7 +61,7 @@ public class TestNonAuthorUploader extends TestCaseEnhanced
 	{
 		if(authorSecurity == null)
 		{
-			authorSecurity = MockMartusSecuritySha1.createClient();
+			authorSecurity = MockMartusSecuritySha2.createClient();
 		}
 		
 		if(authorBulletinStore == null)
@@ -84,7 +84,7 @@ public class TestNonAuthorUploader extends TestCaseEnhanced
 	{
 		if (uploaderSecurity == null)
 		{
-			uploaderSecurity = MockMartusSecuritySha1.createOtherClient();
+			uploaderSecurity = MockMartusSecuritySha2.createOtherClient();
 			uploaderAccountId = uploaderSecurity.getPublicKeyString();
 		}
 		
@@ -98,7 +98,7 @@ public class TestNonAuthorUploader extends TestCaseEnhanced
 	{
 		if(serverSecurity == null)
 		{
-			serverSecurity = MockMartusSecuritySha1.createServer();
+			serverSecurity = MockMartusSecuritySha2.createServer();
 		}
 
 		if (mockServer == null)

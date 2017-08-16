@@ -29,7 +29,7 @@ import java.io.File;
 import java.util.Vector;
 import org.martus.common.LoggerToNull;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.DirectoryUtils;
 import org.martus.util.TestCaseEnhanced;
@@ -48,7 +48,7 @@ public class TestAuthorizeLog extends TestCaseEnhanced
 	{
 		if(security == null)
 		{
-			security = MockMartusSecuritySha1.createServer();
+			security = MockMartusSecuritySha2.createServer();
 		}
 		tempDir = createTempDirectory();
 		File authorizeLogFile = new File(tempDir, "$$AuthorizeLog.txt");

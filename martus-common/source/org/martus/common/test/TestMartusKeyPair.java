@@ -39,7 +39,7 @@ import org.martus.common.crypto.MartusJceKeyPair;
 import org.martus.common.crypto.MartusKeyPair;
 import org.martus.common.crypto.MartusKeyPairLoader;
 import org.martus.common.crypto.MartusKeyPairSaver;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.crypto.SecurityContext;
 import org.martus.util.StreamableBase64;
 import org.martus.util.TestCaseEnhanced;
@@ -74,8 +74,8 @@ public class TestMartusKeyPair extends TestCaseEnhanced
 			String publicKeyString = p.getPublicKeyString();
 			StreamableBase64.decode(publicKeyString);
 		}
-		objects.add(MockMartusSecuritySha1.createClient().getKeyPair());
-		objects.add(MockMartusSecuritySha1.createOtherClient().getKeyPair());
+		objects.add(MockMartusSecuritySha2.createClient().getKeyPair());
+		objects.add(MockMartusSecuritySha2.createOtherClient().getKeyPair());
 //		System.out.println("JCE:");
 //		System.out.println(((RSAPublicKey)jceKeyPair.getPublicKey()).getModulus());
 //		System.out.println(((RSAPublicKey)jceKeyPair.getPublicKey()).getPublicExponent());
@@ -147,7 +147,7 @@ public class TestMartusKeyPair extends TestCaseEnhanced
 
 	public void testMartusKeyPairSaver() throws Exception
 	{
-		MartusJceKeyPair keyPair = (MartusJceKeyPair) MockMartusSecuritySha1.createClient().getKeyPair();
+		MartusJceKeyPair keyPair = (MartusJceKeyPair) MockMartusSecuritySha2.createClient().getKeyPair();
 		ByteArrayOutputStream rawOut = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(rawOut);
 		MartusKeyPairSaver.save(out, keyPair.getJceKeyPair());

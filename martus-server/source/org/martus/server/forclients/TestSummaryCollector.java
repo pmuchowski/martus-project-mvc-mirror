@@ -32,7 +32,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ReadableDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
@@ -54,7 +54,7 @@ public class TestSummaryCollector extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		server = new MockMartusServer(this);
-		authorSecurity = MockMartusSecuritySha1.createClient();
+		authorSecurity = MockMartusSecuritySha2.createClient();
 		ServerBulletinStore store = server.getStore();
 
 		original = new Bulletin(authorSecurity);
@@ -174,7 +174,7 @@ public class TestSummaryCollector extends TestCaseEnhanced
 	}
 
 	AbstractMockMartusServer server;
-	MockMartusSecuritySha1 authorSecurity;
+	MockMartusSecuritySha2 authorSecurity;
 	Bulletin original;
 	Bulletin firstClone;
 	Bulletin clone;

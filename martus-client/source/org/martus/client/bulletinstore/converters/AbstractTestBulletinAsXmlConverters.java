@@ -35,7 +35,7 @@ import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletinstore.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.fieldspec.StandardFieldSpecs;
 import org.martus.util.DatePreference;
 import org.martus.util.DirectoryUtils;
@@ -62,7 +62,7 @@ abstract public class AbstractTestBulletinAsXmlConverters extends TestCaseEnhanc
 		
 		if(security == null)
 		{
-			security = MockMartusSecuritySha1.createClient();
+			security = MockMartusSecuritySha2.createClient();
 		}
 		
 		if(app == null)

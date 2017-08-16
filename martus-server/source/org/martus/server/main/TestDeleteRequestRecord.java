@@ -30,7 +30,7 @@ import java.io.StringReader;
 import java.util.Vector;
 
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.DeleteRequestRecord;
 import org.martus.common.database.MockServerDatabase;
@@ -82,9 +82,9 @@ public class TestDeleteRequestRecord extends TestCaseEnhanced
 	
 	public void testVerification() throws Exception
 	{
-		MockMartusSecuritySha1 clientSecurity = new MockMartusSecuritySha1();
+		MockMartusSecuritySha2 clientSecurity = new MockMartusSecuritySha2();
 		clientSecurity.createKeyPair();
-		MockMartusSecuritySha1 serverSecurity = new MockMartusSecuritySha1();
+		MockMartusSecuritySha2 serverSecurity = new MockMartusSecuritySha2();
 		serverSecurity.createKeyPair();
 		Bulletin b1 = new Bulletin(clientSecurity);
 		Bulletin b2 = new Bulletin(clientSecurity);
@@ -104,9 +104,9 @@ public class TestDeleteRequestRecord extends TestCaseEnhanced
 	
 	public void testSaveToDatabase() throws Exception
 	{
-		MockMartusSecuritySha1 clientSecurity = new MockMartusSecuritySha1();
+		MockMartusSecuritySha2 clientSecurity = new MockMartusSecuritySha2();
 		clientSecurity.createKeyPair();
-		MockMartusSecuritySha1 serverSecurity = new MockMartusSecuritySha1();
+		MockMartusSecuritySha2 serverSecurity = new MockMartusSecuritySha2();
 		serverSecurity.createKeyPair();
 		Bulletin b1 = new Bulletin(clientSecurity);
 		Bulletin b2 = new Bulletin(clientSecurity);

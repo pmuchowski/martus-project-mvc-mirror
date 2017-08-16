@@ -34,7 +34,7 @@ import org.martus.clientside.test.MockUiLocalization;
 import org.martus.common.HeadquartersKey;
 import org.martus.common.HeadquartersKeys;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestHeadquartersEditorTableModel extends TestCaseEnhanced implements HeadquartersSelectionListener
@@ -52,7 +52,7 @@ public class TestHeadquartersEditorTableModel extends TestCaseEnhanced implement
 		if(localization!=null)
 			return;
 		localization = new MockUiLocalization(getName());
-		appSecurityAndHQ = MockMartusSecuritySha1.createHQ();
+		appSecurityAndHQ = MockMartusSecuritySha2.createHQ();
 		app = MockMartusApp.create(appSecurityAndHQ, localization, getName());
 
 		modelWithData = new HeadquartersEditorTableModel(app);

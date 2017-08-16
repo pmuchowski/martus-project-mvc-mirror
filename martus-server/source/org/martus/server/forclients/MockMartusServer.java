@@ -29,7 +29,7 @@ package org.martus.server.forclients;
 import java.io.File;
 
 import org.martus.common.crypto.AbstractMockMartusSecurity;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.database.Database;
 import org.martus.util.TestCaseEnhanced;
 
@@ -58,6 +58,6 @@ public class MockMartusServer extends AbstractMockMartusServer
 	@Override
 	protected AbstractMockMartusSecurity createServer() throws Exception
 	{
-		return MockMartusSecuritySha1.createServer();
+		return MockMartusSecuritySha2.createServer();
 	}
 }

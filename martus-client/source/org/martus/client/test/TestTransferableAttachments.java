@@ -40,7 +40,7 @@ import org.martus.client.core.TransferableAttachmentList;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestTransferableAttachments extends TestCaseEnhanced
@@ -55,7 +55,7 @@ public class TestTransferableAttachments extends TestCaseEnhanced
 		super.setUp();
 		if(security == null)
 		{
-			security = MockMartusSecuritySha1.createServer();
+			security = MockMartusSecuritySha2.createServer();
 		}
 		store = new MockBulletinStore(security);
 		Bulletin b = new Bulletin(security);

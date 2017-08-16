@@ -31,7 +31,7 @@ import java.net.MalformedURLException;
 import java.util.Vector;
 import org.apache.xmlrpc.XmlRpcException;
 import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpc;
-import org.martus.common.crypto.MockMartusSecuritySha1;
+import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.util.TestCaseEnhanced;
 
 public class TestClientSideNetworkHandler extends TestCaseEnhanced 
@@ -66,7 +66,7 @@ public class TestClientSideNetworkHandler extends TestCaseEnhanced
 
 	public void testPortSelectionSSL() throws Exception
 	{
-		MockMartusSecuritySha1 mockSecurity = MockMartusSecuritySha1.createServer();
+		MockMartusSecuritySha2 mockSecurity = MockMartusSecuritySha2.createServer();
 		
 		MockHandlerForSSL handler = new MockHandlerForSSL();
 		handler.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurity.getPublicKeyString());
