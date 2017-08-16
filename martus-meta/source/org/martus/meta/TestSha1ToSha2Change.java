@@ -41,7 +41,7 @@ import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.server.forclients.AbstractMockMartusServer;
 import org.martus.server.forclients.MockMartusServer;
-import org.martus.server.forclients.MockMartusServerSha2;
+import org.martus.server.forclients.MockMartusServerSha1;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.util.TestCaseEnhanced;
 
@@ -69,7 +69,7 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		if(hqAppSecuritySha2 == null)
 			hqAppSecuritySha2 = MockMartusSecuritySha2.createHQ();
 
-		serverSha2 = new MockMartusServerSha2(this);
+		serverSha2 = new MockMartusServerSha1(this);
 		serverSha2.serverForClients.loadBannedClients();
 		serverSha2.verifyAndLoadConfigurationFiles();
 
