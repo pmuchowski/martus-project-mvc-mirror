@@ -125,6 +125,7 @@ public class TestClient
 		suite.addTest(new TestSuite(TestSearchParser.class));
 		suite.addTest(new TestSuite(TestSearchSpec.class));
 		suite.addTest(new TestSuite(TestSearchTreeNode.class));
+		suite.addTest(new TestSuite(TestSha1ToSha2Change.class));
 		suite.addTest(new TestSuite(TestSortableBulletinList.class));
 		suite.addTest(new TestSuite(TestSummaryCount.class));
 		suite.addTest(new TestSuite(TestTokenReplacement.class));
