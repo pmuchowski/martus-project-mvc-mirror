@@ -77,8 +77,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		updateCasesSelectDefaultCase();
 		CaseListChangeListener caseListChangeListener = new CaseListChangeListener();
 		casesListViewAll.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-		currentSelectedCase = currentCasesListView.getSelectionModel().selectedItemProperty();
-		showTrashFolder.visibleProperty().bind(getFxLandingShellController().getShowTrashBinding());
+		currentSelectedCase = casesListViewAll.getSelectionModel().selectedItemProperty();
 		addFolderContentsListener();
 		addFolderListListener();
 		showAllCases();
@@ -122,7 +121,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 	
 	private CaseListProvider getCurrentCaseListProvider()
 	{
-		return (CaseListProvider) currentCasesListView.getItems();
+		return (CaseListProvider) casesListViewAll.getItems();
 	}
 
 	public CaseListProvider getAllCaseListProvider()
@@ -147,14 +146,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 	
 	protected void updateCasesSelectDefaultCase()
 	{
-		setCurrentlyViewedCaseList();
 		updateCases(AllCaseListItem.RAW_NAME);
-	}
-	
-	protected void setCurrentlyViewedCaseList()
-	{
-		currentCasesListView = casesListViewAll;
-		updateCaseList();
 	}
 
 	public void updateCases(String caseNameToSelect)
@@ -189,28 +181,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		if(folder.getName().equals(searchFolder))
 			return true;
 
-		BulletinFolder discarded = store.getFolderDiscarded();
-		if(folder.equals(discarded))
-			return true;
-
 		return false;
-	}
-	
-	@FXML
-	public void onShowTrash(ActionEvent event)
-	{
-		updateButtons();
-		clearCasesListViewAllSelection();
-		
-		BulletinFolder trashFolder = getApp().getStore().getFolderDiscarded();
-		MartusLocalization localization = getLocalization();
-		CaseListItem trashList = new CaseListItem(trashFolder, localization);
-		CaseListProvider trashProvider = new CaseListProvider();
-		trashProvider.add(trashList);
-		currentCasesListView = new ListView<CaseListItem>();
-		currentCasesListView.setItems(trashProvider);
-		currentCasesListView.getSelectionModel().select(trashList);
-		updateCaseList();
 	}
 
 	private void clearCasesListViewAllSelection()
@@ -260,7 +231,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		if(isEmptyFolderSelection())
 			return defaultCaseBeingViewed;
 		
-		int selectedIndex = currentCasesListView.getSelectionModel().getSelectedIndex();
+		int selectedIndex = casesListViewAll.getSelectionModel().getSelectedIndex();
 		CaseListItem selectedCase = getCurrentCaseListProvider().get(selectedIndex);
 		BulletinFolder folder = getApp().findFolder(selectedCase.getName());
 		
@@ -285,8 +256,8 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 
 	private void selectCaseAndScrollInView(CaseListItem caseToSelect)
 	{
-		currentCasesListView.getSelectionModel().select(caseToSelect);
-		currentCasesListView.scrollTo(caseToSelect);
+		casesListViewAll.getSelectionModel().select(caseToSelect);
+		casesListViewAll.scrollTo(caseToSelect);
 	}
 
 	private void updateDeleteFolderButton(BulletinFolder folder)
@@ -374,7 +345,6 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 		@Override
 		public void changed(ObservableValue<? extends CaseListItem> observalue, CaseListItem previousCase, CaseListItem newCase)
 		{
-			selectCurrentCaseIfNothingWasPreviouslySelected(previousCase);
 			if (newCase == null)
 				return;
 			
@@ -388,13 +358,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 				updateCaseList();
 		}
 	}
-	
-	protected void selectCurrentCaseIfNothingWasPreviouslySelected(CaseListItem previousCase)
-	{
-		if(previousCase == null)
-			setCurrentlyViewedCaseList();
-	}
-		
+
 	private class FolderCreatedListener implements ChangeListener<String>
 	{
 		public FolderCreatedListener()
@@ -489,7 +453,7 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 
 	private boolean isEmptyFolderSelection()
 	{
-		int selectedIndex = currentCasesListView.getSelectionModel().getSelectedIndex();
+		int selectedIndex = casesListViewAll.getSelectionModel().getSelectedIndex();
 		return selectedIndex == INVALID_INDEX;
 	}
 	
@@ -579,16 +543,12 @@ public class FxCaseManagementController extends AbstractFxLandingContentControll
 
 	@FXML
 	private ListView<CaseListItem> casesListViewAll;
-			
+
 	@FXML
 	private Button deleteFolderButton;
-	
-	@FXML
-	private Button showTrashFolder;
 
 	private ReadOnlyObjectProperty<CaseListItem> currentSelectedCase;
 	private AllCaseListItem allCaseListItem;
-	private ListView<CaseListItem> currentCasesListView;
 	private Set<FolderSelectionListener> listeners;
 	private HashSet<FolderContentsListener> folderContentsListeners;
 	private BulletinFolder defaultCaseBeingViewed;
