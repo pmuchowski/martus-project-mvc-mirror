@@ -133,6 +133,8 @@ public class ExportItemsController extends FxController
 		String hintMessage = "";
 		if(!exportEncrypted)
 			hintMessage = getLocalization().getFieldLabel("ExportBulletinDetails");
+		else
+			includeAttachments.setSelected(true);
 		
 		unencryptedExportFormatBox.setDisable(exportEncrypted);
 		textMessageArea.setText(hintMessage);
@@ -144,7 +146,6 @@ public class ExportItemsController extends FxController
 		if (newValue)
 		{
 			enableEncryptExportFileCheckBox();
-			includeAttachments.setSelected(false);
 			xmlRadioButton.setSelected(newValue);
 		}
 		
