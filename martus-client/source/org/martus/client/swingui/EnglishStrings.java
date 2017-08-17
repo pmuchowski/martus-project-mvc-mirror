@@ -93,7 +93,6 @@ public class EnglishStrings
 "wintitle:confirmDateRageInvalid=Date Range Invalid",
 "wintitle:confirmPrintAllPrivateData=Print All Private Data",
 "wintitle:confirmCancelRetrieve=Cancel Retrieve",
-"wintitle:confirmReportIncludePrivate=All Data Private",
 "wintitle:confirmSealSelectedBulletins=Seal Records",
 "wintitle:confirmXmlSchemaNewerImportAnyway=Import Records",
 "wintitle:confirmImportingCustomizationUnknownSigner=Template Manager",
@@ -534,8 +533,6 @@ public class EnglishStrings
 "wintitle:notifySyncUnableToDeleteLocalOnlyOrImmutableFiles=Download Information",
 "field:notifySyncUnableToDeleteLocalOnlyOrImmutableFilescause=The following records were unable to be deleted since they were only found locally or you do not have permission to delete them off the server.  The remaining records will be deleted.",
 
-"button:IncludePrivateBulletins=Include Private Data",
-
 "menu:file=File",
 "menu:CreateNewBulletin=Create New Record",
 "menu:printBulletin=Print Record(s)",
@@ -703,8 +700,6 @@ public class EnglishStrings
 "field:LastModified=Last Modified",
 "field:EnterNewName=Enter New Name ",
 
-"wintitle:IncludePrivateData=Include Private Data",
-"field:IncludePrivateData=#TotalBulletins# records were selected for printing.  #AllPrivateBulletins# of them are all private.\n What would you like to include when printing?",
 "button:PublicAndPrivateData=Both Public and Private Data",
 "button:PublicOnly=Public Data Only",
 "button:SelectAll=Select All",
@@ -872,8 +867,6 @@ public class EnglishStrings
 "field:confirmWarnMissingOrCorruptAccountMapSignatureFileeffect=Clicking on Yes will try to generate a new acctmap.txt.sig file and continue to load Martus.  Clicking on No will exit Martus.",
 "field:confirmWarnMissingAccountMapFilecause=Warning: acctmap.txt file in your account's packets directory is missing or is corrupt.  This may indicate someone has tried to tamper with your data or could be caused by a hardware error.",		
 "field:confirmWarnMissingAccountMapFileeffect=Clicking on Yes will delete all of your records and continue to load Martus.  Clicking on No will exit Martus so you can try to recover or repair this file manually.",
-"field:confirmReportIncludePrivatecause=There are no records with public data. Include private data?",
-"field:confirmReportIncludePrivateeffect=Press 'Include Private Data' to continue with private data included, or press 'Cancel' to exit and return to Martus.",
 
 "field:confirmCancelShareBackupcause=Do you wish to cancel this backup?",
 "field:confirmCancelShareBackupeffect=By choosing Yes, you will exit this backup.",
