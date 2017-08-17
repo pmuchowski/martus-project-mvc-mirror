@@ -35,6 +35,7 @@ import org.martus.client.swingui.UiSession;
 import org.martus.clientside.CurrentUiState;
 import org.martus.clientside.test.ServerSideNetworkHandlerNotAvailable;
 import org.martus.common.FieldSpecCollection;
+import org.martus.common.MartusLogger;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MiniLocalization;
 import org.martus.common.bulletin.Bulletin;
@@ -112,7 +113,10 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 			String templateTitle = "t1";
 			createAndSaveTemplate(templateDirectory, templateTitle, securitySha2);
 
+			disableLoggingDueToExpectedExceptionFromSha1Verifier();
 			FormTemplateManager manager = FormTemplateManager.createOrOpen(securitySha1, templateDirectory);
+			MartusLogger.reEnableLogging();
+			
 			manager.getTemplate(templateTitle);
 			fail("Should have thrown SignatureVerificationException");
 		}
@@ -123,6 +127,11 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		{
 			DirectoryUtils.deleteEntireDirectoryTree(tempDirectory);
 		}
+	}
+
+	private void disableLoggingDueToExpectedExceptionFromSha1Verifier()
+	{
+		MartusLogger.disableLogging();
 	}
 
 	private FormTemplate createAndSaveTemplate(File templateDirectory, String templateTitle, MartusCrypto security) throws Exception
@@ -214,14 +223,18 @@ public class TestSha1ToSha2Change extends TestCaseEnhanced
 		MockBulletinStore testStore = new MockBulletinStore(securitySha2);
 		assertEquals(0, testStore.getBulletinCount());
 
+		disableLoggingDueToExpectedExceptionFromSha1Verifier();
 		Bulletin bulletin = testStore.createEmptyBulletin();
+		MartusLogger.reEnableLogging();
 
 		testStore.saveBulletin(bulletin);
 		assertEquals(1, testStore.getBulletinCount());
 
 		testStore = changeBulletinStoreSecurity(testStore, securitySha1);
 		UniversalId uId = bulletin.getUniversalId();
+		disableLoggingDueToExpectedExceptionFromSha1Verifier();
 		assertNull("should not find bulletin", testStore.getBulletinRevision(uId));
+		MartusLogger.reEnableLogging();
 	}
 
 	public void testEditBulletinSignedWithSha1UsingSha2Verifier() throws Exception

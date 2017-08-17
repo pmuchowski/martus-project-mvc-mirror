@@ -483,7 +483,7 @@ public class KnownFieldSpecCache extends BulletinStoreCache implements ReadableD
 		} 
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			MartusLogger.logException(e);
 			return;
 		}
 		if((++visitedBulletinCount % 1000) == 0)

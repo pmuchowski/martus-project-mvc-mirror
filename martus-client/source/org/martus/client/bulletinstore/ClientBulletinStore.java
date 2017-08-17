@@ -268,9 +268,7 @@ public class ClientBulletinStore extends BulletinStore
 		}
 		catch (Exception e)
 		{
-			//TODO: Better error handling
-			System.out.println("BulletinStore.getBulletinHistory: " + e);
-			e.printStackTrace();
+			MartusLogger.logException(e);
 			return null;
 		}
 	}
@@ -291,14 +289,12 @@ public class ClientBulletinStore extends BulletinStore
 		}
 		catch(NullPointerException e)
 		{
-			e.printStackTrace();
+			MartusLogger.logException(e);
 			return null;
 		}
 		catch(Exception e)
 		{
-			//TODO: Better error handling
-			System.out.println("BulletinStore.findBulletinByUniversalId: " + e);
-			e.printStackTrace();
+			MartusLogger.logException(e);
 			return null;
 		}
 	}
