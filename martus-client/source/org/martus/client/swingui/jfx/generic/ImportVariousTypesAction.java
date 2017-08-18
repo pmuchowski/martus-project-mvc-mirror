@@ -44,6 +44,7 @@ import org.martus.client.swingui.jfx.setupwizard.tasks.AbstractAppTask;
 import org.martus.client.tools.ImporterOfXmlFilesOfBulletins;
 import org.martus.clientside.FormatFilter;
 import org.martus.common.MartusLogger;
+import org.martus.common.ProgressMeterInterface;
 
 import javafx.application.Platform;
 
@@ -100,13 +101,13 @@ public class ImportVariousTypesAction implements ActionDoer
 		new ImportServerResponseFileAction(getFxCaseManagementController()).importServerResponseFile(selectedFile);
 	}
 	
-	protected void importBulletinFromXmlFile(File fileToImport)
+	protected void importBulletinFromXmlFile(File fileToImport, ProgressMeterInterface progressMeter)
 	{
 		try
 		{
 			BulletinFolder folderToImportInto = getImportFolder();
 			getFxCaseManagementController().removeFolderContentChangedHandler(folderToImportInto);
-			ImporterOfXmlFilesOfBulletins importer = new ImporterOfXmlFilesOfBulletins(fileToImport, getApp().getStore(), folderToImportInto, System.out);
+			ImporterOfXmlFilesOfBulletins importer = new ImporterOfXmlFilesOfBulletins(fileToImport, getApp().getStore(), folderToImportInto, System.out, progressMeter);
 			importer.importFiles();
 			getFxCaseManagementController().addFolderContentChangedHandler(folderToImportInto);
 			updateCases();
@@ -227,7 +228,10 @@ public class ImportVariousTypesAction implements ActionDoer
 				}
 				else if (new XmlFileFilter(getLocalization()).accept(selectedFile))
 				{
-					importBulletinFromXmlFile(selectedFile);
+					if (selectedFilesToImport.length == 1)
+						importBulletinFromXmlFile(selectedFile, getProgressMeter());
+					else
+						importBulletinFromXmlFile(selectedFile, null);
 				}
 				else
 				{

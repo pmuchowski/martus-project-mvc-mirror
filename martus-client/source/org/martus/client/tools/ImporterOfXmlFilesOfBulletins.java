@@ -32,14 +32,14 @@ import java.util.HashMap;
 
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
-import org.martus.client.swingui.dialogs.UiImportExportProgressMeterDlg;
+import org.martus.common.ProgressMeterInterface;
 import org.martus.common.bulletin.Bulletin;
 
 public class ImporterOfXmlFilesOfBulletins
 {
-	public ImporterOfXmlFilesOfBulletins(File bulletinXmlFileToImport, ClientBulletinStore clientStoreToUse, BulletinFolder importFolderToUse, PrintStream consoleMonitorToUse)
+	public ImporterOfXmlFilesOfBulletins(File bulletinXmlFileToImport, ClientBulletinStore clientStoreToUse, BulletinFolder importFolderToUse, PrintStream consoleMonitorToUse, ProgressMeterInterface progressMeterToUse)
 	{
-		this(new File[]{bulletinXmlFileToImport}, clientStoreToUse, importFolderToUse, consoleMonitorToUse);
+		this(new File[]{bulletinXmlFileToImport}, clientStoreToUse, importFolderToUse, consoleMonitorToUse, progressMeterToUse);
 	}
 	
 	public ImporterOfXmlFilesOfBulletins(File[] bulletinXmlFilesToImportToUse, ClientBulletinStore clientStoreToUse, BulletinFolder importFolderToUse, PrintStream consoleMonitorToUse)
@@ -47,12 +47,12 @@ public class ImporterOfXmlFilesOfBulletins
 		this(bulletinXmlFilesToImportToUse, clientStoreToUse, importFolderToUse, consoleMonitorToUse, null);
 	}
 
-	public ImporterOfXmlFilesOfBulletins(File[] bulletinXmlFilesToImportToUse, ClientBulletinStore clientStoreToUse, BulletinFolder importFolderToUse,UiImportExportProgressMeterDlg progressMeterToUse)
+	public ImporterOfXmlFilesOfBulletins(File[] bulletinXmlFilesToImportToUse, ClientBulletinStore clientStoreToUse, BulletinFolder importFolderToUse, ProgressMeterInterface progressMeterToUse)
 	{
 		this(bulletinXmlFilesToImportToUse, clientStoreToUse, importFolderToUse, null, progressMeterToUse);
 	}
 
-	private ImporterOfXmlFilesOfBulletins(File[] bulletinXmlFilesToImportToUse, ClientBulletinStore clientStoreToUse, BulletinFolder importFolderToUse, PrintStream consoleMonitorToUse, UiImportExportProgressMeterDlg progressMeterToUse)
+	private ImporterOfXmlFilesOfBulletins(File[] bulletinXmlFilesToImportToUse, ClientBulletinStore clientStoreToUse, BulletinFolder importFolderToUse, PrintStream consoleMonitorToUse, ProgressMeterInterface progressMeterToUse)
 	{
 		super();
 		progressMeter = progressMeterToUse;
@@ -90,9 +90,6 @@ public class ImporterOfXmlFilesOfBulletins
 		{
 			if(consoleMonitor != null)
 				consoleMonitor.println("XML is a newer schema than this importer, so data may be lost");
-			if(progressMeter != null)
-				if(!progressMeter.confirmDialog("XmlSchemaNewerImportAnyway"))
-					return 0;
 		}
 		incompleteBulletinsMissingAttachments = importer.getMissingAttachmentsMap();
 		importFolder.prepareForBulkOperation();
@@ -107,8 +104,6 @@ public class ImporterOfXmlFilesOfBulletins
 				if(progressMeter.shouldExit())
 					break;
 				progressMeter.updateProgressMeter(j, bulletinsToImport);
-				progressMeter.updateBulletinTitle(b.get(Bulletin.TAGTITLE));
-
 			}
 			if(consoleMonitor != null)
 				consoleMonitor.println("Importing:" +b.get(Bulletin.TAGTITLE));
@@ -163,7 +158,7 @@ public class ImporterOfXmlFilesOfBulletins
 	private File[] bulletinXmlFilesToImport;
 	private ClientBulletinStore clientStore;
 	private BulletinFolder importFolder;
-	private UiImportExportProgressMeterDlg progressMeter;
+	private ProgressMeterInterface progressMeter;
 	private PrintStream consoleMonitor;
 	public File baseAttachmentsDirectory;
 	private HashMap incompleteBulletinsMissingAttachments;
