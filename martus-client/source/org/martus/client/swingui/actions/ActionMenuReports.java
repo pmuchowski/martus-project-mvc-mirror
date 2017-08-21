@@ -29,7 +29,6 @@ import java.awt.event.ActionEvent;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Vector;
 
 import javax.print.attribute.HashPrintRequestAttributeSet;
@@ -38,7 +37,6 @@ import javax.swing.filechooser.FileFilter;
 import org.json.JSONObject;
 import org.martus.client.bulletinstore.ExportBulletinsWithSpecifiedFields;
 import org.martus.client.core.MartusApp;
-import org.martus.client.core.PartialBulletin;
 import org.martus.client.core.SortableBulletinList;
 import org.martus.client.reports.PageReportBuilder;
 import org.martus.client.reports.ReportAnswers;
@@ -52,11 +50,9 @@ import org.martus.client.reports.TabularReportBuilder;
 import org.martus.client.search.FieldChooserSpecBuilder;
 import org.martus.client.search.PageReportFieldChooserSpecBuilder;
 import org.martus.client.search.SearchTreeNode;
-import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.WorkerThread;
 import org.martus.client.swingui.dialogs.UIReportFieldDlg;
-import org.martus.client.swingui.dialogs.UiIncludePrivateDataDlg;
 import org.martus.client.swingui.dialogs.UiPrintPreviewDlg;
 import org.martus.client.swingui.dialogs.UiPushbuttonsDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg;
@@ -78,6 +74,7 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 {
 	private static final boolean SHOULD_EXPORT_ALL_VERSIONS = false;
 	private static final boolean SHOULD_EXPORT_ATTACHMENTS = false;
+	private static final boolean ALWAYS_EXPORT_PRIVATE_DATA = true;
 
 	public ActionMenuReports(UiMainWindow mainWindowToUse)
 	{
@@ -253,51 +250,7 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 		RunReportOptions options = new RunReportOptions();
 		options.printBreaks = sortDlg.getPrintBreaks();
 		options.hideDetail = sortDlg.getHideDetail();
-		
-		PartialBulletin[] unsortedPartialBulletins = sortableList.getUnsortedPartialBulletins();
-		int allPrivateBulletinCount = getNumberOfAllPrivateBulletins(unsortedPartialBulletins);
-		UiIncludePrivateDataDlg dlg = new UiIncludePrivateDataDlg(mainWindow, unsortedPartialBulletins.length, allPrivateBulletinCount);
-		dlg.setVisible(true);
-		if (dlg.wasCancelButtonPressed())
-			return;
-		
-		options.includePrivate = dlg.wantsPrivateData();
-		if(!options.includePrivate)
-		{
-			boolean areAllBulletinPrivate = true;
-			for(int i = 0; i < unsortedPartialBulletins.length; ++i)
-			{
-				PartialBulletin pb = unsortedPartialBulletins[i];
-				boolean isAllPrivate = FieldSpec.TRUESTRING.equals(pb.getData(Bulletin.PSEUDOFIELD_ALL_PRIVATE));
-				if(!isAllPrivate)
-				{
-					areAllBulletinPrivate = false;
-					break;
-				}
-			}
-			
-			if(areAllBulletinPrivate)
-			{
-				MartusLocalization localization = mainWindow.getLocalization();
-				String cancel = localization.getButtonLabel(EnglishCommonStrings.CANCEL);
-				String includePublic = mainWindow.getLocalization().getButtonLabel("IncludePrivateBulletins");
-				String[] buttons = {includePublic, cancel};
-				HashMap emptyTokenReplacement = new HashMap();
-				if(!mainWindow.confirmCustomButtonsDlg("ReportIncludePrivate", buttons, emptyTokenReplacement))
-					return;
-				options.includePrivate = true;
-			}
-			else
-			{
-				for(int i = 0; i < unsortedPartialBulletins.length; ++i)
-				{
-					PartialBulletin pb = unsortedPartialBulletins[i];
-					boolean isAllPrivate = FieldSpec.TRUESTRING.equals(pb.getData(Bulletin.PSEUDOFIELD_ALL_PRIVATE));
-					if(isAllPrivate)
-						sortableList.remove(pb);
-				}
-			}
-		}
+		options.includePrivate = ALWAYS_EXPORT_PRIVATE_DATA;
 
 		ReportFormat rf = buildReportFormat(answers);
 
@@ -326,19 +279,6 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 		if(didPrint)
 			mainWindow.notifyDlg("PrintCompleted");
 			
-	}
-	
-	private int getNumberOfAllPrivateBulletins(PartialBulletin[] sortedPartialBulletins)
-	{
-		int numberOfAllPrivate = 0;
-		for(int i = 0; i < sortedPartialBulletins.length; ++i)
-		{
-			if(FieldSpec.TRUESTRING.equals(sortedPartialBulletins[i].getData(Bulletin.PSEUDOFIELD_ALL_PRIVATE)))
-			{
-				++numberOfAllPrivate;
-			}
-		}
-		return numberOfAllPrivate;
 	}
 
 	private boolean exportToCsv(File destFile, boolean includePrivate, SortableBulletinList list, MiniFieldSpec[] specs) throws Exception
