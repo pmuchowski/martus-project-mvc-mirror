@@ -50,6 +50,7 @@ import org.martus.client.swingui.jfx.landing.general.HelpController;
 import org.martus.client.swingui.jfx.landing.general.ManageServerSyncRecordsController;
 import org.martus.client.swingui.jfx.landing.general.ManageTemplatesController;
 import org.martus.client.swingui.jfx.landing.general.SettingsController;
+import org.martus.common.Exceptions.NetworkOfflineException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -267,11 +268,21 @@ public class FxLandingShellController extends FxNonWizardShellController
 				showNotifyDialog("RetrieveInProgress");
 				return;
 			}
-			if(!getApp().isSSLServerAvailable())
+
+			try
 			{
-				showNotifyDialog("retrievenoserver");
+				if (!getApp().isSSLServerAvailable())
+				{
+					showNotifyDialog("retrievenoserver");
+					return;
+				}
+			}
+			catch (NetworkOfflineException e)
+			{
+				showNotifyDialog("RetrieveServerTurnedOff");
 				return;
 			}
+
 			ManageServerSyncRecordsController controller = new ManageServerSyncRecordsController(getMainWindow());
 			ActionDoer shellController = new DialogWithNoButtonsShellController(getMainWindow(), controller);
 			doAction(shellController);
