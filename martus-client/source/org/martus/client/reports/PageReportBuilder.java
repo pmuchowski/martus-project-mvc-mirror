@@ -81,8 +81,7 @@ public class PageReportBuilder extends ReportBuilder
 	private String createDetailSection(MiniFieldSpec[] specs)
 	{
 		StringBuffer detailBuffer = new StringBuffer();
-		BulletinHtmlGenerator.appendTitleOfSection(detailBuffer, "$localization.getStorableFieldLabel('privatesection')");
-		
+
 		addTopFields(detailBuffer);
 		addBottomFields(detailBuffer);
 		
