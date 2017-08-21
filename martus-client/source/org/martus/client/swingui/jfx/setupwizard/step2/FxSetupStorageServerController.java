@@ -193,15 +193,15 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 	
 	private void attempToConnectToDefaultSettings()
 	{
-		attemptToConnectNew(getDefaultServerIp(), getDefaultServerPublicKey());
+		attemptToConnectNew(getDefaultServerIp(), getDefaultServerPublicKey(), false);
 	}
 
 	private void attemptToConnectWithAdvancedSettings()
 	{
-		attemptToConnectNew(ipAddressField.getText(), publicCodeField.getText());
+		attemptToConnectNew(ipAddressField.getText(), publicCodeField.getText(), true);
 	}
 
-	private void attemptToConnectNew(String ip, String userEnteredPublicCode)
+	private void attemptToConnectNew(String ip, String userEnteredPublicCode, boolean askComplianceAcceptance)
 	{
 		try
 		{
@@ -210,7 +210,7 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 			
 			String serverKey = task.getPublicKey();
 			String magicWord = magicWordField.getText();
-			attemptToConnect(ip, serverKey, true, magicWord);
+			attemptToConnect(ip, serverKey, askComplianceAcceptance, magicWord);
 
 			FxInSwingWizardStage wizardStage = getWizardStage();
 			if(wizardStage.checkIfCurrentServerIsAvailable())
