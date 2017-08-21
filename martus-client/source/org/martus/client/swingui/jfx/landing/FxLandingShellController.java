@@ -51,7 +51,6 @@ import org.martus.client.swingui.jfx.landing.general.ManageServerSyncRecordsCont
 import org.martus.client.swingui.jfx.landing.general.ManageTemplatesController;
 import org.martus.client.swingui.jfx.landing.general.SettingsController;
 
-import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -89,12 +88,7 @@ public class FxLandingShellController extends FxNonWizardShellController
 	{
 		return caseManagementController.getAllCaseListProvider();
 	}
-	
-	public BooleanBinding getShowTrashBinding()
-	{
-		return bulletinsListController.getTrashNotBeingDisplayedBinding();
-	}
-	
+
 	public FxCaseManagementController getCaseManager()
 	{
 		return caseManagementController;

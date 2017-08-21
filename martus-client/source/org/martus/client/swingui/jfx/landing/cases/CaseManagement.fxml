@@ -63,38 +63,6 @@
             </right>
         </BorderPane>
         <ListView fx:id="casesListViewAll" onMouseClicked="#onCaseListMouseClicked" prefWidth="300.0" VBox.vgrow="ALWAYS" />
-        <BorderPane>
-            <left>
-                <HBox BorderPane.alignment="CENTER">
-                    <children>
-                        <Button fx:id="showTrashFolder" graphicTextGap="2.0" mnemonicParsing="false" onAction="#onShowTrash" prefHeight="40.0" prefWidth="40.0">
-                            <font>
-                                <Font name="Helvetica" size="12.0" />
-                            </font>
-                            <graphic>
-                                <ImageView fitHeight="35.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true" styleClass="button-minpadding">
-                                    <image>
-                                        <Image url="@../../images/trash.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                            <tooltip>
-                                <Tooltip anchorLocation="WINDOW_TOP_RIGHT" text="%Tooltip.ShowTrash" />
-                            </tooltip>
-                            <styleClass>
-                                <String fx:value="button-minpadding" />
-                                <String fx:value="button-transparentWithHover" />
-                            </styleClass>
-                        </Button>
-                    </children>
-                </HBox>
-            </left>
-            <right>
-                <HBox BorderPane.alignment="CENTER">
-                    <children>
-                    </children>
-                </HBox>
-            </right>
-        </BorderPane>
+        <HBox prefHeight="40" minHeight="40" />
     </children>
 </VBox>
