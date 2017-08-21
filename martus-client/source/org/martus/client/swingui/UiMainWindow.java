@@ -541,9 +541,6 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		MartusLogger.logBeginProcess("loadFieldSpecCache");
 		if(!getStore().loadFieldSpecCache())
 		{
-			if(!createdNewAccount)
-				notifyDlg("CreatingFieldSpecCache");
-
 			getStore().createFieldSpecCacheFromDatabase();
 		}
 		MartusLogger.logEndProcess("loadFieldSpecCache");
