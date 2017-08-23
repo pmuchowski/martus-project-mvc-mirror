@@ -42,6 +42,7 @@ import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.bulletin.BulletinFromXFormsLoader;
+import org.martus.common.bulletin.FormTemplateFromXFormsLoader;
 import org.martus.common.crypto.MockMartusSecuritySha2;
 import org.martus.common.fieldspec.ChoiceItem;
 import org.martus.common.fieldspec.CustomDropDownFieldSpec;
@@ -97,6 +98,19 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		{
 			e.printStackTrace();
 			fail("Copying xForms Data should not have failed");
+		}
+	}
+	
+	public void testGroupChildrenWithDuplicateIds() throws Exception
+	{
+		try
+		{
+			FormTemplateFromXFormsLoader.createNewBulletinFromXFormsFormTemplate(TestBulletinFromXFormsLoaderConstants.XFORMS_INSTANCE_WITH_DUPLICATE_IDS);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			fail("Importing form with duplicate group children ids should not have failed!");
 		}
 	}
 	
@@ -192,7 +206,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		fxBulletin.copyDataFromBulletin(bulletin, store);
 		assertEquals("FxBulletin filled from bulletin with data should have data?", getExpectedFieldCountWithNoSections(1), fxBulletin.getFieldSpecs().size());
 		
-		String TAG = "name";
+		String TAG = "nm_name";
 		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag(TAG);
 		assertTrue("Only field should be string?", fieldSpec.getType().isString());
 		assertEquals("Incorrect field label?", FIELD_LABEL, fieldSpec.getLabel());
@@ -212,7 +226,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		fxBulletin.copyDataFromBulletin(bulletin, store);
 		assertEquals("FxBulletin filled from bulletin with data should have data?", getExpectedFieldCountWithNoSections(4), fxBulletin.getFieldSpecs().size());
 		
-		String TAG = "MultiID";
+		String TAG = "GroupID_MultiID";
 		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag(TAG);
 		assertEquals("Incorrect field label?", DROPDOWN_IN_GROUP_LABEL, fieldSpec.getLabel());
 		assertEquals("Incorrect field tag?", TAG, fieldSpec.getTag());
@@ -240,10 +254,10 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		fxBulletin.copyDataFromBulletin(bulletin, store);
 		assertEquals("FxBulletin filled from bulletin with data should have data?", getExpectedFieldCountWithNoSections(12), fxBulletin.getFieldSpecs().size());
 		
-		String TAG = "MultiID1";
+		String TAG = "GroupID_MultiID1";
 		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag(TAG);
 		assertEquals("Incorrect field label?", "MultiLabel1", fieldSpec.getLabel());
-		assertEquals("Incorrect field tag?", "MultiID1", fieldSpec.getTag());
+		assertEquals("Incorrect field tag?", TAG, fieldSpec.getTag());
 		FxBulletinField field = fxBulletin.getField(fieldSpec);
 		assertEquals("Incorrect field value?", "OptionALabel1", field.getValue());
 
@@ -304,7 +318,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		fxBulletin.copyDataFromBulletin(bulletin, store);
 		verifyFieldSpecCount(fxBulletin, getExpectedFieldCountWithNoSections(1));
 
-		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag(DROPDOWN_FIELD_TAG);
+		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag("nm_" + DROPDOWN_FIELD_TAG);
 		verifyDropDownFieldSpecCreatedFromXFormsData(fieldSpec);
 		verifyFieldCreatedFromXFormsData(fxBulletin.getField(fieldSpec));
 	}
@@ -321,7 +335,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		fxBulletin.copyDataFromBulletin(bulletin, store);
 		assertEquals("FxBulletin filled from bulletin with data should have data?", getExpectedFieldCountWithSections(1, 1), fxBulletin.getFieldSpecs().size());
 		
-		String TAG = "age";
+		String TAG = "nm_age";
 		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag(TAG);
 		assertTrue("Only field should be string?", fieldSpec.getType().isString());
 		assertEquals("Incorrect field label?", TestBulletinFromXFormsLoaderConstants.AGE_LABEL, fieldSpec.getLabel());
@@ -341,7 +355,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		fxBulletin.copyDataFromBulletin(bulletin, store);
 		assertEquals("FxBulletin filled from bulletin with data should have data?", getExpectedFieldCountWithSections(1, 1), fxBulletin.getFieldSpecs().size());
 		
-		String TAG = "message";
+		String TAG = "nm_message";
 		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag(TAG);
 		assertTrue("Only field should be message?", fieldSpec.getType().isMessage());
 		assertEquals("Incorrect field label?", TestBulletinFromXFormsLoaderConstants.MESSAGE_LABEL, fieldSpec.getLabel());
@@ -359,7 +373,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		FxBulletin fxBulletin = new FxBulletin(getLocalization());
 		fxBulletin.copyDataFromBulletin(bulletin, store);
 
-		final String XFORMS_AGE_TAG = "age";
+		final String XFORMS_AGE_TAG = "nm_age";
 		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag(XFORMS_AGE_TAG);
 		assertTrue("Only field should be string?", fieldSpec.getType().isString());
 		assertEquals("Incorrect field label?", TestBulletinFromXFormsLoaderConstants.AGE_LABEL, fieldSpec.getLabel());
@@ -389,7 +403,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		
 		DropDownFieldSpec dropDownFieldSpec = (DropDownFieldSpec) fieldSpec;
 		assertEquals("Incorrect drop down field label?", DROPDOWN_FIELD_LABEL, dropDownFieldSpec.getLabel());
-		assertEquals("Incorrect drop down field tag?", DROPDOWN_FIELD_TAG, dropDownFieldSpec.getTag());
+		assertEquals("Incorrect drop down field tag?", "nm_" + DROPDOWN_FIELD_TAG, dropDownFieldSpec.getTag());
 		List<ChoiceItem> expectedChoiceItems = getExpectedChoiceItems();
 		List<ChoiceItem> actualChoiceItems = dropDownFieldSpec.getChoiceItemList();
 		assertEquals("Incorrect choiceItem count", expectedChoiceItems.size(), actualChoiceItems.size());
@@ -425,7 +439,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		fxBulletin.copyDataFromBulletin(bulletin, store);
 		assertEquals("FxBulletin filled from bulletin with data should have date field?", getExpectedFieldCountWithNoSections(1), fxBulletin.getFieldSpecs().size());
 		
-		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag("date");
+		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag("nm_date");
 		assertTrue("Incorrect field type?", fieldSpec.getType().isDate());
 		
 		FxBulletinField dateField = fxBulletin.getField(fieldSpec);
@@ -503,11 +517,11 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		fxBulletin.copyDataFromBulletin(bulletin, store);
 		assertEquals("FxBulletin filled from bulletin with data should have date field?", getExpectedFieldCountWithSections(1, 1), fxBulletin.getFieldSpecs().size());
 		
-		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag("anonymous");
+		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag("nm_anonymous");
 		assertTrue("Incorrect field type?", fieldSpec.getType().isBoolean());
 		
 		FxBulletinField dateField = fxBulletin.getField(fieldSpec);
-		assertEquals("Incorrect date?", expectedBooleanValue, dateField.getValue());
+		assertEquals("Incorrect boolean value?", expectedBooleanValue, dateField.getValue());
 	}
 
 	private int getExpectedFieldCountWithNoSections(int expectedFieldsConverted)
@@ -544,7 +558,7 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		bulletin.getFieldDataPacket().setXFormsInstanceAsString(TestBulletinFromXFormsLoaderConstants.COMPLETE_XFORMS_INSTANCE);
 	
 		Bulletin converted = BulletinFromXFormsLoader.createNewBulletinFromXFormsBulletin(bulletin);
-		CustomDropDownFieldSpec dropdownSpec = (CustomDropDownFieldSpec)converted.getField("sourceOfRecordInformation").getFieldSpec();
+		CustomDropDownFieldSpec dropdownSpec = (CustomDropDownFieldSpec)converted.getField("nm_sourceOfRecordInformation").getFieldSpec();
 		assertEquals("Didn't get correct choice count?", 5, dropdownSpec.getCount());
 	}
 
@@ -613,10 +627,10 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 		
 		String[] expectedFieldSpecSequence = new String[]{
 		"language","author","title","entrydate",   
-		"nm_Section_1__Text_fields_TagSection","name",	"nationality","age",
-		"nm_Section_2__Date_field_TagSection","date",
-		"nm_Section_3__Drop_down_lists_TagSection", "sourceOfRecordInformation", "eventLocation",
-		"nm_Section_4__Check_boxes_TagSection", "anonymous","additionalInfo","testify",
+		"nm_Section_1__Text_fields_TagSection","nm_name",	"nm_nationality","nm_age",
+		"nm_Section_2__Date_field_TagSection","nm_date",
+		"nm_Section_3__Drop_down_lists_TagSection", "nm_sourceOfRecordInformation", "nm_eventLocation",
+		"nm_Section_4__Check_boxes_TagSection", "nm_anonymous","nm_additionalInfo","nm_testify",
 		"nm_victim_informationTagSection","nm_victim_informationTagGrid"};
 		
 		for (int index = 0; index < fieldSpecs.size(); ++index)
@@ -820,8 +834,9 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 	private static String DROPDOWN_IN_GROUP_OPTION2_LABEL = "option2Label";
 	private static String DROPDOWN_IN_GROUP_OPTION1_CODE = "option1ID";
 	private static String DROPDOWN_IN_GROUP_OPTION2_CODE = "option2ID";
+	private static String GROUP_ID = "GroupID";
 	public static final String XFORM_DROPDOWN_FIELD_XML = "<Field type='DROPDOWN'>\n" +
-			"<Tag>MultiID</Tag>\n" +
+			"<Tag>" + GROUP_ID + "_MultiID</Tag>\n" +
 			"<Label>"+DROPDOWN_IN_GROUP_LABEL+"</Label>\n" +
 			"<Choices>\n" +
 			"<Choice>" +
@@ -844,12 +859,12 @@ public class TestBulletinFromXFormsLoader extends TestCaseEnhanced
 			"<model>"+
 				"<instance>"+
 					"<data xmlns=\"http://openrosa.org/formdesigner/B1C7ECF2-1D47-4BC8-B883-C99CC14FEE90\" name=\"Untitled Form\" uiVersion=\"1\" xmlns:jrm=\"http://dev.commcarehq.org/jr/xforms\" version=\"1\" >"+
-						"<GroupID>"+
+						"<" + GROUP_ID + ">"+
 							"<textID></textID>"+
 							"<MultiID></MultiID>"+
 							"<NumberID></NumberID>"+
 							"<DateID></DateID>"+
-						"</GroupID>"+
+						"</" + GROUP_ID + " >"+
 					"</data>"+
 				"</instance>"+
 				"<bind nodeset=\"/data/GroupID\" ></bind>"+

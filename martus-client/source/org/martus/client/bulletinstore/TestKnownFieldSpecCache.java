@@ -116,14 +116,14 @@ public class TestKnownFieldSpecCache extends TestCaseEnhanced
 		allSpecs.addAllSpecs(specsAfterXFormsSaved);
 		contextToUse.setSectionFieldSpecs(allSpecs);
 
-		String xFormsTag = "name";
+		String xFormsTag = "nm_name";
 		for (Iterator iterator = specsAfterXFormsSaved.iterator(); iterator.hasNext();)
 		{
 			FieldSpec newXFormSpec = (FieldSpec) iterator.next();
 			if(newXFormSpec.getTag().equals(xFormsTag))
 			{
 				assertEquals("Label incorrect?", "some randon name", newXFormSpec.getLabel());
-				assertEquals("Tag incorrect?", "name", newXFormSpec.getTag());
+				assertEquals("Tag incorrect?", "nm_name", newXFormSpec.getTag());
 				assertTrue("Type incorrect?",  newXFormSpec.getType().isString());
 				return;
 			}

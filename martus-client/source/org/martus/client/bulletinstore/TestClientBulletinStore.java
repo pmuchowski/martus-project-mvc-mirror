@@ -2107,7 +2107,7 @@ public class TestClientBulletinStore extends TestCaseEnhanced
 		FxBulletin fxBulletin = new FxBulletin(localization);
 		fxBulletin.copyDataFromBulletin(bulletin, testStore);
 
-		final String XFORMS_AGE_TAG = "age";
+		final String XFORMS_AGE_TAG = "nm_age";
 		FieldSpec fieldSpec = fxBulletin.findFieldSpecByTag(XFORMS_AGE_TAG);
 		assertTrue("Only field should be string?", fieldSpec.getType().isString());
 		assertEquals("Incorrect field label?", TestBulletinFromXFormsLoaderConstants.AGE_LABEL, fieldSpec.getLabel());

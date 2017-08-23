@@ -198,7 +198,7 @@ public class TestSafeReadableBulletin extends TestCaseEnhanced
 		SafeReadableBulletin srb = new SafeReadableBulletin(b, localization);
 		assertTrue("Original Bulletin should be an xForms record", b.isXFormsBulletin());
 
-		String xFormsTag = "name";
+		String xFormsTag = "nm_name";
 		MartusField xFormField = srb.field(xFormsTag);
 		assertEquals("x Form's field not found?", "xforms Name Field", xFormField.getData());
 	}

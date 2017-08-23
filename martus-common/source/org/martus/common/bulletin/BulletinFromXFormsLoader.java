@@ -152,7 +152,7 @@ public class BulletinFromXFormsLoader extends AbtractXFormsLoader
 			final int dataType = questionPrompt.getDataType();
 			TreeReference reference = (TreeReference) question.getBind().getReference();
 			FieldDataPacket fieldDataPacket = bulletinLoadedFromXForms.getFieldDataPacket();
-			String xFormsFieldTag = reference.getNameLast();
+			String xFormsFieldTag = createTagIncludingParentToAvoidDuplicates(reference);
 			String answerAsString = getMartusAnswerStringFromQuestion(answer, question, dataType);
 			fieldDataPacket.set(xFormsFieldTag, answerAsString);
 		}

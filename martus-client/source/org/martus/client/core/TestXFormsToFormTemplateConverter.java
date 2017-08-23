@@ -95,7 +95,7 @@ public class TestXFormsToFormTemplateConverter extends TestCaseEnhanced
 	{
 		FieldSpecCollection allFields = createFieldSpecCollectionWithDefaultTopFields();
 		allFields.add(FieldSpec.createCustomField("XFormUnGrouped1", "+", new FieldTypeSectionStart()));
-		allFields.add(FieldSpec.createCustomField("message", "This should be a Message Field", new FieldTypeMessage()));
+		allFields.add(FieldSpec.createCustomField("nm_message", "This should be a Message Field", new FieldTypeMessage()));
 		
 		return allFields;
 	}
@@ -104,18 +104,18 @@ public class TestXFormsToFormTemplateConverter extends TestCaseEnhanced
 	{
 		FieldSpecCollection allFields = createFieldSpecCollectionWithDefaultTopFields();
 		allFields.add(FieldSpec.createCustomField("nm_Section_1__Text_fields_TagSection", "Section 1 (Text fields)", new FieldTypeSectionStart()));
-		allFields.add(FieldSpec.createCustomField("name", "What is your name:", new FieldTypeNormal()));
-		allFields.add(FieldSpec.createCustomField("nationality", "What is your country of origin:", new FieldTypeNormal()));
-		allFields.add(FieldSpec.createCustomField("age", "What is your age:", new FieldTypeNormal()));
+		allFields.add(FieldSpec.createCustomField("nm_name", "What is your name:", new FieldTypeNormal()));
+		allFields.add(FieldSpec.createCustomField("nm_nationality", "What is your country of origin:", new FieldTypeNormal()));
+		allFields.add(FieldSpec.createCustomField("nm_age", "What is your age:", new FieldTypeNormal()));
 		allFields.add(FieldSpec.createCustomField("nm_Section_2__Date_field_TagSection", "Section 2 (Date field)", new FieldTypeSectionStart()));
-		allFields.add(FieldSpec.createCustomField("date", "Date of incident", new FieldTypeDate()));
+		allFields.add(FieldSpec.createCustomField("nm_date", "Date of incident", new FieldTypeDate()));
 		allFields.add(FieldSpec.createCustomField("nm_Section_3__Drop_down_lists_TagSection", "Section 3 (Drop down lists)", new FieldTypeSectionStart()));
 		allFields.add(createSourceOfRecordInfoDropdown());
 		allFields.add(createRegiondsDropDown());
 		allFields.add(FieldSpec.createCustomField("nm_Section_4__Check_boxes_TagSection", "Section 4 (Check boxes)", new FieldTypeSectionStart()));
-		allFields.add(FieldSpec.createCustomField("anonymous", "Does interviewee wish to remain anonymous?", new FieldTypeBoolean()));
-		allFields.add(FieldSpec.createCustomField("additionalInfo", "Is interviewee willing to give additional information if needed?", new FieldTypeBoolean()));
-		allFields.add(FieldSpec.createCustomField("testify", "Is interviewee willing to testify?", new FieldTypeBoolean()));
+		allFields.add(FieldSpec.createCustomField("nm_anonymous", "Does interviewee wish to remain anonymous?", new FieldTypeBoolean()));
+		allFields.add(FieldSpec.createCustomField("nm_additionalInfo", "Is interviewee willing to give additional information if needed?", new FieldTypeBoolean()));
+		allFields.add(FieldSpec.createCustomField("nm_testify", "Is interviewee willing to testify?", new FieldTypeBoolean()));
 		allFields.add(FieldSpec.createCustomField("nm_victim_informationTagSection", "Section 5 (Repeating group of fields)", new FieldTypeSectionStart()));		
 		allFields.add(createGrid());
 		
@@ -138,20 +138,20 @@ public class TestXFormsToFormTemplateConverter extends TestCaseEnhanced
 	private FieldSpecCollection createVictimFieldsForGrid()
 	{
 		FieldSpecCollection columnFieldSpecs = new FieldSpecCollection();
-		columnFieldSpecs.add(FieldSpec.createCustomField("victimFirstName", "Victim first name", new FieldTypeNormal()));
-		columnFieldSpecs.add(FieldSpec.createCustomField("victimLastName", "Victim last name", new FieldTypeNormal()));
-		columnFieldSpecs.add(createDropdownFieldSpec("sex", "Victim Sex", new String[]{"", "Female", "Male", "Other"}));
+		columnFieldSpecs.add(FieldSpec.createCustomField("victim_information_victimFirstName", "Victim first name", new FieldTypeNormal()));
+		columnFieldSpecs.add(FieldSpec.createCustomField("victim_information_victimLastName", "Victim last name", new FieldTypeNormal()));
+		columnFieldSpecs.add(createDropdownFieldSpec("victim_information_sex", "Victim Sex", new String[]{"", "Female", "Male", "Other"}));
 		return columnFieldSpecs;
 	}
 
 	private DropDownFieldSpec createSourceOfRecordInfoDropdown()
 	{		
-		return createDropdownFieldSpec("sourceOfRecordInformation", "Source of record information", new String[]{"", "Media/Press", "Legal Report", "Personal Interview", "Other"});
+		return createDropdownFieldSpec("nm_sourceOfRecordInformation", "Source of record information", new String[]{"", "Media/Press", "Legal Report", "Personal Interview", "Other"});
 	}
 
 	private DropDownFieldSpec createRegiondsDropDown()
 	{
-		return createDropdownFieldSpec("eventLocation", "Event Location", new String[]{"", "Region 1", "Region 2", "Region 3",});
+		return createDropdownFieldSpec("nm_eventLocation", "Event Location", new String[]{"", "Region 1", "Region 2", "Region 3",});
 	}
 
 	private DropDownFieldSpec createDropdownFieldSpec(String tag, String label, String[] choiceLabels)

@@ -198,12 +198,24 @@ abstract public class AbtractXFormsLoader
 		return null;
 	}
 	
+	public static String createTagIncludingParentToAvoidDuplicates(TreeReference reference)
+	{
+		final String parentName = reference.getParentRef().getNameLast();
+		final String childName = reference.getNameLast();
+		return combineNames(parentName, childName);
+	}
+
+	public static String combineNames(final String parentName, final String childName)
+	{
+		return parentName + "_" + childName;
+	}
+	
 	private FieldSpec convertToFieldSpec(FormEntryPrompt questionPrompt)
 	{
 		QuestionDef question = questionPrompt.getQuestion();
 		final int dataType = questionPrompt.getDataType();
 		TreeReference reference = (TreeReference) question.getBind().getReference();
-		String tag = reference.getNameLast();
+		String tag = createTagIncludingParentToAvoidDuplicates(reference);
 		String questionLabel = questionPrompt.getQuestion().getLabelInnerText();
 
 		if(questionPrompt.isReadOnly())

@@ -327,4 +327,57 @@ public interface TestBulletinFromXFormsLoaderConstants
 				"</nm>"+
 			"</xforms_instance>";
 	
+	
+	public static final String XFORMS_INSTANCE_WITH_DUPLICATE_IDS = 
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+			"<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\" xmlns:orx=\"http://openrosa.org/jr/xforms\" xmlns=\"http://www.w3.org/2002/xforms\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:jr=\"http://openrosa.org/javarosa\" xmlns:vellum=\"http://commcarehq.org/xforms/vellum\">" +
+			"	<h:head>" +
+			"		<h:title>Untitled Form</h:title>" +
+			"		<model>" +
+			"			<instance>" +
+			"				<data xmlns:jrm=\"http://dev.commcarehq.org/jr/xforms\" xmlns=\"http://openrosa.org/formdesigner/716FD5CB-2D77-471F-B487-4BB112345468\" uiVersion=\"1\" version=\"1\" name=\"Untitled Form\">" +
+			"					<Exhaustive_Test>" +
+			"						<Main_Characters>" +
+			"							<Radio_Type />" +
+			"						</Main_Characters>" +
+			"						<Characters_and_Radio_Type>" +
+			"							<Radio_Type />" +
+			"						</Characters_and_Radio_Type>" +
+			"					</Exhaustive_Test>" +
+			"				</data>" +
+			"			</instance>" +
+			"			<bind nodeset=\"/data/Exhaustive_Test\" />" +
+			"			<bind nodeset=\"/data/Exhaustive_Test/Main_Characters\" />" +
+			"			<bind nodeset=\"/data/Exhaustive_Test/Main_Characters/Radio_Type\" />" +
+			"			<bind nodeset=\"/data/Exhaustive_Test/Characters_and_Radio_Type\" />" +
+			"			<bind nodeset=\"/data/Exhaustive_Test/Characters_and_Radio_Type/Radio_Type\" />" +
+			"		</model>" +
+			"	</h:head>" +
+			"	<h:body>" +
+			"		<group ref=\"/data/Exhaustive_Test\" appearance=\"field-list\">" +
+			"			<label>Exhaustive_Test</label>" +
+			"			<group ref=\"/data/Exhaustive_Test/Main_Characters\" appearance=\"field-list\">" +
+			"				<label>Main Character Group Label</label>" +
+			"				<select1 ref=\"/data/Exhaustive_Test/Main_Characters/Radio_Type\">" +
+			"					<label>some random label</label>" +
+			"					<item>" +
+			"						<label>Random label</label>" +
+			"						<value>item1</value>" +
+			"					</item>" +
+			"				</select1>" +
+			"			</group>" +
+			"		" +
+			"			<group ref=\"/data/Exhaustive_Test/Characters_and_Radio_Type\" appearance=\"field-list\">" +
+			"				<label>Characters_and_Radio_Type</label>" +
+			"				<select1 ref=\"/data/Exhaustive_Test/Characters_and_Radio_Type/Radio_Type\">" +
+			"					<label>Radio_Type</label>" +
+			"					<item>" +
+			"						<label>Radio random</label>" +
+			"						<value>item1</value>" +
+			"					</item>" +
+			"				</select1>" +
+			"			</group>" +
+			"		</group>" +
+			"	</h:body>" +
+			"</h:html>";
 }
