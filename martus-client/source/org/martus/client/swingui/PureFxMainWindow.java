@@ -240,5 +240,15 @@ public class PureFxMainWindow extends UiMainWindow
 		return new PureFxModelessBusyDlg(getLocalization().getFieldLabel("waitingForBulletinsToLoad"));
 	}
 
+	public void showMessageDialog(String message)
+	{
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Message");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		alert.showAndWait();
+	}
+
 	private static Stage realStage;
 }

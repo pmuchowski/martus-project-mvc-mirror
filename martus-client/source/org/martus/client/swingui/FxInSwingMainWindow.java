@@ -326,6 +326,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 		return new UiModelessBusyDlg(getLocalization().getFieldLabel("waitingForBulletinsToLoad"));
 	}
 
+	public void showMessageDialog(String message)
+	{
+		JOptionPane.showMessageDialog(null, message);
+	}
+
 	private JFrame swingFrame;
 	private UiMainPane mainPane;
 	private FxMainStage mainStage;
