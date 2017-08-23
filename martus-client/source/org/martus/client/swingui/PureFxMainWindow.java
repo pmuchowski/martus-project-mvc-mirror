@@ -117,7 +117,12 @@ public class PureFxMainWindow extends UiMainWindow
 	@Override
 	public void rawError(String errorText)
 	{
-		// FIXME: PureFX: We need to support this
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("ERROR");
+		alert.setHeaderText(null);
+		alert.setContentText(errorText);
+
+		alert.showAndWait();
 	}
 
 	@Override
