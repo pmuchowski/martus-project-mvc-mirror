@@ -54,6 +54,7 @@ import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingCreateNewAccountWizardStage;
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingSetupWizardStage;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.swing.UiOptionPane;
 import org.martus.swing.Utilities;
 
 import javafx.application.Platform;
@@ -329,6 +330,19 @@ public class FxInSwingMainWindow extends UiMainWindow
 	public void showMessageDialog(String message)
 	{
 		JOptionPane.showMessageDialog(null, message);
+	}
+
+	protected void initializationErrorExitMartusDlg(String message)
+	{
+		String title = "Error Starting Martus";
+		String cause = "Unable to start Martus: \n" + message;
+		String ok = "OK";
+		String[] buttons = { ok };
+		UiOptionPane pane = new UiOptionPane(cause, UiOptionPane.INFORMATION_MESSAGE, UiOptionPane.DEFAULT_OPTION,
+				null, buttons);
+		JDialog dialog = pane.createDialog(null, title);
+		dialog.setVisible(true);
+		System.exit(1);
 	}
 
 	private JFrame swingFrame;

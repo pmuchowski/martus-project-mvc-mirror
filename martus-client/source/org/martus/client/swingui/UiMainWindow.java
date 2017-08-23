@@ -141,7 +141,6 @@ import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.XmlPacketLoader;
 import org.martus.swing.FontHandler;
 import org.martus.swing.UiNotifyDlg;
-import org.martus.swing.UiOptionPane;
 import org.martus.swing.UiPopupMenu;
 import org.martus.swing.Utilities;
 import org.martus.util.FileTransfer;
@@ -1362,18 +1361,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		UiUtilities.messageDlg(getLocalization(), parent, baseTag, message, tokenReplacement);
 	}
 
-	private void initializationErrorExitMartusDlg(String message)
-	{
-		String title = "Error Starting Martus";
-		String cause = "Unable to start Martus: \n" + message;
-		String ok = "OK";
-		String[] buttons = { ok };
-		UiOptionPane pane = new UiOptionPane(cause, UiOptionPane.INFORMATION_MESSAGE, UiOptionPane.DEFAULT_OPTION,
-								null, buttons);
-		JDialog dialog = pane.createDialog(null, title);
-		dialog.setVisible(true);
-		System.exit(1);
-	}
+	protected abstract void initializationErrorExitMartusDlg(String message);
 
 	public String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText)
 	{

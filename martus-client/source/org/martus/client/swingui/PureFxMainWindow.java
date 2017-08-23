@@ -250,5 +250,20 @@ public class PureFxMainWindow extends UiMainWindow
 		alert.showAndWait();
 	}
 
+	protected void initializationErrorExitMartusDlg(String message)
+	{
+		String title = "Error Starting Martus";
+		String cause = "Unable to start Martus: \n" + message;
+
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(cause);
+
+		alert.showAndWait();
+
+		System.exit(1);
+	}
+
 	private static Stage realStage;
 }
