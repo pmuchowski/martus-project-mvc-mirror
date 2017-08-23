@@ -28,12 +28,12 @@ package org.martus.client.swingui;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import javafx.scene.Cursor;
-import javafx.stage.Stage;
-
 import javax.swing.JFrame;
 
+import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
+import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.jfx.contacts.PureFxContactsStage;
 import org.martus.client.swingui.jfx.generic.FxShellController;
@@ -45,6 +45,10 @@ import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.landing.PureFxMainStage;
 import org.martus.client.swingui.jfx.setupwizard.PureFxSetupWizardStage;
 import org.martus.common.bulletin.Bulletin;
+
+import javafx.scene.Cursor;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 public class PureFxMainWindow extends UiMainWindow
 {
@@ -225,6 +229,10 @@ public class PureFxMainWindow extends UiMainWindow
 		}
 	}
 
+	public ModelessBusyDlg createSplashScreen()
+	{
+		return new PureFxModelessBusyDlg(new Image(UiAboutDlg.class.getResourceAsStream("Martus-logo-black-text-160x72.png")));
+	}
 
 	private static Stage realStage;
 }

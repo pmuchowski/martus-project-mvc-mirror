@@ -50,7 +50,6 @@ import java.util.Vector;
 
 import javax.crypto.Cipher;
 import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -78,6 +77,7 @@ import org.martus.client.network.RetrieveCommand;
 import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.bulletincomponent.UiBulletinPreviewPane;
 import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
+import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
 import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
@@ -185,7 +185,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		
 		cursorStack = new Stack();
 		
-		UiModelessBusyDlg splashScreen = new UiModelessBusyDlg(new ImageIcon(UiAboutDlg.class.getResource("Martus-logo-black-text-160x72.png")));
+		ModelessBusyDlg splashScreen = createSplashScreen();
 		try
 		{
 			session = new UiSession();
@@ -213,7 +213,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			splashScreen.endDialog();
 		}
 	}
-	
+
+	public abstract ModelessBusyDlg createSplashScreen();
+
 	public abstract JFrame getSwingFrame();
 	
 	protected void restrictToOnlyTestServers()

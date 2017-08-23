@@ -30,14 +30,16 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Window;
 
-import javafx.application.Platform;
-
+import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.martus.client.swingui.dialogs.FxInSwingBulletinModifyDialog;
+import org.martus.client.swingui.dialogs.ModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
+import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
 import org.martus.client.swingui.jfx.contacts.FxInSwingContactsStage;
 import org.martus.client.swingui.jfx.generic.FxInSwingDialogStage;
 import org.martus.client.swingui.jfx.generic.FxInSwingModalDialog;
@@ -53,6 +55,8 @@ import org.martus.client.swingui.jfx.setupwizard.FxInSwingCreateNewAccountWizard
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingSetupWizardStage;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.swing.Utilities;
+
+import javafx.application.Platform;
 
 public class FxInSwingMainWindow extends UiMainWindow
 {
@@ -312,6 +316,10 @@ public class FxInSwingMainWindow extends UiMainWindow
 		}
 	}
 
+	public ModelessBusyDlg createSplashScreen()
+	{
+		return new UiModelessBusyDlg(new ImageIcon(UiAboutDlg.class.getResource("Martus-logo-black-text-160x72.png")));
+	}
 
 	private JFrame swingFrame;
 	private UiMainPane mainPane;
