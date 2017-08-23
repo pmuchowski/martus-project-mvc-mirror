@@ -321,6 +321,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 		return new UiModelessBusyDlg(new ImageIcon(UiAboutDlg.class.getResource("Martus-logo-black-text-160x72.png")));
 	}
 
+	public ModelessBusyDlg createBulletinLoadScreen()
+	{
+		return new UiModelessBusyDlg(getLocalization().getFieldLabel("waitingForBulletinsToLoad"));
+	}
+
 	private JFrame swingFrame;
 	private UiMainPane mainPane;
 	private FxMainStage mainStage;

@@ -47,6 +47,7 @@ import org.martus.client.swingui.jfx.setupwizard.PureFxSetupWizardStage;
 import org.martus.common.bulletin.Bulletin;
 
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -232,6 +233,11 @@ public class PureFxMainWindow extends UiMainWindow
 	public ModelessBusyDlg createSplashScreen()
 	{
 		return new PureFxModelessBusyDlg(new Image(UiAboutDlg.class.getResourceAsStream("Martus-logo-black-text-160x72.png")));
+	}
+
+	public ModelessBusyDlg createBulletinLoadScreen()
+	{
+		return new PureFxModelessBusyDlg(getLocalization().getFieldLabel("waitingForBulletinsToLoad"));
 	}
 
 	private static Stage realStage;

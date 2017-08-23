@@ -81,7 +81,6 @@ import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
 import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
-import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
 import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
@@ -216,6 +215,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 	public abstract ModelessBusyDlg createSplashScreen();
 
+	public abstract ModelessBusyDlg createBulletinLoadScreen();
+
 	public abstract JFrame getSwingFrame();
 	
 	protected void restrictToOnlyTestServers()
@@ -280,7 +281,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		if(!createdNewAccount && !justRecovered)
 			askAndBackupKeypairIfRequired();
 		
-		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(getLocalization().getFieldLabel("waitingForBulletinsToLoad"));
+		ModelessBusyDlg waitingForBulletinsToLoad = createBulletinLoadScreen();
 		try
 		{
 			if(!loadFoldersAndBulletins())
