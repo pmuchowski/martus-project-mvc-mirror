@@ -28,12 +28,12 @@ package org.martus.client.swingui;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import javafx.scene.Cursor;
-import javafx.stage.Stage;
-
 import javax.swing.JFrame;
 
+import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
+import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.jfx.contacts.PureFxContactsStage;
 import org.martus.client.swingui.jfx.generic.FxShellController;
@@ -45,6 +45,11 @@ import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.landing.PureFxMainStage;
 import org.martus.client.swingui.jfx.setupwizard.PureFxSetupWizardStage;
 import org.martus.common.bulletin.Bulletin;
+
+import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 public class PureFxMainWindow extends UiMainWindow
 {
@@ -112,7 +117,12 @@ public class PureFxMainWindow extends UiMainWindow
 	@Override
 	public void rawError(String errorText)
 	{
-		// FIXME: PureFX: We need to support this
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setTitle("ERROR");
+		alert.setHeaderText(null);
+		alert.setContentText(errorText);
+
+		alert.showAndWait();
 	}
 
 	@Override
@@ -225,6 +235,40 @@ public class PureFxMainWindow extends UiMainWindow
 		}
 	}
 
+	public ModelessBusyDlg createSplashScreen()
+	{
+		return new PureFxModelessBusyDlg(new Image(UiAboutDlg.class.getResourceAsStream("Martus-logo-black-text-160x72.png")));
+	}
+
+	public ModelessBusyDlg createBulletinLoadScreen()
+	{
+		return new PureFxModelessBusyDlg(getLocalization().getFieldLabel("waitingForBulletinsToLoad"));
+	}
+
+	public void showMessageDialog(String message)
+	{
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle("Message");
+		alert.setHeaderText(null);
+		alert.setContentText(message);
+
+		alert.showAndWait();
+	}
+
+	protected void initializationErrorExitMartusDlg(String message)
+	{
+		String title = "Error Starting Martus";
+		String cause = "Unable to start Martus: \n" + message;
+
+		Alert alert = new Alert(Alert.AlertType.INFORMATION);
+		alert.setTitle(title);
+		alert.setHeaderText(null);
+		alert.setContentText(cause);
+
+		alert.showAndWait();
+
+		System.exit(1);
+	}
 
 	private static Stage realStage;
 }

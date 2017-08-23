@@ -50,11 +50,9 @@ import java.util.Vector;
 
 import javax.crypto.Cipher;
 import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
@@ -78,10 +76,10 @@ import org.martus.client.network.RetrieveCommand;
 import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.bulletincomponent.UiBulletinPreviewPane;
 import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
+import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
 import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
-import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
 import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
@@ -143,7 +141,6 @@ import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.XmlPacketLoader;
 import org.martus.swing.FontHandler;
 import org.martus.swing.UiNotifyDlg;
-import org.martus.swing.UiOptionPane;
 import org.martus.swing.UiPopupMenu;
 import org.martus.swing.Utilities;
 import org.martus.util.FileTransfer;
@@ -168,7 +165,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Error attempting to verify jar");
+			showMessageDialog("Error attempting to verify jar");
 			throw new RuntimeException(e);
 		}
 
@@ -179,13 +176,13 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Unknown error attempting to locate crypto jars");
+			showMessageDialog("Unknown error attempting to locate crypto jars");
 			throw new RuntimeException(e);
 		}
 		
 		cursorStack = new Stack();
 		
-		UiModelessBusyDlg splashScreen = new UiModelessBusyDlg(new ImageIcon(UiAboutDlg.class.getResource("Martus-logo-black-text-160x72.png")));
+		ModelessBusyDlg splashScreen = createSplashScreen();
 		try
 		{
 			session = new UiSession();
@@ -213,7 +210,13 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			splashScreen.endDialog();
 		}
 	}
-	
+
+	public abstract ModelessBusyDlg createSplashScreen();
+
+	public abstract ModelessBusyDlg createBulletinLoadScreen();
+
+	public abstract void showMessageDialog(String message);
+
 	public abstract JFrame getSwingFrame();
 	
 	protected void restrictToOnlyTestServers()
@@ -278,7 +281,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		if(!createdNewAccount && !justRecovered)
 			askAndBackupKeypairIfRequired();
 		
-		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(getLocalization().getFieldLabel("waitingForBulletinsToLoad"));
+		ModelessBusyDlg waitingForBulletinsToLoad = createBulletinLoadScreen();
 		try
 		{
 			if(!loadFoldersAndBulletins())
@@ -373,7 +376,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		if(foundBcJce)
 		{
 			String hintsToSolve = "Make sure Xbootclasspath does not contain bc-jce.jar";
-			JOptionPane.showMessageDialog(null, "bc-jce.jar cannot be used\n\n" + hintsToSolve);
+			showMessageDialog("bc-jce.jar cannot be used\n\n" + hintsToSolve);
 		}
 		
 		try
@@ -383,13 +386,13 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			if(bcprovJarURL.toString().indexOf(bcprovJarName) < 0)
 			{
 				String hintsToSolve = "Make sure " + bcprovJarName + " is the only bcprov file in Martus/lib/ext";
-				JOptionPane.showMessageDialog(null, "Didn't load " + bcprovJarName + "\n\n" + hintsToSolve);
+				showMessageDialog("Didn't load " + bcprovJarName + "\n\n" + hintsToSolve);
 			}
 		} 
 		catch (MartusCrypto.InvalidJarException e)
 		{
 			String hintsToSolve = "Xbootclasspath might be incorrect; " + MartusJarVerification.BCPROV_JAR_FILE_NAME + " might be missing from Martus/lib/ext";
-			JOptionPane.showMessageDialog(null, "Didn't load bc-jce.jar\n\n" + hintsToSolve);
+			showMessageDialog("Didn't load bc-jce.jar\n\n" + hintsToSolve);
 		}
 
 	}
@@ -404,7 +407,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 		if(!MartusApp.isJarSigned())
 		{
-			JOptionPane.showMessageDialog(null, "This Martus Jar is not signed, so cannot be verified");
+			showMessageDialog("This Martus Jar is not signed, so cannot be verified");
 		}
 	}
 
@@ -1358,18 +1361,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		UiUtilities.messageDlg(getLocalization(), parent, baseTag, message, tokenReplacement);
 	}
 
-	private void initializationErrorExitMartusDlg(String message)
-	{
-		String title = "Error Starting Martus";
-		String cause = "Unable to start Martus: \n" + message;
-		String ok = "OK";
-		String[] buttons = { ok };
-		UiOptionPane pane = new UiOptionPane(cause, UiOptionPane.INFORMATION_MESSAGE, UiOptionPane.DEFAULT_OPTION,
-								null, buttons);
-		JDialog dialog = pane.createDialog(null, title);
-		dialog.setVisible(true);
-		System.exit(1);
-	}
+	protected abstract void initializationErrorExitMartusDlg(String message);
 
 	public String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText)
 	{

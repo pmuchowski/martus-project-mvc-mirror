@@ -40,7 +40,7 @@ import javax.swing.border.Border;
 import org.martus.swing.UiLabel;
 import org.martus.swing.Utilities;
 
-public class UiModelessBusyDlg extends JDialog
+public class UiModelessBusyDlg extends JDialog implements ModelessBusyDlg
 {
 	public UiModelessBusyDlg(Icon icon)
 	{
