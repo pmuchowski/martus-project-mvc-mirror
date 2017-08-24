@@ -33,6 +33,7 @@ import javax.swing.JFrame;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
+import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.jfx.contacts.PureFxContactsStage;
@@ -268,6 +269,11 @@ public class PureFxMainWindow extends UiMainWindow
 		alert.showAndWait();
 
 		System.exit(1);
+	}
+
+	protected void showWarningMessageDlg(JFrame owner, String title, String okButtonLabel, String warningMessageLtoR, String warningMessageRtoL)
+	{
+		new PureFxWarningMessageDlg(title, okButtonLabel, warningMessageLtoR, warningMessageRtoL);
 	}
 
 	private static Stage realStage;

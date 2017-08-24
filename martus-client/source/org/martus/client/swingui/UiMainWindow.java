@@ -88,7 +88,6 @@ import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
 import org.martus.client.swingui.dialogs.UiSplashDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiTemplateDlg;
-import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
 import org.martus.client.swingui.filefilters.AllFileFilter;
 import org.martus.client.swingui.filefilters.KeyPairFormatFilter;
 import org.martus.client.swingui.foldertree.UiFolderTreePane;
@@ -444,7 +443,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			String warningMessageLtoR = getWarningMessageAboutUnofficialTranslations(message);
 			String warningMessageRtoL = getWarningMessageAboutUnofficialTranslations(messageRtoL);
 			Toolkit.getDefaultToolkit().beep();
-			new UiWarningMessageDlg(owner, "", localization.getButtonLabel(EnglishCommonStrings.OK), warningMessageLtoR, warningMessageRtoL);
+			showWarningMessageDlg(owner, "", localization.getButtonLabel(EnglishCommonStrings.OK), warningMessageLtoR, warningMessageRtoL);
 		}
 		catch(Exception e)
 		{
@@ -493,6 +492,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		}
 		return originalMessage;
 	}
+
+	protected abstract void showWarningMessageDlg(JFrame owner, String title, String okButtonLabel, String warningMessageLtoR, String warningMessageRtoL);
 
 	public void startInactivityTimeoutDetection()
 	{

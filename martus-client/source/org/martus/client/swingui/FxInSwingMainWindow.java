@@ -40,6 +40,7 @@ import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
 import org.martus.client.swingui.jfx.contacts.FxInSwingContactsStage;
 import org.martus.client.swingui.jfx.generic.FxInSwingDialogStage;
 import org.martus.client.swingui.jfx.generic.FxInSwingModalDialog;
@@ -53,6 +54,7 @@ import org.martus.client.swingui.jfx.landing.FxInSwingMainStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingCreateNewAccountWizardStage;
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingSetupWizardStage;
+import org.martus.common.EnglishCommonStrings;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.swing.UiOptionPane;
 import org.martus.swing.Utilities;
@@ -343,6 +345,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 		JDialog dialog = pane.createDialog(null, title);
 		dialog.setVisible(true);
 		System.exit(1);
+	}
+
+	protected void showWarningMessageDlg(JFrame owner, String title, String okButtonLabel, String warningMessageLtoR, String warningMessageRtoL)
+	{
+		new UiWarningMessageDlg(owner, "", getLocalization().getButtonLabel(EnglishCommonStrings.OK), warningMessageLtoR, warningMessageRtoL);
 	}
 
 	private JFrame swingFrame;
