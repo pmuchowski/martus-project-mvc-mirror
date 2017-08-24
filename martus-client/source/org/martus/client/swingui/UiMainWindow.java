@@ -280,7 +280,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		
 		if(!createdNewAccount && !justRecovered)
 			askAndBackupKeypairIfRequired();
-		
+
 		ModelessBusyDlg waitingForBulletinsToLoad = createBulletinLoadScreen();
 		try
 		{
@@ -413,16 +413,16 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 	public void displayPossibleUnofficialIncompatibleTranslationWarnings(String newLanguageCode)
 	{
-		UiMainWindow.displayPossibleUnofficialIncompatibleTranslationWarnings(getCurrentActiveFrame().getSwingFrame(), getLocalization(), newLanguageCode);
+		displayPossibleUnofficialIncompatibleTranslationWarnings(getCurrentActiveFrame().getSwingFrame(), getLocalization(), newLanguageCode);
 	}
 
-	public static void displayPossibleUnofficialIncompatibleTranslationWarnings(JFrame owner, UiLocalization localization, String newLanguageCode)
+	public void displayPossibleUnofficialIncompatibleTranslationWarnings(JFrame owner, UiLocalization localization, String newLanguageCode)
 	{
-		UiMainWindow.displayDefaultUnofficialTranslationMessageIfNecessary(owner, localization, newLanguageCode);
-		UiMainWindow.displayIncompatibleMtfVersionWarningMessageIfNecessary(owner, localization, newLanguageCode);
+		displayDefaultUnofficialTranslationMessageIfNecessary(owner, localization, newLanguageCode);
+		displayIncompatibleMtfVersionWarningMessageIfNecessary(owner, localization, newLanguageCode);
 	}
 
-	private static void displayDefaultUnofficialTranslationMessageIfNecessary(JFrame owner, MtfAwareLocalization localization, String languageCodeToTest)
+	private void displayDefaultUnofficialTranslationMessageIfNecessary(JFrame owner, MtfAwareLocalization localization, String languageCodeToTest)
 	{
 		if(localization.isOfficialTranslation(languageCodeToTest))
 			return;
@@ -454,7 +454,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		
 	}
 	
-	private static void displayIncompatibleMtfVersionWarningMessageIfNecessary(JFrame owner, MtfAwareLocalization localization, String languageCodeToTest)
+	private void displayIncompatibleMtfVersionWarningMessageIfNecessary(JFrame owner, MtfAwareLocalization localization, String languageCodeToTest)
 	{
 		if(localization.doesTranslationVersionMatchProgramVersion(languageCodeToTest, UiConstants.versionLabel))
 			return;
