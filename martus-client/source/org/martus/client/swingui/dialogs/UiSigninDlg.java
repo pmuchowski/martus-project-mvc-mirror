@@ -35,22 +35,22 @@ import javax.swing.JFrame;
 import org.martus.client.core.FontSetter;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiChoiceEditor;
-import org.martus.clientside.CurrentUiState;
 import org.martus.clientside.MtfAwareLocalization;
 import org.martus.clientside.UiBasicSigninDlg;
-import org.martus.clientside.UiLocalization;
 import org.martus.swing.UiLabel;
 
 public class UiSigninDlg extends UiBasicSigninDlg
 {
-	public UiSigninDlg(UiLocalization localizationToUse, CurrentUiState uiStateToUse, int mode, String username, char[] password)
+	public UiSigninDlg(UiMainWindow mainWindowToUse, int mode, String username, char[] password)
 	{
-		super(localizationToUse, uiStateToUse, mode, username, password);
+		super(mainWindowToUse.getLocalization(), mainWindowToUse.getCurrentUiState(), mode, username, password);
+		mainWindow = mainWindowToUse;
 	}
 	
-	public UiSigninDlg(UiLocalization localizationToUse, CurrentUiState uiStateToUse, JFrame owner, int mode, String username, char[] password)
+	public UiSigninDlg(UiMainWindow mainWindowToUse, JFrame owner, int mode, String username, char[] password)
 	{
-		super(localizationToUse, uiStateToUse, owner, mode, username, password);
+		super(mainWindowToUse.getLocalization(), mainWindowToUse.getCurrentUiState(), owner, mode, username, password);
+		mainWindow = mainWindowToUse;
 	}
 	
 	protected JComponent getLanguageComponent()
@@ -71,7 +71,7 @@ public class UiSigninDlg extends UiBasicSigninDlg
 		{
 			String languageCode = languageDropdown.getText();
 			FontSetter.setDefaultFont(languageCode.equals(MtfAwareLocalization.BURMESE));
-			UiMainWindow.displayPossibleUnofficialIncompatibleTranslationWarnings(owner, localization, languageCode);
+			mainWindow.displayPossibleUnofficialIncompatibleTranslationWarnings(owner, localization, languageCode);
 			changeLanguagesAndRestartSignin(languageCode);
 			dispose();
 		}
@@ -85,6 +85,7 @@ public class UiSigninDlg extends UiBasicSigninDlg
 		usersChoice = LANGUAGE_CHANGED;
 	}
 
-	UiChoiceEditor languageDropdown;
+	private UiChoiceEditor languageDropdown;
+	private UiMainWindow mainWindow;
 }
 

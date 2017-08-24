@@ -217,7 +217,7 @@ public class UiPreferencesDlg extends JDialog implements ActionListener
 			MartusLocalization localization = owner.getLocalization();
 			String languageCodeSelected = languageDropdown.getText();
 			FontSetter.setDefaultFont(isUseZawgyiFont());
-			UiMainWindow.displayPossibleUnofficialIncompatibleTranslationWarnings(owner.getCurrentActiveFrame().getSwingFrame(), localization, languageCodeSelected);
+			owner.displayPossibleUnofficialIncompatibleTranslationWarnings(owner.getCurrentActiveFrame().getSwingFrame(), localization, languageCodeSelected);
 			localization.setMdyOrder(mdyDropdown.getText());
 			String delimiter = delimiterDropdown.getText();
 			setDateDelimiter(localization, delimiter);

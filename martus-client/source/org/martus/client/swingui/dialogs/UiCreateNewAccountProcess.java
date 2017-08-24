@@ -146,7 +146,7 @@ public class UiCreateNewAccountProcess
 		char[] userPassword = "".toCharArray();
 		while(userChoice == UiSigninDlg.LANGUAGE_CHANGED)
 		{	
-			signinDlg = new UiSigninDlg(mainWindow.getLocalization(), mainWindow.getCurrentUiState(), mainWindow.getSwingFrame(), mode, userName, userPassword);
+			signinDlg = new UiSigninDlg(mainWindow, mainWindow.getSwingFrame(), mode, userName, userPassword);
 			userChoice = signinDlg.getUserChoice();
 			userName = signinDlg.getNameText();
 			userPassword = signinDlg.getPassword();
