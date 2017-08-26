@@ -111,7 +111,6 @@ import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpc;
 import org.martus.clientside.CurrentUiState;
 import org.martus.clientside.FormatFilter;
 import org.martus.clientside.MtfAwareLocalization;
-import org.martus.clientside.UiFileChooser;
 import org.martus.clientside.UiLocalization;
 import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
@@ -2508,10 +2507,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		return getTextFieldColumns(Utilities.getViewableScreenSize().width);
 	}
 	
-	public File showChooseDirectoryDialog(String windowTitle)
-	{
-		return UiFileChooser.displayChooseDirectoryDialog(getCurrentActiveFrame().getSwingFrame(), windowTitle);
-	}
+	public abstract File showChooseDirectoryDialog(String windowTitle);
 
 	public File showFileOpenDialog(String fileDialogCategory, Vector<FormatFilter> filters)
 	{

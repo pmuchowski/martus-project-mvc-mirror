@@ -59,6 +59,7 @@ import org.martus.client.swingui.jfx.setupwizard.FxInSwingCreateNewAccountWizard
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingSetupWizardStage;
 import org.martus.clientside.FileDialogHelpers;
 import org.martus.clientside.FormatFilter;
+import org.martus.clientside.UiFileChooser;
 import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.bulletin.Bulletin;
@@ -422,6 +423,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 	protected File showFileSaveDialog(String title, File directory, String defaultFilename, FormatFilter filter)
 	{
 		return FileDialogHelpers.doFileSaveDialog(getCurrentActiveFrame().getSwingFrame(), title, directory, defaultFilename, filter, getLocalization());
+	}
+
+	public File showChooseDirectoryDialog(String windowTitle)
+	{
+		return UiFileChooser.displayChooseDirectoryDialog(getCurrentActiveFrame().getSwingFrame(), windowTitle);
 	}
 
 	private JFrame swingFrame;

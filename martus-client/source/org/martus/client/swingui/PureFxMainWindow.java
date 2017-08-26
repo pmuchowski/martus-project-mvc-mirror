@@ -56,6 +56,7 @@ import org.martus.common.bulletin.Bulletin;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -351,6 +352,14 @@ public class PureFxMainWindow extends UiMainWindow
 		fileChooser.setInitialFileName(defaultFilename);
 
 		return fileChooser.showSaveDialog(new Stage());
+	}
+
+	public File showChooseDirectoryDialog(String windowTitle)
+	{
+		DirectoryChooser chooser = new DirectoryChooser();
+		chooser.setTitle(windowTitle);
+
+		return chooser.showDialog(new Stage());
 	}
 
 	private FileChooser createFileChooser(String title, File directory, FormatFilter filter)
