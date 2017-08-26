@@ -26,13 +26,17 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Point;
+import java.util.Map;
 
 import javax.swing.JFrame;
 
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
+import org.martus.client.swingui.dialogs.PureFxNotifyDlg;
+import org.martus.client.swingui.dialogs.PureFxUtilities;
 import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
@@ -274,6 +278,61 @@ public class PureFxMainWindow extends UiMainWindow
 	protected void showWarningMessageDlg(JFrame owner, String title, String okButtonLabel, String warningMessageLtoR, String warningMessageRtoL)
 	{
 		new PureFxWarningMessageDlg(title, okButtonLabel, warningMessageLtoR, warningMessageRtoL);
+	}
+
+	public boolean confirmDlg(JFrame parent, String baseTag)
+	{
+		return PureFxUtilities.confirmDlg(getLocalization(), parent, baseTag);
+	}
+
+	public boolean confirmDlg(JFrame parent, String baseTag, Map tokenReplacement)
+	{
+		return PureFxUtilities.confirmDlg(getLocalization(), parent, baseTag, tokenReplacement);
+	}
+
+	public boolean confirmDlg(JFrame parent, String title, String[] contents)
+	{
+		return PureFxUtilities.confirmDlg(getLocalization(), parent, title, contents);
+	}
+
+	public boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons)
+	{
+		return PureFxUtilities.confirmDlg(parent, title, contents, buttons);
+	}
+
+	public boolean confirmDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		return PureFxUtilities.confirmDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons, tokenReplacement);
+	}
+
+	protected boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		return PureFxUtilities.confirmDlg(parent, title, contents, buttons, tokenReplacement);
+	}
+
+	protected void notifyDlg(JFrame parent, String baseTag, String titleTag, Map tokenReplacement)
+	{
+		PureFxUtilities.notifyDlg(getLocalization(), parent, baseTag, titleTag, tokenReplacement);
+	}
+
+	public void notifyDlg(String title, String[] contents, String[] buttons)
+	{
+		new PureFxNotifyDlg(title, contents, buttons);
+	}
+
+	public void messageDlg(JFrame parent, String baseTag, String message, Map tokenReplacement)
+	{
+		PureFxUtilities.messageDlg(getLocalization(), parent, baseTag, message, tokenReplacement);
+	}
+
+	protected void notifyDlg(Frame owner, String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		new PureFxNotifyDlg(title, contents, buttons, tokenReplacement);
+	}
+
+	protected void notifyDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		new PureFxNotifyDlg(title, contents, buttons, tokenReplacement);
 	}
 
 	private static Stage realStage;

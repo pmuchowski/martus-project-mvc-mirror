@@ -27,8 +27,10 @@ package org.martus.client.swingui;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Window;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
@@ -54,8 +56,10 @@ import org.martus.client.swingui.jfx.landing.FxInSwingMainStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingCreateNewAccountWizardStage;
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingSetupWizardStage;
+import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.UiOptionPane;
 import org.martus.swing.Utilities;
 
@@ -350,6 +354,61 @@ public class FxInSwingMainWindow extends UiMainWindow
 	protected void showWarningMessageDlg(JFrame owner, String title, String okButtonLabel, String warningMessageLtoR, String warningMessageRtoL)
 	{
 		new UiWarningMessageDlg(owner, "", getLocalization().getButtonLabel(EnglishCommonStrings.OK), warningMessageLtoR, warningMessageRtoL);
+	}
+
+	public boolean confirmDlg(JFrame parent, String baseTag)
+	{
+		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag);
+	}
+
+	public boolean confirmDlg(JFrame parent, String baseTag, Map tokenReplacement)
+	{
+		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag, tokenReplacement);
+	}
+
+	public boolean confirmDlg(JFrame parent, String title, String[] contents)
+	{
+		return UiUtilities.confirmDlg(getLocalization(), parent, title, contents);
+	}
+
+	public boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons)
+	{
+		return UiUtilities.confirmDlg(parent, title, contents, buttons);
+	}
+
+	public boolean confirmDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		return UiUtilities.confirmDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons, tokenReplacement);
+	}
+
+	protected boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		return UiUtilities.confirmDlg(parent, title, contents, buttons, tokenReplacement);
+	}
+
+	protected void notifyDlg(JFrame parent, String baseTag, String titleTag, Map tokenReplacement)
+	{
+		UiUtilities.notifyDlg(getLocalization(), parent, baseTag, titleTag, tokenReplacement);
+	}
+
+	public void notifyDlg(String title, String[] contents, String[] buttons)
+	{
+		new UiNotifyDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons);
+	}
+
+	public void messageDlg(JFrame parent, String baseTag, String message, Map tokenReplacement)
+	{
+		UiUtilities.messageDlg(getLocalization(), parent, baseTag, message, tokenReplacement);
+	}
+
+	protected void notifyDlg(Frame owner, String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		new UiNotifyDlg(owner, title, contents, buttons, tokenReplacement);
+	}
+
+	protected void notifyDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		new UiNotifyDlg(title, contents, buttons, tokenReplacement);
 	}
 
 	private JFrame swingFrame;

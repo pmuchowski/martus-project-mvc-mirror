@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -139,7 +140,6 @@ import org.martus.common.packet.Packet.WrongAccountException;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.XmlPacketLoader;
 import org.martus.swing.FontHandler;
-import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.UiPopupMenu;
 import org.martus.swing.Utilities;
 import org.martus.util.FileTransfer;
@@ -361,8 +361,10 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		HashMap map = new HashMap();
 		map.put("#HighVersion#", highVersionJava);
 		map.put("#ExpectedVersion#", expectedVersionJava);
-		new UiNotifyDlg(title, new String[]{warningMessage}, new String[]{buttonMessage}, map);
+		notifyDlg(title, new String[]{warningMessage}, new String[]{buttonMessage}, map);
 	}
+
+	protected abstract void notifyDlg(String title, String[] contents, String[] buttons, Map tokenReplacement);
 
 	private void warnIfCryptoJarsNotLoaded() throws Exception
 	{
@@ -469,8 +471,10 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		map.put("#MtfVersionNumber#", mtfVersionNumber);
 		map.put("#ProgramVersionNumber#", localization.extractVersionNumber(UiConstants.versionLabel));
 		map.put("#MtfLanguage#", localization.getLanguageName(languageCodeToTest));
-		new UiNotifyDlg(owner, title, new String[]{warningMessage, "", mtfVersion, programVersion}, new String[]{buttonMessage}, map);
+		notifyDlg(owner, title, new String[]{warningMessage, "", mtfVersion, programVersion}, new String[]{buttonMessage}, map);
 	}
+
+	protected abstract void notifyDlg(Frame owner, String title, String[] contents, String[] buttons, Map tokenReplacement);
 
 	private static String getWarningMessageAboutUnofficialTranslations(String originalMessage)
 	{
@@ -1184,45 +1188,30 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		return confirmDlg(getCurrentActiveFrame().getSwingFrame(), baseTag);
 	}
 	
-	public boolean confirmDlg(JFrame parent, String baseTag)
-	{
-		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag);
-	}
+	public abstract boolean confirmDlg(JFrame parent, String baseTag);
 
 	public boolean confirmDlg(String baseTag, Map tokenReplacement)
 	{
 		return confirmDlg(getCurrentActiveFrame().getSwingFrame(), baseTag, tokenReplacement);
 	}
 
-	public boolean confirmDlg(JFrame parent, String baseTag, Map tokenReplacement)
-	{
-		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag, tokenReplacement);
-	}
+	public abstract boolean confirmDlg(JFrame parent, String baseTag, Map tokenReplacement);
 
 	public boolean confirmDlg(String title, String[] contents)
 	{
 		return confirmDlg(getCurrentActiveFrame().getSwingFrame(), title, contents);
 	}
 
-	public boolean confirmDlg(JFrame parent, String title, String[] contents)
-	{
-		return UiUtilities.confirmDlg(getLocalization(), parent, title, contents);
-	}
+	public abstract boolean confirmDlg(JFrame parent, String title, String[] contents);
 
 	public boolean confirmDlg(String title, String[] contents, String[] buttons)
 	{
 		return confirmDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons);
 	}
 
-	public boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons)
-	{
-		return UiUtilities.confirmDlg(parent, title, contents, buttons);
-	}
+	public abstract boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons);
 
-	public boolean confirmDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
-	{
-		return UiUtilities.confirmDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons, tokenReplacement);
-	}
+	public abstract boolean confirmDlg(String title, String[] contents, String[] buttons, Map tokenReplacement);
 
 	public boolean confirmCustomButtonsDlg(String baseTag, String[] buttons, Map tokenReplacement)
 	{
@@ -1257,10 +1246,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		return title;
 	}
 
-	private boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons, Map tokenReplacement)
-	{
-		return UiUtilities.confirmDlg(parent, title, contents, buttons, tokenReplacement);
-	}
+	protected abstract boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons, Map tokenReplacement);
 
 	abstract public void rawError(String string);
 
@@ -1337,15 +1323,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		notifyDlg(parent, baseTag, titleTag, emptyTokenReplacement);
 	}
 
-	private void notifyDlg(JFrame parent, String baseTag, String titleTag, Map tokenReplacement)
-	{
-		UiUtilities.notifyDlg(getLocalization(), parent, baseTag, titleTag, tokenReplacement);
-	}
+	protected abstract void notifyDlg(JFrame parent, String baseTag, String titleTag, Map tokenReplacement);
 
-	public void notifyDlg(String title, String[] contents, String[] buttons)
-	{
-		new UiNotifyDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons);  
-	}
+	public abstract void notifyDlg(String title, String[] contents, String[] buttons);
 
 	public void messageDlg(String baseTag, String message, Map tokenReplacement)
 	{
@@ -1357,10 +1337,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		messageDlg(parent, baseTag, message, new HashMap());
 	}
 
-	public void messageDlg(JFrame parent, String baseTag, String message, Map tokenReplacement)
-	{
-		UiUtilities.messageDlg(getLocalization(), parent, baseTag, message, tokenReplacement);
-	}
+	public abstract void messageDlg(JFrame parent, String baseTag, String message, Map tokenReplacement);
 
 	protected abstract void initializationErrorExitMartusDlg(String message);
 
