@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.util.Vector;
 
 import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.swing.filechooser.FileFilter;
 
 import org.json.JSONObject;
 import org.martus.client.bulletinstore.ExportBulletinsWithSpecifiedFields;
@@ -195,7 +194,7 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 	
 	ReportAnswers chooseReport() throws Exception
 	{
-		FileFilter filter = new ReportFormatFilter(getLocalization());
+		FormatFilter filter = new ReportFormatFilter(getLocalization());
 		File chosenFile = mainWindow.showFileOpenDialog("SelectReport", filter);
 		if(chosenFile == null)
 			return null;

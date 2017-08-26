@@ -56,7 +56,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileFilter;
 
 import org.bouncycastle.crypto.engines.RSAEngine;
 import org.json.JSONObject;
@@ -2566,17 +2565,17 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		return fileChooser;
 	}
 	
-	public File showFileOpenDialog(String fileDialogCategory, FileFilter filter)
+	public File showFileOpenDialog(String fileDialogCategory, FormatFilter filter)
 	{
 		return internalShowFileOpenDialog(fileDialogCategory, null, filter);
 	}
-	
+
 	public File showFileOpenDialogWithDirectoryMemory(String fileDialogCategory)
 	{
-		return showFileOpenDialogWithDirectoryMemory(fileDialogCategory, (FileFilter)null);
+		return showFileOpenDialogWithDirectoryMemory(fileDialogCategory, null);
 	}
 
-	public File showFileOpenDialogWithDirectoryMemory(String fileDialogCategory, FileFilter filter)
+	public File showFileOpenDialogWithDirectoryMemory(String fileDialogCategory, FormatFilter filter)
 	{
 		File directory = UiSession.getMemorizedFileOpenDirectories().get(fileDialogCategory);
 		File file = internalShowFileOpenDialog(fileDialogCategory, directory, filter);
@@ -2585,7 +2584,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		return file;
 	}
 	
-	private File internalShowFileOpenDialog(String fileDialogCategory, File directory, FileFilter filter)
+	private File internalShowFileOpenDialog(String fileDialogCategory, File directory, FormatFilter filter)
 	{
 		String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
 		String okButtonLabel = getLocalization().getButtonLabel("FileDialogOk" + fileDialogCategory);
