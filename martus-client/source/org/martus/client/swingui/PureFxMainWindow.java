@@ -340,13 +340,29 @@ public class PureFxMainWindow extends UiMainWindow
 
 	public File showFileOpenDialog(String title, String okButtonLabel, File directory, FormatFilter filter)
 	{
+		FileChooser fileChooser = createFileChooser(title, directory, filter);
+
+		return fileChooser.showOpenDialog(new Stage());
+	}
+
+	protected File showFileSaveDialog(String title, File directory, String defaultFilename, FormatFilter filter)
+	{
+		FileChooser fileChooser = createFileChooser(title, directory, filter);
+		fileChooser.setInitialFileName(defaultFilename);
+
+		return fileChooser.showSaveDialog(new Stage());
+	}
+
+	private FileChooser createFileChooser(String title, File directory, FormatFilter filter)
+	{
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle(title);
 		fileChooser.setInitialDirectory(directory);
 
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(filter.getDescription(), filter.getWildCardExtension()));
+		if (filter != null)
+			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(filter.getDescription(), filter.getWildCardExtension()));
 
-		return fileChooser.showOpenDialog(new Stage());
+		return fileChooser;
 	}
 
 	private static Stage realStage;

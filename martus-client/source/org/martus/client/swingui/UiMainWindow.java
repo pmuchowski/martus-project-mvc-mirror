@@ -109,7 +109,6 @@ import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.clientside.ClientSideNetworkGateway;
 import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpc;
 import org.martus.clientside.CurrentUiState;
-import org.martus.clientside.FileDialogHelpers;
 import org.martus.clientside.FormatFilter;
 import org.martus.clientside.MtfAwareLocalization;
 import org.martus.clientside.UiFileChooser;
@@ -2677,8 +2676,10 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
 		if(defaultDirectory == null)
 			defaultDirectory = getApp().getCurrentAccountDirectory();
-		return FileDialogHelpers.doFileSaveDialog(getCurrentActiveFrame().getSwingFrame(), title, defaultDirectory, defaultFilename, filter, getLocalization());
+		return showFileSaveDialog(title, defaultDirectory, defaultFilename, filter);
 	}
+
+	protected abstract File showFileSaveDialog(String title, File directory, String defaultFilename, FormatFilter filter);
 
 	void setLocalization(MartusLocalization localization)
 	{

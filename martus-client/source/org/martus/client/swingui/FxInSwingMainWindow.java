@@ -419,6 +419,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 		return FileDialogHelpers.doFileOpenDialog(getCurrentActiveFrame().getSwingFrame(), title, okButtonLabel, directory, filter);
 	}
 
+	protected File showFileSaveDialog(String title, File directory, String defaultFilename, FormatFilter filter)
+	{
+		return FileDialogHelpers.doFileSaveDialog(getCurrentActiveFrame().getSwingFrame(), title, directory, defaultFilename, filter, getLocalization());
+	}
+
 	private JFrame swingFrame;
 	private UiMainPane mainPane;
 	private FxMainStage mainStage;
