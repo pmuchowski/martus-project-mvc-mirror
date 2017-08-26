@@ -50,7 +50,6 @@ import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.grids.GridTableModel;
 import org.martus.client.swingui.jfx.generic.ModalDialogWithSwingContents;
 import org.martus.client.swingui.jfx.generic.SwingDialogContentPane;
-import org.martus.clientside.FileDialogHelpers;
 import org.martus.clientside.FormatFilter;
 import org.martus.clientside.UiLocalization;
 import org.martus.common.EnglishCommonStrings;
@@ -58,8 +57,8 @@ import org.martus.common.MiniLocalization;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.swing.FontHandler;
 import org.martus.swing.UiButton;
-import org.martus.swing.UiFxStyleButton;
 import org.martus.swing.UiCheckBox;
+import org.martus.swing.UiFxStyleButton;
 import org.martus.swing.UiLinkButton;
 import org.martus.swing.UiTextArea;
 import org.martus.swing.UiWrappedTextPanel;
@@ -486,7 +485,7 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 			dialog.setVisible(false);
 			try
 			{
-				File loadFrom = FileDialogHelpers.doFileOpenDialog(dialog, title, openButtonLabel, directory, filter);
+				File loadFrom = dialog.getMainWindow().showFileOpenDialog(title, openButtonLabel, directory, filter);
 				if(loadFrom == null)
 					return;
 				
