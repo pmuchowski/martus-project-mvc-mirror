@@ -30,6 +30,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Window;
+import java.io.File;
 import java.util.Map;
 
 import javax.swing.ImageIcon;
@@ -56,6 +57,8 @@ import org.martus.client.swingui.jfx.landing.FxInSwingMainStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingCreateNewAccountWizardStage;
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingSetupWizardStage;
+import org.martus.clientside.FileDialogHelpers;
+import org.martus.clientside.FormatFilter;
 import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.bulletin.Bulletin;
@@ -409,6 +412,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 	protected void notifyDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
 	{
 		new UiNotifyDlg(title, contents, buttons, tokenReplacement);
+	}
+
+	public File showFileOpenDialog(String title, String okButtonLabel, File directory, FormatFilter filter)
+	{
+		return FileDialogHelpers.doFileOpenDialog(getCurrentActiveFrame().getSwingFrame(), title, okButtonLabel, directory, filter);
 	}
 
 	private JFrame swingFrame;

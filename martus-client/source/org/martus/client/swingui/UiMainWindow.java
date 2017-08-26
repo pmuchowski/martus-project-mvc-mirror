@@ -2590,9 +2590,11 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		String okButtonLabel = getLocalization().getButtonLabel("FileDialogOk" + fileDialogCategory);
 		if(directory == null)
 			directory = getApp().getCurrentAccountDirectory();
-		return FileDialogHelpers.doFileOpenDialog(getCurrentActiveFrame().getSwingFrame(), title, okButtonLabel, directory, filter);
+		return showFileOpenDialog(title, okButtonLabel, directory, filter);
 	}
-	
+
+	public abstract File showFileOpenDialog(String title, String okButtonLabel, File directory, FormatFilter filter);
+
 	public File showFileSaveDialog(String fileDialogCategory, Vector<FormatFilter> filters)
 	{
 		// TODO: When we switch from Swing to JavaFX, combine this with the other file save dialog

@@ -28,6 +28,7 @@ package org.martus.client.swingui;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
+import java.io.File;
 import java.util.Map;
 
 import javax.swing.JFrame;
@@ -49,11 +50,13 @@ import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.landing.PureFxMainStage;
 import org.martus.client.swingui.jfx.setupwizard.PureFxSetupWizardStage;
+import org.martus.clientside.FormatFilter;
 import org.martus.common.bulletin.Bulletin;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class PureFxMainWindow extends UiMainWindow
@@ -333,6 +336,17 @@ public class PureFxMainWindow extends UiMainWindow
 	protected void notifyDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
 	{
 		new PureFxNotifyDlg(title, contents, buttons, tokenReplacement);
+	}
+
+	public File showFileOpenDialog(String title, String okButtonLabel, File directory, FormatFilter filter)
+	{
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle(title);
+		fileChooser.setInitialDirectory(directory);
+
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(filter.getDescription(), filter.getWildCardExtension()));
+
+		return fileChooser.showOpenDialog(new Stage());
 	}
 
 	private static Stage realStage;
