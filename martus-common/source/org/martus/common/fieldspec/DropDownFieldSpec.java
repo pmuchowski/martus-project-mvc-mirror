@@ -142,7 +142,7 @@ public class DropDownFieldSpec extends FieldSpec
 		for(int i = 0 ; i < getCount(); ++i)
 		{
 			xml.append(("<" + DROPDOWN_SPEC_CHOICE_TAG + ">"));
-			xml.append(getChoice(i).toString());
+			xml.append(XmlUtilities.getXmlEncoded(getChoice(i).toString()));
 			xml.append("</" + DROPDOWN_SPEC_CHOICE_TAG + ">\n");
 		}
 		xml.append("</" + DROPDOWN_SPEC_CHOICES_TAG + ">\n");

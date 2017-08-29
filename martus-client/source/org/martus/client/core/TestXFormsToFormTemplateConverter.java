@@ -74,6 +74,18 @@ public class TestXFormsToFormTemplateConverter extends TestCaseEnhanced
 		}
 	}
 	
+	public void testXFormsModelWithEscapedChars()
+	{
+		try
+		{
+			FormTemplateFromXFormsLoader.createNewBulletinFromXFormsFormTemplate(TestBulletinFromXFormsLoaderConstants.XFORMS_MODEL_WITH_ESCAPED_VALUES);
+		}
+		catch (Exception e)
+		{
+			fail("XForms model with excpaed special chars should not fail?");
+		}
+	}
+	
 	public void testFormTemplateFromXFormsImport() throws Exception
 	{
 		verifyXformsToFormTemplateConversion(TestBulletinFromXFormsLoader.getFormTitle(), createFieldSpecCollectionWithDefaultTopFields(), TestBulletinFromXFormsLoader.getEmptyXFormsModelXmlAsString());

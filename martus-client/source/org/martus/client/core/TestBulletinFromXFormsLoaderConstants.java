@@ -380,4 +380,54 @@ public interface TestBulletinFromXFormsLoaderConstants
 			"		</group>" +
 			"	</h:body>" +
 			"</h:html>";
+	
+	public static final String XFORMS_MODEL_WITH_ESCAPED_VALUES = 
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" + 
+			"<h:html xmlns:h=\"http://www.w3.org/1999/xhtml\" xmlns:orx=\"http://openrosa.org/jr/xforms\" xmlns=\"http://www.w3.org/2002/xforms\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:jr=\"http://openrosa.org/javarosa\" xmlns:vellum=\"http://commcarehq.org/xforms/vellum\">" + 
+			"	<h:head>" + 
+			"		<h:title>Untitled Form</h:title>" + 
+			"		<model>" + 
+			"			<instance>" + 
+			"				<data xmlns:jrm=\"http://dev.commcarehq.org/jr/xforms\" xmlns=\"http://openrosa.org/formdesigner/0B967036-1A25-4D71-8CAB-271E3AE65EC7\" uiVersion=\"1\" version=\"1\" name=\"Untitled Form\">" + 
+			"					<SCharacter_issue>" + 
+			"						<Q1 />" + 
+			"					</SCharacter_issue>" + 
+			"					<Radio_Group>" + 
+			"						<Radio_Type />" + 
+			"					</Radio_Group>" + 
+			"				</data>" + 
+			"			</instance>" + 
+			"			<bind nodeset=\"/data/SCharacter_issue\" />" + 
+			"			<bind nodeset=\"/data/SCharacter_issue/Q1\" type=\"xsd:string\" />" + 
+			"			<bind nodeset=\"/data/Radio_Group\" />" + 
+			"			<bind nodeset=\"/data/Radio_Group/Radio_Type\" />" + 
+			"		</model>" + 
+			"	</h:head>" + 
+			"	<h:body>" + 
+			"		<group ref=\"/data/SCharacter_issue\" appearance=\"field-list\">" + 
+			"			<label>SCharacter_issue</label>" + 
+			"			<input ref=\"/data/SCharacter_issue/Q1\">" + 
+			"				<label>&lt;Value&gt;</label>" + 
+			"			</input>" + 
+			"		</group>" + 
+			"		<group ref=\"/data/Radio_Group\" appearance=\"field-list\">" + 
+			"			<label>Radio_Group</label>" + 
+			"			<select1 ref=\"/data/Radio_Group/Radio_Type\">" + 
+			"				<label>Radio_Type</label>" + 
+			"				<item>" + 
+			"						<label>&lt;QA</label>" + 
+			"						<value>item1</value>" + 
+			"					</item>" + 
+			"					<item>" + 
+			"						<label>&amp;One7&amp;</label>" + 
+			"						<value>item2</value>" + 
+			"					</item>" + 
+			"					<item>" + 
+			"						<label>One5&gt;</label>" + 
+			"						<value>item3</value>" + 
+			"					</item>" + 
+			"			</select1>" + 
+			"		</group>" + 
+			"	</h:body>" + 
+			"</h:html>";
 }
