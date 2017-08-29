@@ -32,9 +32,11 @@ import java.awt.Point;
 import java.awt.Window;
 import java.io.File;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -428,6 +430,27 @@ public class FxInSwingMainWindow extends UiMainWindow
 	public File showChooseDirectoryDialog(String windowTitle)
 	{
 		return UiFileChooser.displayChooseDirectoryDialog(getCurrentActiveFrame().getSwingFrame(), windowTitle);
+	}
+
+	protected File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		JFileChooser fileChooser = new JFileChooser(directory);
+		fileChooser.setDialogTitle(title);
+		filters.forEach(filter -> fileChooser.addChoosableFileFilter(filter));
+
+		// NOTE: Apparently the all file filter has a Mac bug, so this is a workaround
+		fileChooser.setAcceptAllFileFilterUsed(false);
+
+		int userResult = fileChooser.showSaveDialog(getCurrentActiveFrame().getSwingFrame());
+		if(userResult != JFileChooser.APPROVE_OPTION)
+			return null;
+
+		File selectedFile = fileChooser.getSelectedFile();
+
+		FormatFilter selectedFilter = (FormatFilter) fileChooser.getFileFilter();
+		selectedFile = getFileWithExtension(selectedFile, selectedFilter.getExtension());
+
+		return selectedFile;
 	}
 
 	private JFrame swingFrame;

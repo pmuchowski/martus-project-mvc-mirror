@@ -29,7 +29,10 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 
@@ -362,16 +365,47 @@ public class PureFxMainWindow extends UiMainWindow
 		return chooser.showDialog(new Stage());
 	}
 
-	private FileChooser createFileChooser(String title, File directory, FormatFilter filter)
+	private FileChooser createFileChooser(String title, File directory, FormatFilter... filters)
 	{
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle(title);
 		fileChooser.setInitialDirectory(directory);
 
-		if (filter != null)
-			fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter(filter.getDescription(), filter.getWildCardExtension()));
+		List<FileChooser.ExtensionFilter> extensionFilters = new ArrayList<>();
+
+		if (filters != null)
+			for (FormatFilter filter : filters)
+				extensionFilters.add(new FileChooser.ExtensionFilter(filter.getDescription(), getExtensionsWithWildcards(filter.getExtensions())));
+
+		fileChooser.getExtensionFilters().addAll(extensionFilters);
 
 		return fileChooser;
+	}
+
+	private List<String> getExtensionsWithWildcards(String[] extensions)
+	{
+		List<String> extensionsWithWildcards = new ArrayList<>();
+
+		for (String extension : extensions)
+			extensionsWithWildcards.add("*" + extension);
+
+		return extensionsWithWildcards;
+	}
+
+	protected File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
+
+		File selectedFile = fileChooser.showSaveDialog(new Stage());
+
+		if (selectedFile == null)
+			return null;
+
+		List<String> extensions = fileChooser.getSelectedExtensionFilter().getExtensions();
+		String extension = extensions.get(0).replace("*", "");
+		selectedFile = getFileWithExtension(selectedFile, extension);
+
+		return selectedFile;
 	}
 
 	private static Stage realStage;

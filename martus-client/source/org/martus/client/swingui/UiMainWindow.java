@@ -112,7 +112,6 @@ import org.martus.clientside.CurrentUiState;
 import org.martus.clientside.FormatFilter;
 import org.martus.clientside.MtfAwareLocalization;
 import org.martus.clientside.UiLocalization;
-import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.Exceptions.NetworkOfflineException;
 import org.martus.common.HeadquartersKeys;
@@ -2595,33 +2594,28 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		// TODO: When we switch from Swing to JavaFX, combine this with the other file save dialog
 		while(true)
 		{
-			JFileChooser fileChooser = new JFileChooser(getDataDirectoryToInitializeFileChooser());
-			fileChooser.setDialogTitle(getLocalization().getWindowTitle("FileDialog" + fileDialogCategory));
-			filters.forEach(filter -> fileChooser.addChoosableFileFilter(filter));
-			
-			// NOTE: Apparently the all file filter has a Mac bug, so this is a workaround
-			fileChooser.setAcceptAllFileFilterUsed(false);
-	
-			int userResult = fileChooser.showSaveDialog(getCurrentActiveFrame().getSwingFrame());
-			setCurrentUserSelectedDirForNextTime(fileChooser.getCurrentDirectory());
-			if(userResult != JFileChooser.APPROVE_OPTION)
+			String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
+			File directory = getDataDirectoryToInitializeFileChooser();
+
+			File selectedFile = showFileSaveDialog(title, directory, filters);
+
+			if (selectedFile == null)
 				break;
-			
-			File selectedFile = fileChooser.getSelectedFile();
-			setCurrentUserSelectedDirForNextTime(fileChooser.getCurrentDirectory());
-			FormatFilter selectedFilter = (FormatFilter) fileChooser.getFileFilter();
-			selectedFile = getFileWithExtension(selectedFile, selectedFilter);
+
+			setCurrentUserSelectedDirForNextTime(selectedFile.getParentFile());
 
 			if(!selectedFile.exists())
 				return selectedFile;
 
-			if(UiUtilities.confirmDlg(getLocalization(), getCurrentActiveFrame().getSwingFrame(), "OverWriteExistingFile"))
+			if(confirmDlg(getCurrentActiveFrame().getSwingFrame(), "OverWriteExistingFile"))
 				return selectedFile;
 		}
 		
 		return null;
 	}
-	
+
+	protected abstract File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters);
+
 	private void setCurrentUserSelectedDirForNextTime(File currentUserChosenFileChooserDirToUse)
 	{
 		currentUserChosenFileChooserDir = currentUserChosenFileChooserDirToUse;
@@ -2634,10 +2628,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		
 		return currentUserChosenFileChooserDir;
 	}
-	
-	private static File getFileWithExtension(File file, FormatFilter filter)
+
+	protected static File getFileWithExtension(File file, String extension)
 	{
-		String extension = filter.getExtension();
 		String fileName = file.getName();
 		if(!fileName.toLowerCase().endsWith(extension.toLowerCase()))
 		{
