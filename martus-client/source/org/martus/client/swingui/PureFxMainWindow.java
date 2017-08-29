@@ -408,5 +408,23 @@ public class PureFxMainWindow extends UiMainWindow
 		return selectedFile;
 	}
 
+	public File showFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
+
+		return fileChooser.showOpenDialog(new Stage());
+	}
+
+	protected File[] showMultiFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
+		List<File> files = fileChooser.showOpenMultipleDialog(new Stage());
+
+		if (files == null)
+			return new File[0];
+
+		return files.toArray(new File[files.size()]);
+	}
+
 	private static Stage realStage;
 }

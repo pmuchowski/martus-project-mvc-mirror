@@ -52,7 +52,6 @@ import java.util.Vector;
 import javax.crypto.Cipher;
 import javax.swing.AbstractAction;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
@@ -2510,55 +2509,38 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 	public File showFileOpenDialog(String fileDialogCategory, Vector<FormatFilter> filters)
 	{
-		JFileChooser fileChooser = createFileChooser(fileDialogCategory, filters);
+		String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
+		File directory = getDataDirectoryToInitializeFileChooser();
 
-		File[] selectedFiles = getSelectedFilesFromUser(fileChooser);
-		if (selectedFiles.length != 1)
-			return null;
-		
-		return selectedFiles[0];
+		filters.add(new AllFileFilter(getLocalization()));
+
+		File selectedFile = showFileOpenDialog(title, directory, filters);
+
+		if (selectedFile != null)
+			setCurrentUserSelectedDirForNextTime(selectedFile.getParentFile());
+
+		return selectedFile;
 	}
-	
+
+	public abstract File showFileOpenDialog(String title, File directory, Vector<FormatFilter> filters);
+
 	public File[] showMultiFileOpenDialog(String fileDialogCategory, Vector<FormatFilter> filters)
 	{
-		JFileChooser fileChooser = createFileChooser(fileDialogCategory, filters);
-		fileChooser.setMultiSelectionEnabled(true);
-		
-		return getSelectedFilesFromUser(fileChooser);
-	}
+		String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
+		File directory = getDataDirectoryToInitializeFileChooser();
 
-	private File[] getSelectedFilesFromUser(JFileChooser fileChooser)
-	{
-		int userResult = fileChooser.showOpenDialog(getCurrentActiveFrame().getSwingFrame());
-		setCurrentUserSelectedDirForNextTime(fileChooser.getCurrentDirectory());
-		File[] selectedFiles = fileChooser.getSelectedFiles();
-		if(userResult != JFileChooser.APPROVE_OPTION)
-			return new File[0];
-		
+		filters.add(new AllFileFilter(getLocalization()));
+
+		File[] selectedFiles = showMultiFileOpenDialog(title, directory, filters);
+
 		if (selectedFiles.length > 0)
-			return selectedFiles;
-		
-		//NOTE: getSelectedFiles() returns an empty list when file chooser is single selection and there is a selection 
-		File selectedFile = fileChooser.getSelectedFile();
-		if (selectedFile == null)
-			return new File[0];
-		
-		return new File[]{selectedFile,};
+			setCurrentUserSelectedDirForNextTime(selectedFiles[0].getParentFile());
+
+		return selectedFiles;
 	}
 
-	private JFileChooser createFileChooser(String fileDialogCategory, Vector<FormatFilter> filters)
-	{
-		// TODO: When we switch from Swing to JavaFX, combine this with the other file open dialog
-		JFileChooser fileChooser = new JFileChooser(getDataDirectoryToInitializeFileChooser());
-		fileChooser.setDialogTitle(getLocalization().getWindowTitle("FileDialog" + fileDialogCategory));
-		filters.forEach(filter -> fileChooser.addChoosableFileFilter(filter));
-		
-		// NOTE: Apparently the all file filter has a Mac bug, so this is a workaround
-		fileChooser.setAcceptAllFileFilterUsed(false);
-		fileChooser.addChoosableFileFilter(new AllFileFilter(getLocalization()));
-		return fileChooser;
-	}
-	
+	protected abstract File[] showMultiFileOpenDialog(String title, File directory, Vector<FormatFilter> filters);
+
 	public File showFileOpenDialog(String fileDialogCategory, FormatFilter filter)
 	{
 		return internalShowFileOpenDialog(fileDialogCategory, null, filter);

@@ -434,12 +434,7 @@ public class FxInSwingMainWindow extends UiMainWindow
 
 	protected File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters)
 	{
-		JFileChooser fileChooser = new JFileChooser(directory);
-		fileChooser.setDialogTitle(title);
-		filters.forEach(filter -> fileChooser.addChoosableFileFilter(filter));
-
-		// NOTE: Apparently the all file filter has a Mac bug, so this is a workaround
-		fileChooser.setAcceptAllFileFilterUsed(false);
+		JFileChooser fileChooser = createFileChooser(title, directory, filters);
 
 		int userResult = fileChooser.showSaveDialog(getCurrentActiveFrame().getSwingFrame());
 		if(userResult != JFileChooser.APPROVE_OPTION)
@@ -451,6 +446,40 @@ public class FxInSwingMainWindow extends UiMainWindow
 		selectedFile = getFileWithExtension(selectedFile, selectedFilter.getExtension());
 
 		return selectedFile;
+	}
+
+	public File showFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		JFileChooser fileChooser = createFileChooser(title, directory, filters);
+
+		int userResult = fileChooser.showOpenDialog(getCurrentActiveFrame().getSwingFrame());
+		if(userResult != JFileChooser.APPROVE_OPTION)
+			return null;
+
+		return fileChooser.getSelectedFile();
+	}
+
+	protected File[] showMultiFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		JFileChooser fileChooser = createFileChooser(title, directory, filters);
+		fileChooser.setMultiSelectionEnabled(true);
+
+		int userResult = fileChooser.showOpenDialog(getCurrentActiveFrame().getSwingFrame());
+		if(userResult != JFileChooser.APPROVE_OPTION)
+			return new File[0];
+
+		return fileChooser.getSelectedFiles();
+	}
+
+	private JFileChooser createFileChooser(String title, File directory, Vector<FormatFilter> filters)
+	{
+		JFileChooser fileChooser = new JFileChooser(directory);
+		fileChooser.setDialogTitle(title);
+		filters.forEach(filter -> fileChooser.addChoosableFileFilter(filter));
+
+		// NOTE: Apparently the all file filter has a Mac bug, so this is a workaround
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		return fileChooser;
 	}
 
 	private JFrame swingFrame;
