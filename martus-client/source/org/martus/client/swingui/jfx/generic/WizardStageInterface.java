@@ -29,4 +29,8 @@ public interface WizardStageInterface
 {
 	public void next();
 	public void back();
+
+	boolean checkIfCurrentServerIsAvailable();
+	void setCurrentServerIsAvailable(boolean isServerAvailable);
+	boolean hasServerAvailabilityBeenInitialized();
 }
