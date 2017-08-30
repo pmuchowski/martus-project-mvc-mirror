@@ -2360,7 +2360,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 				MartusLogger.log(MartusLogger.getMemoryStatistics());
 
 				waitingForSignin = true;
-				SwingUtilities.invokeLater(new ThreadedSignin());
+				runInUiThread(new ThreadedSignin());
 			} 
 			catch (Throwable e) 
 			{
@@ -2444,7 +2444,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		boolean rejectedErrorShown;
 		boolean contactInfoErrorShown;
 	}
-	
+
+	public abstract void runInUiThread(Runnable toRun);
+
 	public CurrentUiState getCurrentUiState()
 	{
 		return getUiState();

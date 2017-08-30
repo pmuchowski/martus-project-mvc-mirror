@@ -57,6 +57,7 @@ import org.martus.client.swingui.jfx.setupwizard.PureFxSetupWizardStage;
 import org.martus.clientside.FormatFilter;
 import org.martus.common.bulletin.Bulletin;
 
+import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -435,6 +436,11 @@ public class PureFxMainWindow extends UiMainWindow
 			return new File[0];
 
 		return files.toArray(new File[files.size()]);
+	}
+
+	public void runInUiThread(Runnable toRun)
+	{
+		Platform.runLater(toRun);
 	}
 
 	private static Stage realStage;

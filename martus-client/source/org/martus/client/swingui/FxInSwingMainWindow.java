@@ -39,6 +39,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
 import org.martus.client.swingui.dialogs.FxInSwingBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
@@ -480,6 +481,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 		// NOTE: Apparently the all file filter has a Mac bug, so this is a workaround
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		return fileChooser;
+	}
+
+	public void runInUiThread(Runnable toRun)
+	{
+		SwingUtilities.invokeLater(toRun);
 	}
 
 	private JFrame swingFrame;
