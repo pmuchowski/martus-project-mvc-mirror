@@ -27,7 +27,7 @@ package org.martus.client.swingui.jfx.setupwizard.step2;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp.SaveConfigInfoException;
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.client.swingui.jfx.generic.FxInSwingWizardStage;
+import org.martus.client.swingui.jfx.generic.WizardStageInterface;
 import org.martus.client.swingui.jfx.setupwizard.AbstractFxSetupWizardContentController;
 import org.martus.client.swingui.jfx.setupwizard.step3.FxSetupBackupYourKeyController;
 import org.martus.client.swingui.jfx.setupwizard.tasks.GetServerPublicKeyTask;
@@ -134,7 +134,7 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 	@FXML
 	public void setupServerLater()
 	{
-		FxInSwingWizardStage wizardStage = getWizardStage();
+		WizardStageInterface wizardStage = getWizardStage();
 		try
 		{
 			getApp().setServerInfo("", "", "");
@@ -212,7 +212,7 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 			String magicWord = magicWordField.getText();
 			attemptToConnect(ip, serverKey, askComplianceAcceptance, magicWord);
 
-			FxInSwingWizardStage wizardStage = getWizardStage();
+			WizardStageInterface wizardStage = getWizardStage();
 			if(wizardStage.checkIfCurrentServerIsAvailable())
 				getWizardNavigationHandler().doNext();
 		} 

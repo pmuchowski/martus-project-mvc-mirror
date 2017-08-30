@@ -25,14 +25,14 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.jfx.setupwizard;
 
-import javafx.fxml.Initializable;
-
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.jfx.WizardNavigationButtonsInterface;
 import org.martus.client.swingui.jfx.WizardNavigationHandlerInterface;
 import org.martus.client.swingui.jfx.generic.FxContentController;
-import org.martus.client.swingui.jfx.generic.FxInSwingWizardStage;
+import org.martus.client.swingui.jfx.generic.WizardStageInterface;
 import org.martus.client.swingui.jfx.setupwizard.tasks.ConnectToServerTask;
+
+import javafx.fxml.Initializable;
 
 abstract public class AbstractFxSetupWizardContentController extends FxContentController implements WizardNavigationHandlerInterface, Initializable
 {
@@ -85,9 +85,9 @@ abstract public class AbstractFxSetupWizardContentController extends FxContentCo
 		wizardNavigationHandler = navigationHandlerToUse;
 	}
 	
-	public FxInSwingWizardStage getWizardStage()
+	public WizardStageInterface getWizardStage()
 	{
-		return (FxInSwingWizardStage) getStage();
+		return (WizardStageInterface) getStage();
 	}
 	
 	abstract public int getWizardStepNumber();
