@@ -40,6 +40,7 @@ import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxNotifyDlg;
+import org.martus.client.swingui.dialogs.PureFxStringInputDlg;
 import org.martus.client.swingui.dialogs.PureFxUtilities;
 import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
@@ -441,6 +442,13 @@ public class PureFxMainWindow extends UiMainWindow
 	public void runInUiThread(Runnable toRun)
 	{
 		Platform.runLater(toRun);
+	}
+
+	public String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText)
+	{
+		PureFxStringInputDlg inputDlg = new PureFxStringInputDlg(this, baseTag, descriptionTag, rawDescriptionText, defaultText);
+
+		return inputDlg.getResult();
 	}
 
 	private static Stage realStage;

@@ -46,6 +46,7 @@ import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
 import org.martus.client.swingui.jfx.contacts.FxInSwingContactsStage;
 import org.martus.client.swingui.jfx.generic.FxInSwingDialogStage;
@@ -486,6 +487,14 @@ public class FxInSwingMainWindow extends UiMainWindow
 	public void runInUiThread(Runnable toRun)
 	{
 		SwingUtilities.invokeLater(toRun);
+	}
+
+	public String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText)
+	{
+		UiStringInputDlg inputDlg = new UiStringInputDlg(this, baseTag, descriptionTag, rawDescriptionText, defaultText);
+		inputDlg.setFocusToInputField();
+		inputDlg.setVisible(true);
+		return inputDlg.getResult();
 	}
 
 	private JFrame swingFrame;

@@ -85,7 +85,6 @@ import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesRetrieveDlg;
 import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
 import org.martus.client.swingui.dialogs.UiSplashDlg;
-import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiTemplateDlg;
 import org.martus.client.swingui.filefilters.AllFileFilter;
 import org.martus.client.swingui.filefilters.KeyPairFormatFilter;
@@ -1336,13 +1335,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 	protected abstract void initializationErrorExitMartusDlg(String message);
 
-	public String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText)
-	{
-		UiStringInputDlg inputDlg = new UiStringInputDlg(this, baseTag, descriptionTag, rawDescriptionText, defaultText);
-		inputDlg.setFocusToInputField();
-		inputDlg.setVisible(true);
-		return inputDlg.getResult();
-	}
+	public abstract String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText);
 
 	public UiPopupMenu getPopupMenu()
 	{
