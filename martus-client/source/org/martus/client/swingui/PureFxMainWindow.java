@@ -119,12 +119,20 @@ public class PureFxMainWindow extends UiMainWindow
 		Point appPosition = getUiState().getCurrentAppPosition();
 		boolean showMaximized = getUiState().isCurrentAppMaximized();
 
+		if (appDimension.getHeight() == 0 || appDimension.getWidth() == 0)
+		{
+			showMaximized = true;
+		}
+		else
+		{
+			realStage.setWidth(appDimension.getWidth());
+			realStage.setHeight(appDimension.getHeight());
+		}
+
 		realStage.setX(appPosition.getX());
 		realStage.setY(appPosition.getY());
-		realStage.setWidth(appDimension.getWidth());
-		realStage.setHeight(appDimension.getHeight());
 		realStage.setMaximized(showMaximized);
-		
+
 		getUiState().setCurrentAppDimension(getMainWindowSize());
 	}
 
