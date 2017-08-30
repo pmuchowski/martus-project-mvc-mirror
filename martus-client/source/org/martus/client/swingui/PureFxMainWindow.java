@@ -90,7 +90,7 @@ public class PureFxMainWindow extends UiMainWindow
 	@Override
 	public FxMainStage getMainStage()
 	{
-		return null;
+		return mainStage;
 	}
 
 	@Override
@@ -104,6 +104,7 @@ public class PureFxMainWindow extends UiMainWindow
 	{
 		setStatusBar(createStatusBar());
 		PureFxMainStage fxStage = new PureFxMainStage(this, realStage);
+		mainStage = fxStage;
 		fxStage.showCurrentPage();
 		restoreWindowSizeAndState();
 		realStage.setTitle(getLocalization().getWindowTitle("main"));
@@ -427,4 +428,5 @@ public class PureFxMainWindow extends UiMainWindow
 	}
 
 	private static Stage realStage;
+	private FxMainStage mainStage;
 }
