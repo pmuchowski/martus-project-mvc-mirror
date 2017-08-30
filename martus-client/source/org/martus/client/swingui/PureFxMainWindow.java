@@ -40,6 +40,7 @@ import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxNotifyDlg;
+import org.martus.client.swingui.dialogs.PureFxScrollableTextDlg;
 import org.martus.client.swingui.dialogs.PureFxStringInputDlg;
 import org.martus.client.swingui.dialogs.PureFxUtilities;
 import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
@@ -56,6 +57,7 @@ import org.martus.client.swingui.jfx.landing.PureFxMainStage;
 import org.martus.client.swingui.jfx.setupwizard.PureFxCreateNewAccountWizardStage;
 import org.martus.client.swingui.jfx.setupwizard.PureFxSetupWizardStage;
 import org.martus.clientside.FormatFilter;
+import org.martus.clientside.MtfAwareLocalization;
 import org.martus.common.bulletin.Bulletin;
 
 import javafx.application.Platform;
@@ -449,6 +451,17 @@ public class PureFxMainWindow extends UiMainWindow
 		PureFxStringInputDlg inputDlg = new PureFxStringInputDlg(this, baseTag, descriptionTag, rawDescriptionText, defaultText);
 
 		return inputDlg.getResult();
+	}
+
+	public boolean showScrollableTextDlg(String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text)
+	{
+		PureFxScrollableTextDlg dlg = new PureFxScrollableTextDlg(this, titleTag, okButtonTag, cancelButtonTag, descriptionTag, text);
+		return dlg.getResult();
+	}
+
+	public void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement)
+	{
+		new PureFxScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, tokenReplacement);
 	}
 
 	private static Stage realStage;

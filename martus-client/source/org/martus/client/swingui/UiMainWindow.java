@@ -83,7 +83,6 @@ import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
 import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesRetrieveDlg;
-import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
 import org.martus.client.swingui.dialogs.UiSplashDlg;
 import org.martus.client.swingui.dialogs.UiTemplateDlg;
 import org.martus.client.swingui.filefilters.AllFileFilter;
@@ -1739,11 +1738,12 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	{
 		if(newServerCompliance.equals(""))
 			return confirmDlg("ServerComplianceFailed");
-			
-		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", descriptionTag, newServerCompliance, null);
-		return dlg.getResult();
+
+		return showScrollableTextDlg("ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", descriptionTag, newServerCompliance);
 	}
-	
+
+	public abstract boolean showScrollableTextDlg(String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text);
+
 	public void saveConfigInfo()
 	{
 		try
@@ -2045,12 +2045,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	{
 		return new KeyPairFormatFilter(getLocalization());
 	}
-	
-	public void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement) 
-	{
-		new UiShowScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, tokenReplacement, null);
-	}
-	
+
+	public abstract void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement);
+
 	public void setAndSaveHQKeysInConfigInfo(HeadquartersKeys allHQKeys, HeadquartersKeys defaultHQKeys)
 	{
 		try

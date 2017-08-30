@@ -46,6 +46,7 @@ import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
 import org.martus.client.swingui.jfx.contacts.FxInSwingContactsStage;
@@ -63,6 +64,7 @@ import org.martus.client.swingui.jfx.setupwizard.FxInSwingCreateNewAccountWizard
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingSetupWizardStage;
 import org.martus.clientside.FileDialogHelpers;
 import org.martus.clientside.FormatFilter;
+import org.martus.clientside.MtfAwareLocalization;
 import org.martus.clientside.UiFileChooser;
 import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
@@ -495,6 +497,17 @@ public class FxInSwingMainWindow extends UiMainWindow
 		inputDlg.setFocusToInputField();
 		inputDlg.setVisible(true);
 		return inputDlg.getResult();
+	}
+
+	public boolean showScrollableTextDlg(String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text)
+	{
+		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, titleTag, okButtonTag, cancelButtonTag, descriptionTag, text, null);
+		return dlg.getResult();
+	}
+
+	public void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement)
+	{
+		new UiShowScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, tokenReplacement, null);
 	}
 
 	private JFrame swingFrame;
