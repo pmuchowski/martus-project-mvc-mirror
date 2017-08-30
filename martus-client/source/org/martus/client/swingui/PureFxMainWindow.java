@@ -52,6 +52,7 @@ import org.martus.client.swingui.jfx.generic.PureFxStage;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.landing.PureFxMainStage;
+import org.martus.client.swingui.jfx.setupwizard.PureFxCreateNewAccountWizardStage;
 import org.martus.client.swingui.jfx.setupwizard.PureFxSetupWizardStage;
 import org.martus.clientside.FormatFilter;
 import org.martus.common.bulletin.Bulletin;
@@ -198,6 +199,7 @@ public class PureFxMainWindow extends UiMainWindow
 	@Override
 	public void createAndShowSetupWizard() throws Exception
 	{
+		createAndShowLargeModalDialog(new PureFxCreateNewAccountWizardStage(this));
 	}
 
 	@Override
