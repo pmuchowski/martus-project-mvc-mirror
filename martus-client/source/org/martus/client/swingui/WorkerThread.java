@@ -30,7 +30,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public abstract class WorkerThread extends Thread
 {
-	public void start(ModalBusyDialog dlgToNotify)
+	public void start(ModalBusyDialogInterface dlgToNotify)
 	{
 		dlg = dlgToNotify;
 		super.start();
@@ -121,6 +121,6 @@ public abstract class WorkerThread extends Thread
 	
 	public abstract void doTheWorkWithNO_SWING_CALLS() throws Exception;
 	
-	ModalBusyDialog dlg;
+	private ModalBusyDialogInterface dlg;
 	public Exception thrown;
 }

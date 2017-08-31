@@ -37,7 +37,7 @@ import javax.swing.border.LineBorder;
 import org.martus.clientside.UiLocalization;
 import org.martus.swing.Utilities;
 
-public class ModalBusyDialog extends JDialog
+public class ModalBusyDialog extends JDialog implements ModalBusyDialogInterface
 {
 	public ModalBusyDialog(UiMainWindow mainWindow, String dialogTag)
 	{
@@ -52,7 +52,12 @@ public class ModalBusyDialog extends JDialog
 		setUndecorated(true);
 		Utilities.packAndCenterWindow(this);
 	}
-	
+
+	public void showDialog()
+	{
+		setVisible(true);
+	}
+
 	public void workerFinished()
 	{
 		dispose();
