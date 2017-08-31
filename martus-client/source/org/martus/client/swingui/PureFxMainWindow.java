@@ -515,6 +515,11 @@ public class PureFxMainWindow extends UiMainWindow
 			return getCurrentActiveStage().getActualStage();
 	}
 
+	protected ModalBusyDialogInterface createModalBusyDialog(String dialogTag)
+	{
+		return new PureFxModalBusyDialog(this, dialogTag);
+	}
+
 	private static Stage realStage;
 	private FxMainStage mainStage;
 	private PureFxStage activeStage;

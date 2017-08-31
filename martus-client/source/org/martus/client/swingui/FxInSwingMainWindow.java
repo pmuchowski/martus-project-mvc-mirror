@@ -534,6 +534,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 		return null;
 	}
 
+	protected ModalBusyDialogInterface createModalBusyDialog(String dialogTag)
+	{
+		return new ModalBusyDialog(this, dialogTag);
+	}
+
 	private JFrame swingFrame;
 	private UiMainPane mainPane;
 	private FxMainStage mainStage;

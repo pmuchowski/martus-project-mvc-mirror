@@ -1554,9 +1554,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		setWaitingCursor();
 		try
 		{
-			ModalBusyDialog dlg = new ModalBusyDialog(this, dialogTag);
+			ModalBusyDialogInterface dlg = createModalBusyDialog(dialogTag);
 			worker.start(dlg);
-			dlg.setVisible(true);
+			dlg.showDialog();
 			worker.cleanup();
 		}
 		finally
@@ -1564,7 +1564,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			resetCursor();
 		}
 	}
-	
+
+	protected abstract ModalBusyDialogInterface createModalBusyDialog(String dialogTag);
+
 	public SearchTreeNode askUserForSearchCriteria() throws ParseException
 	{
 		UiFancySearchDialogContents searchDlg = new UiFancySearchDialogContents(this);
