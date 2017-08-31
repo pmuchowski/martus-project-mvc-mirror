@@ -361,7 +361,7 @@ public class PureFxMainWindow extends UiMainWindow
 	{
 		FileChooser fileChooser = createFileChooser(title, directory, filter);
 
-		return fileChooser.showOpenDialog(new Stage());
+		return fileChooser.showOpenDialog(getActiveStage());
 	}
 
 	protected File showFileSaveDialog(String title, File directory, String defaultFilename, FormatFilter filter)
@@ -369,7 +369,7 @@ public class PureFxMainWindow extends UiMainWindow
 		FileChooser fileChooser = createFileChooser(title, directory, filter);
 		fileChooser.setInitialFileName(defaultFilename);
 
-		return fileChooser.showSaveDialog(new Stage());
+		return fileChooser.showSaveDialog(getActiveStage());
 	}
 
 	public File showChooseDirectoryDialog(String windowTitle)
@@ -377,7 +377,7 @@ public class PureFxMainWindow extends UiMainWindow
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle(windowTitle);
 
-		return chooser.showDialog(new Stage());
+		return chooser.showDialog(getActiveStage());
 	}
 
 	private FileChooser createFileChooser(String title, File directory, FormatFilter... filters)
@@ -417,7 +417,7 @@ public class PureFxMainWindow extends UiMainWindow
 	{
 		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
 
-		File selectedFile = fileChooser.showSaveDialog(new Stage());
+		File selectedFile = fileChooser.showSaveDialog(getActiveStage());
 
 		if (selectedFile == null)
 			return null;
@@ -433,13 +433,13 @@ public class PureFxMainWindow extends UiMainWindow
 	{
 		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
 
-		return fileChooser.showOpenDialog(new Stage());
+		return fileChooser.showOpenDialog(getActiveStage());
 	}
 
 	protected File[] showMultiFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
 	{
 		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
-		List<File> files = fileChooser.showOpenMultipleDialog(new Stage());
+		List<File> files = fileChooser.showOpenMultipleDialog(getActiveStage());
 
 		if (files == null)
 			return new File[0];
@@ -480,6 +480,14 @@ public class PureFxMainWindow extends UiMainWindow
 	public PureFxStage getCurrentActiveStage()
 	{
 		return activeStage;
+	}
+
+	private Stage getActiveStage()
+	{
+		if (getCurrentActiveStage() == null)
+			return realStage;
+		else
+			return getCurrentActiveStage().getActualStage();
 	}
 
 	private static Stage realStage;
