@@ -94,6 +94,7 @@ import org.martus.client.swingui.jfx.generic.FxDialogHelper;
 import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.InitialSigninController;
 import org.martus.client.swingui.jfx.generic.ModalDialogWithSwingContents;
+import org.martus.client.swingui.jfx.generic.PureFxStage;
 import org.martus.client.swingui.jfx.generic.ReSigninController;
 import org.martus.client.swingui.jfx.generic.SigninController;
 import org.martus.client.swingui.jfx.generic.SigninController.SigninResult;
@@ -2471,7 +2472,11 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	{
 		return currentActiveDialog;
 	}
-	
+
+	public abstract void setCurrentActiveStage(PureFxStage newActiveStage);
+
+	public abstract PureFxStage getCurrentActiveStage();
+
 	private int getTextFieldColumns(int windowWidth) 
 	{
 		if(windowWidth < MINIMUM_SCREEN_WIDTH)

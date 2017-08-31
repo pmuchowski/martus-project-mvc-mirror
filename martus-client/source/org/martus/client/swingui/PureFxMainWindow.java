@@ -470,6 +470,19 @@ public class PureFxMainWindow extends UiMainWindow
 		new PureFxScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, tokenReplacement);
 	}
 
+	@Override
+	public void setCurrentActiveStage(PureFxStage newActiveStage)
+	{
+		activeStage = newActiveStage;
+	}
+
+	@Override
+	public PureFxStage getCurrentActiveStage()
+	{
+		return activeStage;
+	}
+
 	private static Stage realStage;
 	private FxMainStage mainStage;
+	private PureFxStage activeStage;
 }

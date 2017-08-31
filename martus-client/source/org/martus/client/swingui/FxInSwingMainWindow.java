@@ -57,6 +57,7 @@ import org.martus.client.swingui.jfx.generic.FxInSwingStage;
 import org.martus.client.swingui.jfx.generic.FxRunner;
 import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.FxStatusBar;
+import org.martus.client.swingui.jfx.generic.PureFxStage;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxInSwingMainStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
@@ -508,6 +509,17 @@ public class FxInSwingMainWindow extends UiMainWindow
 	public void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement)
 	{
 		new UiShowScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, tokenReplacement, null);
+	}
+
+	@Override
+	public void setCurrentActiveStage(PureFxStage newActiveStage)
+	{
+	}
+
+	@Override
+	public PureFxStage getCurrentActiveStage()
+	{
+		return null;
 	}
 
 	private JFrame swingFrame;
