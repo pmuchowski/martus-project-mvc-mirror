@@ -29,10 +29,12 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
 
@@ -447,9 +449,32 @@ public class PureFxMainWindow extends UiMainWindow
 		return files.toArray(new File[files.size()]);
 	}
 
-	public void runInUiThread(Runnable toRun)
+	public void runInUiThreadLater(Runnable toRun)
 	{
 		Platform.runLater(toRun);
+	}
+
+	public void runInUiThreadAndWait(final Runnable toRun) throws InterruptedException, InvocationTargetException
+	{
+		if (Platform.isFxApplicationThread())
+		{
+			toRun.run();
+			return;
+		}
+
+		final CountDownLatch doneLatch = new CountDownLatch(1);
+		Platform.runLater(() -> {
+			try
+			{
+				toRun.run();
+			}
+			finally
+			{
+				doneLatch.countDown();
+			}
+		});
+
+		doneLatch.await();
 	}
 
 	public String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText)

@@ -31,6 +31,7 @@ import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Window;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Vector;
 
@@ -487,9 +488,20 @@ public class FxInSwingMainWindow extends UiMainWindow
 		return fileChooser;
 	}
 
-	public void runInUiThread(Runnable toRun)
+	public void runInUiThreadLater(Runnable toRun)
 	{
 		SwingUtilities.invokeLater(toRun);
+	}
+
+	public void runInUiThreadAndWait(Runnable toRun) throws InterruptedException, InvocationTargetException
+	{
+		if (SwingUtilities.isEventDispatchThread())
+		{
+			toRun.run();
+			return;
+		}
+
+		SwingUtilities.invokeAndWait(toRun);
 	}
 
 	public String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText)

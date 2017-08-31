@@ -39,6 +39,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.FileLock;
@@ -2351,7 +2352,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 				MartusLogger.log(MartusLogger.getMemoryStatistics());
 
 				waitingForSignin = true;
-				runInUiThread(new ThreadedSignin());
+				runInUiThreadLater(new ThreadedSignin());
 			} 
 			catch (Throwable e) 
 			{
@@ -2436,7 +2437,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		boolean contactInfoErrorShown;
 	}
 
-	public abstract void runInUiThread(Runnable toRun);
+	public abstract void runInUiThreadLater(Runnable toRun);
+
+	public abstract void runInUiThreadAndWait(Runnable toRun) throws InterruptedException, InvocationTargetException;
 
 	public CurrentUiState getCurrentUiState()
 	{
