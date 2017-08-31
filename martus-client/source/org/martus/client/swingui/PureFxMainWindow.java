@@ -386,15 +386,21 @@ public class PureFxMainWindow extends UiMainWindow
 		fileChooser.setTitle(title);
 		fileChooser.setInitialDirectory(directory);
 
-		List<FileChooser.ExtensionFilter> extensionFilters = new ArrayList<>();
-
 		if (filters != null)
-			for (FormatFilter filter : filters)
-				extensionFilters.add(new FileChooser.ExtensionFilter(filter.getDescription(), getExtensionsWithWildcards(filter.getExtensions())));
-
-		fileChooser.getExtensionFilters().addAll(extensionFilters);
+			fileChooser.getExtensionFilters().addAll(createExtensionFilters(filters));
 
 		return fileChooser;
+	}
+
+	private List<FileChooser.ExtensionFilter> createExtensionFilters(FormatFilter... filters)
+	{
+		List<FileChooser.ExtensionFilter> extensionFilters = new ArrayList<>();
+
+		for (FormatFilter filter : filters)
+			if (filter != null)
+				extensionFilters.add(new FileChooser.ExtensionFilter(filter.getDescription(), getExtensionsWithWildcards(filter.getExtensions())));
+
+		return extensionFilters;
 	}
 
 	private List<String> getExtensionsWithWildcards(String[] extensions)
