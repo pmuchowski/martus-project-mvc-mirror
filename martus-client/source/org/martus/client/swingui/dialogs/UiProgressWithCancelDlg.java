@@ -94,16 +94,10 @@ public class UiProgressWithCancelDlg extends JDialog implements ProgressMeterInt
 		MartusLogger.log("UiProgressWithCancelDlg cannot setStatusMessage: " + message);
 	}
 
-	// TODO: Remove one of these two redundant methods
-	public void workerFinished()
-	{
-		dispose();
-	}
-
 	@Override
 	public void finished()
 	{
-		workerFinished();
+		dispose();
 	}
 
 	class WindowEventHandler extends WindowAdapter

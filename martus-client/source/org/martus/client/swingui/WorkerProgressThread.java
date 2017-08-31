@@ -25,12 +25,11 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui;
 
-import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.common.ProgressMeterInterface;
 
 public abstract class WorkerProgressThread extends Thread
 {
-	public void start(UiProgressWithCancelDlg dlgToNotify)
+	public void start(ProgressMeterInterface dlgToNotify)
 	{
 		dlg = dlgToNotify;
 		super.start();
@@ -57,7 +56,7 @@ public abstract class WorkerProgressThread extends Thread
 		{
 			thrown = e;
 		}
-		dlg.workerFinished();
+		dlg.finished();
 	}
 
 	public ProgressMeterInterface getProgressMeter()
@@ -67,6 +66,6 @@ public abstract class WorkerProgressThread extends Thread
 
 	public abstract void doTheWorkWithNO_SWING_CALLS() throws Exception;
 
-	UiProgressWithCancelDlg dlg;
+	private ProgressMeterInterface dlg;
 	public Exception thrown;
 }
