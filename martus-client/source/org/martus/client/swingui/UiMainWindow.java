@@ -55,7 +55,6 @@ import javax.swing.AbstractAction;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
 
 import org.bouncycastle.crypto.engines.RSAEngine;
 import org.json.JSONObject;
@@ -1280,9 +1279,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		private String baseTag;
 	}
 
-	public static void showNotifyDlgOnSwingThread(UiMainWindow mainWindowToUse, String baseTag)
+	public static void showNotifyDlgOnUiThread(UiMainWindow mainWindowToUse, String baseTag)
 	{
-		SwingUtilities.invokeLater(new Notifier(mainWindowToUse, baseTag));
+		mainWindowToUse.runInUiThreadLater(new Notifier(mainWindowToUse, baseTag));
 	}
 
 	public void notifyDlg(String baseTag)

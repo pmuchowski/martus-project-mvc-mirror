@@ -289,7 +289,7 @@ class BackgroundTimerTask extends TimerTask
 			MartusLogger.logException(e);
 
 			String baseTag = "SyncDisabledDueToError";
-			UiMainWindow.showNotifyDlgOnSwingThread(mainWindow, baseTag);
+			UiMainWindow.showNotifyDlgOnUiThread(mainWindow, baseTag);
 			return;
 		}
 
