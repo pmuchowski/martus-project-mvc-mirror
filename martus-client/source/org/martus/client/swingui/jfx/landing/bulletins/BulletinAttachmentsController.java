@@ -33,6 +33,27 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ResourceBundle;
 
+import org.martus.client.bulletinstore.ClientBulletinStore;
+import org.martus.client.core.AttachmentProxyFile;
+import org.martus.client.core.FxBulletin;
+import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.fields.attachments.ViewAttachmentHandler;
+import org.martus.client.swingui.jfx.generic.FxController;
+import org.martus.client.swingui.jfx.generic.PureFxStage;
+import org.martus.client.swingui.jfx.generic.TableRowData;
+import org.martus.client.swingui.jfx.generic.controls.FxButtonTableCellFactory;
+import org.martus.client.swingui.jfx.generic.controls.FxImageTableCellFactory;
+import org.martus.client.swingui.jfx.landing.bulletins.AttachmentViewController.FileType;
+import org.martus.common.MartusLogger;
+import org.martus.common.bulletin.AttachmentProxy;
+import org.martus.common.bulletin.BulletinLoader;
+import org.martus.common.crypto.MartusCrypto.CryptoException;
+import org.martus.common.database.ReadableDatabase;
+import org.martus.common.packet.Packet.InvalidPacketException;
+import org.martus.common.packet.Packet.SignatureVerificationException;
+import org.martus.common.packet.Packet.WrongPacketTypeException;
+import org.martus.util.StreamableBase64.InvalidBase64Exception;
+
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.ReadOnlyProperty;
@@ -49,26 +70,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.stage.FileChooser;
 import javafx.stage.Screen;
-
-import org.martus.client.bulletinstore.ClientBulletinStore;
-import org.martus.client.core.AttachmentProxyFile;
-import org.martus.client.core.FxBulletin;
-import org.martus.client.swingui.UiMainWindow;
-import org.martus.client.swingui.fields.attachments.ViewAttachmentHandler;
-import org.martus.client.swingui.jfx.generic.FxController;
-import org.martus.client.swingui.jfx.generic.TableRowData;
-import org.martus.client.swingui.jfx.generic.controls.FxButtonTableCellFactory;
-import org.martus.client.swingui.jfx.generic.controls.FxImageTableCellFactory;
-import org.martus.client.swingui.jfx.landing.bulletins.AttachmentViewController.FileType;
-import org.martus.common.MartusLogger;
-import org.martus.common.bulletin.AttachmentProxy;
-import org.martus.common.bulletin.BulletinLoader;
-import org.martus.common.crypto.MartusCrypto.CryptoException;
-import org.martus.common.database.ReadableDatabase;
-import org.martus.common.packet.Packet.InvalidPacketException;
-import org.martus.common.packet.Packet.SignatureVerificationException;
-import org.martus.common.packet.Packet.WrongPacketTypeException;
-import org.martus.util.StreamableBase64.InvalidBase64Exception;
+import javafx.stage.Stage;
 
 
 public class BulletinAttachmentsController extends FxController
@@ -257,7 +259,7 @@ public class BulletinAttachmentsController extends FxController
 
 			FileChooser chooser = new FileChooser();
 			chooser.setInitialFileName(fileName);
-			File outputFile = chooser.showSaveDialog(null);
+			File outputFile = chooser.showSaveDialog(getActiveStage());
 			if(outputFile == null)
 				return;
 			
@@ -272,6 +274,16 @@ public class BulletinAttachmentsController extends FxController
 			MartusLogger.logException(e);
 			showNotifyDialog("UnableToSaveAttachment");
 		}
+	}
+
+	private Stage getActiveStage()
+	{
+		PureFxStage activeStage = getMainWindow().getCurrentActiveStage();
+
+		if (activeStage == null)
+			return null;
+
+		return activeStage.getActualStage();
 	}
 
 	private void saveAttachmentFromDatabase(AttachmentProxy proxy, File outputFile)
