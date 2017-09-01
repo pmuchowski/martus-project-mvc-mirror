@@ -39,10 +39,10 @@ import org.martus.client.swingui.UiProgressMeter;
 import org.martus.clientside.UiLocalization;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.MartusLogger;
-import org.martus.common.ProgressMeterInterface;
 import org.martus.swing.UiButton;
+import org.martus.swing.Utilities;
 
-public class UiProgressWithCancelDlg extends JDialog implements ProgressMeterInterface
+public class UiProgressWithCancelDlg extends JDialog implements ProgressMeterDialogInterface
 {
 	public UiProgressWithCancelDlg(UiMainWindow mainWindowToUse, String tagToUse)
 	{
@@ -98,6 +98,14 @@ public class UiProgressWithCancelDlg extends JDialog implements ProgressMeterInt
 	public void finished()
 	{
 		dispose();
+	}
+
+	@Override
+	public void showDialog()
+	{
+		pack();
+		Utilities.packAndCenterWindow(this);
+		setVisible(true);
 	}
 
 	class WindowEventHandler extends WindowAdapter
