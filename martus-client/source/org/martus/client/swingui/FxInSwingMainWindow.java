@@ -42,11 +42,13 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.FxInSwingBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
+import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
@@ -60,6 +62,7 @@ import org.martus.client.swingui.jfx.generic.FxInSwingStage;
 import org.martus.client.swingui.jfx.generic.FxRunner;
 import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.FxStatusBar;
+import org.martus.client.swingui.jfx.generic.ModalDialogWithSwingContents;
 import org.martus.client.swingui.jfx.generic.PureFxStage;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxInSwingMainStage;
@@ -544,6 +547,16 @@ public class FxInSwingMainWindow extends UiMainWindow
 	public ProgressMeterDialogInterface createProgressMeter(String tagToUse)
 	{
 		return new UiProgressWithCancelDlg(this, tagToUse);
+	}
+
+	protected FancySearchDialogInterface createFancySearchDialog()
+	{
+		return new UiFancySearchDialogContents(this);
+	}
+
+	protected void showFancySearchDialog(FancySearchDialogInterface fancySearchDialog)
+	{
+		ModalDialogWithSwingContents.show((UiFancySearchDialogContents) fancySearchDialog);
 	}
 
 	private JFrame swingFrame;

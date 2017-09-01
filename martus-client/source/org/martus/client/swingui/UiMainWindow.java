@@ -75,11 +75,11 @@ import org.martus.client.network.RetrieveCommand;
 import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.bulletincomponent.UiBulletinPreviewPane;
 import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
+import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
-import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
 import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesRetrieveDlg;
@@ -93,7 +93,6 @@ import org.martus.client.swingui.jfx.generic.FxController;
 import org.martus.client.swingui.jfx.generic.FxDialogHelper;
 import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.InitialSigninController;
-import org.martus.client.swingui.jfx.generic.ModalDialogWithSwingContents;
 import org.martus.client.swingui.jfx.generic.PureFxStage;
 import org.martus.client.swingui.jfx.generic.ReSigninController;
 import org.martus.client.swingui.jfx.generic.SigninController;
@@ -1569,7 +1568,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 	public SearchTreeNode askUserForSearchCriteria() throws ParseException
 	{
-		UiFancySearchDialogContents searchDlg = new UiFancySearchDialogContents(this);
+		FancySearchDialogInterface searchDlg = createFancySearchDialog();
 		searchDlg.setSearchFinalBulletinsOnly(getUiState().searchFinalBulletinsOnly());
 		searchDlg.setSearchSameRowsOnly(getUiState().searchSameRowsOnly());
 		String searchString = getUiState().getSearchString();
@@ -1577,16 +1576,21 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		if(searchString.startsWith("{"))
 			search = new JSONObject(searchString);
 		searchDlg.setSearchAsJson(search);
-		ModalDialogWithSwingContents.show(searchDlg);
+
+		showFancySearchDialog(searchDlg);
+
 		if(!searchDlg.getResults())
 			return null;
-		
 
 		getUiState().setSearchFinalBulletinsOnly(searchDlg.searchFinalBulletinsOnly());
 		getUiState().setSearchSameRowsOnly(searchDlg.searchSameRowsOnly());
 		getUiState().setSearchString(searchDlg.getSearchAsJson().toString());
 		return searchDlg.getSearchTree();
 	}
+
+	protected abstract FancySearchDialogInterface createFancySearchDialog();
+
+	protected abstract void showFancySearchDialog(FancySearchDialogInterface fancySearchDialog);
 
 	public void aboutMartus()
 	{

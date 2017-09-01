@@ -38,6 +38,7 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
 
+import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
@@ -55,6 +56,7 @@ import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.FxStatusBar;
 import org.martus.client.swingui.jfx.generic.PureFxDialogStage;
 import org.martus.client.swingui.jfx.generic.PureFxStage;
+import org.martus.client.swingui.jfx.generic.FancySearchDialogController;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.landing.PureFxMainStage;
@@ -62,6 +64,7 @@ import org.martus.client.swingui.jfx.setupwizard.PureFxCreateNewAccountWizardSta
 import org.martus.client.swingui.jfx.setupwizard.PureFxSetupWizardStage;
 import org.martus.clientside.FormatFilter;
 import org.martus.clientside.MtfAwareLocalization;
+import org.martus.common.MartusLogger;
 import org.martus.common.bulletin.Bulletin;
 
 import javafx.application.Platform;
@@ -525,6 +528,23 @@ public class PureFxMainWindow extends UiMainWindow
 	public ProgressMeterDialogInterface createProgressMeter(String tagToUse)
 	{
 		return new PureFxProgressWithCancelDlg(this, tagToUse);
+	}
+
+	protected FancySearchDialogInterface createFancySearchDialog()
+	{
+		return new FancySearchDialogController(this);
+	}
+
+	protected void showFancySearchDialog(FancySearchDialogInterface fancySearchDialog)
+	{
+		try
+		{
+			createAndShowModalDialog((FancySearchDialogController) fancySearchDialog, null, null);
+		}
+		catch (Exception e)
+		{
+			MartusLogger.logException(e);
+		}
 	}
 
 	private static Stage realStage;
