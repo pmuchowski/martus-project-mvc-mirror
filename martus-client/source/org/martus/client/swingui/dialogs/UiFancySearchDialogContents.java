@@ -66,7 +66,7 @@ import org.martus.swing.Utilities;
 import org.martus.util.TokenReplacement;
 import org.martus.util.TokenReplacement.TokenInvalidException;
 
-public class UiFancySearchDialogContents extends SwingDialogContentPane
+public class UiFancySearchDialogContents extends SwingDialogContentPane implements FancySearchDialogInterface
 {
 	private static final String DIALOG_BACKGROUND_COLOR = "#F4F4F4";
 	private static final String HEADER_FONT_COLOR = "#595959";
@@ -546,9 +546,9 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		return result;
 	}
 
-	boolean result;
-	FancySearchGridEditor grid;
-	UiCheckBox dontSearchTrash;
-	UiCheckBox searchFinalBulletins;
-	UiCheckBox searchSameRowsOnly;
+	private boolean result;
+	private FancySearchGridEditor grid;
+	private UiCheckBox dontSearchTrash;
+	private UiCheckBox searchFinalBulletins;
+	private UiCheckBox searchSameRowsOnly;
 }
