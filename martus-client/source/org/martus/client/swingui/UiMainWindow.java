@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -51,11 +52,9 @@ import java.util.Vector;
 import javax.crypto.Cipher;
 import javax.swing.AbstractAction;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
-import javax.swing.filechooser.FileFilter;
 
 import org.bouncycastle.crypto.engines.RSAEngine;
 import org.json.JSONObject;
@@ -88,7 +87,6 @@ import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
 import org.martus.client.swingui.dialogs.UiSplashDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiTemplateDlg;
-import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
 import org.martus.client.swingui.filefilters.AllFileFilter;
 import org.martus.client.swingui.filefilters.KeyPairFormatFilter;
 import org.martus.client.swingui.foldertree.UiFolderTreePane;
@@ -110,12 +108,9 @@ import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.clientside.ClientSideNetworkGateway;
 import org.martus.clientside.ClientSideNetworkHandlerUsingXmlRpc;
 import org.martus.clientside.CurrentUiState;
-import org.martus.clientside.FileDialogHelpers;
 import org.martus.clientside.FormatFilter;
 import org.martus.clientside.MtfAwareLocalization;
-import org.martus.clientside.UiFileChooser;
 import org.martus.clientside.UiLocalization;
-import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.Exceptions.NetworkOfflineException;
 import org.martus.common.HeadquartersKeys;
@@ -140,7 +135,6 @@ import org.martus.common.packet.Packet.WrongAccountException;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.XmlPacketLoader;
 import org.martus.swing.FontHandler;
-import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.UiPopupMenu;
 import org.martus.swing.Utilities;
 import org.martus.util.FileTransfer;
@@ -280,7 +274,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		
 		if(!createdNewAccount && !justRecovered)
 			askAndBackupKeypairIfRequired();
-		
+
 		ModelessBusyDlg waitingForBulletinsToLoad = createBulletinLoadScreen();
 		try
 		{
@@ -362,8 +356,10 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		HashMap map = new HashMap();
 		map.put("#HighVersion#", highVersionJava);
 		map.put("#ExpectedVersion#", expectedVersionJava);
-		new UiNotifyDlg(title, new String[]{warningMessage}, new String[]{buttonMessage}, map);
+		notifyDlg(title, new String[]{warningMessage}, new String[]{buttonMessage}, map);
 	}
+
+	protected abstract void notifyDlg(String title, String[] contents, String[] buttons, Map tokenReplacement);
 
 	private void warnIfCryptoJarsNotLoaded() throws Exception
 	{
@@ -413,16 +409,16 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 	public void displayPossibleUnofficialIncompatibleTranslationWarnings(String newLanguageCode)
 	{
-		UiMainWindow.displayPossibleUnofficialIncompatibleTranslationWarnings(getCurrentActiveFrame().getSwingFrame(), getLocalization(), newLanguageCode);
+		displayPossibleUnofficialIncompatibleTranslationWarnings(getCurrentActiveFrame().getSwingFrame(), getLocalization(), newLanguageCode);
 	}
 
-	public static void displayPossibleUnofficialIncompatibleTranslationWarnings(JFrame owner, UiLocalization localization, String newLanguageCode)
+	public void displayPossibleUnofficialIncompatibleTranslationWarnings(JFrame owner, UiLocalization localization, String newLanguageCode)
 	{
-		UiMainWindow.displayDefaultUnofficialTranslationMessageIfNecessary(owner, localization, newLanguageCode);
-		UiMainWindow.displayIncompatibleMtfVersionWarningMessageIfNecessary(owner, localization, newLanguageCode);
+		displayDefaultUnofficialTranslationMessageIfNecessary(owner, localization, newLanguageCode);
+		displayIncompatibleMtfVersionWarningMessageIfNecessary(owner, localization, newLanguageCode);
 	}
 
-	private static void displayDefaultUnofficialTranslationMessageIfNecessary(JFrame owner, MtfAwareLocalization localization, String languageCodeToTest)
+	private void displayDefaultUnofficialTranslationMessageIfNecessary(JFrame owner, MtfAwareLocalization localization, String languageCodeToTest)
 	{
 		if(localization.isOfficialTranslation(languageCodeToTest))
 			return;
@@ -444,7 +440,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			String warningMessageLtoR = getWarningMessageAboutUnofficialTranslations(message);
 			String warningMessageRtoL = getWarningMessageAboutUnofficialTranslations(messageRtoL);
 			Toolkit.getDefaultToolkit().beep();
-			new UiWarningMessageDlg(owner, "", localization.getButtonLabel(EnglishCommonStrings.OK), warningMessageLtoR, warningMessageRtoL);
+			showWarningMessageDlg(owner, "", localization.getButtonLabel(EnglishCommonStrings.OK), warningMessageLtoR, warningMessageRtoL);
 		}
 		catch(Exception e)
 		{
@@ -454,7 +450,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		
 	}
 	
-	private static void displayIncompatibleMtfVersionWarningMessageIfNecessary(JFrame owner, MtfAwareLocalization localization, String languageCodeToTest)
+	private void displayIncompatibleMtfVersionWarningMessageIfNecessary(JFrame owner, MtfAwareLocalization localization, String languageCodeToTest)
 	{
 		if(localization.doesTranslationVersionMatchProgramVersion(languageCodeToTest, UiConstants.versionLabel))
 			return;
@@ -470,8 +466,10 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		map.put("#MtfVersionNumber#", mtfVersionNumber);
 		map.put("#ProgramVersionNumber#", localization.extractVersionNumber(UiConstants.versionLabel));
 		map.put("#MtfLanguage#", localization.getLanguageName(languageCodeToTest));
-		new UiNotifyDlg(owner, title, new String[]{warningMessage, "", mtfVersion, programVersion}, new String[]{buttonMessage}, map);
+		notifyDlg(owner, title, new String[]{warningMessage, "", mtfVersion, programVersion}, new String[]{buttonMessage}, map);
 	}
+
+	protected abstract void notifyDlg(Frame owner, String title, String[] contents, String[] buttons, Map tokenReplacement);
 
 	private static String getWarningMessageAboutUnofficialTranslations(String originalMessage)
 	{
@@ -493,6 +491,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		}
 		return originalMessage;
 	}
+
+	protected abstract void showWarningMessageDlg(JFrame owner, String title, String okButtonLabel, String warningMessageLtoR, String warningMessageRtoL);
 
 	public void startInactivityTimeoutDetection()
 	{
@@ -1183,45 +1183,30 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		return confirmDlg(getCurrentActiveFrame().getSwingFrame(), baseTag);
 	}
 	
-	public boolean confirmDlg(JFrame parent, String baseTag)
-	{
-		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag);
-	}
+	public abstract boolean confirmDlg(JFrame parent, String baseTag);
 
 	public boolean confirmDlg(String baseTag, Map tokenReplacement)
 	{
 		return confirmDlg(getCurrentActiveFrame().getSwingFrame(), baseTag, tokenReplacement);
 	}
 
-	public boolean confirmDlg(JFrame parent, String baseTag, Map tokenReplacement)
-	{
-		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag, tokenReplacement);
-	}
+	public abstract boolean confirmDlg(JFrame parent, String baseTag, Map tokenReplacement);
 
 	public boolean confirmDlg(String title, String[] contents)
 	{
 		return confirmDlg(getCurrentActiveFrame().getSwingFrame(), title, contents);
 	}
 
-	public boolean confirmDlg(JFrame parent, String title, String[] contents)
-	{
-		return UiUtilities.confirmDlg(getLocalization(), parent, title, contents);
-	}
+	public abstract boolean confirmDlg(JFrame parent, String title, String[] contents);
 
 	public boolean confirmDlg(String title, String[] contents, String[] buttons)
 	{
 		return confirmDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons);
 	}
 
-	public boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons)
-	{
-		return UiUtilities.confirmDlg(parent, title, contents, buttons);
-	}
+	public abstract boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons);
 
-	public boolean confirmDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
-	{
-		return UiUtilities.confirmDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons, tokenReplacement);
-	}
+	public abstract boolean confirmDlg(String title, String[] contents, String[] buttons, Map tokenReplacement);
 
 	public boolean confirmCustomButtonsDlg(String baseTag, String[] buttons, Map tokenReplacement)
 	{
@@ -1256,10 +1241,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		return title;
 	}
 
-	private boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons, Map tokenReplacement)
-	{
-		return UiUtilities.confirmDlg(parent, title, contents, buttons, tokenReplacement);
-	}
+	protected abstract boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons, Map tokenReplacement);
 
 	abstract public void rawError(String string);
 
@@ -1336,15 +1318,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		notifyDlg(parent, baseTag, titleTag, emptyTokenReplacement);
 	}
 
-	private void notifyDlg(JFrame parent, String baseTag, String titleTag, Map tokenReplacement)
-	{
-		UiUtilities.notifyDlg(getLocalization(), parent, baseTag, titleTag, tokenReplacement);
-	}
+	protected abstract void notifyDlg(JFrame parent, String baseTag, String titleTag, Map tokenReplacement);
 
-	public void notifyDlg(String title, String[] contents, String[] buttons)
-	{
-		new UiNotifyDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons);  
-	}
+	public abstract void notifyDlg(String title, String[] contents, String[] buttons);
 
 	public void messageDlg(String baseTag, String message, Map tokenReplacement)
 	{
@@ -1356,10 +1332,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		messageDlg(parent, baseTag, message, new HashMap());
 	}
 
-	public void messageDlg(JFrame parent, String baseTag, String message, Map tokenReplacement)
-	{
-		UiUtilities.messageDlg(getLocalization(), parent, baseTag, message, tokenReplacement);
-	}
+	public abstract void messageDlg(JFrame parent, String baseTag, String message, Map tokenReplacement);
 
 	protected abstract void initializationErrorExitMartusDlg(String message);
 
@@ -2532,73 +2505,53 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		return getTextFieldColumns(Utilities.getViewableScreenSize().width);
 	}
 	
-	public File showChooseDirectoryDialog(String windowTitle)
-	{
-		return UiFileChooser.displayChooseDirectoryDialog(getCurrentActiveFrame().getSwingFrame(), windowTitle);
-	}
+	public abstract File showChooseDirectoryDialog(String windowTitle);
 
 	public File showFileOpenDialog(String fileDialogCategory, Vector<FormatFilter> filters)
 	{
-		JFileChooser fileChooser = createFileChooser(fileDialogCategory, filters);
+		String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
+		File directory = getDataDirectoryToInitializeFileChooser();
 
-		File[] selectedFiles = getSelectedFilesFromUser(fileChooser);
-		if (selectedFiles.length != 1)
-			return null;
-		
-		return selectedFiles[0];
+		filters.add(new AllFileFilter(getLocalization()));
+
+		File selectedFile = showFileOpenDialog(title, directory, filters);
+
+		if (selectedFile != null)
+			setCurrentUserSelectedDirForNextTime(selectedFile.getParentFile());
+
+		return selectedFile;
 	}
-	
+
+	public abstract File showFileOpenDialog(String title, File directory, Vector<FormatFilter> filters);
+
 	public File[] showMultiFileOpenDialog(String fileDialogCategory, Vector<FormatFilter> filters)
 	{
-		JFileChooser fileChooser = createFileChooser(fileDialogCategory, filters);
-		fileChooser.setMultiSelectionEnabled(true);
-		
-		return getSelectedFilesFromUser(fileChooser);
-	}
+		String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
+		File directory = getDataDirectoryToInitializeFileChooser();
 
-	private File[] getSelectedFilesFromUser(JFileChooser fileChooser)
-	{
-		int userResult = fileChooser.showOpenDialog(getCurrentActiveFrame().getSwingFrame());
-		setCurrentUserSelectedDirForNextTime(fileChooser.getCurrentDirectory());
-		File[] selectedFiles = fileChooser.getSelectedFiles();
-		if(userResult != JFileChooser.APPROVE_OPTION)
-			return new File[0];
-		
+		filters.add(new AllFileFilter(getLocalization()));
+
+		File[] selectedFiles = showMultiFileOpenDialog(title, directory, filters);
+
 		if (selectedFiles.length > 0)
-			return selectedFiles;
-		
-		//NOTE: getSelectedFiles() returns an empty list when file chooser is single selection and there is a selection 
-		File selectedFile = fileChooser.getSelectedFile();
-		if (selectedFile == null)
-			return new File[0];
-		
-		return new File[]{selectedFile,};
+			setCurrentUserSelectedDirForNextTime(selectedFiles[0].getParentFile());
+
+		return selectedFiles;
 	}
 
-	private JFileChooser createFileChooser(String fileDialogCategory, Vector<FormatFilter> filters)
-	{
-		// TODO: When we switch from Swing to JavaFX, combine this with the other file open dialog
-		JFileChooser fileChooser = new JFileChooser(getDataDirectoryToInitializeFileChooser());
-		fileChooser.setDialogTitle(getLocalization().getWindowTitle("FileDialog" + fileDialogCategory));
-		filters.forEach(filter -> fileChooser.addChoosableFileFilter(filter));
-		
-		// NOTE: Apparently the all file filter has a Mac bug, so this is a workaround
-		fileChooser.setAcceptAllFileFilterUsed(false);
-		fileChooser.addChoosableFileFilter(new AllFileFilter(getLocalization()));
-		return fileChooser;
-	}
-	
-	public File showFileOpenDialog(String fileDialogCategory, FileFilter filter)
+	protected abstract File[] showMultiFileOpenDialog(String title, File directory, Vector<FormatFilter> filters);
+
+	public File showFileOpenDialog(String fileDialogCategory, FormatFilter filter)
 	{
 		return internalShowFileOpenDialog(fileDialogCategory, null, filter);
 	}
-	
+
 	public File showFileOpenDialogWithDirectoryMemory(String fileDialogCategory)
 	{
-		return showFileOpenDialogWithDirectoryMemory(fileDialogCategory, (FileFilter)null);
+		return showFileOpenDialogWithDirectoryMemory(fileDialogCategory, null);
 	}
 
-	public File showFileOpenDialogWithDirectoryMemory(String fileDialogCategory, FileFilter filter)
+	public File showFileOpenDialogWithDirectoryMemory(String fileDialogCategory, FormatFilter filter)
 	{
 		File directory = UiSession.getMemorizedFileOpenDirectories().get(fileDialogCategory);
 		File file = internalShowFileOpenDialog(fileDialogCategory, directory, filter);
@@ -2607,47 +2560,44 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		return file;
 	}
 	
-	private File internalShowFileOpenDialog(String fileDialogCategory, File directory, FileFilter filter)
+	private File internalShowFileOpenDialog(String fileDialogCategory, File directory, FormatFilter filter)
 	{
 		String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
 		String okButtonLabel = getLocalization().getButtonLabel("FileDialogOk" + fileDialogCategory);
 		if(directory == null)
 			directory = getApp().getCurrentAccountDirectory();
-		return FileDialogHelpers.doFileOpenDialog(getCurrentActiveFrame().getSwingFrame(), title, okButtonLabel, directory, filter);
+		return showFileOpenDialog(title, okButtonLabel, directory, filter);
 	}
-	
+
+	public abstract File showFileOpenDialog(String title, String okButtonLabel, File directory, FormatFilter filter);
+
 	public File showFileSaveDialog(String fileDialogCategory, Vector<FormatFilter> filters)
 	{
 		// TODO: When we switch from Swing to JavaFX, combine this with the other file save dialog
 		while(true)
 		{
-			JFileChooser fileChooser = new JFileChooser(getDataDirectoryToInitializeFileChooser());
-			fileChooser.setDialogTitle(getLocalization().getWindowTitle("FileDialog" + fileDialogCategory));
-			filters.forEach(filter -> fileChooser.addChoosableFileFilter(filter));
-			
-			// NOTE: Apparently the all file filter has a Mac bug, so this is a workaround
-			fileChooser.setAcceptAllFileFilterUsed(false);
-	
-			int userResult = fileChooser.showSaveDialog(getCurrentActiveFrame().getSwingFrame());
-			setCurrentUserSelectedDirForNextTime(fileChooser.getCurrentDirectory());
-			if(userResult != JFileChooser.APPROVE_OPTION)
+			String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
+			File directory = getDataDirectoryToInitializeFileChooser();
+
+			File selectedFile = showFileSaveDialog(title, directory, filters);
+
+			if (selectedFile == null)
 				break;
-			
-			File selectedFile = fileChooser.getSelectedFile();
-			setCurrentUserSelectedDirForNextTime(fileChooser.getCurrentDirectory());
-			FormatFilter selectedFilter = (FormatFilter) fileChooser.getFileFilter();
-			selectedFile = getFileWithExtension(selectedFile, selectedFilter);
+
+			setCurrentUserSelectedDirForNextTime(selectedFile.getParentFile());
 
 			if(!selectedFile.exists())
 				return selectedFile;
 
-			if(UiUtilities.confirmDlg(getLocalization(), getCurrentActiveFrame().getSwingFrame(), "OverWriteExistingFile"))
+			if(confirmDlg(getCurrentActiveFrame().getSwingFrame(), "OverWriteExistingFile"))
 				return selectedFile;
 		}
 		
 		return null;
 	}
-	
+
+	protected abstract File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters);
+
 	private void setCurrentUserSelectedDirForNextTime(File currentUserChosenFileChooserDirToUse)
 	{
 		currentUserChosenFileChooserDir = currentUserChosenFileChooserDirToUse;
@@ -2660,10 +2610,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		
 		return currentUserChosenFileChooserDir;
 	}
-	
-	private static File getFileWithExtension(File file, FormatFilter filter)
+
+	protected static File getFileWithExtension(File file, String extension)
 	{
-		String extension = filter.getExtension();
 		String fileName = file.getName();
 		if(!fileName.toLowerCase().endsWith(extension.toLowerCase()))
 		{
@@ -2698,8 +2647,10 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
 		if(defaultDirectory == null)
 			defaultDirectory = getApp().getCurrentAccountDirectory();
-		return FileDialogHelpers.doFileSaveDialog(getCurrentActiveFrame().getSwingFrame(), title, defaultDirectory, defaultFilename, filter, getLocalization());
+		return showFileSaveDialog(title, defaultDirectory, defaultFilename, filter);
 	}
+
+	protected abstract File showFileSaveDialog(String title, File directory, String defaultFilename, FormatFilter filter);
 
 	void setLocalization(MartusLocalization localization)
 	{

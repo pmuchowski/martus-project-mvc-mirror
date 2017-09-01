@@ -32,6 +32,7 @@ import java.io.File;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.tablemodels.AttachmentTableModel;
 import org.martus.clientside.FileDialogHelpers;
+import org.martus.clientside.FormatFilter;
 import org.martus.common.bulletin.AttachmentProxy;
 
 class AddHandler implements ActionListener
@@ -45,7 +46,7 @@ class AddHandler implements ActionListener
 	
 	public void actionPerformed(ActionEvent ae)
 	{
-		File file = mainWindow.showFileOpenDialogWithDirectoryMemory("AddAttachment", FileDialogHelpers.NO_FILTER);
+		File file = mainWindow.showFileOpenDialogWithDirectoryMemory("AddAttachment", (FormatFilter) FileDialogHelpers.NO_FILTER);
 		if(file == null)
 			return;
 		

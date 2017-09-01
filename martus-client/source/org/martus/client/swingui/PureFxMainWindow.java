@@ -26,13 +26,22 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui;
 
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Point;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
+import org.martus.client.swingui.dialogs.PureFxNotifyDlg;
+import org.martus.client.swingui.dialogs.PureFxUtilities;
+import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.jfx.contacts.PureFxContactsStage;
@@ -44,11 +53,14 @@ import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.landing.PureFxMainStage;
 import org.martus.client.swingui.jfx.setupwizard.PureFxSetupWizardStage;
+import org.martus.clientside.FormatFilter;
 import org.martus.common.bulletin.Bulletin;
 
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class PureFxMainWindow extends UiMainWindow
@@ -268,6 +280,150 @@ public class PureFxMainWindow extends UiMainWindow
 		alert.showAndWait();
 
 		System.exit(1);
+	}
+
+	protected void showWarningMessageDlg(JFrame owner, String title, String okButtonLabel, String warningMessageLtoR, String warningMessageRtoL)
+	{
+		new PureFxWarningMessageDlg(title, okButtonLabel, warningMessageLtoR, warningMessageRtoL);
+	}
+
+	public boolean confirmDlg(JFrame parent, String baseTag)
+	{
+		return PureFxUtilities.confirmDlg(getLocalization(), parent, baseTag);
+	}
+
+	public boolean confirmDlg(JFrame parent, String baseTag, Map tokenReplacement)
+	{
+		return PureFxUtilities.confirmDlg(getLocalization(), parent, baseTag, tokenReplacement);
+	}
+
+	public boolean confirmDlg(JFrame parent, String title, String[] contents)
+	{
+		return PureFxUtilities.confirmDlg(getLocalization(), parent, title, contents);
+	}
+
+	public boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons)
+	{
+		return PureFxUtilities.confirmDlg(parent, title, contents, buttons);
+	}
+
+	public boolean confirmDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		return PureFxUtilities.confirmDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons, tokenReplacement);
+	}
+
+	protected boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		return PureFxUtilities.confirmDlg(parent, title, contents, buttons, tokenReplacement);
+	}
+
+	protected void notifyDlg(JFrame parent, String baseTag, String titleTag, Map tokenReplacement)
+	{
+		PureFxUtilities.notifyDlg(getLocalization(), parent, baseTag, titleTag, tokenReplacement);
+	}
+
+	public void notifyDlg(String title, String[] contents, String[] buttons)
+	{
+		new PureFxNotifyDlg(title, contents, buttons);
+	}
+
+	public void messageDlg(JFrame parent, String baseTag, String message, Map tokenReplacement)
+	{
+		PureFxUtilities.messageDlg(getLocalization(), parent, baseTag, message, tokenReplacement);
+	}
+
+	protected void notifyDlg(Frame owner, String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		new PureFxNotifyDlg(title, contents, buttons, tokenReplacement);
+	}
+
+	protected void notifyDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		new PureFxNotifyDlg(title, contents, buttons, tokenReplacement);
+	}
+
+	public File showFileOpenDialog(String title, String okButtonLabel, File directory, FormatFilter filter)
+	{
+		FileChooser fileChooser = createFileChooser(title, directory, filter);
+
+		return fileChooser.showOpenDialog(new Stage());
+	}
+
+	protected File showFileSaveDialog(String title, File directory, String defaultFilename, FormatFilter filter)
+	{
+		FileChooser fileChooser = createFileChooser(title, directory, filter);
+		fileChooser.setInitialFileName(defaultFilename);
+
+		return fileChooser.showSaveDialog(new Stage());
+	}
+
+	public File showChooseDirectoryDialog(String windowTitle)
+	{
+		DirectoryChooser chooser = new DirectoryChooser();
+		chooser.setTitle(windowTitle);
+
+		return chooser.showDialog(new Stage());
+	}
+
+	private FileChooser createFileChooser(String title, File directory, FormatFilter... filters)
+	{
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle(title);
+		fileChooser.setInitialDirectory(directory);
+
+		List<FileChooser.ExtensionFilter> extensionFilters = new ArrayList<>();
+
+		if (filters != null)
+			for (FormatFilter filter : filters)
+				extensionFilters.add(new FileChooser.ExtensionFilter(filter.getDescription(), getExtensionsWithWildcards(filter.getExtensions())));
+
+		fileChooser.getExtensionFilters().addAll(extensionFilters);
+
+		return fileChooser;
+	}
+
+	private List<String> getExtensionsWithWildcards(String[] extensions)
+	{
+		List<String> extensionsWithWildcards = new ArrayList<>();
+
+		for (String extension : extensions)
+			extensionsWithWildcards.add("*" + extension);
+
+		return extensionsWithWildcards;
+	}
+
+	protected File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
+
+		File selectedFile = fileChooser.showSaveDialog(new Stage());
+
+		if (selectedFile == null)
+			return null;
+
+		List<String> extensions = fileChooser.getSelectedExtensionFilter().getExtensions();
+		String extension = extensions.get(0).replace("*", "");
+		selectedFile = getFileWithExtension(selectedFile, extension);
+
+		return selectedFile;
+	}
+
+	public File showFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
+
+		return fileChooser.showOpenDialog(new Stage());
+	}
+
+	protected File[] showMultiFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
+		List<File> files = fileChooser.showOpenMultipleDialog(new Stage());
+
+		if (files == null)
+			return new File[0];
+
+		return files.toArray(new File[files.size()]);
 	}
 
 	private static Stage realStage;

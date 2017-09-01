@@ -49,7 +49,7 @@ public class UiInitialSigninDlg extends UiSigninDlg
 {
 	public UiInitialSigninDlg(UiMainWindow mainWindowToUse, int mode, String userName, char[] password)
 	{
-		super(mainWindowToUse.getLocalization(), mainWindowToUse.getCurrentUiState(), mode, userName, password);
+		super(mainWindowToUse, mode, userName, password);
 	}
 	
 	protected Component createMainPanel()

@@ -44,7 +44,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.filechooser.FileFilter;
 
 import org.martus.client.core.CustomFieldsDuplicateLabelChecker;
 import org.martus.client.swingui.MartusLocalization;
@@ -52,6 +51,7 @@ import org.martus.client.swingui.UiFontEncodingHelper;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.filefilters.MCTFileFilter;
 import org.martus.client.swingui.jfx.common.ExportTemplateDoer;
+import org.martus.clientside.FormatFilter;
 import org.martus.clientside.MtfAwareLocalization;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.Exceptions.ServerNotAvailableException;
@@ -240,7 +240,7 @@ public class UiCustomFieldsDlg extends JDialog
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
-			FileFilter filter = new MCTFileFilter(mainWindow.getLocalization());
+			FormatFilter filter = new MCTFileFilter(mainWindow.getLocalization());
 			File importFile = mainWindow.showFileOpenDialog("ImportCustomization", filter);
 			if(importFile == null)
 				return;

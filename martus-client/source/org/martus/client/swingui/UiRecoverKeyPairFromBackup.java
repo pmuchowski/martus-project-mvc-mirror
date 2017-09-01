@@ -95,7 +95,7 @@ public class UiRecoverKeyPairFromBackup
 		int userChoice = UiSigninDlg.LANGUAGE_CHANGED;
 		while(userChoice == UiSigninDlg.LANGUAGE_CHANGED)
 		{	
-			signinDlg = new UiSigninDlg(getLocalization(), mainWindow.getCurrentUiState(), UiSigninDlg.SECURITY_VALIDATE, userName, userPassword);
+			signinDlg = new UiSigninDlg(mainWindow, UiSigninDlg.SECURITY_VALIDATE, userName, userPassword);
 			userChoice = signinDlg.getUserChoice();
 			userName = signinDlg.getNameText();
 			userPassword = signinDlg.getPassword();

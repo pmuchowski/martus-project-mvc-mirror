@@ -27,11 +27,16 @@ package org.martus.client.swingui;
 
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Window;
+import java.io.File;
+import java.util.Map;
+import java.util.Vector;
 
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -40,6 +45,7 @@ import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
 import org.martus.client.swingui.jfx.contacts.FxInSwingContactsStage;
 import org.martus.client.swingui.jfx.generic.FxInSwingDialogStage;
 import org.martus.client.swingui.jfx.generic.FxInSwingModalDialog;
@@ -53,7 +59,13 @@ import org.martus.client.swingui.jfx.landing.FxInSwingMainStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingCreateNewAccountWizardStage;
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingSetupWizardStage;
+import org.martus.clientside.FileDialogHelpers;
+import org.martus.clientside.FormatFilter;
+import org.martus.clientside.UiFileChooser;
+import org.martus.clientside.UiUtilities;
+import org.martus.common.EnglishCommonStrings;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.UiOptionPane;
 import org.martus.swing.Utilities;
 
@@ -343,6 +355,131 @@ public class FxInSwingMainWindow extends UiMainWindow
 		JDialog dialog = pane.createDialog(null, title);
 		dialog.setVisible(true);
 		System.exit(1);
+	}
+
+	protected void showWarningMessageDlg(JFrame owner, String title, String okButtonLabel, String warningMessageLtoR, String warningMessageRtoL)
+	{
+		new UiWarningMessageDlg(owner, "", getLocalization().getButtonLabel(EnglishCommonStrings.OK), warningMessageLtoR, warningMessageRtoL);
+	}
+
+	public boolean confirmDlg(JFrame parent, String baseTag)
+	{
+		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag);
+	}
+
+	public boolean confirmDlg(JFrame parent, String baseTag, Map tokenReplacement)
+	{
+		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag, tokenReplacement);
+	}
+
+	public boolean confirmDlg(JFrame parent, String title, String[] contents)
+	{
+		return UiUtilities.confirmDlg(getLocalization(), parent, title, contents);
+	}
+
+	public boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons)
+	{
+		return UiUtilities.confirmDlg(parent, title, contents, buttons);
+	}
+
+	public boolean confirmDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		return UiUtilities.confirmDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons, tokenReplacement);
+	}
+
+	protected boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		return UiUtilities.confirmDlg(parent, title, contents, buttons, tokenReplacement);
+	}
+
+	protected void notifyDlg(JFrame parent, String baseTag, String titleTag, Map tokenReplacement)
+	{
+		UiUtilities.notifyDlg(getLocalization(), parent, baseTag, titleTag, tokenReplacement);
+	}
+
+	public void notifyDlg(String title, String[] contents, String[] buttons)
+	{
+		new UiNotifyDlg(getCurrentActiveFrame().getSwingFrame(), title, contents, buttons);
+	}
+
+	public void messageDlg(JFrame parent, String baseTag, String message, Map tokenReplacement)
+	{
+		UiUtilities.messageDlg(getLocalization(), parent, baseTag, message, tokenReplacement);
+	}
+
+	protected void notifyDlg(Frame owner, String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		new UiNotifyDlg(owner, title, contents, buttons, tokenReplacement);
+	}
+
+	protected void notifyDlg(String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		new UiNotifyDlg(title, contents, buttons, tokenReplacement);
+	}
+
+	public File showFileOpenDialog(String title, String okButtonLabel, File directory, FormatFilter filter)
+	{
+		return FileDialogHelpers.doFileOpenDialog(getCurrentActiveFrame().getSwingFrame(), title, okButtonLabel, directory, filter);
+	}
+
+	protected File showFileSaveDialog(String title, File directory, String defaultFilename, FormatFilter filter)
+	{
+		return FileDialogHelpers.doFileSaveDialog(getCurrentActiveFrame().getSwingFrame(), title, directory, defaultFilename, filter, getLocalization());
+	}
+
+	public File showChooseDirectoryDialog(String windowTitle)
+	{
+		return UiFileChooser.displayChooseDirectoryDialog(getCurrentActiveFrame().getSwingFrame(), windowTitle);
+	}
+
+	protected File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		JFileChooser fileChooser = createFileChooser(title, directory, filters);
+
+		int userResult = fileChooser.showSaveDialog(getCurrentActiveFrame().getSwingFrame());
+		if(userResult != JFileChooser.APPROVE_OPTION)
+			return null;
+
+		File selectedFile = fileChooser.getSelectedFile();
+
+		FormatFilter selectedFilter = (FormatFilter) fileChooser.getFileFilter();
+		selectedFile = getFileWithExtension(selectedFile, selectedFilter.getExtension());
+
+		return selectedFile;
+	}
+
+	public File showFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		JFileChooser fileChooser = createFileChooser(title, directory, filters);
+
+		int userResult = fileChooser.showOpenDialog(getCurrentActiveFrame().getSwingFrame());
+		if(userResult != JFileChooser.APPROVE_OPTION)
+			return null;
+
+		return fileChooser.getSelectedFile();
+	}
+
+	protected File[] showMultiFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
+	{
+		JFileChooser fileChooser = createFileChooser(title, directory, filters);
+		fileChooser.setMultiSelectionEnabled(true);
+
+		int userResult = fileChooser.showOpenDialog(getCurrentActiveFrame().getSwingFrame());
+		if(userResult != JFileChooser.APPROVE_OPTION)
+			return new File[0];
+
+		return fileChooser.getSelectedFiles();
+	}
+
+	private JFileChooser createFileChooser(String title, File directory, Vector<FormatFilter> filters)
+	{
+		JFileChooser fileChooser = new JFileChooser(directory);
+		fileChooser.setDialogTitle(title);
+		filters.forEach(filter -> fileChooser.addChoosableFileFilter(filter));
+
+		// NOTE: Apparently the all file filter has a Mac bug, so this is a workaround
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		return fileChooser;
 	}
 
 	private JFrame swingFrame;
