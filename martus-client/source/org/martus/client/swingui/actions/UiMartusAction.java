@@ -37,7 +37,7 @@ import org.martus.client.swingui.SearchThread;
 import org.martus.client.swingui.UiMainPane;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
-import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
+import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.foldertree.UiFolderTreePane;
 import org.martus.common.MartusLogger;
 import org.martus.common.fieldspec.FieldSpec;
@@ -139,7 +139,7 @@ abstract public class UiMartusAction extends AbstractAction
 	
 	public SortableBulletinList doSearch(SearchTreeNode searchTree, MiniFieldSpec[] sortSpecs, MiniFieldSpec[] extraSpecs, String progressDialogTag) throws Exception
 	{
-		UiProgressWithCancelDlg dlg = new UiProgressWithCancelDlg(getMainWindow(), progressDialogTag);
+		ProgressMeterDialogInterface dlg = getMainWindow().createProgressMeter(progressDialogTag);
 		SearchThread thread = new SearchThread(getMainWindow(), searchTree, sortSpecs, extraSpecs);
 		getMainWindow().doBackgroundWork(thread, dlg);
 		return thread.getResults();
