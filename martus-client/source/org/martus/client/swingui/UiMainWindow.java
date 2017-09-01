@@ -76,11 +76,11 @@ import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.bulletincomponent.UiBulletinPreviewPane;
 import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
+import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
 import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
 import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
-import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesRetrieveDlg;
 import org.martus.client.swingui.dialogs.UiSplashDlg;
@@ -1531,15 +1531,13 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		bulletinsTablePane.selectFirstBulletin();
 	}
 	
-	public void doBackgroundWork(WorkerProgressThread worker, UiProgressWithCancelDlg progressDialog) throws Exception
+	public void doBackgroundWork(WorkerProgressThread worker, ProgressMeterDialogInterface progressDialog) throws Exception
 	{
 		setWaitingCursor();
 		try
 		{
 			worker.start(progressDialog);
-			progressDialog.pack();
-			Utilities.packAndCenterWindow(progressDialog);
-			progressDialog.setVisible(true);
+			progressDialog.showDialog();
 			worker.cleanup();
 		}
 		finally
@@ -1566,6 +1564,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	}
 
 	protected abstract ModalBusyDialogInterface createModalBusyDialog(String dialogTag);
+
+	public abstract ProgressMeterDialogInterface createProgressMeter(String tagToUse);
 
 	public SearchTreeNode askUserForSearchCriteria() throws ParseException
 	{

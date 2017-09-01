@@ -44,9 +44,11 @@ import javax.swing.SwingUtilities;
 
 import org.martus.client.swingui.dialogs.FxInSwingBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
+import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
@@ -537,6 +539,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 	protected ModalBusyDialogInterface createModalBusyDialog(String dialogTag)
 	{
 		return new ModalBusyDialog(this, dialogTag);
+	}
+
+	public ProgressMeterDialogInterface createProgressMeter(String tagToUse)
+	{
+		return new UiProgressWithCancelDlg(this, tagToUse);
 	}
 
 	private JFrame swingFrame;

@@ -39,9 +39,11 @@ import java.util.concurrent.CountDownLatch;
 import javax.swing.JFrame;
 
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
+import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxNotifyDlg;
+import org.martus.client.swingui.dialogs.PureFxProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.PureFxScrollableTextDlg;
 import org.martus.client.swingui.dialogs.PureFxStringInputDlg;
 import org.martus.client.swingui.dialogs.PureFxUtilities;
@@ -518,6 +520,11 @@ public class PureFxMainWindow extends UiMainWindow
 	protected ModalBusyDialogInterface createModalBusyDialog(String dialogTag)
 	{
 		return new PureFxModalBusyDialog(this, dialogTag);
+	}
+
+	public ProgressMeterDialogInterface createProgressMeter(String tagToUse)
+	{
+		return new PureFxProgressWithCancelDlg(this, tagToUse);
 	}
 
 	private static Stage realStage;
