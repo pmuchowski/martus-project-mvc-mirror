@@ -42,6 +42,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import org.martus.client.core.BulletinGetterThread;
 import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.FxInSwingBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
@@ -76,6 +77,7 @@ import org.martus.clientside.UiFileChooser;
 import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.packet.UniversalId;
 import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.UiOptionPane;
 import org.martus.swing.Utilities;
@@ -557,6 +559,13 @@ public class FxInSwingMainWindow extends UiMainWindow
 	protected void showFancySearchDialog(FancySearchDialogInterface fancySearchDialog)
 	{
 		ModalDialogWithSwingContents.show((UiFancySearchDialogContents) fancySearchDialog);
+	}
+
+	public Vector getBulletins(UniversalId[] uids) throws Exception
+	{
+		BulletinGetterThread thread = new BulletinGetterThread(getStore(), uids);
+		doBackgroundWork(thread, "PreparingBulletins");
+		return thread.getBulletins();
 	}
 
 	private JFrame swingFrame;

@@ -38,6 +38,7 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
 
+import org.martus.client.core.BulletinGetterThread;
 import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
@@ -52,11 +53,11 @@ import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.jfx.contacts.PureFxContactsStage;
+import org.martus.client.swingui.jfx.generic.FancySearchDialogController;
 import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.FxStatusBar;
 import org.martus.client.swingui.jfx.generic.PureFxDialogStage;
 import org.martus.client.swingui.jfx.generic.PureFxStage;
-import org.martus.client.swingui.jfx.generic.FancySearchDialogController;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.landing.PureFxMainStage;
@@ -66,6 +67,7 @@ import org.martus.clientside.FormatFilter;
 import org.martus.clientside.MtfAwareLocalization;
 import org.martus.common.MartusLogger;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.packet.UniversalId;
 
 import javafx.application.Platform;
 import javafx.scene.Cursor;
@@ -545,6 +547,23 @@ public class PureFxMainWindow extends UiMainWindow
 		{
 			MartusLogger.logException(e);
 		}
+	}
+
+	public Vector getBulletins(UniversalId[] uids) throws Exception
+	{
+		BulletinGetterThread thread = new BulletinGetterThread(getStore(), uids);
+		runInUiThreadAndWait(() ->
+		{
+			try
+			{
+				doBackgroundWork(thread, "PreparingBulletins");
+			}
+			catch (Exception e)
+			{
+				MartusLogger.logException(e);
+			}
+		});
+		return thread.getBulletins();
 	}
 
 	private static Stage realStage;

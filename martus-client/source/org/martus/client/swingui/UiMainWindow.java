@@ -60,7 +60,6 @@ import org.bouncycastle.crypto.engines.RSAEngine;
 import org.json.JSONObject;
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
-import org.martus.client.core.BulletinGetterThread;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.FontSetter;
 import org.martus.client.core.MartusApp;
@@ -2273,14 +2272,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		}
 		return getBulletins(uids);
 	}
-	
-	public Vector getBulletins(UniversalId[] uids) throws Exception
-	{
-		BulletinGetterThread thread = new BulletinGetterThread(getStore(), uids);
-		doBackgroundWork(thread, "PreparingBulletins");
-		return thread.getBulletins();
-	}
-	
+
+	public abstract Vector getBulletins(UniversalId[] uids) throws Exception;
+
 	public boolean getBulletinsAlwaysPrivate()
 	{
 		return getApp().getConfigInfo().shouldForceBulletinsAllPrivate();
