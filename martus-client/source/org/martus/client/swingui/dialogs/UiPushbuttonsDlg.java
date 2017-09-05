@@ -34,7 +34,7 @@ import org.martus.swing.UiButton;
 import org.martus.swing.UiVBox;
 import org.martus.swing.Utilities;
 
-public class UiPushbuttonsDlg extends JDialog implements ActionListener
+public class UiPushbuttonsDlg extends JDialog implements ActionListener, PushButtonsDlgInterface
 {
 	public UiPushbuttonsDlg(UiMainWindow mainWindow, String title, String[] buttonLabels)
 	{
@@ -58,6 +58,12 @@ public class UiPushbuttonsDlg extends JDialog implements ActionListener
 	public String getPressedButtonLabel()
 	{
 		return pressedButtonLabel;
+	}
+
+	@Override
+	public void showDialog()
+	{
+		setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent event)
