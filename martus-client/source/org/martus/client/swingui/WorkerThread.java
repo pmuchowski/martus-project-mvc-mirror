@@ -27,11 +27,10 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui;
 
 import java.lang.reflect.InvocationTargetException;
-import javax.swing.SwingUtilities;
 
 public abstract class WorkerThread extends Thread
 {
-	public void start(ModalBusyDialog dlgToNotify)
+	public void start(ModalBusyDialogInterface dlgToNotify)
 	{
 		dlg = dlgToNotify;
 		super.start();
@@ -64,7 +63,7 @@ public abstract class WorkerThread extends Thread
 	public boolean displayConfirmDlgAndWaitForResponse(UiMainWindow mainWindow, String title, String[] contents) throws InterruptedException, InvocationTargetException
 	{
 		ThreadedConfirmDlg confirm = new ThreadedConfirmDlg(mainWindow, title, contents);
-		SwingUtilities.invokeAndWait(confirm);
+		mainWindow.runInUiThreadAndWait(confirm);
 		return confirm.getResult();
 	}
 
@@ -95,12 +94,12 @@ public abstract class WorkerThread extends Thread
 
 	public void displayNotifyDlg(UiMainWindow mainWindow, String resultMessageTag)
 	{
-		SwingUtilities.invokeLater(new ThreadedNotifyDlg(mainWindow, resultMessageTag));
+		mainWindow.runInUiThreadLater(new ThreadedNotifyDlg(mainWindow, resultMessageTag));
 	}
 
 	public void displayNotifyDlgAndWaitForResponse(UiMainWindow mainWindow, String resultMessageTag) throws InterruptedException, InvocationTargetException
 	{
-		SwingUtilities.invokeAndWait(new ThreadedNotifyDlg(mainWindow, resultMessageTag));
+		mainWindow.runInUiThreadAndWait(new ThreadedNotifyDlg(mainWindow, resultMessageTag));
 	}
 
 	public static class ThreadedNotifyDlg implements Runnable
@@ -122,6 +121,6 @@ public abstract class WorkerThread extends Thread
 	
 	public abstract void doTheWorkWithNO_SWING_CALLS() throws Exception;
 	
-	ModalBusyDialog dlg;
+	private ModalBusyDialogInterface dlg;
 	public Exception thrown;
 }

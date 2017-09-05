@@ -96,7 +96,7 @@ public class ImportTemplateAction implements ActionDoer
 			catch (Exception e)
 			{
 				MartusLogger.logException(e);
-				UiMainWindow.showNotifyDlgOnSwingThread(getMainWindow(), "PublicInfoFileError");
+				UiMainWindow.showNotifyDlgOnUiThread(getMainWindow(), "PublicInfoFileError");
 			}
 		}
 

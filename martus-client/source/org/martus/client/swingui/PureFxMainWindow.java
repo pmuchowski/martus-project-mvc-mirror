@@ -29,22 +29,31 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
 
+import org.martus.client.core.BulletinGetterThread;
+import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
+import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxNotifyDlg;
+import org.martus.client.swingui.dialogs.PureFxProgressWithCancelDlg;
+import org.martus.client.swingui.dialogs.PureFxScrollableTextDlg;
+import org.martus.client.swingui.dialogs.PureFxStringInputDlg;
 import org.martus.client.swingui.dialogs.PureFxUtilities;
 import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.jfx.contacts.PureFxContactsStage;
+import org.martus.client.swingui.jfx.generic.FancySearchDialogController;
 import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.FxStatusBar;
 import org.martus.client.swingui.jfx.generic.PureFxDialogStage;
@@ -52,10 +61,15 @@ import org.martus.client.swingui.jfx.generic.PureFxStage;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.landing.PureFxMainStage;
+import org.martus.client.swingui.jfx.setupwizard.PureFxCreateNewAccountWizardStage;
 import org.martus.client.swingui.jfx.setupwizard.PureFxSetupWizardStage;
 import org.martus.clientside.FormatFilter;
+import org.martus.clientside.MtfAwareLocalization;
+import org.martus.common.MartusLogger;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.packet.UniversalId;
 
+import javafx.application.Platform;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
@@ -90,7 +104,7 @@ public class PureFxMainWindow extends UiMainWindow
 	@Override
 	public FxMainStage getMainStage()
 	{
-		return null;
+		return mainStage;
 	}
 
 	@Override
@@ -104,6 +118,7 @@ public class PureFxMainWindow extends UiMainWindow
 	{
 		setStatusBar(createStatusBar());
 		PureFxMainStage fxStage = new PureFxMainStage(this, realStage);
+		mainStage = fxStage;
 		fxStage.showCurrentPage();
 		restoreWindowSizeAndState();
 		realStage.setTitle(getLocalization().getWindowTitle("main"));
@@ -117,12 +132,20 @@ public class PureFxMainWindow extends UiMainWindow
 		Point appPosition = getUiState().getCurrentAppPosition();
 		boolean showMaximized = getUiState().isCurrentAppMaximized();
 
+		if (appDimension.getHeight() == 0 || appDimension.getWidth() == 0)
+		{
+			showMaximized = true;
+		}
+		else
+		{
+			realStage.setWidth(appDimension.getWidth());
+			realStage.setHeight(appDimension.getHeight());
+		}
+
 		realStage.setX(appPosition.getX());
 		realStage.setY(appPosition.getY());
-		realStage.setWidth(appDimension.getWidth());
-		realStage.setHeight(appDimension.getHeight());
 		realStage.setMaximized(showMaximized);
-		
+
 		getUiState().setCurrentAppDimension(getMainWindowSize());
 	}
 
@@ -197,6 +220,7 @@ public class PureFxMainWindow extends UiMainWindow
 	@Override
 	public void createAndShowSetupWizard() throws Exception
 	{
+		createAndShowLargeModalDialog(new PureFxCreateNewAccountWizardStage(this));
 	}
 
 	@Override
@@ -346,7 +370,7 @@ public class PureFxMainWindow extends UiMainWindow
 	{
 		FileChooser fileChooser = createFileChooser(title, directory, filter);
 
-		return fileChooser.showOpenDialog(new Stage());
+		return fileChooser.showOpenDialog(getActiveStage());
 	}
 
 	protected File showFileSaveDialog(String title, File directory, String defaultFilename, FormatFilter filter)
@@ -354,7 +378,7 @@ public class PureFxMainWindow extends UiMainWindow
 		FileChooser fileChooser = createFileChooser(title, directory, filter);
 		fileChooser.setInitialFileName(defaultFilename);
 
-		return fileChooser.showSaveDialog(new Stage());
+		return fileChooser.showSaveDialog(getActiveStage());
 	}
 
 	public File showChooseDirectoryDialog(String windowTitle)
@@ -362,7 +386,7 @@ public class PureFxMainWindow extends UiMainWindow
 		DirectoryChooser chooser = new DirectoryChooser();
 		chooser.setTitle(windowTitle);
 
-		return chooser.showDialog(new Stage());
+		return chooser.showDialog(getActiveStage());
 	}
 
 	private FileChooser createFileChooser(String title, File directory, FormatFilter... filters)
@@ -371,15 +395,21 @@ public class PureFxMainWindow extends UiMainWindow
 		fileChooser.setTitle(title);
 		fileChooser.setInitialDirectory(directory);
 
-		List<FileChooser.ExtensionFilter> extensionFilters = new ArrayList<>();
-
 		if (filters != null)
-			for (FormatFilter filter : filters)
-				extensionFilters.add(new FileChooser.ExtensionFilter(filter.getDescription(), getExtensionsWithWildcards(filter.getExtensions())));
-
-		fileChooser.getExtensionFilters().addAll(extensionFilters);
+			fileChooser.getExtensionFilters().addAll(createExtensionFilters(filters));
 
 		return fileChooser;
+	}
+
+	private List<FileChooser.ExtensionFilter> createExtensionFilters(FormatFilter... filters)
+	{
+		List<FileChooser.ExtensionFilter> extensionFilters = new ArrayList<>();
+
+		for (FormatFilter filter : filters)
+			if (filter != null)
+				extensionFilters.add(new FileChooser.ExtensionFilter(filter.getDescription(), getExtensionsWithWildcards(filter.getExtensions())));
+
+		return extensionFilters;
 	}
 
 	private List<String> getExtensionsWithWildcards(String[] extensions)
@@ -396,7 +426,7 @@ public class PureFxMainWindow extends UiMainWindow
 	{
 		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
 
-		File selectedFile = fileChooser.showSaveDialog(new Stage());
+		File selectedFile = fileChooser.showSaveDialog(getActiveStage());
 
 		if (selectedFile == null)
 			return null;
@@ -412,13 +442,13 @@ public class PureFxMainWindow extends UiMainWindow
 	{
 		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
 
-		return fileChooser.showOpenDialog(new Stage());
+		return fileChooser.showOpenDialog(getActiveStage());
 	}
 
 	protected File[] showMultiFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
 	{
 		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
-		List<File> files = fileChooser.showOpenMultipleDialog(new Stage());
+		List<File> files = fileChooser.showOpenMultipleDialog(getActiveStage());
 
 		if (files == null)
 			return new File[0];
@@ -426,5 +456,117 @@ public class PureFxMainWindow extends UiMainWindow
 		return files.toArray(new File[files.size()]);
 	}
 
+	public void runInUiThreadLater(Runnable toRun)
+	{
+		Platform.runLater(toRun);
+	}
+
+	public void runInUiThreadAndWait(final Runnable toRun) throws InterruptedException, InvocationTargetException
+	{
+		if (Platform.isFxApplicationThread())
+		{
+			toRun.run();
+			return;
+		}
+
+		final CountDownLatch doneLatch = new CountDownLatch(1);
+		Platform.runLater(() -> {
+			try
+			{
+				toRun.run();
+			}
+			finally
+			{
+				doneLatch.countDown();
+			}
+		});
+
+		doneLatch.await();
+	}
+
+	public String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText)
+	{
+		PureFxStringInputDlg inputDlg = new PureFxStringInputDlg(this, baseTag, descriptionTag, rawDescriptionText, defaultText);
+
+		return inputDlg.getResult();
+	}
+
+	public boolean showScrollableTextDlg(String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text)
+	{
+		PureFxScrollableTextDlg dlg = new PureFxScrollableTextDlg(this, titleTag, okButtonTag, cancelButtonTag, descriptionTag, text);
+		return dlg.getResult();
+	}
+
+	public void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement)
+	{
+		new PureFxScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, tokenReplacement);
+	}
+
+	@Override
+	public void setCurrentActiveStage(PureFxStage newActiveStage)
+	{
+		activeStage = newActiveStage;
+	}
+
+	@Override
+	public PureFxStage getCurrentActiveStage()
+	{
+		return activeStage;
+	}
+
+	private Stage getActiveStage()
+	{
+		if (getCurrentActiveStage() == null)
+			return realStage;
+		else
+			return getCurrentActiveStage().getActualStage();
+	}
+
+	protected ModalBusyDialogInterface createModalBusyDialog(String dialogTag)
+	{
+		return new PureFxModalBusyDialog(this, dialogTag);
+	}
+
+	public ProgressMeterDialogInterface createProgressMeter(String tagToUse)
+	{
+		return new PureFxProgressWithCancelDlg(this, tagToUse);
+	}
+
+	protected FancySearchDialogInterface createFancySearchDialog()
+	{
+		return new FancySearchDialogController(this);
+	}
+
+	protected void showFancySearchDialog(FancySearchDialogInterface fancySearchDialog)
+	{
+		try
+		{
+			createAndShowModalDialog((FancySearchDialogController) fancySearchDialog, null, null);
+		}
+		catch (Exception e)
+		{
+			MartusLogger.logException(e);
+		}
+	}
+
+	public Vector getBulletins(UniversalId[] uids) throws Exception
+	{
+		BulletinGetterThread thread = new BulletinGetterThread(getStore(), uids);
+		runInUiThreadAndWait(() ->
+		{
+			try
+			{
+				doBackgroundWork(thread, "PreparingBulletins");
+			}
+			catch (Exception e)
+			{
+				MartusLogger.logException(e);
+			}
+		});
+		return thread.getBulletins();
+	}
+
 	private static Stage realStage;
+	private FxMainStage mainStage;
+	private PureFxStage activeStage;
 }

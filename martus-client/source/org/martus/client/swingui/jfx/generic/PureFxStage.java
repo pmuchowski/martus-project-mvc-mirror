@@ -25,16 +25,15 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.jfx.generic;
 
+import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.actions.ActionDoer;
+
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-
-import org.martus.client.swingui.UiMainWindow;
-import org.martus.client.swingui.actions.ActionDoer;
-
 
 abstract public class PureFxStage extends VirtualStage
 {
@@ -55,6 +54,11 @@ abstract public class PureFxStage extends VirtualStage
 
 		Scene scene = createEmptyShellScene();
 		setScene(scene);
+
+		setParentStage(getActiveStage());
+
+		setActiveStage(this);
+		getActualStage().setOnHiding(event -> setActiveStage(parentStage));
 	}
 
 	@Override
@@ -137,6 +141,25 @@ abstract public class PureFxStage extends VirtualStage
 	{
 		stage.showAndWait();
 	}
-	
+
+	private void setActiveStage(PureFxStage newActiveStage)
+	{
+		getMainWindow().setCurrentActiveStage(newActiveStage);
+	}
+
+	private PureFxStage getActiveStage()
+	{
+		return getMainWindow().getCurrentActiveStage();
+	}
+
+	private void setParentStage(PureFxStage newParentStage)
+	{
+		parentStage = newParentStage;
+
+		if (newParentStage != null)
+			getActualStage().initOwner(newParentStage.getActualStage());
+	}
+
 	private Stage stage;
+	private PureFxStage parentStage;
 }

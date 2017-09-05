@@ -25,12 +25,12 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.jfx.landing;
 
-import javafx.stage.Stage;
-
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.jfx.generic.PureFxStage;
 import org.martus.client.swingui.jfx.landing.bulletins.BulletinsListController;
 import org.martus.client.swingui.jfx.landing.cases.FxCaseManagementController;
+
+import javafx.stage.Stage;
 
 public class PureFxMainStage extends PureFxStage implements FxMainStage
 {
@@ -44,14 +44,17 @@ public class PureFxMainStage extends PureFxStage implements FxMainStage
 	@Override
 	public BulletinsListController getBulletinsListController()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getLandingShellController().getBulletinsListController();
 	}
 
 	@Override
 	public FxCaseManagementController getCaseManager()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return getLandingShellController().getCaseManager();
+	}
+
+	private FxLandingShellController getLandingShellController()
+	{
+		return (FxLandingShellController)getShellController();
 	}
 }

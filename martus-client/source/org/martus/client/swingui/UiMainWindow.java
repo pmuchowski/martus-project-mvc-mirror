@@ -39,6 +39,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.FileLock;
@@ -54,13 +55,11 @@ import javax.swing.AbstractAction;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
-import javax.swing.SwingUtilities;
 
 import org.bouncycastle.crypto.engines.RSAEngine;
 import org.json.JSONObject;
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
-import org.martus.client.core.BulletinGetterThread;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.FontSetter;
 import org.martus.client.core.MartusApp;
@@ -75,17 +74,15 @@ import org.martus.client.network.RetrieveCommand;
 import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.bulletincomponent.UiBulletinPreviewPane;
 import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
+import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
+import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
-import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
 import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
-import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesRetrieveDlg;
-import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
 import org.martus.client.swingui.dialogs.UiSplashDlg;
-import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiTemplateDlg;
 import org.martus.client.swingui.filefilters.AllFileFilter;
 import org.martus.client.swingui.filefilters.KeyPairFormatFilter;
@@ -95,7 +92,7 @@ import org.martus.client.swingui.jfx.generic.FxController;
 import org.martus.client.swingui.jfx.generic.FxDialogHelper;
 import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.InitialSigninController;
-import org.martus.client.swingui.jfx.generic.ModalDialogWithSwingContents;
+import org.martus.client.swingui.jfx.generic.PureFxStage;
 import org.martus.client.swingui.jfx.generic.ReSigninController;
 import org.martus.client.swingui.jfx.generic.SigninController;
 import org.martus.client.swingui.jfx.generic.SigninController.SigninResult;
@@ -1280,9 +1277,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		private String baseTag;
 	}
 
-	public static void showNotifyDlgOnSwingThread(UiMainWindow mainWindowToUse, String baseTag)
+	public static void showNotifyDlgOnUiThread(UiMainWindow mainWindowToUse, String baseTag)
 	{
-		SwingUtilities.invokeLater(new Notifier(mainWindowToUse, baseTag));
+		mainWindowToUse.runInUiThreadLater(new Notifier(mainWindowToUse, baseTag));
 	}
 
 	public void notifyDlg(String baseTag)
@@ -1336,13 +1333,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 	protected abstract void initializationErrorExitMartusDlg(String message);
 
-	public String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText)
-	{
-		UiStringInputDlg inputDlg = new UiStringInputDlg(this, baseTag, descriptionTag, rawDescriptionText, defaultText);
-		inputDlg.setFocusToInputField();
-		inputDlg.setVisible(true);
-		return inputDlg.getResult();
-	}
+	public abstract String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText);
 
 	public UiPopupMenu getPopupMenu()
 	{
@@ -1538,15 +1529,13 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		bulletinsTablePane.selectFirstBulletin();
 	}
 	
-	public void doBackgroundWork(WorkerProgressThread worker, UiProgressWithCancelDlg progressDialog) throws Exception
+	public void doBackgroundWork(WorkerProgressThread worker, ProgressMeterDialogInterface progressDialog) throws Exception
 	{
 		setWaitingCursor();
 		try
 		{
 			worker.start(progressDialog);
-			progressDialog.pack();
-			Utilities.packAndCenterWindow(progressDialog);
-			progressDialog.setVisible(true);
+			progressDialog.showDialog();
 			worker.cleanup();
 		}
 		finally
@@ -1561,9 +1550,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		setWaitingCursor();
 		try
 		{
-			ModalBusyDialog dlg = new ModalBusyDialog(this, dialogTag);
+			ModalBusyDialogInterface dlg = createModalBusyDialog(dialogTag);
 			worker.start(dlg);
-			dlg.setVisible(true);
+			dlg.showDialog();
 			worker.cleanup();
 		}
 		finally
@@ -1571,10 +1560,14 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			resetCursor();
 		}
 	}
-	
+
+	protected abstract ModalBusyDialogInterface createModalBusyDialog(String dialogTag);
+
+	public abstract ProgressMeterDialogInterface createProgressMeter(String tagToUse);
+
 	public SearchTreeNode askUserForSearchCriteria() throws ParseException
 	{
-		UiFancySearchDialogContents searchDlg = new UiFancySearchDialogContents(this);
+		FancySearchDialogInterface searchDlg = createFancySearchDialog();
 		searchDlg.setSearchFinalBulletinsOnly(getUiState().searchFinalBulletinsOnly());
 		searchDlg.setSearchSameRowsOnly(getUiState().searchSameRowsOnly());
 		String searchString = getUiState().getSearchString();
@@ -1582,16 +1575,21 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		if(searchString.startsWith("{"))
 			search = new JSONObject(searchString);
 		searchDlg.setSearchAsJson(search);
-		ModalDialogWithSwingContents.show(searchDlg);
+
+		showFancySearchDialog(searchDlg);
+
 		if(!searchDlg.getResults())
 			return null;
-		
 
 		getUiState().setSearchFinalBulletinsOnly(searchDlg.searchFinalBulletinsOnly());
 		getUiState().setSearchSameRowsOnly(searchDlg.searchSameRowsOnly());
 		getUiState().setSearchString(searchDlg.getSearchAsJson().toString());
 		return searchDlg.getSearchTree();
 	}
+
+	protected abstract FancySearchDialogInterface createFancySearchDialog();
+
+	protected abstract void showFancySearchDialog(FancySearchDialogInterface fancySearchDialog);
 
 	public void aboutMartus()
 	{
@@ -1746,11 +1744,12 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	{
 		if(newServerCompliance.equals(""))
 			return confirmDlg("ServerComplianceFailed");
-			
-		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", descriptionTag, newServerCompliance, null);
-		return dlg.getResult();
+
+		return showScrollableTextDlg("ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", descriptionTag, newServerCompliance);
 	}
-	
+
+	public abstract boolean showScrollableTextDlg(String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text);
+
 	public void saveConfigInfo()
 	{
 		try
@@ -2052,12 +2051,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	{
 		return new KeyPairFormatFilter(getLocalization());
 	}
-	
-	public void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement) 
-	{
-		new UiShowScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, tokenReplacement, null);
-	}
-	
+
+	public abstract void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement);
+
 	public void setAndSaveHQKeysInConfigInfo(HeadquartersKeys allHQKeys, HeadquartersKeys defaultHQKeys)
 	{
 		try
@@ -2276,14 +2272,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		}
 		return getBulletins(uids);
 	}
-	
-	public Vector getBulletins(UniversalId[] uids) throws Exception
-	{
-		BulletinGetterThread thread = new BulletinGetterThread(getStore(), uids);
-		doBackgroundWork(thread, "PreparingBulletins");
-		return thread.getBulletins();
-	}
-	
+
+	public abstract Vector getBulletins(UniversalId[] uids) throws Exception;
+
 	public boolean getBulletinsAlwaysPrivate()
 	{
 		return getApp().getConfigInfo().shouldForceBulletinsAllPrivate();
@@ -2360,7 +2351,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 				MartusLogger.log(MartusLogger.getMemoryStatistics());
 
 				waitingForSignin = true;
-				SwingUtilities.invokeLater(new ThreadedSignin());
+				runInUiThreadLater(new ThreadedSignin());
 			} 
 			catch (Throwable e) 
 			{
@@ -2444,7 +2435,11 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		boolean rejectedErrorShown;
 		boolean contactInfoErrorShown;
 	}
-	
+
+	public abstract void runInUiThreadLater(Runnable toRun);
+
+	public abstract void runInUiThreadAndWait(Runnable toRun) throws InterruptedException, InvocationTargetException;
+
 	public CurrentUiState getCurrentUiState()
 	{
 		return getUiState();
@@ -2479,7 +2474,11 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	{
 		return currentActiveDialog;
 	}
-	
+
+	public abstract void setCurrentActiveStage(PureFxStage newActiveStage);
+
+	public abstract PureFxStage getCurrentActiveStage();
+
 	private int getTextFieldColumns(int windowWidth) 
 	{
 		if(windowWidth < MINIMUM_SCREEN_WIDTH)

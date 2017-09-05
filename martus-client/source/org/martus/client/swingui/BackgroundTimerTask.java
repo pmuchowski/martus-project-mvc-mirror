@@ -179,7 +179,7 @@ class BackgroundTimerTask extends TimerTask
 			doRetrieving();
 			if(!retriever.hasWorkToDo())
 			{
-				SwingUtilities.invokeLater(new ThreadedUpdateReadyMessage());
+				mainWindow.runInUiThreadLater(new ThreadedUpdateReadyMessage());
 			}
 			return;
 		}
@@ -197,8 +197,8 @@ class BackgroundTimerTask extends TimerTask
 		catch (Exception e)
 		{
 			String tag = "RetrieveError";
-			SwingUtilities.invokeLater(new WorkerThread.ThreadedNotifyDlg(mainWindow, tag));
-			SwingUtilities.invokeLater(new ThreadedUpdateReadyMessage());
+			mainWindow.runInUiThreadLater(new WorkerThread.ThreadedNotifyDlg(mainWindow, tag));
+			mainWindow.runInUiThreadLater(new ThreadedUpdateReadyMessage());
 			e.printStackTrace();
 		}
 		mainWindow.folderContentsHaveChanged(folder);
@@ -226,7 +226,7 @@ class BackgroundTimerTask extends TimerTask
 			{
 				MartusLogger.log(uploadResult.exceptionThrown);
 				ThreadedNotify damagedBulletin = new ThreadedNotify("DamagedBulletinMovedToDiscarded", uploadResult.uid);
-				SwingUtilities.invokeAndWait(damagedBulletin);
+				mainWindow.runInUiThreadAndWait(damagedBulletin);
 				mainWindow.folderContentsHaveChanged(getStore().getFolderSealedOutbox());
 				mainWindow.folderContentsHaveChanged(getStore().getFolderDraftOutbox());
 				mainWindow.folderContentsHaveChanged(getApp().createOrFindFolder(getStore().getNameOfFolderDamaged()));
@@ -237,7 +237,7 @@ class BackgroundTimerTask extends TimerTask
 				tag = "UploadFailedProgressMessage"; 
 				MartusLogger.log(uploadResult.exceptionThrown);
 				ThreadedNotify bulletinNotSent = new ThreadedNotify("UploadFailedBulletinNotSentToServer", uploadResult.uid);
-				SwingUtilities.invokeAndWait(bulletinNotSent);
+				mainWindow.runInUiThreadAndWait(bulletinNotSent);
 				updateDisplay();
 			}
 			else if(uploadResult.result == null)
@@ -289,7 +289,7 @@ class BackgroundTimerTask extends TimerTask
 			MartusLogger.logException(e);
 
 			String baseTag = "SyncDisabledDueToError";
-			UiMainWindow.showNotifyDlgOnSwingThread(mainWindow, baseTag);
+			UiMainWindow.showNotifyDlgOnUiThread(mainWindow, baseTag);
 			return;
 		}
 
@@ -394,7 +394,7 @@ class BackgroundTimerTask extends TimerTask
 					mainWindow.allBulletinsInCurrentFolderHaveChanged();
 				}
 			}
-			SwingUtilities.invokeLater(new CurrentFolderRefresher());
+			mainWindow.runInUiThreadLater(new CurrentFolderRefresher());
 		}
 		catch(Exception e)
 		{
@@ -497,7 +497,7 @@ class BackgroundTimerTask extends TimerTask
 		{
 			try
 			{
-				SwingUtilities.invokeAndWait(updater);
+				mainWindow.runInUiThreadAndWait(updater);
 			}
 			catch (Exception notMuchWeCanDoAboutIt)
 			{
@@ -523,7 +523,7 @@ class BackgroundTimerTask extends TimerTask
 			if(!compliance.equals(getApp().getConfigInfo().getServerCompliance()))
 			{
 				ThreadedServerComplianceDlg dlg = new ThreadedServerComplianceDlg(compliance);
-				SwingUtilities.invokeAndWait(dlg);
+				mainWindow.runInUiThreadAndWait(dlg);
 			}
 		}
 		catch (ServerCallFailedException userAlreadyKnows)
@@ -614,7 +614,7 @@ class BackgroundTimerTask extends TimerTask
 			ThreadedMessageDlg newsDlg = new ThreadedMessageDlg("ServerNews", newsItem, tokenReplacement);
 			try
 			{
-				SwingUtilities.invokeAndWait(newsDlg);
+				mainWindow.runInUiThreadAndWait(newsDlg);
 			}
 			catch (Exception e)
 			{

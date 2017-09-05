@@ -25,16 +25,11 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui;
 
-import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.SwingUtilities;
-
-import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.common.ProgressMeterInterface;
 
 public abstract class WorkerProgressThread extends Thread
 {
-	public void start(UiProgressWithCancelDlg dlgToNotify)
+	public void start(ProgressMeterInterface dlgToNotify)
 	{
 		dlg = dlgToNotify;
 		super.start();
@@ -61,75 +56,16 @@ public abstract class WorkerProgressThread extends Thread
 		{
 			thrown = e;
 		}
-		dlg.workerFinished();
+		dlg.finished();
 	}
 
-	public boolean displayConfirmDlgAndWaitForResponse(UiMainWindow mainWindow, String title, String[] contents) throws InterruptedException, InvocationTargetException
-	{
-		ThreadedConfirmDlg confirm = new ThreadedConfirmDlg(mainWindow, title, contents);
-		SwingUtilities.invokeAndWait(confirm);
-		return confirm.getResult();
-	}
-	
 	public ProgressMeterInterface getProgressMeter()
 	{
 		return dlg;
 	}
 
-	private static class ThreadedConfirmDlg implements Runnable
-	{
-		public ThreadedConfirmDlg(UiMainWindow mainWindowToUse, String titleToUse, String[] contentsToUse)
-		{
-			mainWindow = mainWindowToUse;
-			title = titleToUse;
-			contents = contentsToUse;
-		}
-		
-		public void run()
-		{
-			result = mainWindow.confirmDlg(title, contents);
-		}
-		
-		public boolean getResult()
-		{
-			return result;
-		}
-		
-		UiMainWindow mainWindow;
-		boolean result;
-		String title;
-		String[] contents;
-	}
-
-	public void displayNotifyDlg(UiMainWindow mainWindow, String resultMessageTag)
-	{
-		SwingUtilities.invokeLater(new ThreadedNotifyDlg(mainWindow, resultMessageTag));
-	}
-
-	public void displayNotifyDlgAndWaitForResponse(UiMainWindow mainWindow, String resultMessageTag) throws InterruptedException, InvocationTargetException
-	{
-		SwingUtilities.invokeAndWait(new ThreadedNotifyDlg(mainWindow, resultMessageTag));
-	}
-
-	private static class ThreadedNotifyDlg implements Runnable
-	{
-		public ThreadedNotifyDlg(UiMainWindow mainWindowToUse, String tagToUse)
-		{
-			tag = tagToUse;
-			mainWindow = mainWindowToUse;
-		}
-		
-		public void run()
-		{
-			mainWindow.notifyDlg(tag);
-		}
-		UiMainWindow mainWindow;
-		String tag;
-	}
-	
-	
 	public abstract void doTheWorkWithNO_SWING_CALLS() throws Exception;
-	
-	UiProgressWithCancelDlg dlg;
+
+	private ProgressMeterInterface dlg;
 	public Exception thrown;
 }

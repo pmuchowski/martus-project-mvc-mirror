@@ -333,7 +333,10 @@ public class BulletinsListController extends AbstractFxLandingContentController 
 		@Override
 		public void run()
 		{
-			Set foundUids = new HashSet(Arrays.asList(results.getUniversalIds()));
+			if (results == null)
+				return;
+
+			Set<UniversalId> foundUids = new HashSet<>(Arrays.asList(results.getUniversalIds()));
 			showSearchResults(foundUids);
 		}
 		

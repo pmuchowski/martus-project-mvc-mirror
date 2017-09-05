@@ -25,19 +25,11 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.jfx.setupwizard.step3;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp.SaveConfigInfoException;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.jfx.contacts.FxWizardAddContactsController;
-import org.martus.client.swingui.jfx.generic.FxInSwingWizardStage;
+import org.martus.client.swingui.jfx.generic.WizardStageInterface;
 import org.martus.client.swingui.jfx.setupwizard.AbstractFxSetupWizardContentController;
 import org.martus.client.swingui.jfx.setupwizard.tasks.GetServerPublicKeyTask;
 import org.martus.common.DammCheckDigitAlgorithm.CheckDigitInvalidException;
@@ -47,6 +39,14 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CreateDigestException;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.util.StreamableBase64.InvalidBase64Exception;
+
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 public class FxAdvancedServerStorageSetupController extends	FxSetupWizardAbstractServerSetupController implements Initializable
 {
@@ -114,7 +114,7 @@ public class FxAdvancedServerStorageSetupController extends	FxSetupWizardAbstrac
 			String magicWord = magicWordField.getText();
 			attemptToConnect(ip, serverKey, true, magicWord);
 
-			FxInSwingWizardStage wizardStage = getWizardStage();
+			WizardStageInterface wizardStage = getWizardStage();
 			if(wizardStage.checkIfCurrentServerIsAvailable())
 				getWizardNavigationHandler().doNext();
 		} 

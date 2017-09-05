@@ -25,17 +25,17 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.jfx.setupwizard.step3;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
-
 import org.martus.client.core.MartusApp.SaveConfigInfoException;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.jfx.contacts.FxWizardAddContactsController;
-import org.martus.client.swingui.jfx.generic.FxInSwingWizardStage;
+import org.martus.client.swingui.jfx.generic.WizardStageInterface;
 import org.martus.client.swingui.jfx.setupwizard.AbstractFxSetupWizardContentController;
 import org.martus.client.swingui.jfx.setupwizard.step5.FxSetupImportTemplatesController;
 import org.martus.common.MartusLogger;
+
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 
 public class FxSetupStorageServerController extends FxSetupWizardAbstractServerSetupController
 {
@@ -92,7 +92,7 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 	@FXML
 	public void setupServerLater()
 	{
-		FxInSwingWizardStage wizardStage = getWizardStage();
+		WizardStageInterface wizardStage = getWizardStage();
 		try
 		{
 			getApp().setServerInfo("", "", "");
@@ -110,7 +110,7 @@ public class FxSetupStorageServerController extends FxSetupWizardAbstractServerS
 	public void useDefaultServer()
 	{
 		attemptToConnect(getDefaultServerIp(), getDefaultServerPublicKey(), false);
-		FxInSwingWizardStage wizardStage = getWizardStage();
+		WizardStageInterface wizardStage = getWizardStage();
 		if(wizardStage.hasServerAvailabilityBeenInitialized())
 			getWizardNavigationHandler().doNext();
 	}

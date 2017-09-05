@@ -1,8 +1,7 @@
 /*
 
-The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2015, Beneficent
-Technology, Inc. (Benetech).
+Martus(TM) is a trademark of Beneficent Technology, Inc.
+This software is (c) Copyright 2001-2017, Beneficent Technology, Inc.
 
 Martus is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -23,14 +22,19 @@ Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 
 */
-package org.martus.client.swingui.jfx.generic;
+package org.martus.client.swingui.dialogs;
 
-public interface WizardStageInterface
+import org.json.JSONObject;
+import org.martus.client.search.SearchTreeNode;
+
+public interface FancySearchDialogInterface
 {
-	public void next();
-	public void back();
-
-	boolean checkIfCurrentServerIsAvailable();
-	void setCurrentServerIsAvailable(boolean isServerAvailable);
-	boolean hasServerAvailabilityBeenInitialized();
+	boolean searchFinalBulletinsOnly();
+	void setSearchFinalBulletinsOnly(boolean searchFinalOnly);
+	boolean searchSameRowsOnly();
+	void setSearchSameRowsOnly(boolean sameRowsOnly);
+	JSONObject getSearchAsJson();
+	void setSearchAsJson(JSONObject searchGrid);
+	boolean getResults();
+	SearchTreeNode getSearchTree();
 }

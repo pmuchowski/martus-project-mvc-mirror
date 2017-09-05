@@ -31,6 +31,7 @@ import java.awt.Frame;
 import java.awt.Point;
 import java.awt.Window;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Vector;
 
@@ -39,12 +40,20 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
+import org.martus.client.core.BulletinGetterThread;
+import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.FxInSwingBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
+import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
+import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
+import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
+import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
 import org.martus.client.swingui.jfx.contacts.FxInSwingContactsStage;
 import org.martus.client.swingui.jfx.generic.FxInSwingDialogStage;
@@ -54,6 +63,8 @@ import org.martus.client.swingui.jfx.generic.FxInSwingStage;
 import org.martus.client.swingui.jfx.generic.FxRunner;
 import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.FxStatusBar;
+import org.martus.client.swingui.jfx.generic.ModalDialogWithSwingContents;
+import org.martus.client.swingui.jfx.generic.PureFxStage;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxInSwingMainStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
@@ -61,10 +72,12 @@ import org.martus.client.swingui.jfx.setupwizard.FxInSwingCreateNewAccountWizard
 import org.martus.client.swingui.jfx.setupwizard.FxInSwingSetupWizardStage;
 import org.martus.clientside.FileDialogHelpers;
 import org.martus.clientside.FormatFilter;
+import org.martus.clientside.MtfAwareLocalization;
 import org.martus.clientside.UiFileChooser;
 import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.packet.UniversalId;
 import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.UiOptionPane;
 import org.martus.swing.Utilities;
@@ -480,6 +493,79 @@ public class FxInSwingMainWindow extends UiMainWindow
 		// NOTE: Apparently the all file filter has a Mac bug, so this is a workaround
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		return fileChooser;
+	}
+
+	public void runInUiThreadLater(Runnable toRun)
+	{
+		SwingUtilities.invokeLater(toRun);
+	}
+
+	public void runInUiThreadAndWait(Runnable toRun) throws InterruptedException, InvocationTargetException
+	{
+		if (SwingUtilities.isEventDispatchThread())
+		{
+			toRun.run();
+			return;
+		}
+
+		SwingUtilities.invokeAndWait(toRun);
+	}
+
+	public String getStringInput(String baseTag, String descriptionTag, String rawDescriptionText, String defaultText)
+	{
+		UiStringInputDlg inputDlg = new UiStringInputDlg(this, baseTag, descriptionTag, rawDescriptionText, defaultText);
+		inputDlg.setFocusToInputField();
+		inputDlg.setVisible(true);
+		return inputDlg.getResult();
+	}
+
+	public boolean showScrollableTextDlg(String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text)
+	{
+		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, titleTag, okButtonTag, cancelButtonTag, descriptionTag, text, null);
+		return dlg.getResult();
+	}
+
+	public void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement)
+	{
+		new UiShowScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, tokenReplacement, null);
+	}
+
+	@Override
+	public void setCurrentActiveStage(PureFxStage newActiveStage)
+	{
+	}
+
+	@Override
+	public PureFxStage getCurrentActiveStage()
+	{
+		return null;
+	}
+
+	protected ModalBusyDialogInterface createModalBusyDialog(String dialogTag)
+	{
+		return new ModalBusyDialog(this, dialogTag);
+	}
+
+	public ProgressMeterDialogInterface createProgressMeter(String tagToUse)
+	{
+		return new UiProgressWithCancelDlg(this, tagToUse);
+	}
+
+	protected FancySearchDialogInterface createFancySearchDialog()
+	{
+		return new UiFancySearchDialogContents(this);
+	}
+
+	protected void showFancySearchDialog(FancySearchDialogInterface fancySearchDialog)
+	{
+		ModalDialogWithSwingContents.show((UiFancySearchDialogContents) fancySearchDialog);
+	}
+
+	public Vector getBulletins(UniversalId[] uids) throws Exception
+	{
+		BulletinGetterThread thread = new BulletinGetterThread(getStore(), uids);
+		doBackgroundWork(thread, "PreparingBulletins");
+		return thread.getBulletins();
 	}
 
 	private JFrame swingFrame;

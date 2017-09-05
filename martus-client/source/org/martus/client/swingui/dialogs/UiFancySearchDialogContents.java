@@ -53,6 +53,7 @@ import org.martus.client.swingui.jfx.generic.SwingDialogContentPane;
 import org.martus.clientside.FormatFilter;
 import org.martus.clientside.UiLocalization;
 import org.martus.common.EnglishCommonStrings;
+import org.martus.common.MartusLogger;
 import org.martus.common.MiniLocalization;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.swing.FontHandler;
@@ -66,7 +67,7 @@ import org.martus.swing.Utilities;
 import org.martus.util.TokenReplacement;
 import org.martus.util.TokenReplacement.TokenInvalidException;
 
-public class UiFancySearchDialogContents extends SwingDialogContentPane
+public class UiFancySearchDialogContents extends SwingDialogContentPane implements FancySearchDialogInterface
 {
 	private static final String DIALOG_BACKGROUND_COLOR = "#F4F4F4";
 	private static final String HEADER_FONT_COLOR = "#595959";
@@ -427,34 +428,36 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		public void actionPerformed(ActionEvent event)
 		{
 			UiLocalization localization = dialog.getLocalization();
+			UiMainWindow mainWindow = dialog.getMainWindow();
 			FormatFilter filter = new SearchSpecFilter(localization);
 			// NOTE: If we pass the frame, the user will still be able to click on 
 			// the fancy search dialog, possibly hiding the modal file save dialog.
 			// If we pass the dialog, Java will STILL set the owner to the frame.
 			// So we must hide the fancy search dialog while anything modal is above it
 			dialog.setVisible(false);
+
 			try
 			{
-				File saveTo = dialog.getMainWindow().showFileSaveDialog("SaveSearch", filter);
+				SaveFileHandler saveFileHandler = new SaveFileHandler(mainWindow, "SaveSearch", filter);
+				mainWindow.runInUiThreadAndWait(saveFileHandler);
+
+				File saveTo = saveFileHandler.getResult();
 				if(saveTo == null)
 					return;
-				
-				try
-				{
-					save(saveTo);
-				} 
-				catch (Exception e)
-				{
-					e.printStackTrace();
-					dialog.getMainWindow().notifyDlg("ErrorWritingFile");
-				}
+
+				save(saveTo);
+			}
+			catch (Exception e)
+			{
+				MartusLogger.logException(e);
+				showNotifyDlg(mainWindow, "ErrorWritingFile");
 			}
 			finally
 			{
 				dialog.setVisible(true);
 			}
 		}
-		
+
 		void save(File destination) throws Exception
 		{
 			String text = dialog.getSearchSpec().toJson().toString();
@@ -463,7 +466,34 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		
 		UiFancySearchDialogContents dialog;
 	}
-	
+
+	static class SaveFileHandler implements Runnable
+	{
+		public SaveFileHandler(UiMainWindow mainWindowToUse, String fileDialogCategoryToUse, FormatFilter filterToUse)
+		{
+			mainWindow = mainWindowToUse;
+			fileDialogCategory = fileDialogCategoryToUse;
+			filter = filterToUse;
+		}
+
+		@Override
+		public void run()
+		{
+			result = mainWindow.showFileSaveDialog(fileDialogCategory, filter);
+		}
+
+		public File getResult()
+		{
+			return result;
+		}
+
+		private File result;
+
+		private UiMainWindow mainWindow;
+		private String fileDialogCategory;
+		private FormatFilter filter;
+	}
+
 	static class LoadButtonHandler implements ActionListener
 	{
 		public LoadButtonHandler(UiFancySearchDialogContents dialogToLoadInto)
@@ -474,33 +504,35 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		public void actionPerformed(ActionEvent event)
 		{
 			UiLocalization localization = dialog.getLocalization();
+			UiMainWindow mainWindow = dialog.getMainWindow();
 			String title = localization.getWindowTitle("LoadSavedSearch");
 			String openButtonLabel = localization.getButtonLabel("LoadSearchOkButton");
-			File directory = dialog.getMainWindow().getApp().getCurrentAccountDirectory();
+			File directory = mainWindow.getApp().getCurrentAccountDirectory();
 			FormatFilter filter = new SearchSpecFilter(localization);
 			// NOTE: If we pass the frame, the user will still be able to click on 
 			// the fancy search dialog, possibly hiding the modal file save dialog.
 			// If we pass the dialog, Java will STILL set the owner to the frame.
 			// So we must hide the fancy search dialog while anything modal is above it
 			dialog.setVisible(false);
+
 			try
 			{
-				File loadFrom = dialog.getMainWindow().showFileOpenDialog(title, openButtonLabel, directory, filter);
+				LoadFileHandler loadFileHandler = new LoadFileHandler(mainWindow, title, openButtonLabel, directory, filter);
+				mainWindow.runInUiThreadAndWait(loadFileHandler);
+
+				File loadFrom = loadFileHandler.getResult();
 				if(loadFrom == null)
 					return;
-				
-				try
-				{
-					SearchSpec spec = load(loadFrom);
-					dialog.setSearchAsJson(spec.getSearchGrid());
-					dialog.setSearchFinalBulletinsOnly(spec.getFinalOnly());
-					dialog.setSearchSameRowsOnly(spec.getSameRowsOnly());
-				} 
-				catch (Exception e)
-				{
-					e.printStackTrace();
-					dialog.getMainWindow().notifyDlg("ErrorReadingFile");
-				}
+
+				SearchSpec spec = load(loadFrom);
+				dialog.setSearchAsJson(spec.getSearchGrid());
+				dialog.setSearchFinalBulletinsOnly(spec.getFinalOnly());
+				dialog.setSearchSameRowsOnly(spec.getSameRowsOnly());
+			}
+			catch (Exception e)
+			{
+				MartusLogger.logException(e);
+				showNotifyDlg(mainWindow, "ErrorReadingFile");
 			}
 			finally
 			{
@@ -516,7 +548,50 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		
 		UiFancySearchDialogContents dialog;
 	}
-	
+
+	static class LoadFileHandler implements Runnable
+	{
+		public LoadFileHandler(UiMainWindow mainWindowToUse, String titleToUse, String openButtonLabelToUse, File directoryToUse, FormatFilter filterToUse)
+		{
+			mainWindow = mainWindowToUse;
+			title = titleToUse;
+			openButtonLabel = openButtonLabelToUse;
+			directory = directoryToUse;
+			filter = filterToUse;
+		}
+
+		@Override
+		public void run()
+		{
+			result = mainWindow.showFileOpenDialog(title, openButtonLabel, directory, filter);
+		}
+
+		public File getResult()
+		{
+			return result;
+		}
+
+		private File result;
+
+		private UiMainWindow mainWindow;
+		private String title;
+		private String openButtonLabel;
+		private File directory;
+		private FormatFilter filter;
+	}
+
+	private static void showNotifyDlg(UiMainWindow mainWindow, String baseTag)
+	{
+		try
+		{
+			mainWindow.runInUiThreadAndWait(() -> mainWindow.notifyDlg(baseTag));
+		}
+		catch (Exception e)
+		{
+			MartusLogger.logException(e);
+		}
+	}
+
 	static class SearchSpecFilter extends FormatFilter
 	{
 		public SearchSpecFilter(MiniLocalization localization)
@@ -546,9 +621,9 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane
 		return result;
 	}
 
-	boolean result;
-	FancySearchGridEditor grid;
-	UiCheckBox dontSearchTrash;
-	UiCheckBox searchFinalBulletins;
-	UiCheckBox searchSameRowsOnly;
+	private boolean result;
+	private FancySearchGridEditor grid;
+	private UiCheckBox dontSearchTrash;
+	private UiCheckBox searchFinalBulletins;
+	private UiCheckBox searchSameRowsOnly;
 }
