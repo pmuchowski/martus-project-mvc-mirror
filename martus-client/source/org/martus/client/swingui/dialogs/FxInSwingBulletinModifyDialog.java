@@ -27,13 +27,12 @@ package org.martus.client.swingui.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-import javafx.application.Platform;
 
 import javax.swing.Box;
 import javax.swing.JFrame;
@@ -52,6 +51,8 @@ import org.martus.common.bulletin.Bulletin.BulletinState;
 import org.martus.swing.UiButton;
 import org.martus.swing.UiScrollPane;
 import org.martus.swing.Utilities;
+
+import javafx.application.Platform;
 
 public class FxInSwingBulletinModifyDialog extends UiBulletinModifyDlg
 {
@@ -113,7 +114,18 @@ public class FxInSwingBulletinModifyDialog extends UiBulletinModifyDlg
 	{
 		getSwingFrame().setVisible(newVisibility);
 	}
-	
+
+	public void setWaitCursor()
+	{
+		originalCursor = getSwingFrame().getCursor();
+		getSwingFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+	}
+
+	public void resetCursor()
+	{
+		getSwingFrame().setCursor(originalCursor);
+	}
+
 	@Override
 	public JFrame getSwingFrame()
 	{
@@ -237,5 +249,5 @@ public class FxInSwingBulletinModifyDialog extends UiBulletinModifyDlg
 
 	private JFrame realFrame;
 	private UiScrollPane scroller;
-	
+	private Cursor originalCursor;
 }

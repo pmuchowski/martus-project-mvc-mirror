@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
 
 import org.martus.client.bulletinstore.BulletinsToTemplateMatcher;
 import org.martus.client.core.BulletinLanguageChangeListener;
@@ -301,13 +300,13 @@ public class FxBulletinEditorShellController extends FxNonWizardShellController 
 			return;
 
 		boolean neverDeleteFromOurServer = shouldDisallowDeleteFromServer(state);
-		SwingUtilities.invokeLater(() -> parentDialog.saveBulletin(neverDeleteFromOurServer, state));
+		getMainWindow().runInUiThreadLater(() -> parentDialog.saveBulletin(neverDeleteFromOurServer, state));
 		closeDialog();
 	}
 	
 	private void closeDialog()
 	{
-		SwingUtilities.invokeLater(() -> parentDialog.cleanupAndExit());
+		getMainWindow().runInUiThreadLater(() -> parentDialog.cleanupAndExit());
 	}
 
 	private boolean shouldDisallowDeleteFromServer(final BulletinState state)

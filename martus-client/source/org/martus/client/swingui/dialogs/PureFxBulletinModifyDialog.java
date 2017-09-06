@@ -28,14 +28,15 @@ package org.martus.client.swingui.dialogs;
 import java.awt.Dimension;
 import java.awt.Point;
 
-import javafx.stage.Stage;
-
 import javax.swing.JFrame;
 
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.jfx.generic.PureFxDialogStage;
 import org.martus.client.swingui.jfx.landing.bulletins.FxBulletinEditorShellController;
 import org.martus.common.bulletin.Bulletin;
+
+import javafx.scene.Cursor;
+import javafx.stage.Stage;
 
 public class PureFxBulletinModifyDialog extends UiBulletinModifyDlg
 {
@@ -117,5 +118,17 @@ public class PureFxBulletinModifyDialog extends UiBulletinModifyDlg
 		dialogStage.show();
 	}
 
+	public void setWaitCursor()
+	{
+		originalCursor = dialogStage.getActualStage().getScene().getCursor();
+		dialogStage.getActualStage().getScene().setCursor(Cursor.WAIT);
+	}
+
+	public void resetCursor()
+	{
+		dialogStage.getActualStage().getScene().setCursor(originalCursor);
+	}
+
 	private PureFxDialogStage dialogStage;
+	private Cursor originalCursor;
 }
