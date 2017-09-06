@@ -26,18 +26,11 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui.dialogs;
 
-import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.HashMap;
-
-import javafx.beans.property.Property;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-
-import javax.swing.SwingUtilities;
 
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
@@ -56,6 +49,10 @@ import org.martus.common.fieldspec.DateRangeInvertedException;
 import org.martus.common.fieldspec.DateTooEarlyException;
 import org.martus.common.fieldspec.DateTooLateException;
 import org.martus.common.fieldspec.RequiredFieldIsBlankException;
+
+import javafx.beans.property.Property;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 
 abstract public class UiBulletinModifyDlg implements TopLevelWindowInterface
 {
@@ -155,7 +152,7 @@ abstract public class UiBulletinModifyDlg implements TopLevelWindowInterface
 				MartusLogger.log("Switching Templates:'" + newValue + "'  was ='" + oldValue +"'");
 				ClientBulletinStore store = mainWindow.getApp().getStore();
 				Bulletin clonedBulletin = createClonedBulletinUsingCurrentTemplate(store);
-				SwingUtilities.invokeLater(() -> showBulletin(clonedBulletin));
+				mainWindow.runInUiThreadLater(() -> showBulletin(clonedBulletin));
 			} 
 			catch (Exception e)
 			{
@@ -248,8 +245,7 @@ abstract public class UiBulletinModifyDlg implements TopLevelWindowInterface
 
 	public void saveBulletin(boolean neverDeleteFromServer, BulletinState bulletinState)
 	{
-		Cursor originalCursor = getSwingFrame().getCursor();
-		getSwingFrame().setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		setWaitCursor();
 		try 
 		{
 			MartusApp app = observer.getApp();
@@ -283,9 +279,13 @@ abstract public class UiBulletinModifyDlg implements TopLevelWindowInterface
 		} 
 		finally 
 		{
-			getSwingFrame().setCursor(originalCursor);
+			resetCursor();
 		}
 	}
+
+	public abstract void setWaitCursor();
+
+	public abstract void resetCursor();
 
 	private void saveBulletinAndUpdateFolders(ClientBulletinStore store, BulletinFolder outboxToUse) throws Exception
 	{
