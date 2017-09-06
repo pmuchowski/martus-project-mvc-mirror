@@ -77,6 +77,7 @@ import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
 import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
+import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
 import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
@@ -1638,6 +1639,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 		notifyDlg(title, contents, buttons);
 	}
+
+	public abstract PushButtonsDlgInterface createPushButtonsDlg(String title, String[] buttonLabels);
 
 	public void displayHelpMessage()
 	{

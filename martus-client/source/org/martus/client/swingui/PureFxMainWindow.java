@@ -46,10 +46,12 @@ import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PureFxNotifyDlg;
 import org.martus.client.swingui.dialogs.PureFxProgressWithCancelDlg;
+import org.martus.client.swingui.dialogs.PureFxPushButtonsDlg;
 import org.martus.client.swingui.dialogs.PureFxScrollableTextDlg;
 import org.martus.client.swingui.dialogs.PureFxStringInputDlg;
 import org.martus.client.swingui.dialogs.PureFxUtilities;
 import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
+import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.jfx.contacts.PureFxContactsStage;
@@ -564,6 +566,11 @@ public class PureFxMainWindow extends UiMainWindow
 			}
 		});
 		return thread.getBulletins();
+	}
+
+	public PushButtonsDlgInterface createPushButtonsDlg(String title, String[] buttonLabels)
+	{
+		return new PureFxPushButtonsDlg(title, buttonLabels);
 	}
 
 	private static Stage realStage;

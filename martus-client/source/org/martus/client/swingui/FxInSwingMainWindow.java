@@ -47,11 +47,13 @@ import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.FxInSwingBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
+import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
+import org.martus.client.swingui.dialogs.UiPushbuttonsDlg;
 import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
@@ -566,6 +568,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 		BulletinGetterThread thread = new BulletinGetterThread(getStore(), uids);
 		doBackgroundWork(thread, "PreparingBulletins");
 		return thread.getBulletins();
+	}
+
+	public PushButtonsDlgInterface createPushButtonsDlg(String title, String[] buttonLabels)
+	{
+		return new UiPushbuttonsDlg(this, title, buttonLabels);
 	}
 
 	private JFrame swingFrame;

@@ -51,9 +51,9 @@ import org.martus.client.search.PageReportFieldChooserSpecBuilder;
 import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.WorkerThread;
+import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
 import org.martus.client.swingui.dialogs.UIReportFieldDlg;
 import org.martus.client.swingui.dialogs.UiPrintPreviewDlg;
-import org.martus.client.swingui.dialogs.UiPushbuttonsDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldOrganizerDlg;
 import org.martus.client.swingui.dialogs.UiSortFieldsDlg;
@@ -102,8 +102,8 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 			String cancelButtonLabel = localization.getButtonLabel(EnglishCommonStrings.CANCEL);
 			String[] buttonLabels = {runButtonLabel, createTabularReportButtonLabel, createPageReportButtonLabel, cancelButtonLabel, };
 			String title = mainWindow.getLocalization().getWindowTitle("RunOrCreateReport");
-			UiPushbuttonsDlg runOrCreate = new UiPushbuttonsDlg(mainWindow, title, buttonLabels);
-			runOrCreate.setVisible(true);
+			PushButtonsDlgInterface runOrCreate = mainWindow.createPushButtonsDlg(title, buttonLabels);
+			runOrCreate.showDialog();
 			String pressed = runOrCreate.getPressedButtonLabel();
 			if(pressed == null || pressed.equals(cancelButtonLabel))
 				return;
