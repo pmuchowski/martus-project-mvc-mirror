@@ -610,6 +610,11 @@ public class PureFxMainWindow extends UiMainWindow
 		return new SwingInFxPrintPreviewDlg(this, output);
 	}
 
+	public ReportFieldDlgInterface createSingleSelectionFieldChooserDialog(FieldSpec[] specs, ResultsHandler resultsHandler)
+	{
+		return new SwingInFxSingleSelectionFieldChooserDlg(this, specs, resultsHandler);
+	}
+
 	private static Stage realStage;
 	private FxMainStage mainStage;
 	private PureFxStage activeStage;

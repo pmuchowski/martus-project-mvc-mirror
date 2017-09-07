@@ -612,6 +612,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 		return new UiPrintPreviewDlg(this, output);
 	}
 
+	public ReportFieldDlgInterface createSingleSelectionFieldChooserDialog(FieldSpec[] specs, ResultsHandler resultsHandler)
+	{
+		return new SingleSelectionFieldChooserDialog(this, specs, resultsHandler);
+	}
+
 	private JFrame swingFrame;
 	private UiMainPane mainPane;
 	private FxMainStage mainStage;

@@ -1659,6 +1659,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 	public abstract PreviewDlgInterface createPrintPreviewDlg(ReportOutput output);
 
+	public abstract ReportFieldDlgInterface createSingleSelectionFieldChooserDialog(FieldSpec[] specs, ResultsHandler resultsHandler);
+
 	public void displayHelpMessage()
 	{
 		InputStream helpStream = null;
