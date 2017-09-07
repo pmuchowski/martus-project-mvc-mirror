@@ -78,9 +78,11 @@ import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
+import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
 import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
+import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesRetrieveDlg;
 import org.martus.client.swingui.dialogs.UiSplashDlg;
@@ -126,6 +128,7 @@ import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.database.FileDatabase.MissingAccountMapException;
 import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
+import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.OrchidTransportWrapper;
 import org.martus.common.packet.Packet;
@@ -1641,6 +1644,12 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	}
 
 	public abstract PushButtonsDlgInterface createPushButtonsDlg(String title, String[] buttonLabels);
+
+	public abstract ReportFieldDlgInterface createReportFieldChooserDlg(FieldSpec[] specs);
+
+	public abstract ReportFieldDlgInterface createReportFieldChooserDlg(FieldSpec[] specs, ResultsHandler resultsHandler);
+
+	public abstract ReportFieldDlgInterface createReportFieldOrganizerDlg();
 
 	public void displayHelpMessage()
 	{

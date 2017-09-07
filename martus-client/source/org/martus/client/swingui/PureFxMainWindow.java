@@ -39,8 +39,10 @@ import java.util.concurrent.CountDownLatch;
 import javax.swing.JFrame;
 
 import org.martus.client.core.BulletinGetterThread;
+import org.martus.client.reports.ReportOutput;
 import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
+import org.martus.client.swingui.dialogs.PreviewDlgInterface;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.PureFxBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.PureFxModelessBusyDlg;
@@ -52,8 +54,16 @@ import org.martus.client.swingui.dialogs.PureFxStringInputDlg;
 import org.martus.client.swingui.dialogs.PureFxUtilities;
 import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
+import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
+import org.martus.client.swingui.dialogs.SortFieldsDlgInterface;
+import org.martus.client.swingui.dialogs.SwingInFxPrintPreviewDlg;
+import org.martus.client.swingui.dialogs.SwingInFxReportFieldChooserDlg;
+import org.martus.client.swingui.dialogs.SwingInFxReportFieldOrganizerDlg;
+import org.martus.client.swingui.dialogs.SwingInFxSingleSelectionFieldChooserDlg;
+import org.martus.client.swingui.dialogs.SwingInFxSortFieldsDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
+import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.client.swingui.jfx.contacts.PureFxContactsStage;
 import org.martus.client.swingui.jfx.generic.FancySearchDialogController;
 import org.martus.client.swingui.jfx.generic.FxShellController;
@@ -69,6 +79,8 @@ import org.martus.clientside.FormatFilter;
 import org.martus.clientside.MtfAwareLocalization;
 import org.martus.common.MartusLogger;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.fieldspec.FieldSpec;
+import org.martus.common.fieldspec.MiniFieldSpec;
 import org.martus.common.packet.UniversalId;
 
 import javafx.application.Platform;
@@ -571,6 +583,21 @@ public class PureFxMainWindow extends UiMainWindow
 	public PushButtonsDlgInterface createPushButtonsDlg(String title, String[] buttonLabels)
 	{
 		return new PureFxPushButtonsDlg(title, buttonLabels);
+	}
+
+	public ReportFieldDlgInterface createReportFieldChooserDlg(FieldSpec[] specs)
+	{
+		return new SwingInFxReportFieldChooserDlg(this, specs);
+	}
+
+	public ReportFieldDlgInterface createReportFieldChooserDlg(FieldSpec[] specs, ResultsHandler resultsHandler)
+	{
+		return new SwingInFxReportFieldChooserDlg(this, specs, resultsHandler);
+	}
+
+	public ReportFieldDlgInterface createReportFieldOrganizerDlg()
+	{
+		return new SwingInFxReportFieldOrganizerDlg(this);
 	}
 
 	private static Stage realStage;

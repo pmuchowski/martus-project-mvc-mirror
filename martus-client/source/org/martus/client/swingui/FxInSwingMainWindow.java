@@ -48,12 +48,16 @@ import org.martus.client.swingui.dialogs.FxInSwingBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
+import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
 import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.UiPushbuttonsDlg;
+import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg;
+import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
+import org.martus.client.swingui.dialogs.UiReportFieldOrganizerDlg;
 import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
@@ -79,6 +83,7 @@ import org.martus.clientside.UiFileChooser;
 import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.packet.UniversalId;
 import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.UiOptionPane;
@@ -573,6 +578,21 @@ public class FxInSwingMainWindow extends UiMainWindow
 	public PushButtonsDlgInterface createPushButtonsDlg(String title, String[] buttonLabels)
 	{
 		return new UiPushbuttonsDlg(this, title, buttonLabels);
+	}
+
+	public ReportFieldDlgInterface createReportFieldChooserDlg(FieldSpec[] specs)
+	{
+		return new UiReportFieldChooserDlg(this, specs);
+	}
+
+	public ReportFieldDlgInterface createReportFieldChooserDlg(FieldSpec[] specs, ResultsHandler resultsHandler)
+	{
+		return new UiReportFieldChooserDlg(this, specs, resultsHandler);
+	}
+
+	public ReportFieldDlgInterface createReportFieldOrganizerDlg()
+	{
+		return new UiReportFieldOrganizerDlg(this);
 	}
 
 	private JFrame swingFrame;
