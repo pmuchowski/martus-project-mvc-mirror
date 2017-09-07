@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.Box;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
@@ -85,18 +86,30 @@ public class UiReportFieldOrganizerDlg extends UIReportFieldDlg
 		Component[] buttons = {Box.createHorizontalGlue(), okButton, cancelButton};
 		Utilities.addComponentsRespectingOrientation(bottomButtonBar, buttons);
 
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(new UiWrappedTextPanel(localization.getFieldLabel(dialogTag)), BorderLayout.BEFORE_FIRST_LINE);
-		panel.add(new UiScrollPane(fieldSelector), BorderLayout.CENTER);
-		panel.add(sideButtonBar, BorderLayout.EAST);
-		panel.add(bottomButtonBar, BorderLayout.AFTER_LAST_LINE);
+		mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(new UiWrappedTextPanel(localization.getFieldLabel(dialogTag)), BorderLayout.BEFORE_FIRST_LINE);
+		mainPanel.add(new UiScrollPane(fieldSelector), BorderLayout.CENTER);
+		mainPanel.add(sideButtonBar, BorderLayout.EAST);
+		mainPanel.add(bottomButtonBar, BorderLayout.AFTER_LAST_LINE);
 
-		getContentPane().add(panel);
+		getContentPane().add(mainPanel);
 		pack();
 		Utilities.packAndCenterWindow(this);
 		updateButtons();
 	}
-	
+
+	@Override
+	public void showDialog()
+	{
+		setVisible(true);
+	}
+
+	@Override
+	public JComponent getMainContent()
+	{
+		return mainPanel;
+	}
+
 	class AddButtonHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -227,4 +240,6 @@ public class UiReportFieldOrganizerDlg extends UIReportFieldDlg
 	UiMainWindow mainWindow;
 	UiReportFieldSelectorPanel fieldSelector;
 	FieldSpec[] orderedSpecs;
+
+	private JPanel mainPanel;
 }

@@ -42,6 +42,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -115,7 +116,7 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 		gridBagConstraints = createGridBagConstraints(2, 1, GridBagConstraints.BOTH, 1, 1);
 		mainSelectionsPanel.add(selectedFieldsPanel, gridBagConstraints);
 
-		JPanel mainPanelWithButtonBar = new JPanel(new BorderLayout());
+		mainPanelWithButtonBar = new JPanel(new BorderLayout());
 		mainPanelWithButtonBar.add(mainSelectionsPanel, BorderLayout.CENTER);
 		mainPanelWithButtonBar.add(createButtonBar(localization), BorderLayout.AFTER_LAST_LINE);
 
@@ -236,7 +237,19 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 		FieldChoicesByLabel allFieldsForFormTemplate = fieldChooserSpecBuilder.buildFieldChoicesByLabel(getMainWindow().getStore(), allFieldsForTemplate.asSet(), null, reusableChoicesLists);
 		fieldSelector.rebuildTableWithNewFieldSpecs(allFieldsForFormTemplate.asArray(getMainWindow().getLocalization()));
 	}
-	
+
+	@Override
+	public void showDialog()
+	{
+		setVisible(true);
+	}
+
+	@Override
+	public JComponent getMainContent()
+	{
+		return mainPanelWithButtonBar;
+	}
+
 	class OkButtonHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -403,4 +416,6 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 	protected UiReportFieldSelectorPanel fieldSelector;
 	protected UiReportFieldSelectorPanel selectedFieldsSelector;
 	protected FieldSpec[] selectedSpecs;
+
+	private JPanel mainPanelWithButtonBar;
 }

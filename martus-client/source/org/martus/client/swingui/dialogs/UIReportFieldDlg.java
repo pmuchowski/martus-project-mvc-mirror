@@ -31,11 +31,12 @@ import javax.swing.JDialog;
 
 import org.martus.common.fieldspec.FieldSpec;
 
-abstract public class UIReportFieldDlg extends JDialog
+abstract public class UIReportFieldDlg extends JDialog implements ReportFieldDlgInterface, SwingDialogInterface
 {
-   public UIReportFieldDlg(Frame owner) 
-   {
-        super(owner);
-   }
+	public UIReportFieldDlg(Frame owner)
+	{
+		super(owner);
+	}
+
 	abstract public FieldSpec[] getSelectedSpecs();
 }
