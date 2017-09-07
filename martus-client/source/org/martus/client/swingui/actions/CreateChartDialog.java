@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
@@ -44,6 +45,8 @@ import org.martus.client.search.FieldChooserSpecBuilder;
 import org.martus.client.search.SortFieldChooserSpecBuilder;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.dialogs.CreateChartDialogInterface;
+import org.martus.client.swingui.dialogs.SwingDialogInterface;
 import org.martus.client.swingui.fields.UiPopUpFieldChooserEditor;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.bulletin.Bulletin;
@@ -61,7 +64,7 @@ import org.martus.swing.Utilities;
 
 import com.jhlabs.awt.GridLayoutPlus;
 
-public class CreateChartDialog extends JDialog
+public class CreateChartDialog extends JDialog implements SwingDialogInterface, CreateChartDialogInterface
 {
 	public CreateChartDialog(UiMainWindow mainWindowToUse)
 	{
@@ -70,12 +73,12 @@ public class CreateChartDialog extends JDialog
 		setTitle(getLocalization().getWindowTitle("CreateChart"));
 		setModal(true);
 		setIconImage(Utilities.getMartusIconImage());
-		getContentPane().setLayout(new BorderLayout());
+		mainPanel = new JPanel(new BorderLayout());
 		String disclaimerText = getLocalization().getFieldLabel("ChartPrivateFieldsNotice");
 		String htmlDisclaimerText = "<html><b>" + disclaimerText.replaceAll("\\n", "<br/>");
 		UiLabel disclaimer = new UiLabel(htmlDisclaimerText);
 		disclaimer.setBorder(BorderFactory.createEmptyBorder(3,3,3,3));
-		getContentPane().add(disclaimer, BorderLayout.BEFORE_FIRST_LINE);
+		mainPanel.add(disclaimer, BorderLayout.BEFORE_FIRST_LINE);
 
 		JPanel panel = new JPanel(new GridLayoutPlus(0, 2));
 		Border lineBorder = BorderFactory.createLineBorder(Color.BLACK);
@@ -93,7 +96,7 @@ public class CreateChartDialog extends JDialog
 		subtitleComponent = new UiTextField(40);
 		Component[] subtitleRow = new Component[] {createLabel("ChartSubtitle"), subtitleComponent};
 		Utilities.addComponentsRespectingOrientation(panel, subtitleRow);
-		getContentPane().add(panel, BorderLayout.CENTER);
+		mainPanel.add(panel, BorderLayout.CENTER);
 		
 		ok = new UiButton(getLocalization().getButtonLabel(EnglishCommonStrings.OK));
 		ok.addActionListener(new OkHandler());
@@ -103,9 +106,11 @@ public class CreateChartDialog extends JDialog
 		cancel.addActionListener(new CancelHandler());
 		Box buttonBox = Box.createHorizontalBox();
 		Utilities.addComponentsRespectingOrientation(buttonBox, new Component[] {Box.createHorizontalGlue(), ok, cancel});
-		
-		getContentPane().add(buttonBox, BorderLayout.AFTER_LAST_LINE);
+
+		mainPanel.add(buttonBox, BorderLayout.AFTER_LAST_LINE);
+		getContentPane().add(mainPanel);
 		pack();
+		Utilities.packAndCenterWindow(this);
 	}
 	
 	private UiComboBox createChartTypeComponent()
@@ -131,7 +136,7 @@ public class CreateChartDialog extends JDialog
 		return getLocalization().getFieldLabel("ChartType" + chartType);
 	}
 
-	public boolean getResult()
+	public boolean getResults()
 	{
 		return result;
 	}
@@ -148,7 +153,19 @@ public class CreateChartDialog extends JDialog
 
 		return chooser.getComponent();
 	}
-	
+
+	@Override
+	public JComponent getMainContent()
+	{
+		return mainPanel;
+	}
+
+	@Override
+	public void showDialog()
+	{
+		setVisible(true);
+	}
+
 	class FieldChooserActionHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
@@ -295,4 +312,6 @@ public class CreateChartDialog extends JDialog
 	private UiButton ok;
 	
 	private boolean result;
+
+	private JPanel mainPanel;
 }
