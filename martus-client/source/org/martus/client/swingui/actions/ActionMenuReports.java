@@ -51,10 +51,10 @@ import org.martus.client.search.PageReportFieldChooserSpecBuilder;
 import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.WorkerThread;
+import org.martus.client.swingui.dialogs.PreviewDlgInterface;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
 import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
-import org.martus.client.swingui.dialogs.UiPrintPreviewDlg;
-import org.martus.client.swingui.dialogs.UiSortFieldsDlg;
+import org.martus.client.swingui.dialogs.SortFieldsDlgInterface;
 import org.martus.client.swingui.filefilters.CsvFileFilter;
 import org.martus.clientside.FormatFilter;
 import org.martus.common.EnglishCommonStrings;
@@ -224,9 +224,9 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 		SearchTreeNode searchTree = mainWindow.askUserForSearchCriteria();
 		if(searchTree == null)
 			return;
-		
-		UiSortFieldsDlg sortDlg = new UiSortFieldsDlg(mainWindow, answers.getSpecs());
-		sortDlg.setVisible(true);
+
+		SortFieldsDlgInterface sortDlg = mainWindow.createSortFieldsDlg(answers.getSpecs());
+		sortDlg.showDialog();
 		if(!sortDlg.ok())
 			return;
 		
@@ -255,8 +255,8 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 		printToWriter(result, rf, sortableList, options);
 		result.close();
 
-		UiPrintPreviewDlg printPreview = new UiPrintPreviewDlg(mainWindow, result);
-		printPreview.setVisible(true);
+		PreviewDlgInterface printPreview = mainWindow.createPrintPreviewDlg(result);
+		printPreview.showDialog();
 		if(printPreview.wasCancelButtonPressed())
 			return;
 		boolean sendToDisk = printPreview.wantsPrintToDisk();
