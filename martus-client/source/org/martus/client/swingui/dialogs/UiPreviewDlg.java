@@ -34,6 +34,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.clientside.UiLocalization;
@@ -41,7 +42,7 @@ import org.martus.common.EnglishCommonStrings;
 import org.martus.swing.UiButton;
 import org.martus.swing.Utilities;
 
-public class UiPreviewDlg  extends JDialog implements ActionListener
+public class UiPreviewDlg  extends JDialog implements ActionListener, PreviewDlgInterface, SwingDialogInterface
 {
 	
 	public UiPreviewDlg(UiMainWindow mainWindowToUse)
@@ -69,9 +70,12 @@ public class UiPreviewDlg  extends JDialog implements ActionListener
 		Box buttons = Box.createHorizontalBox();
 		Utilities.addComponentsRespectingOrientation(buttons, new Component[] {Box.createHorizontalGlue(), printToPrinter, printToFile, exportAsCsv, cancel});
 
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(scrollablePreview, BorderLayout.CENTER);
-		getContentPane().add(buttons, BorderLayout.SOUTH);
+		mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(scrollablePreview, BorderLayout.CENTER);
+		mainPanel.add(buttons, BorderLayout.SOUTH);
+
+		getContentPane().add(mainPanel);
+
 		getRootPane().setDefaultButton(printToPrinter);
 		Utilities.packAndCenterWindow(this);
 		setResizable(true);
@@ -91,7 +95,19 @@ public class UiPreviewDlg  extends JDialog implements ActionListener
 	{
 		return pressedCancel;
 	}
-	
+
+	@Override
+	public void showDialog()
+	{
+		setVisible(true);
+	}
+
+	@Override
+	public JComponent getMainContent()
+	{
+		return mainPanel;
+	}
+
 	public void actionPerformed(ActionEvent ae)
 	{
 		if(ae.getSource().equals(printToPrinter))
@@ -120,6 +136,8 @@ public class UiPreviewDlg  extends JDialog implements ActionListener
 	JButton printToFile;
 	JButton exportAsCsv;
 	JButton cancel;
+
+	private JPanel mainPanel;
 
 	boolean printToDisk = false;
 	boolean exportToCsv = false;
