@@ -115,15 +115,35 @@ public class UiReportFieldOrganizerDlg extends UIReportFieldDlg
 		public void actionPerformed(ActionEvent e)
 		{
 			FieldSpec[] allFieldSpecs = getAllFieldSpecs();
-			Vector possibleSpecsToAdd = new Vector(Arrays.asList(allFieldSpecs));
+			Vector<FieldSpec> possibleSpecsToAdd = new Vector<>(Arrays.asList(allFieldSpecs));
 			FieldSpec[] currentSpecs = fieldSelector.getAllItems();
 			if(currentSpecs != null)
 				possibleSpecsToAdd.removeAll(Arrays.asList(currentSpecs));
-			UiReportFieldChooserDlg dlg = new UiReportFieldChooserDlg(mainWindow, (FieldSpec[])possibleSpecsToAdd.toArray(new FieldSpec[0]));
-			dlg.setVisible(true);
-			fieldSelector.addSpecs(dlg.getSelectedSpecs());
-			updateButtons();
+
+			mainWindow.runInUiThreadLater(new ShowFieldChooserHandler(possibleSpecsToAdd));
 		}
+	}
+
+	class ShowFieldChooserHandler implements Runnable
+	{
+		public ShowFieldChooserHandler(Vector<FieldSpec> possibleSpecsToAddToUse)
+		{
+			possibleSpecsToAdd = possibleSpecsToAddToUse.toArray(new FieldSpec[0]);
+		}
+
+		@Override
+		public void run()
+		{
+			ReportFieldDlgInterface dlg = mainWindow.createReportFieldChooserDlg(possibleSpecsToAdd, selectedSpecs ->
+			{
+				fieldSelector.addSpecs(selectedSpecs);
+				updateButtons();
+			});
+
+			dlg.showDialog();
+		}
+
+		private FieldSpec [] possibleSpecsToAdd;
 	}
 
 	class RemoveButtonHandler implements ActionListener
