@@ -27,13 +27,14 @@ package org.martus.client.swingui.dialogs;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Vector;
 
 import javax.swing.Box;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JPanel;
 
 import org.martus.client.search.SortFieldChooserSpecBuilder;
 import org.martus.client.swingui.UiMainWindow;
@@ -50,7 +51,7 @@ import org.martus.swing.UiVBox;
 import org.martus.swing.UiWrappedTextArea;
 import org.martus.swing.Utilities;
 
-public class UiSortFieldsDlg extends JDialog implements ActionListener
+public class UiSortFieldsDlg extends JDialog implements ActionListener, SwingDialogInterface, SortFieldsDlgInterface
 {
 	public UiSortFieldsDlg(UiMainWindow mainWindow, MiniFieldSpec[] specsToAllow)
 	{
@@ -60,8 +61,6 @@ public class UiSortFieldsDlg extends JDialog implements ActionListener
 			sortMiniSpecs = new Vector();
 		
 		setModal(true);
-		Container contentPane = getContentPane();
-		contentPane.setLayout(new BorderLayout());
 		UiLocalization localization = mainWindow.getLocalization();
 		setTitle(localization.getWindowTitle("ReportChooseSortFields"));
 
@@ -69,8 +68,9 @@ public class UiSortFieldsDlg extends JDialog implements ActionListener
 
 		SortFieldChooserSpecBuilder builder = new SortFieldChooserSpecBuilder(localization);
 		PopUpTreeFieldSpec spec = builder.createSpec(mainWindow.getStore(), specsToAllow);
-		
-		contentPane.add(new UiWrappedTextArea(text), BorderLayout.BEFORE_FIRST_LINE);
+
+		mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(new UiWrappedTextArea(text), BorderLayout.BEFORE_FIRST_LINE);
 
 		UiVBox multiSortBox = new UiVBox();
 		
@@ -111,8 +111,8 @@ public class UiSortFieldsDlg extends JDialog implements ActionListener
 		Box mainArea = Box.createVerticalBox();
 		mainArea.add(multiSortBox);
 		mainArea.add(breakChoice);
-		
-		contentPane.add(mainArea, BorderLayout.CENTER);
+
+		mainPanel.add(mainArea, BorderLayout.CENTER);
 		okButton = new UiButton(localization.getButtonLabel(EnglishCommonStrings.OK));
 		okButton.addActionListener(this);
 		UiButton cancelButton = new UiButton(localization.getButtonLabel(EnglishCommonStrings.CANCEL));
@@ -120,9 +120,11 @@ public class UiSortFieldsDlg extends JDialog implements ActionListener
 		Box buttonBar = Box.createHorizontalBox();
 		Component[] buttons = new Component[] {Box.createHorizontalGlue(), okButton, cancelButton};
 		Utilities.addComponentsRespectingOrientation(buttonBar, buttons);
-		contentPane.add(buttonBar, BorderLayout.AFTER_LAST_LINE);
+		mainPanel.add(buttonBar, BorderLayout.AFTER_LAST_LINE);
 		getRootPane().setDefaultButton(okButton);
-		
+
+		getContentPane().add(mainPanel);
+
 		pack();
 		Utilities.packAndCenterWindow(this);
 	}
@@ -152,7 +154,7 @@ public class UiSortFieldsDlg extends JDialog implements ActionListener
 		savedBreakChoice = (ChoiceItem)breakChoice.getSelectedItem();
 	}
 	
-	public MiniFieldSpec[] getSelectedMiniFieldSpecs() throws Exception
+	public MiniFieldSpec[] getSelectedMiniFieldSpecs()
 	{
 		return (MiniFieldSpec[])sortMiniSpecs.toArray(new MiniFieldSpec[0]);
 	}
@@ -181,6 +183,20 @@ public class UiSortFieldsDlg extends JDialog implements ActionListener
 	{
 		return hitOk;
 	}
+
+	@Override
+	public JComponent getMainContent()
+	{
+		return mainPanel;
+	}
+
+	@Override
+	public void showDialog()
+	{
+		setVisible(true);
+	}
+
+	private JPanel mainPanel;
 
 	UiPopUpFieldChooserEditor[] sortChooser;
 	boolean hitOk;
