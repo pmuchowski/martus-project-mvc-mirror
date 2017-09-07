@@ -52,10 +52,8 @@ import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.WorkerThread;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
-import org.martus.client.swingui.dialogs.UIReportFieldDlg;
+import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
 import org.martus.client.swingui.dialogs.UiPrintPreviewDlg;
-import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg;
-import org.martus.client.swingui.dialogs.UiReportFieldOrganizerDlg;
 import org.martus.client.swingui.dialogs.UiSortFieldsDlg;
 import org.martus.client.swingui.filefilters.CsvFileFilter;
 import org.martus.clientside.FormatFilter;
@@ -353,22 +351,22 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 	{
 		while(true)
 		{
-			UIReportFieldDlg dlg;
+			ReportFieldDlgInterface dlg;
 			if(reportType.isPage())
 			{
 				FieldChooserSpecBuilder fieldChooserSpecBuilder = new PageReportFieldChooserSpecBuilder(mainWindow.getLocalization());
 				FieldSpec[] availableFieldSpecs = fieldChooserSpecBuilder.createFieldSpecArray(mainWindow.getStore());
-				dlg = new UiReportFieldChooserDlg(mainWindow, availableFieldSpecs);
+				dlg = mainWindow.createReportFieldChooserDlg(availableFieldSpecs);
 			}
 			else if(reportType.isTabular())
 			{
-				dlg = new UiReportFieldOrganizerDlg(mainWindow);
+				dlg = mainWindow.createReportFieldOrganizerDlg();
 			}
 			else
 			{
 				return null;
 			}
-			dlg.setVisible(true);
+			dlg.showDialog();
 			FieldSpec[] selectedSpecs = dlg.getSelectedSpecs();
 			if(selectedSpecs == null)
 				return null;
