@@ -42,6 +42,15 @@ public class SingleSelectionFieldChooserDialog extends UiReportFieldChooserDlg
 		getTableModel().addTableModelListener(new TableModelHandler());
 	}
 
+	public SingleSelectionFieldChooserDialog(UiMainWindow mainWindowToUse, FieldSpec[] specsToUse, ResultsHandler resultsHandlerToUse)
+	{
+		super(mainWindowToUse, specsToUse, resultsHandlerToUse);
+
+		enableSingleSelection();
+
+		getTableModel().addTableModelListener(new TableModelHandler());
+	}
+
 	protected SpecTableModel getTableModel()
 	{
 		return selectedFieldsSelector.model;
