@@ -67,6 +67,12 @@ import javafx.collections.ObservableSet;
 
 public class UiReportFieldChooserDlg extends UIReportFieldDlg
 {
+	public UiReportFieldChooserDlg(UiMainWindow mainWindowToUse, FieldSpec[] specsToUse, ResultsHandler resultsHandlerToUse)
+	{
+		this(mainWindowToUse, specsToUse);
+		resultsHandler = resultsHandlerToUse;
+	}
+
 	public UiReportFieldChooserDlg(UiMainWindow mainWindowToUse, FieldSpec[] specsToUse)
 	{
 		super(mainWindowToUse.getSwingFrame());
@@ -250,11 +256,19 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 		return mainPanelWithButtonBar;
 	}
 
+	public interface ResultsHandler
+	{
+		void setResults(FieldSpec[] selectedSpecs);
+	}
+
 	class OkButtonHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			selectedSpecs = selectedFieldsSelector.getAllItems();
+			if (resultsHandler != null)
+				resultsHandler.setResults(selectedSpecs);
+
 			dispose();
 		}
 	}
@@ -418,4 +432,5 @@ public class UiReportFieldChooserDlg extends UIReportFieldDlg
 	protected FieldSpec[] selectedSpecs;
 
 	private JPanel mainPanelWithButtonBar;
+	private ResultsHandler resultsHandler;
 }
