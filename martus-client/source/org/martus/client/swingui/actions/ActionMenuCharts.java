@@ -82,6 +82,7 @@ import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiFontEncodingHelper;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.dialogs.CreateChartDialogInterface;
+import org.martus.client.swingui.dialogs.PreviewDlgInterface;
 import org.martus.client.swingui.dialogs.UiChartPreviewDlg;
 import org.martus.clientside.FormatFilter;
 import org.martus.common.MartusLogger;
@@ -150,7 +151,7 @@ public class ActionMenuCharts extends UiMenuAction implements ActionDoer
 	
 	private ChartAnswers createAndSave()
 	{
-		CreateChartDialogInterface dialog = new CreateChartDialog(getMainWindow());
+		CreateChartDialogInterface dialog = getMainWindow().createChartCreateDialog();
 		dialog.showDialog();
 
 		if(!dialog.getResults())
@@ -185,9 +186,9 @@ public class ActionMenuCharts extends UiMenuAction implements ActionDoer
 			JFreeChart chart = createChart(answers, fieldToCount, counts);
 			
 			chart.removeSubtitle(new DateTitle());
-			
-			UiChartPreviewDlg preview = new UiChartPreviewDlg(getMainWindow(), chart);
-			preview.setVisible(true);		
+
+			PreviewDlgInterface preview = getMainWindow().createChartPreviewDlg(chart);
+			preview.showDialog();
 			if(preview.wasCancelButtonPressed())
 				return;			
 			boolean sendToDisk = preview.wantsPrintToDisk();

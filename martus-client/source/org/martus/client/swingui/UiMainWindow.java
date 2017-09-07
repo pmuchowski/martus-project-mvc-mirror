@@ -57,6 +57,7 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
 import org.bouncycastle.crypto.engines.RSAEngine;
+import org.jfree.chart.JFreeChart;
 import org.json.JSONObject;
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
@@ -75,6 +76,7 @@ import org.martus.client.reports.ReportOutput;
 import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.bulletincomponent.UiBulletinPreviewPane;
 import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
+import org.martus.client.swingui.dialogs.CreateChartDialogInterface;
 import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PreviewDlgInterface;
@@ -1660,6 +1662,10 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	public abstract PreviewDlgInterface createPrintPreviewDlg(ReportOutput output);
 
 	public abstract ReportFieldDlgInterface createSingleSelectionFieldChooserDialog(FieldSpec[] specs, ResultsHandler resultsHandler);
+
+	public abstract CreateChartDialogInterface createChartCreateDialog();
+
+	public abstract PreviewDlgInterface createChartPreviewDlg(JFreeChart chart);
 
 	public void displayHelpMessage()
 	{

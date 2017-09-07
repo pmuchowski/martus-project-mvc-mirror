@@ -38,8 +38,10 @@ import java.util.concurrent.CountDownLatch;
 
 import javax.swing.JFrame;
 
+import org.jfree.chart.JFreeChart;
 import org.martus.client.core.BulletinGetterThread;
 import org.martus.client.reports.ReportOutput;
+import org.martus.client.swingui.dialogs.CreateChartDialogInterface;
 import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
 import org.martus.client.swingui.dialogs.PreviewDlgInterface;
@@ -56,6 +58,8 @@ import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
 import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
 import org.martus.client.swingui.dialogs.SortFieldsDlgInterface;
+import org.martus.client.swingui.dialogs.SwingInFxChartPreviewDlg;
+import org.martus.client.swingui.dialogs.SwingInFxCreateChartDialog;
 import org.martus.client.swingui.dialogs.SwingInFxPrintPreviewDlg;
 import org.martus.client.swingui.dialogs.SwingInFxReportFieldChooserDlg;
 import org.martus.client.swingui.dialogs.SwingInFxReportFieldOrganizerDlg;
@@ -613,6 +617,16 @@ public class PureFxMainWindow extends UiMainWindow
 	public ReportFieldDlgInterface createSingleSelectionFieldChooserDialog(FieldSpec[] specs, ResultsHandler resultsHandler)
 	{
 		return new SwingInFxSingleSelectionFieldChooserDlg(this, specs, resultsHandler);
+	}
+
+	public CreateChartDialogInterface createChartCreateDialog()
+	{
+		return new SwingInFxCreateChartDialog(this);
+	}
+
+	public PreviewDlgInterface createChartPreviewDlg(JFreeChart chart)
+	{
+		return new SwingInFxChartPreviewDlg(this, chart);
 	}
 
 	private static Stage realStage;
