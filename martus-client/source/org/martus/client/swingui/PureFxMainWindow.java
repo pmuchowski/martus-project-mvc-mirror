@@ -600,6 +600,16 @@ public class PureFxMainWindow extends UiMainWindow
 		return new SwingInFxReportFieldOrganizerDlg(this);
 	}
 
+	public SortFieldsDlgInterface createSortFieldsDlg(MiniFieldSpec[] specsToAllow)
+	{
+		return new SwingInFxSortFieldsDlg(this, specsToAllow);
+	}
+
+	public PreviewDlgInterface createPrintPreviewDlg(ReportOutput output)
+	{
+		return new SwingInFxPrintPreviewDlg(this, output);
+	}
+
 	private static Stage realStage;
 	private FxMainStage mainStage;
 	private PureFxStage activeStage;

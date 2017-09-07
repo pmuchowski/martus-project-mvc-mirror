@@ -43,22 +43,28 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.martus.client.core.BulletinGetterThread;
+import org.martus.client.reports.ReportOutput;
 import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.FxInSwingBulletinModifyDialog;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
+import org.martus.client.swingui.dialogs.PreviewDlgInterface;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
 import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
+import org.martus.client.swingui.dialogs.SingleSelectionFieldChooserDialog;
+import org.martus.client.swingui.dialogs.SortFieldsDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiPrintPreviewDlg;
 import org.martus.client.swingui.dialogs.UiProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.UiPushbuttonsDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.client.swingui.dialogs.UiReportFieldOrganizerDlg;
 import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
+import org.martus.client.swingui.dialogs.UiSortFieldsDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
 import org.martus.client.swingui.jfx.contacts.FxInSwingContactsStage;
@@ -84,6 +90,7 @@ import org.martus.clientside.UiUtilities;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.fieldspec.FieldSpec;
+import org.martus.common.fieldspec.MiniFieldSpec;
 import org.martus.common.packet.UniversalId;
 import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.UiOptionPane;
@@ -593,6 +600,16 @@ public class FxInSwingMainWindow extends UiMainWindow
 	public ReportFieldDlgInterface createReportFieldOrganizerDlg()
 	{
 		return new UiReportFieldOrganizerDlg(this);
+	}
+
+	public SortFieldsDlgInterface createSortFieldsDlg(MiniFieldSpec[] specsToAllow)
+	{
+		return new UiSortFieldsDlg(this, specsToAllow);
+	}
+
+	public PreviewDlgInterface createPrintPreviewDlg(ReportOutput output)
+	{
+		return new UiPrintPreviewDlg(this, output);
 	}
 
 	private JFrame swingFrame;
