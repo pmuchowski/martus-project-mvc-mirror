@@ -63,6 +63,7 @@ import org.martus.client.swingui.dialogs.SwingInFxCreateChartDialog;
 import org.martus.client.swingui.dialogs.SwingInFxPrintPreviewDlg;
 import org.martus.client.swingui.dialogs.SwingInFxReportFieldChooserDlg;
 import org.martus.client.swingui.dialogs.SwingInFxReportFieldOrganizerDlg;
+import org.martus.client.swingui.dialogs.SwingInFxSearchHelpDialog;
 import org.martus.client.swingui.dialogs.SwingInFxSingleSelectionFieldChooserDlg;
 import org.martus.client.swingui.dialogs.SwingInFxSortFieldsDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
@@ -633,6 +634,15 @@ public class PureFxMainWindow extends UiMainWindow
 	public PreviewDlgInterface createChartPreviewDlg(JFreeChart chart)
 	{
 		return new SwingInFxChartPreviewDlg(this, chart);
+	}
+
+	public void showSearchHelpMessage(String title, String message, String closeButton)
+	{
+		Platform.runLater(() ->
+		{
+			SwingInFxSearchHelpDialog dialog = new SwingInFxSearchHelpDialog(this, title, message, closeButton);
+			dialog.showAndWait();
+		});
 	}
 
 	private static Stage realStage;

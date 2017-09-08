@@ -1671,6 +1671,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 	public abstract PreviewDlgInterface createChartPreviewDlg(JFreeChart chart);
 
+	public abstract void showSearchHelpMessage(String title, String message, String closeButton);
+
 	public void displayHelpMessage()
 	{
 		InputStream helpStream = null;
