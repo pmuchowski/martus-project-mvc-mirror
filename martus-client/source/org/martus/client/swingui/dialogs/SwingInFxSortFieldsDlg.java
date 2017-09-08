@@ -61,18 +61,6 @@ public class SwingInFxSortFieldsDlg extends SwingInFxDialog implements SortField
 	}
 
 	@Override
-	public int getDialogWidth()
-	{
-		return 900;
-	}
-
-	@Override
-	public int getDialogHeight()
-	{
-		return 250;
-	}
-
-	@Override
 	public boolean ok()
 	{
 		return uiSortFieldsDlg.ok();

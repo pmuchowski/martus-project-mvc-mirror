@@ -24,6 +24,8 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.dialogs;
 
+import java.awt.Dimension;
+
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 
@@ -36,6 +38,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Screen;
 
 public abstract class SwingInFxDialog extends Dialog
 {
@@ -49,7 +52,6 @@ public abstract class SwingInFxDialog extends Dialog
 		swingNode = new SwingNode();
 		Pane mainPane = new StackPane();
 		mainPane.getChildren().add(swingNode);
-		mainPane.setPrefSize(getDialogWidth(), getDialogHeight());
 
 		setTitle("");
 		setGraphic(null);
@@ -59,7 +61,29 @@ public abstract class SwingInFxDialog extends Dialog
 
 	public void createAndSetSwingContent()
 	{
-		SwingUtilities.invokeLater(() -> swingNode.setContent(createSwingContent()));
+		SwingUtilities.invokeLater(() ->
+		{
+			JComponent component = createSwingContent();
+			Dimension size = component.getPreferredSize();
+
+			Platform.runLater(() -> setSizeAndCenterDialog(size));
+
+			swingNode.setContent(component);
+		});
+	}
+
+	private void setSizeAndCenterDialog(Dimension size)
+	{
+		double maxHeight = Screen.getPrimary().getVisualBounds().getHeight();
+		double maxWidth = Screen.getPrimary().getVisualBounds().getHeight();
+
+		double prefHeight = size.getWidth() + WIDTH_OFFSET;
+		double prefWidth = size.getHeight() + HEIGHT_OFFSET;
+
+		setWidth(Double.min(maxHeight, prefHeight));
+		setHeight(Double.min(maxWidth, prefWidth));
+
+		getDialogPane().getContent().getScene().getWindow().centerOnScreen();
 	}
 
 	public void closeDialog()
@@ -73,8 +97,8 @@ public abstract class SwingInFxDialog extends Dialog
 
 	public abstract JComponent createSwingContent();
 
-	public abstract int getDialogWidth();
-	public abstract int getDialogHeight();
-
 	private final SwingNode swingNode;
+
+	private final static double WIDTH_OFFSET = 40;
+	private final static double HEIGHT_OFFSET = 80;
 }
