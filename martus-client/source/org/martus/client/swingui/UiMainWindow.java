@@ -353,6 +353,10 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	abstract protected void obscureMainWindow();
 	abstract protected void hideMainWindow();
 
+	protected UiInactivityDetector getInactivityDetector()
+	{
+		return inactivityDetector;
+	}
 
 	public void displayIncorrectVersionJava(String highVersionJava, String expectedVersionJava)
 	{
@@ -2800,7 +2804,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	private BackgroundTimerTask backgroundUploadTimerTask;
 	private TimeoutTimerTask timeoutTimerTask;
 	String uploadResult;
-	UiInactivityDetector inactivityDetector;
+	private UiInactivityDetector inactivityDetector;
 
 	private TopLevelWindowInterface currentActiveFrame;
 	private JDialog currentActiveDialog;

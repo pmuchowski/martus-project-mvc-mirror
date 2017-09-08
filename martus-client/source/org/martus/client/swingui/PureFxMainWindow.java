@@ -523,6 +523,12 @@ public class PureFxMainWindow extends UiMainWindow
 	@Override
 	public void setCurrentActiveStage(PureFxStage newActiveStage)
 	{
+		if (activeStage != null && !activeStage.equals(mainStage))
+			getInactivityDetector().unregister(activeStage.getScene());
+
+		if (newActiveStage != null)
+			getInactivityDetector().register(newActiveStage.getScene());
+
 		activeStage = newActiveStage;
 	}
 
