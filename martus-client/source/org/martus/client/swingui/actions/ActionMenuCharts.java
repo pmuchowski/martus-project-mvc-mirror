@@ -81,6 +81,8 @@ import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiFontEncodingHelper;
 import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.dialogs.CreateChartDialogInterface;
+import org.martus.client.swingui.dialogs.PreviewDlgInterface;
 import org.martus.client.swingui.dialogs.UiChartPreviewDlg;
 import org.martus.clientside.FormatFilter;
 import org.martus.common.MartusLogger;
@@ -91,7 +93,6 @@ import org.martus.common.fieldspec.MiniFieldSpec;
 import org.martus.common.packet.UniversalId;
 import org.martus.swing.FontHandler;
 import org.martus.swing.PrintUtilities;
-import org.martus.swing.Utilities;
 import org.martus.util.TokenReplacement;
 import org.martus.util.TokenReplacement.TokenInvalidException;
 
@@ -150,10 +151,10 @@ public class ActionMenuCharts extends UiMenuAction implements ActionDoer
 	
 	private ChartAnswers createAndSave()
 	{
-		CreateChartDialog dialog = new CreateChartDialog(getMainWindow());
-		Utilities.packAndCenterWindow(dialog);
-		dialog.setVisible(true);
-		if(!dialog.getResult())
+		CreateChartDialogInterface dialog = getMainWindow().createChartCreateDialog();
+		dialog.showDialog();
+
+		if(!dialog.getResults())
 			return null;
 		
 		return dialog.getAnswers();
@@ -185,9 +186,9 @@ public class ActionMenuCharts extends UiMenuAction implements ActionDoer
 			JFreeChart chart = createChart(answers, fieldToCount, counts);
 			
 			chart.removeSubtitle(new DateTitle());
-			
-			UiChartPreviewDlg preview = new UiChartPreviewDlg(getMainWindow(), chart);
-			preview.setVisible(true);		
+
+			PreviewDlgInterface preview = getMainWindow().createChartPreviewDlg(chart);
+			preview.showDialog();
 			if(preview.wasCancelButtonPressed())
 				return;			
 			boolean sendToDisk = preview.wantsPrintToDisk();

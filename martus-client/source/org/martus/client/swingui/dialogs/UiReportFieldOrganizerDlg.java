@@ -33,6 +33,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import javax.swing.Box;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.ListSelectionModel;
 
@@ -85,32 +86,64 @@ public class UiReportFieldOrganizerDlg extends UIReportFieldDlg
 		Component[] buttons = {Box.createHorizontalGlue(), okButton, cancelButton};
 		Utilities.addComponentsRespectingOrientation(bottomButtonBar, buttons);
 
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(new UiWrappedTextPanel(localization.getFieldLabel(dialogTag)), BorderLayout.BEFORE_FIRST_LINE);
-		panel.add(new UiScrollPane(fieldSelector), BorderLayout.CENTER);
-		panel.add(sideButtonBar, BorderLayout.EAST);
-		panel.add(bottomButtonBar, BorderLayout.AFTER_LAST_LINE);
+		mainPanel = new JPanel(new BorderLayout());
+		mainPanel.add(new UiWrappedTextPanel(localization.getFieldLabel(dialogTag)), BorderLayout.BEFORE_FIRST_LINE);
+		mainPanel.add(new UiScrollPane(fieldSelector), BorderLayout.CENTER);
+		mainPanel.add(sideButtonBar, BorderLayout.EAST);
+		mainPanel.add(bottomButtonBar, BorderLayout.AFTER_LAST_LINE);
 
-		getContentPane().add(panel);
+		getContentPane().add(mainPanel);
 		pack();
 		Utilities.packAndCenterWindow(this);
 		updateButtons();
 	}
-	
+
+	@Override
+	public void showDialog()
+	{
+		setVisible(true);
+	}
+
+	@Override
+	public JComponent getMainContent()
+	{
+		return mainPanel;
+	}
+
 	class AddButtonHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			FieldSpec[] allFieldSpecs = getAllFieldSpecs();
-			Vector possibleSpecsToAdd = new Vector(Arrays.asList(allFieldSpecs));
+			Vector<FieldSpec> possibleSpecsToAdd = new Vector<>(Arrays.asList(allFieldSpecs));
 			FieldSpec[] currentSpecs = fieldSelector.getAllItems();
 			if(currentSpecs != null)
 				possibleSpecsToAdd.removeAll(Arrays.asList(currentSpecs));
-			UiReportFieldChooserDlg dlg = new UiReportFieldChooserDlg(mainWindow, (FieldSpec[])possibleSpecsToAdd.toArray(new FieldSpec[0]));
-			dlg.setVisible(true);
-			fieldSelector.addSpecs(dlg.getSelectedSpecs());
-			updateButtons();
+
+			mainWindow.runInUiThreadLater(new ShowFieldChooserHandler(possibleSpecsToAdd));
 		}
+	}
+
+	class ShowFieldChooserHandler implements Runnable
+	{
+		public ShowFieldChooserHandler(Vector<FieldSpec> possibleSpecsToAddToUse)
+		{
+			possibleSpecsToAdd = possibleSpecsToAddToUse.toArray(new FieldSpec[0]);
+		}
+
+		@Override
+		public void run()
+		{
+			ReportFieldDlgInterface dlg = mainWindow.createReportFieldChooserDlg(possibleSpecsToAdd, selectedSpecs ->
+			{
+				fieldSelector.addSpecs(selectedSpecs);
+				updateButtons();
+			});
+
+			dlg.showDialog();
+		}
+
+		private FieldSpec [] possibleSpecsToAdd;
 	}
 
 	class RemoveButtonHandler implements ActionListener
@@ -227,4 +260,6 @@ public class UiReportFieldOrganizerDlg extends UIReportFieldDlg
 	UiMainWindow mainWindow;
 	UiReportFieldSelectorPanel fieldSelector;
 	FieldSpec[] orderedSpecs;
+
+	private JPanel mainPanel;
 }

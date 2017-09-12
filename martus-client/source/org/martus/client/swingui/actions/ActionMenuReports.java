@@ -51,12 +51,10 @@ import org.martus.client.search.PageReportFieldChooserSpecBuilder;
 import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.WorkerThread;
-import org.martus.client.swingui.dialogs.UIReportFieldDlg;
-import org.martus.client.swingui.dialogs.UiPrintPreviewDlg;
-import org.martus.client.swingui.dialogs.UiPushbuttonsDlg;
-import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg;
-import org.martus.client.swingui.dialogs.UiReportFieldOrganizerDlg;
-import org.martus.client.swingui.dialogs.UiSortFieldsDlg;
+import org.martus.client.swingui.dialogs.PreviewDlgInterface;
+import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
+import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
+import org.martus.client.swingui.dialogs.SortFieldsDlgInterface;
 import org.martus.client.swingui.filefilters.CsvFileFilter;
 import org.martus.clientside.FormatFilter;
 import org.martus.common.EnglishCommonStrings;
@@ -102,8 +100,8 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 			String cancelButtonLabel = localization.getButtonLabel(EnglishCommonStrings.CANCEL);
 			String[] buttonLabels = {runButtonLabel, createTabularReportButtonLabel, createPageReportButtonLabel, cancelButtonLabel, };
 			String title = mainWindow.getLocalization().getWindowTitle("RunOrCreateReport");
-			UiPushbuttonsDlg runOrCreate = new UiPushbuttonsDlg(mainWindow, title, buttonLabels);
-			runOrCreate.setVisible(true);
+			PushButtonsDlgInterface runOrCreate = mainWindow.createPushButtonsDlg(title, buttonLabels);
+			runOrCreate.showDialog();
 			String pressed = runOrCreate.getPressedButtonLabel();
 			if(pressed == null || pressed.equals(cancelButtonLabel))
 				return;
@@ -226,9 +224,9 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 		SearchTreeNode searchTree = mainWindow.askUserForSearchCriteria();
 		if(searchTree == null)
 			return;
-		
-		UiSortFieldsDlg sortDlg = new UiSortFieldsDlg(mainWindow, answers.getSpecs());
-		sortDlg.setVisible(true);
+
+		SortFieldsDlgInterface sortDlg = mainWindow.createSortFieldsDlg(answers.getSpecs());
+		sortDlg.showDialog();
 		if(!sortDlg.ok())
 			return;
 		
@@ -257,8 +255,8 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 		printToWriter(result, rf, sortableList, options);
 		result.close();
 
-		UiPrintPreviewDlg printPreview = new UiPrintPreviewDlg(mainWindow, result);
-		printPreview.setVisible(true);
+		PreviewDlgInterface printPreview = mainWindow.createPrintPreviewDlg(result);
+		printPreview.showDialog();
 		if(printPreview.wasCancelButtonPressed())
 			return;
 		boolean sendToDisk = printPreview.wantsPrintToDisk();
@@ -353,22 +351,22 @@ public class ActionMenuReports extends ActionPrint implements ActionDoer
 	{
 		while(true)
 		{
-			UIReportFieldDlg dlg;
+			ReportFieldDlgInterface dlg;
 			if(reportType.isPage())
 			{
 				FieldChooserSpecBuilder fieldChooserSpecBuilder = new PageReportFieldChooserSpecBuilder(mainWindow.getLocalization());
 				FieldSpec[] availableFieldSpecs = fieldChooserSpecBuilder.createFieldSpecArray(mainWindow.getStore());
-				dlg = new UiReportFieldChooserDlg(mainWindow, availableFieldSpecs);
+				dlg = mainWindow.createReportFieldChooserDlg(availableFieldSpecs);
 			}
 			else if(reportType.isTabular())
 			{
-				dlg = new UiReportFieldOrganizerDlg(mainWindow);
+				dlg = mainWindow.createReportFieldOrganizerDlg();
 			}
 			else
 			{
 				return null;
 			}
-			dlg.setVisible(true);
+			dlg.showDialog();
 			FieldSpec[] selectedSpecs = dlg.getSelectedSpecs();
 			if(selectedSpecs == null)
 				return null;

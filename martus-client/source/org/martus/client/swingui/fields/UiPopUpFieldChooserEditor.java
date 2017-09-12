@@ -47,7 +47,8 @@ import org.martus.client.search.FieldChooserSpecBuilder;
 import org.martus.client.search.SearchFieldChooserSpecBuilder;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.client.swingui.dialogs.SingleSelectionFieldChooserDialog;
+import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
+import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.common.fieldspec.FieldSpec;
 import org.martus.common.fieldspec.MiniFieldSpec;
 import org.martus.common.fieldspec.PopUpTreeFieldSpec;
@@ -147,34 +148,35 @@ public class UiPopUpFieldChooserEditor extends UiField implements ActionListener
 
 	private void doPopUp()
 	{
-		Container topLevel = panel.getTopLevelAncestor();
-		Point locationOnScreen = panel.getLocationOnScreen();
-		String initialCode = getText();
-		SearchableFieldChoiceItem selectedNode = askUserForField(topLevel, locationOnScreen, spec, initialCode, mainWindow.getLocalization());
-		if(selectedNode == null)
-			return;
-		
-		selectedItem = selectedNode;
-		label.setText(selectedNode.toString());
-		notifyListeners();
-	}
-
-	private SearchableFieldChoiceItem askUserForField(Container topLevel, Point location, PopUpTreeFieldSpec treeSpec, String initialCode, MartusLocalization localization)
-	{
 		FieldChooserSpecBuilder fieldChooserSpecBuilder = new SearchFieldChooserSpecBuilder(mainWindow.getLocalization());
 		FieldSpec[] availableFieldSpecs = fieldChooserSpecBuilder.createFieldSpecArray(mainWindow.getStore());
-		SingleSelectionFieldChooserDialog uiReportDialog = new SingleSelectionFieldChooserDialog(mainWindow, availableFieldSpecs);
 
-		uiReportDialog.setVisible(true);
-		FieldSpec[] selectedSpecs = uiReportDialog.getSelectedSpecs();
-		if (selectedSpecs == null)
-			return null;
+		mainWindow.runInUiThreadLater(() ->
+		{
+			ReportFieldDlgInterface uiReportDialog = mainWindow.createSingleSelectionFieldChooserDialog(availableFieldSpecs, new SpecsResultsHandler());
+			uiReportDialog.showDialog();
+		});
+	}
 
-		if (selectedSpecs.length == 0)
-			return null;
-		
-		FieldSpec fieldSpec = selectedSpecs[0];
-		return new SearchableFieldChoiceItem(fieldSpec);
+	class SpecsResultsHandler implements ResultsHandler
+	{
+		@Override
+		public void setResults(FieldSpec[] selectedSpecs)
+		{
+			if (selectedSpecs == null)
+				return;
+
+			if (selectedSpecs.length == 0)
+				return;
+
+			FieldSpec fieldSpec = selectedSpecs[0];
+
+			SearchableFieldChoiceItem selectedNode = new SearchableFieldChoiceItem(fieldSpec);
+
+			selectedItem = selectedNode;
+			label.setText(selectedNode.toString());
+			notifyListeners();
+		}
 	}
 
 	protected FieldTreeDialog createFieldChooserDialog(Container topLevel, Point locationOnScreen, PopUpTreeFieldSpec treeSpec, MartusLocalization localization)

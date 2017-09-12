@@ -57,6 +57,7 @@ import javax.swing.JFrame;
 import javax.swing.JSplitPane;
 
 import org.bouncycastle.crypto.engines.RSAEngine;
+import org.jfree.chart.JFreeChart;
 import org.json.JSONObject;
 import org.martus.client.bulletinstore.BulletinFolder;
 import org.martus.client.bulletinstore.ClientBulletinStore;
@@ -71,15 +72,22 @@ import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.templates.FormTemplateManager.UnableToLoadCurrentTemplateException;
 import org.martus.client.network.BackgroundUploader;
 import org.martus.client.network.RetrieveCommand;
+import org.martus.client.reports.ReportOutput;
 import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.bulletincomponent.UiBulletinPreviewPane;
 import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
+import org.martus.client.swingui.dialogs.CreateChartDialogInterface;
 import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.ModelessBusyDlg;
+import org.martus.client.swingui.dialogs.PreviewDlgInterface;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
+import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
+import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
+import org.martus.client.swingui.dialogs.SortFieldsDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
 import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
+import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesRetrieveDlg;
 import org.martus.client.swingui.dialogs.UiSplashDlg;
@@ -125,6 +133,8 @@ import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.database.FileDatabase.MissingAccountMapException;
 import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
+import org.martus.common.fieldspec.FieldSpec;
+import org.martus.common.fieldspec.MiniFieldSpec;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.OrchidTransportWrapper;
 import org.martus.common.packet.Packet;
@@ -1638,6 +1648,24 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 		notifyDlg(title, contents, buttons);
 	}
+
+	public abstract PushButtonsDlgInterface createPushButtonsDlg(String title, String[] buttonLabels);
+
+	public abstract ReportFieldDlgInterface createReportFieldChooserDlg(FieldSpec[] specs);
+
+	public abstract ReportFieldDlgInterface createReportFieldChooserDlg(FieldSpec[] specs, ResultsHandler resultsHandler);
+
+	public abstract ReportFieldDlgInterface createReportFieldOrganizerDlg();
+
+	public abstract SortFieldsDlgInterface createSortFieldsDlg(MiniFieldSpec[] specsToAllow);
+
+	public abstract PreviewDlgInterface createPrintPreviewDlg(ReportOutput output);
+
+	public abstract ReportFieldDlgInterface createSingleSelectionFieldChooserDialog(FieldSpec[] specs, ResultsHandler resultsHandler);
+
+	public abstract CreateChartDialogInterface createChartCreateDialog();
+
+	public abstract PreviewDlgInterface createChartPreviewDlg(JFreeChart chart);
 
 	public void displayHelpMessage()
 	{

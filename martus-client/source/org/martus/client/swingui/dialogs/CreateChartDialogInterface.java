@@ -1,8 +1,7 @@
 /*
 
-The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2006-2007, Beneficent
-Technology, Inc. (The Benetech Initiative).
+Martus(TM) is a trademark of Beneficent Technology, Inc.
+This software is (c) Copyright 2001-2017, Beneficent Technology, Inc.
 
 Martus is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -25,18 +24,13 @@ Boston, MA 02111-1307, USA.
 */
 package org.martus.client.swingui.dialogs;
 
-import java.awt.Frame;
+import org.martus.client.reports.ChartAnswers;
 
-import javax.swing.JDialog;
-
-import org.martus.common.fieldspec.FieldSpec;
-
-abstract public class UIReportFieldDlg extends JDialog implements ReportFieldDlgInterface, SwingDialogInterface
+public interface CreateChartDialogInterface
 {
-	public UIReportFieldDlg(Frame owner)
-	{
-		super(owner);
-	}
+	boolean getResults();
 
-	abstract public FieldSpec[] getSelectedSpecs();
+	ChartAnswers getAnswers();
+
+	void showDialog();
 }
