@@ -164,6 +164,11 @@ abstract public class PureFxStage extends VirtualStage
 			getActualStage().initOwner(newParentStage.getActualStage());
 	}
 
+	public PureFxStage getParentStage()
+	{
+		return parentStage;
+	}
+
 	private Stage stage;
 	private PureFxStage parentStage;
 }

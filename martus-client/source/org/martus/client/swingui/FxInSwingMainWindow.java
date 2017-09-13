@@ -651,6 +651,38 @@ public class FxInSwingMainWindow extends UiMainWindow
 		return new UiSigninDlg(this, owner, mode, username, password);
 	}
 
+	protected void hideActiveWindowContent()
+	{
+		JFrame frame = getCurrentActiveFrame().getSwingFrame();
+		if(frame != null)
+		{
+			frame.setGlassPane(new WindowObscurer());
+			frame.getGlassPane().setVisible(true);
+		}
+
+		JDialog dialog = getCurrentActiveDialog();
+		if(dialog != null)
+		{
+			dialog.setGlassPane(new WindowObscurer());
+			dialog.getGlassPane().setVisible(true);
+		}
+	}
+
+	protected void showActiveWindowContent()
+	{
+		JFrame frame = getCurrentActiveFrame().getSwingFrame();
+		if(frame != null)
+		{
+			frame.getGlassPane().setVisible(false);
+		}
+
+		JDialog dialog = getCurrentActiveDialog();
+		if(dialog != null)
+		{
+			dialog.getGlassPane().setVisible(false);
+		}
+	}
+
 	private JFrame swingFrame;
 	private UiMainPane mainPane;
 	private FxMainStage mainStage;
