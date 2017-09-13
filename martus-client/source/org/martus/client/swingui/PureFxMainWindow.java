@@ -667,6 +667,27 @@ public class PureFxMainWindow extends UiMainWindow
 		return signinController;
 	}
 
+	protected void hideActiveWindowContent()
+	{
+		setActiveWindowContentVisible(false);
+	}
+
+	protected void showActiveWindowContent()
+	{
+		setActiveWindowContentVisible(true);
+	}
+
+	private void setActiveWindowContentVisible(boolean visible)
+	{
+		PureFxStage stage = getCurrentActiveStage();
+
+		while (stage != null)
+		{
+			stage.getActualStage().getScene().getRoot().setVisible(visible);
+			stage = stage.getParentStage();
+		}
+	}
+
 	private static Stage realStage;
 	private FxMainStage mainStage;
 	private PureFxStage activeStage;

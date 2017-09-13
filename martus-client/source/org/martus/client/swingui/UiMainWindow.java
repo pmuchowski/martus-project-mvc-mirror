@@ -2411,38 +2411,26 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			@Override
 			public void run()
 			{
-				JFrame frame = getCurrentActiveFrame().getSwingFrame();
-				if(frame != null)
-				{
-					frame.setGlassPane(new WindowObscurer());
-					frame.getGlassPane().setVisible(true);
-				}
-				JDialog dialog = getCurrentActiveDialog();
-				if(dialog != null)
-				{
-					dialog.setGlassPane(new WindowObscurer());
-					dialog.getGlassPane().setVisible(true);
-				}
+				hideActiveWindowContent();
+
 				if(!reSignIn("timedout1"))
 				{
 					System.out.println("Cancelled from timeout signin");
 					exitWithoutSavingState();
 				}
 				MartusLogger.log("Restoring active frame");
-				if(frame != null)
-				{
-					frame.getGlassPane().setVisible(false);
-				}
-				if(dialog != null)
-				{
-					dialog.getGlassPane().setVisible(false);
-				}
+
+				showActiveWindowContent();
+
 				waitingForSignin = false;
 			}
 		}
 		
 		boolean waitingForSignin;
 	}
+
+	protected abstract void hideActiveWindowContent();
+	protected abstract void showActiveWindowContent();
 
 	class UploadErrorChecker extends AbstractAction
 	{
