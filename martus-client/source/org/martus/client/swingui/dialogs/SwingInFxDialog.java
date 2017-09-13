@@ -57,6 +57,8 @@ public abstract class SwingInFxDialog extends Dialog
 		setGraphic(null);
 		setHeaderText(null);
 		getDialogPane().setContent(mainPane);
+
+		getDialogPane().getScene().getWindow().setOnCloseRequest(event -> closeDialog());
 	}
 
 	public void createAndSetSwingContent()

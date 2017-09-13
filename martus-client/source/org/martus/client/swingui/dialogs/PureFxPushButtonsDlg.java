@@ -58,6 +58,8 @@ public class PureFxPushButtonsDlg extends Dialog implements PushButtonsDlgInterf
 		{
 			mainBox.getChildren().add(createButton(buttonLabel));
 		}
+
+		getDialogPane().getScene().getWindow().setOnCloseRequest(event -> closeDialog());
 	}
 
 	private Button createButton(String label)
@@ -67,12 +69,17 @@ public class PureFxPushButtonsDlg extends Dialog implements PushButtonsDlgInterf
 		{
 			pressedButtonLabel = label;
 
-			getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
-			close();
-			getDialogPane().getButtonTypes().remove(ButtonType.CANCEL);
+			closeDialog();
 		});
 
 		return button;
+	}
+
+	private void closeDialog()
+	{
+		getDialogPane().getButtonTypes().add(ButtonType.CANCEL);
+		close();
+		getDialogPane().getButtonTypes().remove(ButtonType.CANCEL);
 	}
 
 	@Override
