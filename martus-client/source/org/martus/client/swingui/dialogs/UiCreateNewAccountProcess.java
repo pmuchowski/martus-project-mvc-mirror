@@ -30,6 +30,7 @@ import java.util.Arrays;
 
 import org.martus.client.core.MartusUserNameAndPassword;
 import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.jfx.generic.SigninInterface;
 import org.martus.common.Exceptions.BlankUserNameException;
 import org.martus.common.Exceptions.PasswordMatchedUserNameException;
 import org.martus.common.Exceptions.PasswordTooShortException;
@@ -56,12 +57,12 @@ public class UiCreateNewAccountProcess
 		mainWindow = window;
 		while (true)
 		{
-			UiSigninDlg signinDlg1 = getSigninResults(UiSigninDlg.CREATE_NEW, originalUserName);
-			if (signinDlg1.getUserChoice() != UiSigninDlg.SIGN_IN)
+			SigninInterface signinDlg1 = getSigninResults(UiSigninDlg.CREATE_NEW, originalUserName);
+			if (!signinDlg1.isSignin())
 				return;
 
-			userName1 = signinDlg1.getNameText();
-			userPassword1 = signinDlg1.getPassword();
+			userName1 = signinDlg1.getUserName();
+			userPassword1 = signinDlg1.getUserPassword();
 			
 			if(!userName1.equals(originalUserName))
 			{	
@@ -107,12 +108,12 @@ public class UiCreateNewAccountProcess
 			if (userName1.equals(originalUserName))
 				defaultUserName = originalUserName;
 
-			UiSigninDlg signinDlg2 = getSigninResults( UiSigninDlg.RETYPE_USERNAME_PASSWORD, defaultUserName);
-			if (signinDlg2.getUserChoice() != UiSigninDlg.SIGN_IN)
+			SigninInterface signinDlg2 = getSigninResults( UiSigninDlg.RETYPE_USERNAME_PASSWORD, defaultUserName);
+			if (!signinDlg2.isSignin())
 				return;
 
-			String userName2 = signinDlg2.getNameText();
-			char[] userPassword2 = signinDlg2.getPassword();
+			String userName2 = signinDlg2.getUserName();
+			char[] userPassword2 = signinDlg2.getUserPassword();
 
 			// make sure the passwords and usernames match
 			if (!Arrays.equals(userPassword1, userPassword2))
@@ -139,17 +140,17 @@ public class UiCreateNewAccountProcess
 		}
 	}
 
-	private UiSigninDlg getSigninResults(int mode, String userName)
+	private SigninInterface getSigninResults(int mode, String userName)
 	{
-		UiSigninDlg signinDlg = null;
-		int userChoice = UiSigninDlg.LANGUAGE_CHANGED;
+		SigninInterface signinDlg = null;
+		boolean languageChanged = true;
 		char[] userPassword = "".toCharArray();
-		while(userChoice == UiSigninDlg.LANGUAGE_CHANGED)
-		{	
-			signinDlg = new UiSigninDlg(mainWindow, mainWindow.getSwingFrame(), mode, userName, userPassword);
-			userChoice = signinDlg.getUserChoice();
-			userName = signinDlg.getNameText();
-			userPassword = signinDlg.getPassword();
+		while(languageChanged)
+		{
+			signinDlg = mainWindow.createAndShowSigninDialog(mainWindow.getSwingFrame(), mode, userName, userPassword);
+			languageChanged = signinDlg.isLanguageChanged();
+			userName = signinDlg.getUserName();
+			userPassword = signinDlg.getUserPassword();
 		}
 		UiPasswordField.scrubData(userPassword);
 		return signinDlg;
