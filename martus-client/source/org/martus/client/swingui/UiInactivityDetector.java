@@ -30,6 +30,9 @@ import java.awt.AWTEvent;
 import java.awt.Event;
 import java.awt.event.AWTEventListener;
 
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+
 class UiInactivityDetector implements AWTEventListener
 {
 	public UiInactivityDetector()
@@ -38,11 +41,23 @@ class UiInactivityDetector implements AWTEventListener
 				AWTEvent.KEY_EVENT_MASK |
 				AWTEvent.MOUSE_EVENT_MASK |
 				AWTEvent.MOUSE_MOTION_EVENT_MASK);
+
+		fxEventHandler = e -> trackActivity();
 	}
 
 	public long secondsSinceLastActivity()
 	{
 		return (now() - lastActivityAt) / 1000;
+	}
+
+	public void register(Scene scene)
+	{
+		scene.addEventFilter(javafx.event.Event.ANY, fxEventHandler);
+	}
+
+	public void unregister(Scene scene)
+	{
+		scene.removeEventFilter(javafx.event.Event.ANY, fxEventHandler);
 	}
 
 	private void trackActivity()
@@ -65,6 +80,7 @@ class UiInactivityDetector implements AWTEventListener
 		trackActivity();
 	}
 
-	long lastActivityAt = now();
+	private long lastActivityAt = now();
+	private final EventHandler<javafx.event.Event> fxEventHandler;
 }
 

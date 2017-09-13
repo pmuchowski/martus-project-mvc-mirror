@@ -31,6 +31,7 @@ import java.io.IOException;
 
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.dialogs.UiSigninDlg;
+import org.martus.client.swingui.jfx.generic.SigninInterface;
 import org.martus.clientside.PasswordHelper;
 import org.martus.swing.UiPasswordField;
 import org.martus.util.StreamableBase64.InvalidBase64Exception;
@@ -90,17 +91,17 @@ public class UiRecoverKeyPairFromBackup
 	{
 		if(backupFile == null || !backupFile.isFile())
 			throw new AttemptedSignInFailedException();
-		
-		UiSigninDlg signinDlg = null;
-		int userChoice = UiSigninDlg.LANGUAGE_CHANGED;
-		while(userChoice == UiSigninDlg.LANGUAGE_CHANGED)
-		{	
-			signinDlg = new UiSigninDlg(mainWindow, UiSigninDlg.SECURITY_VALIDATE, userName, userPassword);
-			userChoice = signinDlg.getUserChoice();
-			userName = signinDlg.getNameText();
-			userPassword = signinDlg.getPassword();
+
+		SigninInterface signinDlg = null;
+		boolean languageChanged = true;
+		while (languageChanged)
+		{
+			signinDlg = mainWindow.createAndShowSigninDialog(UiSigninDlg.SECURITY_VALIDATE, userName, userPassword);
+			languageChanged = signinDlg.isLanguageChanged();
+			userName = signinDlg.getUserName();
+			userPassword = signinDlg.getUserPassword();
 		}
-		if(userChoice != UiSigninDlg.SIGN_IN)
+		if (!signinDlg.isSignin())
 			throw new AbortedSignInException();
 		
 		FileInputStream inputStream = new FileInputStream(backupFile);

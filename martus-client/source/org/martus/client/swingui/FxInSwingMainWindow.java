@@ -54,6 +54,7 @@ import org.martus.client.swingui.dialogs.PreviewDlgInterface;
 import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
 import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
+import org.martus.client.swingui.dialogs.SearchHelpDialogContents;
 import org.martus.client.swingui.dialogs.SingleSelectionFieldChooserDialog;
 import org.martus.client.swingui.dialogs.SortFieldsDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
@@ -68,6 +69,7 @@ import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.client.swingui.dialogs.UiReportFieldOrganizerDlg;
 import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
+import org.martus.client.swingui.dialogs.UiSigninDlg;
 import org.martus.client.swingui.dialogs.UiSortFieldsDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
@@ -81,6 +83,8 @@ import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.FxStatusBar;
 import org.martus.client.swingui.jfx.generic.ModalDialogWithSwingContents;
 import org.martus.client.swingui.jfx.generic.PureFxStage;
+import org.martus.client.swingui.jfx.generic.SigninInterface;
+import org.martus.client.swingui.jfx.generic.SwingDialogContentPane;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxInSwingMainStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
@@ -629,6 +633,22 @@ public class FxInSwingMainWindow extends UiMainWindow
 	public PreviewDlgInterface createChartPreviewDlg(JFreeChart chart)
 	{
 		return new UiChartPreviewDlg(this, chart);
+	}
+
+	public void showSearchHelpMessage(String title, String message, String closeButton)
+	{
+		SwingDialogContentPane panel = new SearchHelpDialogContents(this, title, message, closeButton);
+		ModalDialogWithSwingContents.show(panel);
+	}
+
+	public SigninInterface createAndShowSigninDialog(int mode, String username, char[] password)
+	{
+		return new UiSigninDlg(this, mode, username, password);
+	}
+
+	public SigninInterface createAndShowSigninDialog(JFrame owner, int mode, String username, char[] password)
+	{
+		return new UiSigninDlg(this, owner, mode, username, password);
 	}
 
 	private JFrame swingFrame;

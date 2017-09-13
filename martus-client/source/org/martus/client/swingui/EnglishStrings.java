@@ -1947,6 +1947,7 @@ public class EnglishStrings
 "field:RecordDoesNotExist=Does Not Exist",
 "field:UnknownRecord=[Error]",
 "button:Cancel=Cancel",
+"button:OK=OK",
 
 "field:KeypairTooLarge=keypair file too large!",
 "field:BackupYourKey=Backup Your Key!",

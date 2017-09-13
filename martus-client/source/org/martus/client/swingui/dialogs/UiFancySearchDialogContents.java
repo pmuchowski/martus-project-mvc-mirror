@@ -29,7 +29,6 @@ package org.martus.client.swingui.dialogs;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -48,7 +47,6 @@ import org.martus.client.search.SearchSpec;
 import org.martus.client.search.SearchTreeNode;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.grids.GridTableModel;
-import org.martus.client.swingui.jfx.generic.ModalDialogWithSwingContents;
 import org.martus.client.swingui.jfx.generic.SwingDialogContentPane;
 import org.martus.clientside.FormatFilter;
 import org.martus.clientside.UiLocalization;
@@ -62,7 +60,6 @@ import org.martus.swing.UiCheckBox;
 import org.martus.swing.UiFxStyleButton;
 import org.martus.swing.UiLinkButton;
 import org.martus.swing.UiTextArea;
-import org.martus.swing.UiWrappedTextPanel;
 import org.martus.swing.Utilities;
 import org.martus.util.TokenReplacement;
 import org.martus.util.TokenReplacement.TokenInvalidException;
@@ -304,27 +301,7 @@ public class UiFancySearchDialogContents extends SwingDialogContentPane implemen
 		
 		private void showHelp(String title, String message, String closeButton)
 		{
-			SwingDialogContentPane panel = new SwingDialogContentPane(mainWindow);
-			panel.setTitle(title);
-			panel.setBorder(new EmptyBorder(5,5,5,5));
-			panel.setLayout(new BorderLayout());
-			UiWrappedTextPanel messagePanel = new UiWrappedTextPanel(message);
-			messagePanel.setBorder(new EmptyBorder(5,5,5,5));
-			messagePanel.setPreferredSize(new Dimension(500,500));
-			panel.add(messagePanel, BorderLayout.CENTER);
-
-			UiButton button = new UiButton(closeButton);
-			button.addActionListener((event) -> panel.dispose());
-			Box hbox = Box.createHorizontalBox();
-			hbox.add(Box.createHorizontalGlue());
-			hbox.add(button);
-			hbox.add(Box.createHorizontalGlue());
-			JPanel buttonPanel = new JPanel();
-			buttonPanel.setBorder(new EmptyBorder(5,5,0,5));
-			buttonPanel.add(hbox);
-			panel.add(buttonPanel, BorderLayout.SOUTH);
-			
-			ModalDialogWithSwingContents.show(panel);
+			mainWindow.showSearchHelpMessage(title, message, closeButton);
 		}
 		
 		private boolean notInEnglishSoExplainUsingEnglishAndOr()

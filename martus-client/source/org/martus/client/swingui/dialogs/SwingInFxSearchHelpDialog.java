@@ -27,14 +27,15 @@ package org.martus.client.swingui.dialogs;
 import javax.swing.JComponent;
 
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.common.fieldspec.MiniFieldSpec;
 
-public class SwingInFxSortFieldsDlg extends SwingInFxDialog implements SortFieldsDlgInterface
+public class SwingInFxSearchHelpDialog extends SwingInFxDialog
 {
-	public SwingInFxSortFieldsDlg(UiMainWindow mainWindowToUse, MiniFieldSpec[] specsToAllowToUse)
+	public SwingInFxSearchHelpDialog(UiMainWindow mainWindowToUse, String titleToUse, String messageToUse, String closeButtonToUse)
 	{
 		mainWindow = mainWindowToUse;
-		specsToAllow = specsToAllowToUse;
+		title = titleToUse;
+		message = messageToUse;
+		closeButton = closeButtonToUse;
 
 		createAndSetSwingContent();
 	}
@@ -42,56 +43,14 @@ public class SwingInFxSortFieldsDlg extends SwingInFxDialog implements SortField
 	@Override
 	public JComponent createSwingContent()
 	{
-		uiSortFieldsDlg = new SortFieldsDlg(mainWindow, specsToAllow);
-		return uiSortFieldsDlg.getMainContent();
-	}
+		SearchHelpDialogContents dialogContents = new SearchHelpDialogContents(mainWindow, title, message, closeButton);
+		dialogContents.addIsActiveListener((observable, oldValue, newValue) -> closeDialog());
 
-	class SortFieldsDlg extends UiSortFieldsDlg
-	{
-		public SortFieldsDlg(UiMainWindow mainWindow, MiniFieldSpec[] specsToAllow)
-		{
-			super(mainWindow, specsToAllow);
-		}
-
-		@Override
-		public void dispose()
-		{
-			closeDialog();
-		}
-	}
-
-	@Override
-	public boolean ok()
-	{
-		return uiSortFieldsDlg.ok();
-	}
-
-	@Override
-	public MiniFieldSpec[] getSelectedMiniFieldSpecs()
-	{
-		return uiSortFieldsDlg.getSelectedMiniFieldSpecs();
-	}
-
-	@Override
-	public boolean getPrintBreaks()
-	{
-		return uiSortFieldsDlg.getPrintBreaks();
-	}
-
-	@Override
-	public boolean getHideDetail()
-	{
-		return uiSortFieldsDlg.getHideDetail();
-	}
-
-	@Override
-	public void showDialog()
-	{
-		showAndWait();
+		return dialogContents;
 	}
 
 	private UiMainWindow mainWindow;
-	private MiniFieldSpec[] specsToAllow;
-
-	private UiSortFieldsDlg uiSortFieldsDlg;
+	private String title;
+	private String message;
+	private String closeButton;
 }

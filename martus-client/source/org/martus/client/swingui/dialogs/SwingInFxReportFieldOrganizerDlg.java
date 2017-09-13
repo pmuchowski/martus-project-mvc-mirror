@@ -36,18 +36,6 @@ public class SwingInFxReportFieldOrganizerDlg extends SwingInFxDialog implements
 	}
 
 	@Override
-	public int getDialogWidth()
-	{
-		return 600;
-	}
-
-	@Override
-	public int getDialogHeight()
-	{
-		return 600;
-	}
-
-	@Override
 	public FieldSpec[] getSelectedSpecs()
 	{
 		return reportFieldDlg.getSelectedSpecs();

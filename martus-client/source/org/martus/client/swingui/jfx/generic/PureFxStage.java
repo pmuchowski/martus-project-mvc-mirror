@@ -58,7 +58,11 @@ abstract public class PureFxStage extends VirtualStage
 		setParentStage(getActiveStage());
 
 		setActiveStage(this);
-		getActualStage().setOnHiding(event -> setActiveStage(parentStage));
+		getActualStage().setOnHiding(event ->
+		{
+			if (this.equals(getActiveStage()))
+				setActiveStage(parentStage);
+		});
 	}
 
 	@Override

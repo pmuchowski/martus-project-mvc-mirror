@@ -60,18 +60,6 @@ public class SwingInFxChartPreviewDlg extends SwingInFxDialog implements Preview
 	}
 
 	@Override
-	public int getDialogWidth()
-	{
-		return 900;
-	}
-
-	@Override
-	public int getDialogHeight()
-	{
-		return 800;
-	}
-
-	@Override
 	public boolean wantsPrintToDisk()
 	{
 		return previewDlg.wantsPrintToDisk();

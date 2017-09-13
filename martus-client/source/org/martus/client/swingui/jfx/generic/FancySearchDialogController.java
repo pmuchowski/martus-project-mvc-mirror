@@ -33,6 +33,8 @@ import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
 import org.martus.client.swingui.dialogs.UiFancySearchDialogContents;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.layout.Pane;
@@ -62,22 +64,20 @@ public class FancySearchDialogController extends SwingInFxShellController implem
 	@Override
 	public JComponent createSwingContent()
 	{
-		searchDlg = new UiFancySearchDialogContentsInFx(getMainWindow());
+		searchDlg = new UiFancySearchDialogContents(getMainWindow());
 		searchDlg.setSearchFinalBulletinsOnly(searchFinalOnly);
 		searchDlg.setSearchSameRowsOnly(sameRowsOnly);
 		searchDlg.setSearchAsJson(search);
 
+		searchDlg.addIsActiveListener(new CloseHandler());
+
 		return searchDlg;
 	}
 
-	class UiFancySearchDialogContentsInFx extends UiFancySearchDialogContents
+	class CloseHandler implements ChangeListener<Boolean>
 	{
-		UiFancySearchDialogContentsInFx(UiMainWindow owner)
-		{
-			super(owner);
-		}
-
-		public void dispose()
+		@Override
+		public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue)
 		{
 			result = searchDlg.getResults();
 

@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 
 <StackPane prefWidth="550" prefHeight="400" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
     <children>
@@ -12,7 +21,7 @@
             </padding>
             <children>
                 <HBox alignment="CENTER">
-                    <Pane fx:id="signInMessagePane" />
+                    <VBox fx:id="signInMessagePane" />
                 </HBox>
                 <HBox VBox.vgrow="ALWAYS" />
                 <HBox>
@@ -20,24 +29,31 @@
                     <VBox spacing="30">
                         <GridPane fx:id="signInPane" vgap="5.0" hgap="5" xmlns:fx="http://javafx.com/fxml">
                             <children>
-                                <Label styleClass="headingLevel4" text="%CreateAccountUserName" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                                <Label styleClass="headingLevel3" text="%CreateAccountUserName" GridPane.columnIndex="0" GridPane.rowIndex="0" />
                                 <TextField id="accountName" fx:id="userNameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                                <Label styleClass="headingLevel4" text="%Password" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                                <Label styleClass="headingLevel3" text="%Password" GridPane.columnIndex="0" GridPane.rowIndex="1" />
                                 <PasswordField id="password" fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                                <Label fx:id="languagesDropdownLabel" styleClass="headingLevel3" text="%LanguageLabel" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                                <ChoiceBox fx:id="languagesDropdown" GridPane.columnIndex="1" GridPane.rowIndex="2" styleClass="singIn-choice-box" />
                             </children>
                             <columnConstraints>
-                                <ColumnConstraints halignment="RIGHT" />
+                                <ColumnConstraints />
                                 <ColumnConstraints />
                             </columnConstraints>
                             <rowConstraints>
                                 <RowConstraints />
                                 <RowConstraints />
+                                <RowConstraints />
                             </rowConstraints>
                         </GridPane>
                         <HBox>
+                            <padding>
+                                <Insets top="20" />
+                            </padding>
                             <children>
-                                <Button fx:id="okButton" defaultButton="true" onAction="#onOk" text="%Button.SignIn" styleClass="button-green" />
+                                <Button fx:id="okButton" defaultButton="true" onAction="#onOk" text="%Button.OK" styleClass="button-green" />
                                 <HBox HBox.hgrow="ALWAYS" />
                                 <Button onAction="#onCancel" text="%Button.cancel" styleClass="button-gray" />
                             </children>

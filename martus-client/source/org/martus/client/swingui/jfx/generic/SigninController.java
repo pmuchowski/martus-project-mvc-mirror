@@ -94,7 +94,17 @@ abstract public class SigninController extends FxNonWizardShellController
 		// in memory even after Martus exits. 
 		return passwordField.getText().toCharArray();
 	}
-	
+
+	protected TextField getUserNameField()
+	{
+		return userNameField;
+	}
+
+	protected PasswordField getPasswordField()
+	{
+		return passwordField;
+	}
+
 	@FXML
 	private void onNewAccount()
 	{

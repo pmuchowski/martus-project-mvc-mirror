@@ -63,17 +63,20 @@ import org.martus.client.swingui.dialogs.SwingInFxCreateChartDialog;
 import org.martus.client.swingui.dialogs.SwingInFxPrintPreviewDlg;
 import org.martus.client.swingui.dialogs.SwingInFxReportFieldChooserDlg;
 import org.martus.client.swingui.dialogs.SwingInFxReportFieldOrganizerDlg;
+import org.martus.client.swingui.dialogs.SwingInFxSearchHelpDialog;
 import org.martus.client.swingui.dialogs.SwingInFxSingleSelectionFieldChooserDlg;
 import org.martus.client.swingui.dialogs.SwingInFxSortFieldsDlg;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.client.swingui.jfx.contacts.PureFxContactsStage;
+import org.martus.client.swingui.jfx.generic.BasicSigninController;
 import org.martus.client.swingui.jfx.generic.FancySearchDialogController;
 import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.FxStatusBar;
 import org.martus.client.swingui.jfx.generic.PureFxDialogStage;
 import org.martus.client.swingui.jfx.generic.PureFxStage;
+import org.martus.client.swingui.jfx.generic.SigninInterface;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.landing.PureFxMainStage;
@@ -523,6 +526,12 @@ public class PureFxMainWindow extends UiMainWindow
 	@Override
 	public void setCurrentActiveStage(PureFxStage newActiveStage)
 	{
+		if (activeStage != null && !activeStage.equals(mainStage))
+			getInactivityDetector().unregister(activeStage.getScene());
+
+		if (newActiveStage != null)
+			getInactivityDetector().register(newActiveStage.getScene());
+
 		activeStage = newActiveStage;
 	}
 
@@ -627,6 +636,35 @@ public class PureFxMainWindow extends UiMainWindow
 	public PreviewDlgInterface createChartPreviewDlg(JFreeChart chart)
 	{
 		return new SwingInFxChartPreviewDlg(this, chart);
+	}
+
+	public void showSearchHelpMessage(String title, String message, String closeButton)
+	{
+		Platform.runLater(() ->
+		{
+			SwingInFxSearchHelpDialog dialog = new SwingInFxSearchHelpDialog(this, title, message, closeButton);
+			dialog.showAndWait();
+		});
+	}
+
+	public SigninInterface createAndShowSigninDialog(int mode, String username, char[] password)
+	{
+		return createAndShowSigninDialog(null, mode, username, password);
+	}
+
+	public SigninInterface createAndShowSigninDialog(JFrame owner, int mode, String username, char[] password)
+	{
+		BasicSigninController signinController = new BasicSigninController(this, mode, username, password);
+		try
+		{
+			createAndShowModalDialog(signinController, null, null);
+		}
+		catch (Exception e)
+		{
+			MartusLogger.logException(e);
+		}
+
+		return signinController;
 	}
 
 	private static Stage realStage;

@@ -77,18 +77,6 @@ public class SwingInFxCreateChartDialog extends SwingInFxDialog implements Creat
 		showAndWait();
 	}
 
-	@Override
-	public int getDialogWidth()
-	{
-		return 700;
-	}
-
-	@Override
-	public int getDialogHeight()
-	{
-		return 250;
-	}
-
 	private UiMainWindow mainWindow;
 	private CreateChartDialog createChartDialog;
 }

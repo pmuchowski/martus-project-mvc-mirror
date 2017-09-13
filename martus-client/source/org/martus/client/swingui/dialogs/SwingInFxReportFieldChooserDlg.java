@@ -73,18 +73,6 @@ public class SwingInFxReportFieldChooserDlg extends SwingInFxDialog implements R
 	}
 
 	@Override
-	public int getDialogWidth()
-	{
-		return 900;
-	}
-
-	@Override
-	public int getDialogHeight()
-	{
-		return 600;
-	}
-
-	@Override
 	public FieldSpec[] getSelectedSpecs()
 	{
 		return reportFieldDlg.getSelectedSpecs();
