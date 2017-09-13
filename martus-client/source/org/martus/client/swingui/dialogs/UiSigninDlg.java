@@ -35,11 +35,12 @@ import javax.swing.JFrame;
 import org.martus.client.core.FontSetter;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiChoiceEditor;
+import org.martus.client.swingui.jfx.generic.SigninInterface;
 import org.martus.clientside.MtfAwareLocalization;
 import org.martus.clientside.UiBasicSigninDlg;
 import org.martus.swing.UiLabel;
 
-public class UiSigninDlg extends UiBasicSigninDlg
+public class UiSigninDlg extends UiBasicSigninDlg implements SigninInterface
 {
 	public UiSigninDlg(UiMainWindow mainWindowToUse, int mode, String username, char[] password)
 	{
@@ -63,6 +64,30 @@ public class UiSigninDlg extends UiBasicSigninDlg
 		languageDropdown.setText(localization.getCurrentLanguageCode());
 		languageDropdown.addActionListener(new LanguageChangedHandler());
 		return languageDropdown.getComponent();
+	}
+
+	@Override
+	public String getUserName()
+	{
+		return getNameText();
+	}
+
+	@Override
+	public char[] getUserPassword()
+	{
+		return getPassword();
+	}
+
+	@Override
+	public boolean isSignin()
+	{
+		return getUserChoice() == SIGN_IN;
+	}
+
+	@Override
+	public boolean isLanguageChanged()
+	{
+		return getUserChoice() == LANGUAGE_CHANGED;
 	}
 
 	class LanguageChangedHandler implements ActionListener
