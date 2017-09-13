@@ -69,6 +69,7 @@ import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.client.swingui.dialogs.UiReportFieldOrganizerDlg;
 import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
+import org.martus.client.swingui.dialogs.UiSigninDlg;
 import org.martus.client.swingui.dialogs.UiSortFieldsDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
@@ -82,6 +83,7 @@ import org.martus.client.swingui.jfx.generic.FxShellController;
 import org.martus.client.swingui.jfx.generic.FxStatusBar;
 import org.martus.client.swingui.jfx.generic.ModalDialogWithSwingContents;
 import org.martus.client.swingui.jfx.generic.PureFxStage;
+import org.martus.client.swingui.jfx.generic.SigninInterface;
 import org.martus.client.swingui.jfx.generic.SwingDialogContentPane;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxInSwingMainStage;
@@ -637,6 +639,16 @@ public class FxInSwingMainWindow extends UiMainWindow
 	{
 		SwingDialogContentPane panel = new SearchHelpDialogContents(this, title, message, closeButton);
 		ModalDialogWithSwingContents.show(panel);
+	}
+
+	public SigninInterface createAndShowSigninDialog(int mode, String username, char[] password)
+	{
+		return new UiSigninDlg(this, mode, username, password);
+	}
+
+	public SigninInterface createAndShowSigninDialog(JFrame owner, int mode, String username, char[] password)
+	{
+		return new UiSigninDlg(this, owner, mode, username, password);
 	}
 
 	private JFrame swingFrame;

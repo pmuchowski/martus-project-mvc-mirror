@@ -104,6 +104,7 @@ import org.martus.client.swingui.jfx.generic.PureFxStage;
 import org.martus.client.swingui.jfx.generic.ReSigninController;
 import org.martus.client.swingui.jfx.generic.SigninController;
 import org.martus.client.swingui.jfx.generic.SigninController.SigninResult;
+import org.martus.client.swingui.jfx.generic.SigninInterface;
 import org.martus.client.swingui.jfx.generic.VirtualStage;
 import org.martus.client.swingui.jfx.landing.FxMainStage;
 import org.martus.client.swingui.jfx.welcome.FxWelcomeContentController;
@@ -1822,6 +1823,9 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		}
 	}
 
+	public abstract SigninInterface createAndShowSigninDialog(int mode, String username, char[] password);
+
+	public abstract SigninInterface createAndShowSigninDialog(JFrame owner, int mode, String username, char[] password);
 
 	public boolean getAndSaveUserNamePassword(File keyPairFile) 
 	{
