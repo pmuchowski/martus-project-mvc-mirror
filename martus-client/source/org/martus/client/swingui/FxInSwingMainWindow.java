@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -550,6 +551,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 	public void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement)
 	{
 		new UiShowScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, tokenReplacement, null);
+	}
+
+	public void displayScrollableMessage(String titleTag, String message, String okButtonTag, JComponent bottomPanel)
+	{
+		new UiShowScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, bottomPanel);
 	}
 
 	@Override

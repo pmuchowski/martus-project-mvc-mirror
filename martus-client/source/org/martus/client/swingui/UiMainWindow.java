@@ -52,6 +52,7 @@ import java.util.Vector;
 
 import javax.crypto.Cipher;
 import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
@@ -2091,6 +2092,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	}
 
 	public abstract void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement);
+	public abstract void displayScrollableMessage(String titleTag, String message, String okButtonTag, JComponent bottomPanel);
 
 	public void setAndSaveHQKeysInConfigInfo(HeadquartersKeys allHQKeys, HeadquartersKeys defaultHQKeys)
 	{
