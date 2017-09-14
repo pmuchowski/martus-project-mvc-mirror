@@ -27,6 +27,8 @@ package org.martus.client.swingui.dialogs;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JComponent;
+
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.clientside.MtfAwareLocalization;
 import org.martus.clientside.UiLocalization;
@@ -39,6 +41,7 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 
 public class PureFxScrollableTextDlg extends Dialog<Boolean>
@@ -49,6 +52,11 @@ public class PureFxScrollableTextDlg extends Dialog<Boolean>
 	}
 
 	public PureFxScrollableTextDlg(UiMainWindow owner, String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text, Map tokenReplacement)
+	{
+		this(owner, titleTag, okButtonTag, cancelButtonTag, descriptionTag, text, tokenReplacement, null);
+	}
+
+	protected PureFxScrollableTextDlg(UiMainWindow owner, String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text, Map tokenReplacement, JComponent bottomPanel)
 	{
 		if(LanguageOptions.isRightToLeftLanguage())
 			getDialogPane().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
@@ -90,9 +98,12 @@ public class PureFxScrollableTextDlg extends Dialog<Boolean>
 			}
 
 			TextArea details = createTextArea(TokenReplacement.replaceTokens(text, tokenReplacement));
+			details.setPrefHeight(DETAILS_PREF_HEIGHT);
 			mainBox.getChildren().add(details);
 
 			setResultConverter(dialogButton -> dialogButton == okButton);
+
+			addBottomPanel(mainBox, bottomPanel);
 
 			showAndWait();
 		}
@@ -113,5 +124,10 @@ public class PureFxScrollableTextDlg extends Dialog<Boolean>
 		return textArea;
 	}
 
+	protected void addBottomPanel(Pane mainBox, JComponent bottomPanel)
+	{
+	}
+
 	private static final int PREF_COL_COUNT = 85;
+	private static final double DETAILS_PREF_HEIGHT = 400;
 }
