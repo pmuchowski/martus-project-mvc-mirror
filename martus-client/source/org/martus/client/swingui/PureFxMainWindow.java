@@ -54,6 +54,7 @@ import org.martus.client.swingui.dialogs.PureFxProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.PureFxPushButtonsDlg;
 import org.martus.client.swingui.dialogs.PureFxScrollableTextDlg;
 import org.martus.client.swingui.dialogs.PureFxScrollableTextDlgWithBottomPanel;
+import org.martus.client.swingui.dialogs.PureFxSplashDlg;
 import org.martus.client.swingui.dialogs.PureFxStringInputDlg;
 import org.martus.client.swingui.dialogs.PureFxUtilities;
 import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
@@ -693,6 +694,11 @@ public class PureFxMainWindow extends UiMainWindow
 			stage.getActualStage().getScene().getRoot().setVisible(visible);
 			stage = stage.getParentStage();
 		}
+	}
+
+	protected void showSplashDlg(String text)
+	{
+		new PureFxSplashDlg(getLocalization(), text);
 	}
 
 	private static Stage realStage;

@@ -72,6 +72,7 @@ import org.martus.client.swingui.dialogs.UiReportFieldOrganizerDlg;
 import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
 import org.martus.client.swingui.dialogs.UiSigninDlg;
 import org.martus.client.swingui.dialogs.UiSortFieldsDlg;
+import org.martus.client.swingui.dialogs.UiSplashDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
 import org.martus.client.swingui.jfx.contacts.FxInSwingContactsStage;
@@ -687,6 +688,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 		{
 			dialog.getGlassPane().setVisible(false);
 		}
+	}
+
+	protected void showSplashDlg(String text)
+	{
+		new UiSplashDlg(getLocalization(), text);
 	}
 
 	private JFrame swingFrame;
