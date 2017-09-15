@@ -85,6 +85,7 @@ import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
 import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
 import org.martus.client.swingui.dialogs.SortFieldsDlgInterface;
+import org.martus.client.swingui.dialogs.TemplateDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
 import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
@@ -1863,7 +1864,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	{
 		ConfigInfo info = getApp().getConfigInfo();
 		File details = getApp().getBulletinDefaultDetailsFile();
-		UiTemplateDlg templateDlg = new UiTemplateDlg(this, info, details);
+		TemplateDlgInterface templateDlg = new UiTemplateDlg(this, info, details);
 		try
 		{
 			if(defaultFile != null)
@@ -1878,8 +1879,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			return;
 		}
 
-		templateDlg.setVisible(true);
-		if(templateDlg.getResult())
+		templateDlg.showDialog();
+		if(templateDlg.getResults())
 		{
 			try
 			{
