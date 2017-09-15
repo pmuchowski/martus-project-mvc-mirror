@@ -77,6 +77,8 @@ public class Martus
 			e.printStackTrace();
 		}
 		
+		enablePureFx();
+		
 		Vector options = new Vector(Arrays.asList(args));
 		int foundTestAll = options.indexOf("--testall");
 		if(foundTestAll < 0)
@@ -118,15 +120,6 @@ public class Martus
 			System.out.println(options.get(foundJavaFx));
 			UiSession.isSwing = false;
 			options.remove(foundJavaFx);
-		}
-		
-		int foundPureFx = options.indexOf("--purefx");
-		if(foundPureFx >= 0)
-		{
-			System.out.println(options.get(foundPureFx));
-			UiSession.isSwing = false;
-			UiSession.isPureFx = true;
-			options.remove(foundPureFx);
 		}
 		
 		int writeOnlyFlavorIndex = options.indexOf("--writeonly");
@@ -191,6 +184,12 @@ public class Martus
 		else
 			run();
     }
+
+	private static void enablePureFx()
+	{
+		UiSession.isSwing = false;
+		UiSession.isPureFx = true;
+	}
 
 	public static void run()
 	{
