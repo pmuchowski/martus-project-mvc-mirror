@@ -52,7 +52,6 @@ import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.filefilters.MCTFileFilter;
 import org.martus.client.swingui.jfx.common.ExportTemplateDoer;
 import org.martus.clientside.FormatFilter;
-import org.martus.clientside.MtfAwareLocalization;
 import org.martus.common.EnglishCommonStrings;
 import org.martus.common.Exceptions.ServerNotAvailableException;
 import org.martus.common.Exceptions.ServerNotCompatibleException;
@@ -447,7 +446,7 @@ public class UiCustomFieldsDlg extends JDialog
 			formatTextArea(xmlExamples);
 			UiScrollPane pane = createScrollPane(xmlExamples);
 
-			new UiShowScrollableTextDlg(mainWindow, "CreateCustomFieldsHelp", EnglishCommonStrings.OK, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, pane);
+			mainWindow.displayScrollableMessage("ErrorCustomFields", message, EnglishCommonStrings.OK, pane);
 		}
 	}
 	
@@ -482,7 +481,7 @@ public class UiCustomFieldsDlg extends JDialog
 		formatTextArea(specificErrors);
 		UiScrollPane specificErrorsPane = createScrollPane(specificErrors);
 
-		new UiShowScrollableTextDlg(mainWindow,"ErrorCustomFields", EnglishCommonStrings.OK, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, errorDescription, specificErrorsPane);
+		mainWindow.displayScrollableMessage("ErrorCustomFields", errorDescription, EnglishCommonStrings.OK, specificErrorsPane);
 	}
 	
 	public static StringBuilder createErrorMessage(UiMainWindow mainWindow, Vector errors)

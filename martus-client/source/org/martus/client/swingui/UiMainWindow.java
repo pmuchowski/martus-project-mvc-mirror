@@ -52,6 +52,7 @@ import java.util.Vector;
 
 import javax.crypto.Cipher;
 import javax.swing.AbstractAction;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JSplitPane;
@@ -90,7 +91,6 @@ import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesRetrieveDlg;
-import org.martus.client.swingui.dialogs.UiSplashDlg;
 import org.martus.client.swingui.dialogs.UiTemplateDlg;
 import org.martus.client.swingui.filefilters.AllFileFilter;
 import org.martus.client.swingui.filefilters.KeyPairFormatFilter;
@@ -947,16 +947,16 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		if(!modified && UiSession.isJavaFx())
 			return;
 		
-		String complianceStatementAlwaysEnglish = "";
+		String complianceStatementAlwaysEnglish;
 		if(modified)
 		{
 			complianceStatementAlwaysEnglish =
 			BEGIN_HTML_TAGS + 
-			"[*your product name*].  <br></br>" +
-			productDescription + "<br></br>" +
-			"This software is not a standard Martus(TM) program, <br></br>" +
-			"because it has been modified by someone other than Benetech, <br></br>" +
-			"the copyright owner and original author of the Martus software.  <br></br>" +
+			"[*your product name*].  <br />" +
+			productDescription + "<br />" +
+			"This software is not a standard Martus(TM) program, <br />" +
+			"because it has been modified by someone other than Benetech, <br />" +
+			"the copyright owner and original author of the Martus software.  <br />" +
 			"For details of what has been changed, see [*here*]." +
 			END_HTML_TAGS;
 		}
@@ -964,22 +964,26 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 		{
 			complianceStatementAlwaysEnglish =
 			BEGIN_HTML_TAGS +
-			"Martus(TM)<br></br>" +
+			"Martus(TM)<br />" +
 			productDescription +
 			END_HTML_TAGS;
 		}
-		new UiSplashDlg(getLocalization(), complianceStatementAlwaysEnglish);
+
+		showSplashDlg(complianceStatementAlwaysEnglish);
 	}
+
+	protected abstract void showSplashDlg(String text);
+
 	public final static String BEGIN_HTML_TAGS = "<font size='5'>";
 	public final static String END_HTML_TAGS = "</font>";
-	
-    public boolean isMainWindowInitalizing()
-    {
-    	return mainWindowInitalizing;
-    }
 
-    public MartusApp getApp()
-    {
+	public boolean isMainWindowInitalizing()
+	{
+		return mainWindowInitalizing;
+	}
+
+	public MartusApp getApp()
+	{
 		return getSession().getApp();
 	}
 	
@@ -2091,6 +2095,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	}
 
 	public abstract void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement);
+	public abstract void displayScrollableMessage(String titleTag, String message, String okButtonTag, JComponent bottomPanel);
 
 	public void setAndSaveHQKeysInConfigInfo(HeadquartersKeys allHQKeys, HeadquartersKeys defaultHQKeys)
 	{

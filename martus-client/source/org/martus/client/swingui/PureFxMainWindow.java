@@ -36,6 +36,7 @@ import java.util.Map;
 import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 
 import org.jfree.chart.JFreeChart;
@@ -52,6 +53,8 @@ import org.martus.client.swingui.dialogs.PureFxNotifyDlg;
 import org.martus.client.swingui.dialogs.PureFxProgressWithCancelDlg;
 import org.martus.client.swingui.dialogs.PureFxPushButtonsDlg;
 import org.martus.client.swingui.dialogs.PureFxScrollableTextDlg;
+import org.martus.client.swingui.dialogs.PureFxScrollableTextDlgWithBottomPanel;
+import org.martus.client.swingui.dialogs.PureFxSplashDlg;
 import org.martus.client.swingui.dialogs.PureFxStringInputDlg;
 import org.martus.client.swingui.dialogs.PureFxUtilities;
 import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
@@ -523,6 +526,11 @@ public class PureFxMainWindow extends UiMainWindow
 		new PureFxScrollableTextDlg(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, tokenReplacement);
 	}
 
+	public void displayScrollableMessage(String titleTag, String message, String okButtonTag, JComponent bottomPanel)
+	{
+		Platform.runLater(() -> new PureFxScrollableTextDlgWithBottomPanel(this, titleTag, okButtonTag, MtfAwareLocalization.UNUSED_TAG, MtfAwareLocalization.UNUSED_TAG, message, bottomPanel));
+	}
+
 	@Override
 	public void setCurrentActiveStage(PureFxStage newActiveStage)
 	{
@@ -686,6 +694,11 @@ public class PureFxMainWindow extends UiMainWindow
 			stage.getActualStage().getScene().getRoot().setVisible(visible);
 			stage = stage.getParentStage();
 		}
+	}
+
+	protected void showSplashDlg(String text)
+	{
+		new PureFxSplashDlg(getLocalization(), text);
 	}
 
 	private static Stage realStage;

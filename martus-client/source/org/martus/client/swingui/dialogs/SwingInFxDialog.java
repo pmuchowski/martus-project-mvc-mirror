@@ -77,13 +77,13 @@ public abstract class SwingInFxDialog extends Dialog
 	private void setSizeAndCenterDialog(Dimension size)
 	{
 		double maxHeight = Screen.getPrimary().getVisualBounds().getHeight();
-		double maxWidth = Screen.getPrimary().getVisualBounds().getHeight();
+		double maxWidth = Screen.getPrimary().getVisualBounds().getWidth();
 
-		double prefHeight = size.getWidth() + WIDTH_OFFSET;
-		double prefWidth = size.getHeight() + HEIGHT_OFFSET;
+		double prefHeight = size.getHeight() + HEIGHT_OFFSET;
+		double prefWidth = size.getWidth() + WIDTH_OFFSET;
 
-		setWidth(Double.min(maxHeight, prefHeight));
-		setHeight(Double.min(maxWidth, prefWidth));
+		setHeight(Double.min(maxHeight, prefHeight));
+		setWidth(Double.min(maxWidth, prefWidth));
 
 		getDialogPane().getContent().getScene().getWindow().centerOnScreen();
 	}
