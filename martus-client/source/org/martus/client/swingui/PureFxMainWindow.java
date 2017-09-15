@@ -41,6 +41,7 @@ import javax.swing.JFrame;
 
 import org.jfree.chart.JFreeChart;
 import org.martus.client.core.BulletinGetterThread;
+import org.martus.client.core.ConfigInfo;
 import org.martus.client.reports.ReportOutput;
 import org.martus.client.swingui.dialogs.CreateChartDialogInterface;
 import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
@@ -56,6 +57,7 @@ import org.martus.client.swingui.dialogs.PureFxScrollableTextDlg;
 import org.martus.client.swingui.dialogs.PureFxScrollableTextDlgWithBottomPanel;
 import org.martus.client.swingui.dialogs.PureFxSplashDlg;
 import org.martus.client.swingui.dialogs.PureFxStringInputDlg;
+import org.martus.client.swingui.dialogs.PureFxTemplateDlg;
 import org.martus.client.swingui.dialogs.PureFxUtilities;
 import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
@@ -69,6 +71,7 @@ import org.martus.client.swingui.dialogs.SwingInFxReportFieldOrganizerDlg;
 import org.martus.client.swingui.dialogs.SwingInFxSearchHelpDialog;
 import org.martus.client.swingui.dialogs.SwingInFxSingleSelectionFieldChooserDlg;
 import org.martus.client.swingui.dialogs.SwingInFxSortFieldsDlg;
+import org.martus.client.swingui.dialogs.TemplateDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
@@ -699,6 +702,11 @@ public class PureFxMainWindow extends UiMainWindow
 	protected void showSplashDlg(String text)
 	{
 		new PureFxSplashDlg(getLocalization(), text);
+	}
+
+	protected TemplateDlgInterface createTemplateDialog(ConfigInfo info, File defaultDetailsFile)
+	{
+		return new PureFxTemplateDlg(this, info, defaultDetailsFile);
 	}
 
 	private static Stage realStage;

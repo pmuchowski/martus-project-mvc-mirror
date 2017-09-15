@@ -92,7 +92,6 @@ import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesRetrieveDlg;
-import org.martus.client.swingui.dialogs.UiTemplateDlg;
 import org.martus.client.swingui.filefilters.AllFileFilter;
 import org.martus.client.swingui.filefilters.KeyPairFormatFilter;
 import org.martus.client.swingui.foldertree.UiFolderTreePane;
@@ -1864,7 +1863,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	{
 		ConfigInfo info = getApp().getConfigInfo();
 		File details = getApp().getBulletinDefaultDetailsFile();
-		TemplateDlgInterface templateDlg = new UiTemplateDlg(this, info, details);
+		TemplateDlgInterface templateDlg = createTemplateDialog(info, details);
 		try
 		{
 			if(defaultFile != null)
@@ -1892,6 +1891,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			}
 		}
 	}
+
+	protected abstract TemplateDlgInterface createTemplateDialog(ConfigInfo info, File defaultDetailsFile);
 
 	public void retrieveBulletins(RetrieveTableModel model, String folderName,
 						String dlgTitleTag, String summariesProgressTag, String retrieverProgressTag)
