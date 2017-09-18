@@ -2606,26 +2606,15 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	public File showFileSaveDialog(String fileDialogCategory, Vector<FormatFilter> filters)
 	{
 		// TODO: When we switch from Swing to JavaFX, combine this with the other file save dialog
-		while(true)
-		{
-			String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
-			File directory = getDataDirectoryToInitializeFileChooser();
+		String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
+		File directory = getDataDirectoryToInitializeFileChooser();
 
-			File selectedFile = showFileSaveDialog(title, directory, filters);
+		File selectedFile = showFileSaveDialog(title, directory, filters);
 
-			if (selectedFile == null)
-				break;
-
+		if (selectedFile != null)
 			setCurrentUserSelectedDirForNextTime(selectedFile.getParentFile());
 
-			if(!selectedFile.exists())
-				return selectedFile;
-
-			if(confirmDlg(getCurrentActiveFrame().getSwingFrame(), "OverWriteExistingFile"))
-				return selectedFile;
-		}
-		
-		return null;
+		return selectedFile;
 	}
 
 	protected abstract File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters);

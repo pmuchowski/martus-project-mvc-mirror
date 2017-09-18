@@ -451,18 +451,36 @@ public class PureFxMainWindow extends UiMainWindow
 
 	protected File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters)
 	{
-		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
+		while(true)
+		{
+			FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
 
-		File selectedFile = fileChooser.showSaveDialog(getActiveStage());
+			File selectedFile = fileChooser.showSaveDialog(getActiveStage());
 
-		if (selectedFile == null)
-			return null;
+			if (selectedFile == null)
+				return null;
 
-		List<String> extensions = fileChooser.getSelectedExtensionFilter().getExtensions();
-		String extension = extensions.get(0).replace("*", "");
-		selectedFile = getFileWithExtension(selectedFile, extension);
+			List<String> extensions = fileChooser.getSelectedExtensionFilter().getExtensions();
+			String extension = extensions.get(0).replace("*", "");
 
-		return selectedFile;
+			String fileName = selectedFile.getName();
+			if(!fileName.toLowerCase().endsWith(extension.toLowerCase()))
+			{
+				selectedFile = getFileWithExtension(selectedFile, extension);
+
+				if (!selectedFile.exists())
+					return selectedFile;
+
+				if (confirmDlg(getCurrentActiveFrame().getSwingFrame(), "OverWriteExistingFile"))
+					return selectedFile;
+			}
+			else
+			{
+				return selectedFile;
+			}
+
+			directory = selectedFile.getParentFile();
+		}
 	}
 
 	public File showFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
