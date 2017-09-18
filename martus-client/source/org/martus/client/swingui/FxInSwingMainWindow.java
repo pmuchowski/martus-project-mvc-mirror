@@ -474,18 +474,27 @@ public class FxInSwingMainWindow extends UiMainWindow
 
 	protected File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters)
 	{
-		JFileChooser fileChooser = createFileChooser(title, directory, filters);
+		while(true)
+		{
+			JFileChooser fileChooser = createFileChooser(title, directory, filters);
 
-		int userResult = fileChooser.showSaveDialog(getCurrentActiveFrame().getSwingFrame());
-		if(userResult != JFileChooser.APPROVE_OPTION)
-			return null;
+			int userResult = fileChooser.showSaveDialog(getCurrentActiveFrame().getSwingFrame());
+			if (userResult != JFileChooser.APPROVE_OPTION)
+				return null;
 
-		File selectedFile = fileChooser.getSelectedFile();
+			File selectedFile = fileChooser.getSelectedFile();
 
-		FormatFilter selectedFilter = (FormatFilter) fileChooser.getFileFilter();
-		selectedFile = getFileWithExtension(selectedFile, selectedFilter.getExtension());
+			FormatFilter selectedFilter = (FormatFilter) fileChooser.getFileFilter();
+			selectedFile = getFileWithExtension(selectedFile, selectedFilter.getExtension());
 
-		return selectedFile;
+			if (!selectedFile.exists())
+				return selectedFile;
+
+			if (confirmDlg(getCurrentActiveFrame().getSwingFrame(), "OverWriteExistingFile"))
+				return selectedFile;
+
+			directory = selectedFile.getParentFile();
+		}
 	}
 
 	public File showFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
