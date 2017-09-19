@@ -35,7 +35,7 @@ import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.TextArea;
+import javafx.scene.layout.VBox;
 
 public class PureFxNotifyDlg extends Alert
 {
@@ -78,7 +78,8 @@ public class PureFxNotifyDlg extends Alert
 			for (int i = 1; i < buttons.length; i++)
 				getButtonTypes().add(new ButtonType(buttons[i], ButtonBar.ButtonData.CANCEL_CLOSE));
 
-			getDialogPane().setContent(createTextArea(wrappedContents.toString()));
+			VBox mainBox = new VBox(TextAreaCreator.createTextArea(wrappedContents.toString()));
+			getDialogPane().setContent(mainBox);
 
 			showAndWait();
 		}
@@ -86,14 +87,5 @@ public class PureFxNotifyDlg extends Alert
 		{
 			MartusLogger.logException(e);
 		}
-	}
-
-	private TextArea createTextArea(String text)
-	{
-		TextArea textArea = new TextArea(text);
-		textArea.setWrapText(true);
-		textArea.setEditable(false);
-
-		return textArea;
 	}
 }

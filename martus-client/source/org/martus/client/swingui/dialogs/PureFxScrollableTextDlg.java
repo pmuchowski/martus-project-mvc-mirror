@@ -93,11 +93,11 @@ public class PureFxScrollableTextDlg extends Dialog<Boolean>
 				String fieldLabel = localization.getFieldLabel(descriptionTag);
 				fieldLabel = TokenReplacement.replaceTokens(fieldLabel, tokenReplacement);
 
-				TextArea description = createTextArea(TokenReplacement.replaceTokens(fieldLabel, tokenReplacement));
+				TextArea description = TextAreaCreator.createTextArea(TokenReplacement.replaceTokens(fieldLabel, tokenReplacement));
 				mainBox.getChildren().add(description);
 			}
 
-			TextArea details = createTextArea(TokenReplacement.replaceTokens(text, tokenReplacement));
+			TextArea details = TextAreaCreator.createTextArea(TokenReplacement.replaceTokens(text, tokenReplacement));
 			details.setPrefHeight(DETAILS_PREF_HEIGHT);
 			mainBox.getChildren().add(details);
 
@@ -113,21 +113,9 @@ public class PureFxScrollableTextDlg extends Dialog<Boolean>
 		}
 	}
 
-	private TextArea createTextArea(String text)
-	{
-		TextArea textArea = new TextArea(text);
-
-		textArea.setPrefColumnCount(PREF_COL_COUNT);
-		textArea.setWrapText(true);
-		textArea.setEditable(false);
-
-		return textArea;
-	}
-
 	protected void addBottomPanel(Pane mainBox, JComponent bottomPanel)
 	{
 	}
 
-	private static final int PREF_COL_COUNT = 85;
 	private static final double DETAILS_PREF_HEIGHT = 400;
 }

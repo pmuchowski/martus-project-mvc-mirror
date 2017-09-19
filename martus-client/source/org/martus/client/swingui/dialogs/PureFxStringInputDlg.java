@@ -35,7 +35,6 @@ import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
@@ -67,12 +66,12 @@ public class PureFxStringInputDlg extends Dialog<String>
 		TextField text = new TextField(fontHelper.getDisplayable(defaultText));
 
 		if(descriptionTag.length() > 0)
-			mainBox.getChildren().add(createTextArea(localization.getFieldLabel(descriptionTag)));
+			mainBox.getChildren().add(TextAreaCreator.createTextArea(localization.getFieldLabel(descriptionTag)));
 
 		if(rawDescriptionText.length() > 0)
-			mainBox.getChildren().add(createTextArea(rawDescriptionText));
+			mainBox.getChildren().add(TextAreaCreator.createTextArea(rawDescriptionText));
 
-		mainBox.getChildren().add(createTextArea(localization.getFieldLabel("input" + baseTag + "entry")));
+		mainBox.getChildren().add(TextAreaCreator.createTextArea(localization.getFieldLabel("input" + baseTag + "entry")));
 		mainBox.getChildren().add(text);
 
 		setResultConverter(dialogButton -> {
@@ -84,17 +83,4 @@ public class PureFxStringInputDlg extends Dialog<String>
 
 		showAndWait();
 	}
-
-	private TextArea createTextArea(String text)
-	{
-		TextArea textArea = new TextArea(text);
-
-		textArea.setPrefColumnCount(PREF_COL_COUNT);
-		textArea.setWrapText(true);
-		textArea.setEditable(false);
-
-		return textArea;
-	}
-
-	private static final int PREF_COL_COUNT = 85;
 }

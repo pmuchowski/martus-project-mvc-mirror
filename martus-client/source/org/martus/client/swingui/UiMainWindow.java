@@ -327,7 +327,6 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			showMainWindow();
 			mainWindowInitalizing = false;
 		}
-		
 
 		try
 		{
