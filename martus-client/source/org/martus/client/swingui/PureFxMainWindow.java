@@ -41,6 +41,7 @@ import javax.swing.JFrame;
 
 import org.jfree.chart.JFreeChart;
 import org.martus.client.core.BulletinGetterThread;
+import org.martus.client.core.ConfigInfo;
 import org.martus.client.reports.ReportOutput;
 import org.martus.client.swingui.dialogs.CreateChartDialogInterface;
 import org.martus.client.swingui.dialogs.FancySearchDialogInterface;
@@ -56,6 +57,7 @@ import org.martus.client.swingui.dialogs.PureFxScrollableTextDlg;
 import org.martus.client.swingui.dialogs.PureFxScrollableTextDlgWithBottomPanel;
 import org.martus.client.swingui.dialogs.PureFxSplashDlg;
 import org.martus.client.swingui.dialogs.PureFxStringInputDlg;
+import org.martus.client.swingui.dialogs.PureFxTemplateDlg;
 import org.martus.client.swingui.dialogs.PureFxUtilities;
 import org.martus.client.swingui.dialogs.PureFxWarningMessageDlg;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
@@ -69,6 +71,7 @@ import org.martus.client.swingui.dialogs.SwingInFxReportFieldOrganizerDlg;
 import org.martus.client.swingui.dialogs.SwingInFxSearchHelpDialog;
 import org.martus.client.swingui.dialogs.SwingInFxSingleSelectionFieldChooserDlg;
 import org.martus.client.swingui.dialogs.SwingInFxSortFieldsDlg;
+import org.martus.client.swingui.dialogs.TemplateDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
@@ -462,18 +465,36 @@ public class PureFxMainWindow extends UiMainWindow
 
 	protected File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters)
 	{
-		FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
+		while(true)
+		{
+			FileChooser fileChooser = createFileChooser(title, directory, filters.toArray(new FormatFilter[filters.size()]));
 
-		File selectedFile = fileChooser.showSaveDialog(getActiveStage());
+			File selectedFile = fileChooser.showSaveDialog(getActiveStage());
 
-		if (selectedFile == null)
-			return null;
+			if (selectedFile == null)
+				return null;
 
-		List<String> extensions = fileChooser.getSelectedExtensionFilter().getExtensions();
-		String extension = extensions.get(0).replace("*", "");
-		selectedFile = getFileWithExtension(selectedFile, extension);
+			List<String> extensions = fileChooser.getSelectedExtensionFilter().getExtensions();
+			String extension = extensions.get(0).replace("*", "");
 
-		return selectedFile;
+			String fileName = selectedFile.getName();
+			if(!fileName.toLowerCase().endsWith(extension.toLowerCase()))
+			{
+				selectedFile = getFileWithExtension(selectedFile, extension);
+
+				if (!selectedFile.exists())
+					return selectedFile;
+
+				if (confirmDlg(getCurrentActiveFrame().getSwingFrame(), "OverWriteExistingFile"))
+					return selectedFile;
+			}
+			else
+			{
+				return selectedFile;
+			}
+
+			directory = selectedFile.getParentFile();
+		}
 	}
 
 	public File showFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
@@ -713,6 +734,11 @@ public class PureFxMainWindow extends UiMainWindow
 	protected void showSplashDlg(String text)
 	{
 		new PureFxSplashDlg(getLocalization(), text);
+	}
+
+	protected TemplateDlgInterface createTemplateDialog(ConfigInfo info, File defaultDetailsFile)
+	{
+		return new PureFxTemplateDlg(this, info, defaultDetailsFile);
 	}
 
 	private static Stage realStage;

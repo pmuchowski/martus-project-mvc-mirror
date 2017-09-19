@@ -45,9 +45,9 @@ import org.martus.client.swingui.UiFontEncodingHelper;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.clientside.UiLocalization;
 import org.martus.common.EnglishCommonStrings;
+import org.martus.common.MartusLogger;
 import org.martus.swing.UiButton;
 import org.martus.swing.UiLabel;
-import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.UiParagraphPanel;
 import org.martus.swing.UiScrollPane;
 import org.martus.swing.UiTextArea;
@@ -56,7 +56,7 @@ import org.martus.util.UnicodeReader;
 
 
 
-public class UiTemplateDlg extends JDialog implements ActionListener
+public class UiTemplateDlg extends JDialog implements ActionListener, TemplateDlgInterface
 {
 	public UiTemplateDlg(UiMainWindow owner, ConfigInfo infoToUse, File defaultDetailsFileToUse)
 	{
@@ -72,10 +72,10 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		okButton.addActionListener(this);
 		JButton cancel = new UiButton(localization.getButtonLabel(EnglishCommonStrings.CANCEL));
 		cancel.addActionListener(this);
-		JButton help = new UiButton(localization.getButtonLabel("help"));
-		help.addActionListener(new helpHandler());
+		JButton help = new UiButton(localization.getButtonLabel("Help"));
+		help.addActionListener(new HelpHandler());
 		JButton loadFromFile = new UiButton(localization.getButtonLabel("ResetContents"));
-		loadFromFile.addActionListener(new loadFileHandler());
+		loadFromFile.addActionListener(new LoadFileHandler());
 		details = new UiTextArea(15, 65);
 		details.setLineWrap(true);
 		details.setWrapStyleWord(true);
@@ -103,8 +103,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		Utilities.packAndCenterWindow(this);
 	}
 
-
-	class helpHandler implements ActionListener
+	class HelpHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
@@ -119,11 +118,11 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 			String[] contents = {helpMsg, "", "",helpMsgExample, helpMsgExample1, "", helpMsgExample2, "", helpMsgExampleEtc};
 			String[] buttons = {ok};
 
-			new UiNotifyDlg(title, contents, buttons);
+			mainWindow.notifyDlg(title, contents, buttons);
 		}
 	}
 
-	class loadFileHandler implements ActionListener
+	class LoadFileHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
@@ -137,12 +136,11 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 				}
 				catch (IOException e)
 				{
-					e.printStackTrace();
+					MartusLogger.logException(e);
 					mainWindow.notifyDlg("ErrorReadingFile");
 				}
 			}
 		}
-
 	}
 
 	public void loadFile(File fileToLoad) throws IOException
@@ -176,10 +174,15 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		}
 	}
 
-
-	public boolean getResult()
+	public boolean getResults()
 	{
 		return result;
+	}
+
+	@Override
+	public void showDialog()
+	{
+		setVisible(true);
 	}
 
 	public void actionPerformed(ActionEvent ae)
@@ -193,12 +196,11 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		dispose();
 	}
 
-
-	ConfigInfo info;
-	JButton okButton;
-	UiTextArea details;
-	boolean result;
-	UiMainWindow mainWindow;
-	File defaultDetailsFile;
-	UiFontEncodingHelper fontHelper;
+	private ConfigInfo info;
+	private JButton okButton;
+	private UiTextArea details;
+	private boolean result;
+	private UiMainWindow mainWindow;
+	private File defaultDetailsFile;
+	private UiFontEncodingHelper fontHelper;
 }

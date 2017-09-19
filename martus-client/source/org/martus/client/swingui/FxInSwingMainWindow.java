@@ -45,6 +45,7 @@ import javax.swing.SwingUtilities;
 
 import org.jfree.chart.JFreeChart;
 import org.martus.client.core.BulletinGetterThread;
+import org.martus.client.core.ConfigInfo;
 import org.martus.client.reports.ReportOutput;
 import org.martus.client.swingui.actions.CreateChartDialog;
 import org.martus.client.swingui.dialogs.CreateChartDialogInterface;
@@ -58,6 +59,7 @@ import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
 import org.martus.client.swingui.dialogs.SearchHelpDialogContents;
 import org.martus.client.swingui.dialogs.SingleSelectionFieldChooserDialog;
 import org.martus.client.swingui.dialogs.SortFieldsDlgInterface;
+import org.martus.client.swingui.dialogs.TemplateDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiChartPreviewDlg;
@@ -74,6 +76,7 @@ import org.martus.client.swingui.dialogs.UiSigninDlg;
 import org.martus.client.swingui.dialogs.UiSortFieldsDlg;
 import org.martus.client.swingui.dialogs.UiSplashDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
+import org.martus.client.swingui.dialogs.UiTemplateDlg;
 import org.martus.client.swingui.dialogs.UiWarningMessageDlg;
 import org.martus.client.swingui.jfx.contacts.FxInSwingContactsStage;
 import org.martus.client.swingui.jfx.generic.FxInSwingDialogStage;
@@ -471,18 +474,27 @@ public class FxInSwingMainWindow extends UiMainWindow
 
 	protected File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters)
 	{
-		JFileChooser fileChooser = createFileChooser(title, directory, filters);
+		while(true)
+		{
+			JFileChooser fileChooser = createFileChooser(title, directory, filters);
 
-		int userResult = fileChooser.showSaveDialog(getCurrentActiveFrame().getSwingFrame());
-		if(userResult != JFileChooser.APPROVE_OPTION)
-			return null;
+			int userResult = fileChooser.showSaveDialog(getCurrentActiveFrame().getSwingFrame());
+			if (userResult != JFileChooser.APPROVE_OPTION)
+				return null;
 
-		File selectedFile = fileChooser.getSelectedFile();
+			File selectedFile = fileChooser.getSelectedFile();
 
-		FormatFilter selectedFilter = (FormatFilter) fileChooser.getFileFilter();
-		selectedFile = getFileWithExtension(selectedFile, selectedFilter.getExtension());
+			FormatFilter selectedFilter = (FormatFilter) fileChooser.getFileFilter();
+			selectedFile = getFileWithExtension(selectedFile, selectedFilter.getExtension());
 
-		return selectedFile;
+			if (!selectedFile.exists())
+				return selectedFile;
+
+			if (confirmDlg(getCurrentActiveFrame().getSwingFrame(), "OverWriteExistingFile"))
+				return selectedFile;
+
+			directory = selectedFile.getParentFile();
+		}
 	}
 
 	public File showFileOpenDialog(String title, File directory, Vector<FormatFilter> filters)
@@ -693,6 +705,11 @@ public class FxInSwingMainWindow extends UiMainWindow
 	protected void showSplashDlg(String text)
 	{
 		new UiSplashDlg(getLocalization(), text);
+	}
+
+	protected TemplateDlgInterface createTemplateDialog(ConfigInfo info, File defaultDetailsFile)
+	{
+		return new UiTemplateDlg(this, info, defaultDetailsFile);
 	}
 
 	private JFrame swingFrame;

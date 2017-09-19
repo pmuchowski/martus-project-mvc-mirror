@@ -85,13 +85,13 @@ import org.martus.client.swingui.dialogs.ProgressMeterDialogInterface;
 import org.martus.client.swingui.dialogs.PushButtonsDlgInterface;
 import org.martus.client.swingui.dialogs.ReportFieldDlgInterface;
 import org.martus.client.swingui.dialogs.SortFieldsDlgInterface;
+import org.martus.client.swingui.dialogs.TemplateDlgInterface;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewAccountProcess;
 import org.martus.client.swingui.dialogs.UiOnlineHelpDlg;
 import org.martus.client.swingui.dialogs.UiReportFieldChooserDlg.ResultsHandler;
 import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
 import org.martus.client.swingui.dialogs.UiServerSummariesRetrieveDlg;
-import org.martus.client.swingui.dialogs.UiTemplateDlg;
 import org.martus.client.swingui.filefilters.AllFileFilter;
 import org.martus.client.swingui.filefilters.KeyPairFormatFilter;
 import org.martus.client.swingui.foldertree.UiFolderTreePane;
@@ -327,7 +327,6 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			showMainWindow();
 			mainWindowInitalizing = false;
 		}
-		
 
 		try
 		{
@@ -1863,7 +1862,7 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 	{
 		ConfigInfo info = getApp().getConfigInfo();
 		File details = getApp().getBulletinDefaultDetailsFile();
-		UiTemplateDlg templateDlg = new UiTemplateDlg(this, info, details);
+		TemplateDlgInterface templateDlg = createTemplateDialog(info, details);
 		try
 		{
 			if(defaultFile != null)
@@ -1878,8 +1877,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			return;
 		}
 
-		templateDlg.setVisible(true);
-		if(templateDlg.getResult())
+		templateDlg.showDialog();
+		if(templateDlg.getResults())
 		{
 			try
 			{
@@ -1891,6 +1890,8 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 			}
 		}
 	}
+
+	protected abstract TemplateDlgInterface createTemplateDialog(ConfigInfo info, File defaultDetailsFile);
 
 	public void retrieveBulletins(RetrieveTableModel model, String folderName,
 						String dlgTitleTag, String summariesProgressTag, String retrieverProgressTag)
@@ -2603,27 +2604,15 @@ public abstract class UiMainWindow implements ClipboardOwner, TopLevelWindowInte
 
 	public File showFileSaveDialog(String fileDialogCategory, Vector<FormatFilter> filters)
 	{
-		// TODO: When we switch from Swing to JavaFX, combine this with the other file save dialog
-		while(true)
-		{
-			String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
-			File directory = getDataDirectoryToInitializeFileChooser();
+		String title = getLocalization().getWindowTitle("FileDialog" + fileDialogCategory);
+		File directory = getDataDirectoryToInitializeFileChooser();
 
-			File selectedFile = showFileSaveDialog(title, directory, filters);
+		File selectedFile = showFileSaveDialog(title, directory, filters);
 
-			if (selectedFile == null)
-				break;
-
+		if (selectedFile != null)
 			setCurrentUserSelectedDirForNextTime(selectedFile.getParentFile());
 
-			if(!selectedFile.exists())
-				return selectedFile;
-
-			if(confirmDlg(getCurrentActiveFrame().getSwingFrame(), "OverWriteExistingFile"))
-				return selectedFile;
-		}
-		
-		return null;
+		return selectedFile;
 	}
 
 	protected abstract File showFileSaveDialog(String title, File directory, Vector<FormatFilter> filters);
