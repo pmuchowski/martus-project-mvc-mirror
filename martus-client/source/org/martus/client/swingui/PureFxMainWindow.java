@@ -94,11 +94,13 @@ import org.martus.common.fieldspec.MiniFieldSpec;
 import org.martus.common.packet.UniversalId;
 
 import javafx.application.Platform;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class PureFxMainWindow extends UiMainWindow
@@ -163,14 +165,26 @@ public class PureFxMainWindow extends UiMainWindow
 		else
 		{
 			realStage.setWidth(appDimension.getWidth());
-			realStage.setHeight(appDimension.getHeight());
+			realStage.setHeight(getNonFullScreenHeight(appDimension.getHeight()));
 		}
-
+		
 		realStage.setX(appPosition.getX());
 		realStage.setY(appPosition.getY());
 		realStage.setMaximized(showMaximized);
 
 		getUiState().setCurrentAppDimension(getMainWindowSize());
+	}
+
+	private double getNonFullScreenHeight(double potentialHeight)
+	{
+		Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+		final double screenHeight = screenBounds.getHeight();
+		if (potentialHeight < screenHeight)
+			return potentialHeight;
+		
+		//NOTE mac allows full screen of app and will save full screen height.  However app cannot be restored in full screen height. 
+		final double maxHeight = screenHeight - screenBounds.getMinY();
+		return maxHeight;
 	}
 
 	@Override
