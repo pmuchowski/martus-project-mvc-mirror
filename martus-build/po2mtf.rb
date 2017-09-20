@@ -247,6 +247,6 @@ class MtfWriter
 	end
 end
 
-language_code = 'es'
-contents = PoReader.read(language_code, File.open("/home/kevins/Downloads/Martus-#{language_code}.po"))
+language_code = 'en'
+contents = PoReader.read(language_code, File.open("/Users/nimaa/Development/eclipse/translationFiles/6.1/Martus-#{language_code}.po"))
 MtfWriter.write(STDOUT, contents)
