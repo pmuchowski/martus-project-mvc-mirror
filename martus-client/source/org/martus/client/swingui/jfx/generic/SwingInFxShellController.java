@@ -32,6 +32,8 @@ import javax.swing.SwingUtilities;
 
 import org.martus.client.swingui.UiMainWindow;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.layout.Pane;
 
@@ -51,15 +53,32 @@ public abstract class SwingInFxShellController extends FxPopupController
 
 		createAndSetSwingContent(swingNode);
 		getSwingPane().getChildren().add(swingNode);
+
+		getSwingPane().widthProperty().addListener(new ResizeHandler());
+		getSwingPane().heightProperty().addListener(new ResizeHandler());
 	}
 
 	private void createAndSetSwingContent(final SwingNode swingNode)
 	{
-		SwingUtilities.invokeLater(() -> swingNode.setContent(createSwingContent()));
+		SwingUtilities.invokeLater(() ->
+		{
+			swingContent = createSwingContent();
+			swingNode.setContent(swingContent);
+		});
+	}
+
+	class ResizeHandler implements ChangeListener<Number>
+	{
+		@Override
+		public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue)
+		{
+			SwingUtilities.invokeLater(() -> swingContent.repaint());
+		}
 	}
 
 	public abstract JComponent createSwingContent();
 
 	public abstract Pane getSwingPane();
 
+	private JComponent swingContent;
 }
